@@ -52,8 +52,11 @@
       </Form>
 	  </Modal>
 	  <!-- 编辑功能模态框 -->
-		<!-- <Modal v-model="patientText" title="编辑患者信息" class-name="editInfo" @on-ok="ok" @on-cancel="cancel" :styles="{top: '180px'}">
-    	
+		<!-- <Modal v-model="patientText" title="编辑患者信息" class-name="editInfo" @on-ok="ok" @on-cancel="cancel" :styles="{top: '180px'}" width="400">
+    	<p style="width:100%;height:40px;">
+    		<Icon type="ios-help-outline" size="30" color="#f00" class="fn-fl" style="margin-top:5px;"></Icon>
+    		<span class="fn-fl margin-left-10" style="line-height:40px;font-size:16px;">确定关闭吗?</span>
+    	</p>
     </Modal> -->
 	</Row>
 </template>
@@ -155,9 +158,10 @@
                           },
                           on: {
                               click: () => {
+                              	this.patientText = true
                                   //this.remove(params.index)
                                   this.$Modal.confirm({
-								                    title: '提示',
+								                    title: 'Title',
 								                    content: '<p>确定要删除吗?</p>',
 								                    onOk: () => {
 								                        this.remove(params.index)
@@ -293,7 +297,7 @@
 		      },
 		      //详情关闭确认点击事件
 		      ok () {
-		        this.$Message.info('Clicked ok');
+		         
 		      },
 		      cancel () {
 		        this.$Message.info('Clicked cancel');
@@ -395,11 +399,11 @@
 			}
 		}
 		.ivu-modal-body {
-			padding: 32px 132px;
-
+			
+			
 		}
 		.ivu-modal-footer {
-			display: none;
+			// display: none;
 		}
 	}
 	.bb1 {

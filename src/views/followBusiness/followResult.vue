@@ -141,7 +141,7 @@
                             	
                             	console.log(params)
                             	if(params.row.action1==true) {
-                            		this.$router.push('business/add/0');
+                            		this.$router.push({path:'/followBusiness/page/page'});
                             	}else{
                             		this.patientDetail = true
                             	}

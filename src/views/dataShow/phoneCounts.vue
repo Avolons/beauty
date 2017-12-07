@@ -177,7 +177,7 @@
 				// 	alert('请选择月份')
 				// }
 				//if(this.selectYear != '' && this.selectMonth != ''){
-			      	axios.get('http://localhost:8080/static/phoneCount/phoneCount.json', {
+			      	axios.get('http://localhost:8888/static/phoneCount/phoneCount.json', {
 			      		year: '2017',
 			      		month: '10'
 			      	})

@@ -34,14 +34,18 @@
 			</Row>
 		</Col>
 		<!-- 随访模态框 -->
-		<Modal v-model="patientDetail" title="随访电话" class-name="patientInfo" @on-ok="ok" @on-cancel="cancel" :styles="{top: '180px'}" >
-			<Form ref="formInline" :model="AIform" :rules="ruleInline" inline :label="80" class="AIform">
-        <FormItem prop="user" label="电话">
-            <Input v-model="AIform.AIphone" placeholder="请输入号码" type="text"></Input>
-        </FormItem>
-        <FormItem>
-          <Button type="primary" @click="testBtn">提交AI</Button>
-      	</FormItem>
+		<Modal v-model="patientDetail" title="发起临时随访" class-name="patientInfo" @on-ok="ok" @on-cancel="cancel" :styles="{top: '180px'}" width="800px;">
+			
+        	<Table border :columns="temTask" :data="temTaskData" class="margin-bottom-10" ref="temTask" @on-select-all="onlySelectOne"></Table>
+        	<Row>
+        		<Col span="24" class="text-center margin-top-10">
+        			<span style="font-size:14px;font-weight:bold;margin:2px 20px 0 0;">随访起始时间</span>
+        			<DatePicker type="date" placeholder="Select date" v-model="formInline.date"></DatePicker>
+        		</Col>
+        		<Col span="24" class="text-center margin-top-10">
+        			<Button type="primary" @click="testBtn">提交AI</Button>
+        		</Col>
+        	</Row>
       </Form>
 	  </Modal>
 	</Row>
@@ -211,7 +215,58 @@
        //      { required: true, message: '请填写联系电话', trigger: 'blur' },
        //      { type: 'number', message: 'The password length cannot be less than 6 bits', trigger: 'blur' }
        //    ],
-		    } 
+		    },
+		    temTask: [
+		    	{
+                type: 'selection',
+                width: 60,
+                align: 'center'
+            },
+            {
+              title: '方案名称',
+              key: 'name',
+              align: 'center'
+          },
+          {
+              title: '疾病类型',
+              key: 'age',
+              align: 'center'
+          },
+          {
+              title: '操作',
+              key: 'action',
+              width: 250,
+              align: 'center',
+              render: (h, params) => {
+                  return h('div', [
+                      h('Button', {
+                          props: {
+                              type: 'primary',
+                              size: 'small'
+                          },
+                          style: {
+                              marginRight: '5px'
+                          },
+                          on: {
+                            click: () => {
+                            	this.$router.push({path:'/followBusiness/page/page'});
+                            }
+                          }
+                      }, '查看方案详情'),
+                  ]);
+              }
+					}
+		    ], 
+		    temTaskData: [
+		    	{
+		    		name: '糖尿病方案',
+		    		age: '糖尿病'
+		    	},
+		    	{
+		    		name: '高血压方案',
+		    		age: '高血压'
+		    	},
+		    ],
 			}
 		},
 		methods: {
@@ -260,6 +315,10 @@
 		    },
 		    testBtn() {
 		    	alert('测试')
+		    },
+		    onlySelectOne() {
+		    	alert('只能选择一种方案')
+		    	 this.$refs.temTask.selectAll(false);
 		    }
 		},
 	}

@@ -32,8 +32,8 @@
 			<Table border :columns="columns7" :data="data6" class="margin-bottom-10"></Table>
 			<Row>
 				<Col span="10">
-					<Button type="error" @click="examineBtn" class="margin-left-20">审核</Button>
-		      <Button type="warning" @click="testBtn" class="margin-left-20">通过</Button>
+					<!-- <Button type="error" @click="examineBtn" class="margin-left-20">审核</Button>
+		      <Button type="warning" @click="testBtn" class="margin-left-20">通过</Button> -->
 		    </Col>
 		     <Col span="14" class="text-right padding-right-20">
 		      <Page :total="100" show-elevator show-total></Page>
@@ -80,10 +80,10 @@
           ]
         },
         columns7: [//表格栏
-            {
-              title: '随访编号',
-              key: 'name',
-              align: 'center'
+          {
+            title: '随访编号',
+            key: 'name',
+            align: 'center'
           },
           {
               title: '引用随访方案',

@@ -133,7 +133,7 @@
                           on: {
                               click: () => {
                                 this.patientText = true
-                                console.log('99')
+                                this.$router.push({path:'/followBusiness/page/page'});
                               }
                           }
                       }, '修改'),

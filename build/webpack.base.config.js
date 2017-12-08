@@ -15,6 +15,9 @@ module.exports = {
         'vender-base': '@/vendors/vendors.base.js',
         'vender-exten': '@/vendors/vendors.exten.js'
     },
+    devServer: {
+        
+      },
     output: {
         path: path.resolve(__dirname, '../dist/dist')
     },

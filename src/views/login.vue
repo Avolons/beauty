@@ -1,5 +1,19 @@
 <style lang="less">
     @import './login.less';
+    .login{
+        &_form{
+            &_code{
+                position: relative;
+                img{
+                    position: absolute;
+                    right: 0;
+                    top: 0;
+                    height: 100%;
+                    display: block;
+                }
+            }
+        }
+    }
 </style>
 
 <template>
@@ -26,6 +40,14 @@
                                 </span>
                             </Input>
                         </FormItem>
+                         <FormItem prop="code" class="login_form_code">
+                            <Input type="text" v-model="form.code" placeholder="请输入验证码">
+                                <span slot="prepend">
+                                    <Icon :size="14" type="key"></Icon>
+                                </span>
+                            </Input>
+                            <img :src="'192.168.1.40:8080/code?rnd=' + '0.12'" alt="code" >
+                        </FormItem>
                         <FormItem>
                             <Button @click="handleSubmit" type="primary" long>登录</Button>
                         </FormItem>
@@ -39,12 +61,17 @@
 
 <script>
 import Cookies from 'js-cookie';
+import {API} from '../services';
 export default {
     data () {
         return {
+            /** 
+             * 登录验证
+             */
             form: {
-                userName: 'iview_admin',
-                password: ''
+                userName: 'admin',
+                password: 'renshi',
+                code:"1234",
             },
             rules: {
                 userName: [
@@ -52,6 +79,9 @@ export default {
                 ],
                 password: [
                     { required: true, message: '密码不能为空', trigger: 'blur' }
+                ],
+                code:[
+                    { required: true, message: '验证码不能为空', trigger: 'blur'}
                 ]
             }
         };
@@ -63,14 +93,24 @@ export default {
                     Cookies.set('user', this.form.userName);
                     Cookies.set('password', this.form.password);
                     this.$store.commit('setAvator', 'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=3448484253,3685836170&fm=27&gp=0.jpg');
-                    if (this.form.userName === 'iview_admin') {
-                        Cookies.set('access', 0);
-                    } else {
-                        Cookies.set('access', 1);
-                    }
-                    this.$router.push({
-                        name: 'home_index'
+                        if (this.form.userName === 'iview_admin') {
+                            Cookies.set('access', 0);
+                        } else {
+                            Cookies.set('access', 1);
+                        }
+                        this.$router.push({
+                            name: 'home_index'
+                        });
+                    API.common.login({
+                        username: this.form.userName,
+                        password: this.form.password,
+                        picCode: this.form.code
+                    }).then((res)=>{
+                        
+                    }).catch((res)=>{
+
                     });
+                    
                 }
             });
         }

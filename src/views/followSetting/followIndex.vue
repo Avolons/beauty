@@ -27,7 +27,7 @@
 		<Col span="24" class="fpTable">
 			<Table border :columns="columns7" :data="data6" class="margin-bottom-10"></Table>
 			<Row>
-				<Col span="10">
+				<Col span="10"></Col>
 		     <Col span="14" class="text-right padding-right-20">
 		      <Page :total="100" show-elevator show-total></Page>
 				</Col>
@@ -35,7 +35,7 @@
 		</Col>
 	
 		<!-- 编辑功能模态框 -->
-		<Modal v-model="patientText" title="添加指标 / 编辑指标"  @on-ok="ok" @on-cancel="cancel" width="650">
+		<Modal v-model="patientText" title="添加指标 / 编辑指标"  @on-ok="ok" @on-cancel="cancel" width="650" class-name="patientInfo">
       <Form :model="formItem" :label-width="80">
         <FormItem label="指标名称">
             <Input v-model="formItem.input" placeholder="请输入指标名称"></Input>
@@ -51,23 +51,23 @@
                 <Option value="shenzhen">转诊情况</Option>
             </Select>
         </FormItem>
-        <FormItem label="结果类型"  @change="change">
-            <RadioGroup v-model="formItem.radio">
+        <FormItem label="结果类型"  >
+            <RadioGroup v-model="formItem.radio" @on-change="hello">
               <Radio label="textLabel" checked>文本</Radio>
               <Radio label="xxLabel">选项</Radio>
               <Radio label="numberLabel">数值</Radio>
             </RadioGroup>
         </FormItem>
-        	<FormItem label="指标名称">
+        	<FormItem label="指标名称" v-if="radioText">
             <Input v-model="formItem.indexName" placeholder="请输入指标名称" style="width:80%"></Input>
             <Button type="primary" @click="addItem">添加</Button>
         	</FormItem>
-        <FormItem label="预警阀值">
+        <FormItem label="预警阀值"  v-if="radioText">
         	<Select v-model="formItem.model10" multiple style="width:260px">
 			        <Option v-for="item in optionList" :value="item.value" :key="item.value">{{ item.label }}</Option>
 			    </Select>
         </FormItem>
-        <FormItem label="预警阀值">
+        <FormItem label="预警阀值"  v-if="radioNumber">
         	<Input v-model="formItem.indexName" placeholder="请输入下限" style="width:20%"></Input>
         	<span>-</span>
         	<Input v-model="formItem.indexName" placeholder="请输入上限" style="width:20%"></Input>
@@ -76,8 +76,7 @@
             <Input v-model="formItem.textarea" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="添加备注"></Input>
         </FormItem>
         <FormItem>
-            <Button type="primary">Submit</Button>
-            <Button type="ghost" style="margin-left: 8px">Cancel</Button>
+            <Button type="primary">保存</Button>
         </FormItem>
     </Form>
     </Modal>
@@ -221,7 +220,7 @@
                 address: 'Ottawa No. 2 Lake Park'
             }
         ],
-        patientText: true,
+        patientText: false,
         formItem: {
           input: '',
           select: '',
@@ -236,10 +235,23 @@
           model10: []
         },
         optionList: [],
-        
+        radioText: false,
+        radioNumber: false,
 			}
 		},
 		methods: {
+			hello(value){
+				if(value == 'xxLabel') {
+					this.radioText = true
+					this.radioNumber = false
+				}else if(value == 'numberLabel') {
+					this.radioNumber = true
+					this.radioText = false
+				}else {
+					this.radioText = false
+					this.radioNumber = false
+				}
+			},
 			handleSubmit() {
 				alert('搜索')
 			},
@@ -273,12 +285,23 @@
     		console.log(this.optionList)
     	}
 		},
-		change(value){
-			console.log(value)
-		}
+		
 	}
 </script>
 
 <style lang="less">
 	@import "../../styles/common.less";
+	//详情
+	.patientInfo .ivu-modal .ivu-modal-content {
+		.ivu-modal-header {
+			.ivu-modal-header-inner, .ivu-modal-header p {
+				font-size: 16px;
+		    	color: #1c2432;
+		    	font-weight: normal;
+			}
+		}
+		.ivu-modal-footer {
+			display: none;
+		}
+	}
 </style>

@@ -56,7 +56,8 @@ export const otherRouter = {
         { path: 'access/business/business_depart/:business_id', title: '编辑部门信息', name: 'business_depart', component: resolve => { require(['@/views/access/business-manage/business-depart.vue'], resolve); } },
         { path: 'access/role/role_add/:role_id', title: '添加角色', name: 'role_add', component: resolve => { require(['@/views/access/role-manage/role-add.vue'], resolve); } },
         { path: 'access/user/user_add/:user_id', title: '添加用户', name: 'user_add', component: resolve => { require(['@/views/access/user-manage/user-add.vue'], resolve); } },
-        { path: 'followBusiness/page/page', title: '空白页', name: 'page', component: resolve => { require(['@/views/followBusiness/page/page.vue'], resolve); } }
+        { path: 'followBusiness/page/page', title: '空白页', name: 'page', component: resolve => { require(['@/views/followBusiness/page/page.vue'], resolve); } },
+        { path: 'followSetting/voice/voice/:id', title: '语音编辑', name: 'voice', component: resolve => { require(['@/views/followSetting/voice/voice.vue'], resolve); } }
     ]
 };
 

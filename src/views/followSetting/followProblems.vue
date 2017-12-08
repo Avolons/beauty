@@ -184,7 +184,7 @@
                               size: 'small'
                           },
                           style: {
-
+                          	marginRight: '5px'
                           },
                           on: {
                               click: () => {
@@ -201,7 +201,22 @@
 								                });
                               }
                           }
-                      }, '删除')
+                      }, '删除'),
+                      h('Button', {
+                          props: {
+                              type: 'warning',
+                              size: 'small'
+                          },
+                          style: {
+
+                          },
+                          on: {
+                              click: () => {
+                                  this.$router.push({path:'/followSetting/voice/voice/:123'});
+                                 
+                              }
+                          }
+                      }, '编辑话述')
                   ]);
               }
 				}],

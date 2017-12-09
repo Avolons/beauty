@@ -67,7 +67,7 @@
                         key: 'address',
                         align: 'center',
                         ellipsis: 'true',
-                         render: (h, params) => {
+                        render: (h, params) => {
                             return h('div', {
                                         on: {
                                             click: () => {

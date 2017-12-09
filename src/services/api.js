@@ -13,7 +13,7 @@ Vue.prototype.$http = axios;
 /* 默认最长响应时间 */
 axios.defaults.timeout = 500;
 /* 默认的接口地址 */
-axios.defaults.baseURL = 'http://192.168.1.40:8080/';
+axios.defaults.baseURL = 'http://192.168.1.100:8080/';
 
 // 添加请求拦截器
 axios.interceptors.request.use(function (config) {
@@ -183,3 +183,29 @@ export const mine = {
     }
 
 };
+
+/* 随访设置--随访指标接口 *****/
+export const follSetting = {
+  /**
+   * 随访指标所有信息展示
+   * page
+   * limit
+   * name
+   * otype 
+   * @param {any} data
+   * @returns
+   */
+    list (data) {
+        return fetch('get', 'visit/questiontarget/list', data);
+    },
+    deleteList (data) {
+        return fetch('get', 'visit/questiontarget/delete', data);
+    },
+    addList (data) {
+        return fetch('post', 'visit/questiontarget/add', data);
+    },
+    editList (data) {
+        return fetch('get', 'visit/questiontarget/add', data);
+    }
+};
+

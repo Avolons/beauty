@@ -3,6 +3,7 @@
 </style>
 <template>
     <div class="main" :class="{'main-hide-text': shrink}">
+        <!-- 侧边栏导航 -->
         <div class="sidebar-menu-con" :style="{width: shrink?'60px':'200px', overflow: shrink ? 'visible' : 'auto'}">
             <shrinkable-menu 
                 :shrink="shrink"

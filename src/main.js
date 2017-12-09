@@ -11,6 +11,7 @@ import util from '@/libs/util';
 
 Vue.use(VueI18n);
 Vue.use(iView);
+/* 全局设置API */
 
 new Vue({
     el: '#app',

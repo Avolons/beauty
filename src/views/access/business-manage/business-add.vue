@@ -2,7 +2,7 @@
 .busadd {
     height: 100%;
     &_main {
-        height: 100%;
+        min-height: 100%;
         background: #fff;
         border-radius: 4px;
         box-sizing: border-box;
@@ -13,7 +13,6 @@
             font-size: 15px;
             position: relative;
             text-indent: 15px;
-            margin-bottom: 10px;
             font-weight: 400;
             &:after {
                 content: "";
@@ -42,7 +41,7 @@
                 font-weight: 400;
             }
             .ivu-form-item {
-                margin-bottom: 15px;
+                margin-bottom: 20px;
                 .ivu-form-item-label {
                     width: 120px !important;
                 }
@@ -108,8 +107,8 @@
                 <FormItem label="街道地址" prop="address" style="width:450px;">
                     <Input v-model="formValidate.address" placeholder="请输入具体地址"></Input>
                 </FormItem>
-                <FormItem label="联系人" style="width:450px;">
-                    <Input v-model="formValidate.contact" placeholder="请输入企业联系人姓名"></Input>
+                <FormItem label="联系人" prop="contacts" style="width:450px;">
+                    <Input v-model="formValidate.contacts" placeholder="请输入企业联系人姓名"></Input>
                 </FormItem>
                 <FormItem label="联系电话" prop="phone" style="width:450px;">
                     <Input v-model="formValidate.phone" placeholder="请输入联系电话"></Input>
@@ -133,10 +132,12 @@
 <script>
 import Vue from 'vue';
 import iviewArea from 'iview-area';
+import {API} from '../../../services';
 Vue.use(iviewArea);
 export default {
     data() {
         return {
+            id:-1,//增查判断
             modal:false,
             //行业分类
             industryList: [
@@ -256,8 +257,8 @@ export default {
                 product: '',//产品
                 city: [],//企业所在地
                 address: "",//街道地址
-                contact:'',//企业联系人
-                contact:'',//企业联系电话
+                contacts:'',//企业联系人
+                phone:'',//企业联系电话
                 mail: '',//企业邮箱
                 desc: ''//企业简介
             },
@@ -278,6 +279,9 @@ export default {
                 address: [
                     { required: true, message: '请输入街道地址', trigger: 'blur' }
                 ],
+                contacts: [
+                    { required: true, message: '请输入联系人姓名', trigger: 'blur' }
+                ],
                 desc: [
                     { type: 'string', min: 20, message: '请至少输入20字以上的简介', trigger: 'blur' }
                 ]
@@ -285,10 +289,23 @@ export default {
         }
     },
     methods: {
+        /** 
+         * 保存信息
+         */
         handleSave(name) {
             this.$refs[name].validate((valid) => {
                 if (valid) {
-                    this.modal=true;
+                    API.Jurisdiction.addBusiness({
+                        name:this.formValidate.name,
+                        address:this.formValidate.address,
+                        contacts:this.formValidate.contacts,
+                        phone:this.formValidate.phone,
+
+                    }).then((res)=>{
+                        this.modal=true;
+                    }).catch((err)=>{
+
+                    });
                 } else {
                     this.$Message.error('保存失败!');
                 }
@@ -301,12 +318,41 @@ export default {
         editDepart(){
             this.modal=false;
             this.$router.push({
-                path:"/access/business/business_depart/0",
+                path:"/access/business/business_depart",
+                query:{
+                    business_id:this.id,
+                }
             })
         },
+        /** 
+         * 重置所有属性
+         */
         handleReset(name) {
             this.$refs[name].resetFields();
+        },
+        /** 
+         * 初始化所有属性
+         */
+        initData(){
+            if(this.id!=-1){
+                API.Jurisdiction.infoBusiness({
+                    id:this.id
+                }).then((res)=>{
+                    this.formValidate={...this.formValidate,...res.data};
+                }).catch((err)=>{
+
+                });
+            }
         }
+    },
+    /** 
+     * 判断类型
+     */
+    mounted () {
+        /* id为-1 的情况下 是新增*/
+        this.id= this.$route.query.business_id;  
+        /* 初始化数据 */
+        this.initData();
     }
 }
 </script>

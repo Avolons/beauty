@@ -18,17 +18,17 @@
               <Col span="18">
                 <Input v-model="searchResult" placeholder="请输入企业名称" style="width: 200px" />
                 <span @click="searchBus" style="margin: 0 10px;"><Button type="primary" icon="search">搜索</Button></span>
-                <Button @click="cancelSearch" type="ghost" >取消</Button>
+                <Button @click="initData" type="ghost" >取消</Button>
               </Col>
               <Col span="6">
-               <Button @click="addBusiness" type="primary" style="float:right">新增企业</Button>
+               <Button @click="edit(0)" type="primary" style="float:right">新增企业</Button>
               </Col>
           </Row>
           <Row class="business_main_list">
              <Table border :columns="tableHeader" :data="tableData"></Table>
           </Row>
          <Row class="business_main_page">
-            <Page :total="100" :current="1" style="float:right" @on-change="changePage"></Page>
+            <Page :total="totalPage" show-elevator :current="page" style="float:right" @on-change="changePage"></Page>
          </Row>
          
       </div>
@@ -36,10 +36,10 @@
 </template>
 
 <script>
+import {API} from '../../../services';
 export default {
         data () {
             return {
-                
                 searchResult:"",//搜索内容
                 /* 表格表头 */
                 tableHeader: [
@@ -72,7 +72,7 @@ export default {
                                     },
                                     on: {
                                         click: () => {
-                                            this.edit(params.index)
+                                            this.edit(1,params.row.id)
                                         }
                                     }
                                 }, '编辑'),
@@ -86,7 +86,7 @@ export default {
                                     },
                                     on: {
                                         click: () => {
-                                            this.manage(params.index)
+                                            this.manage(params.row.id)
                                         }
                                     }
                                 }, '管理部门'),
@@ -100,7 +100,7 @@ export default {
                                     },
                                     on: {
                                         click: () => {
-                                            this.remove(params.index)
+                                            this.lookTree(params.row.id)
                                         }
                                     }
                                 }, '查看架构'),
@@ -111,7 +111,7 @@ export default {
                                     },
                                     on: {
                                         click: () => {
-                                            this.remove(params.index)
+                                            this.remove(params.row.id)
                                         }
                                     }
                                 }, '删除')
@@ -150,56 +150,101 @@ export default {
         methods: {
             /**
              * 编辑企业/进入企业编辑
+             * type 0添加企业 1编辑企业
+             * id 
              */
-            edit (index) {
-                this.$router.push('business/add/0');
-            },
+            edit(type,id=-1) {
+                this.$router.push({
+                    path:"/access/business/add",
+                    query:{
+                        type:type,
+                        business_id:id
+                    }
+                });
+            }, 
             /** 
              * 管理部门
              */
-            manage(index){
-                this.$router.push('business/business_depart/0');
+            manage(id){
+                this.$router.push({
+                    path:"/access/business/depart",
+                    query:{
+                        business_id:id
+                    }
+                });
             },
             /**
              * 删除当前企业（危险操作）
              */
-            remove (index) {
+            remove (id) {
+                let self=this;
                 this.$Modal.confirm({
                     title:"删除企业",
                     content:"确定删除该企业",
                     okText:"确定",
                     cancelText:"取消",
                     onOk(){
-                        this.data6.splice(index, 1);
+                        API.Jurisdiction.deletBusiness({
+                            id:id
+                        }).then((res)=>{
+                            self.initData();
+                            this.$Message.success("成功删除");
+                        }).catch((err)=>{
+
+                        });
                     }
                 });
             },
-            /**
-             * 添加新企业
-             */
-            addBusiness(index){
-                this.$router.push('business/add/0');
-            },
-            
             /** 
              * 分页改变,返回点击后的分页代码
              */
             changePage(index){
-                
+                this.page=index;
+                this.getList(); 
             },
             /** 
              * 搜索
              */
             searchBus(){
-
+                if(!this.searchResult.trim()){
+                    this.$Message.error('请输入搜索条件');
+                    this.searchResult="";
+                }else{
+                    this.page=1;
+                    this.getList();
+                }
             },
             /** 
-             * 取消搜索
+             * 获取企业列表
              */
-            cancelSearch(){
+            getList(){
+                API.Jurisdiction.listBusiness({
+                    page: this.page,  //当前页码
+                    namelk:this.searchResult
+                }).then((res)=>{
+                    this.totalPage=res.totleRow;
+                    this.tableData=res.data;
+                }).catch((err)=>{
+                });
+            },
+            /** 
+             * 初始化数据
+             */
+            initData(){
+                /* 重置所有条件 */
+                this.page=1;
+                this.searchResult="";
+                this.getList();
+            },
+            /** 
+             * 查看架构
+             */
+            lookTree(id){
 
             }
-
+        },
+        mounted () {
+           this.initData(); 
         }
     }
 </script>

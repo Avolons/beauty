@@ -56,11 +56,18 @@
             <Select v-model="formItem.status">
               <Option value="0">启用</Option>
               <Option value="1">停用</Option>
+           
             </Select>
         </FormItem>
+        <!-- <FormItem label="启用状态">
+            <Select v-model="formItem.status">
+              <Option value="0">启用</Option>
+              <Option value="1">停用</Option>
+            </Select>
+        </FormItem> -->
         <FormItem label="结果类型"  >
             <RadioGroup v-model="formItem.radio" @on-change="radioChange">
-              <Radio label="string" checked>文本</Radio>
+              <Radio label="string">文本</Radio>
               <Radio label="select">选项</Radio>
               <Radio label="digit">数值</Radio>
             </RadioGroup>
@@ -182,8 +189,54 @@
                   },
                   on: {
                     click: () => {
+                      console.log(params.row)
                     	this.patientText = true
+                      API.follSetting.editList({
+                        id: params.row.id
+                      }).then((res) => {
+                        if(res.code == 0) {
+                          this.formItem.id = res.data.id
+                          this.formItem.name = res.data.name
+                          this.formItem.radio = res.data.type
+                          this.formItem.status = res.data.status
+                          this.formItem.remake = res.data.remake
+                          this.formItem.select = res.data.otype
+                          console.log(this.formItem.status)
 
+
+                          //判断指标类型
+                          if(this.formItem.radio == 'select') {
+                            this.radioText = true
+                            this.radioNumber = false
+                          }else if(this.formItem.radio == 'digit') {
+                            this.radioNumber = true
+                            this.radioText = false
+                          }else {
+                            this.radioText = false
+                            this.radioNumber = false
+                          }
+                          let oplist = res.data.optionValues;
+                          var kk = oplist.split(",");//以逗号作为分隔字符串
+                          class Point {
+                            constructor(value, label) {
+                              this.value = value;
+                              this.label = label;
+                            }
+                          }
+                          for(let i=0; i<kk.length;i++ ){
+                            let p1 = new Point(kk[i],kk[i])
+                            this.optionList.push(p1)
+                            console.log(this.optionList)
+                          }
+                          // this.formItem.model10 = this.optionList
+
+                          
+                        }else {
+                          alert(res.message)
+                        }
+                      }).catch((error) => {
+                        console.log(error)
+                      })
                     }
                   }
                 }, '编辑'),
@@ -210,15 +263,9 @@
         pageTotal: 0,
         patientText: false,
         formItem: {
-          input: '',
           select: '',
           radio: 'string',
           status: '',
-          checkbox: [],
-          switch: true,
-          date: '',
-          time: '',
-          slider: [20, 50],
           textarea: '',
           indexName: '',
           model10: []
@@ -368,7 +415,6 @@
       },
       /*
       *编辑指标
-
       */
 			ok () {
         this.$Message.info('Clicked ok');
@@ -386,6 +432,9 @@
           }
         })
     	},
+      /*
+      *指标选项添加预警阀值
+      */
     	addItem() {
     		class Point {
 				  constructor(value, label) {
@@ -400,6 +449,10 @@
     		console.log(this.optionList)
     	}
 		},
+    /*
+    *预警阀值
+    */
+  
 		
 	}
 </script>

@@ -6,6 +6,7 @@
 
 import Vue from 'vue';
 import axios from 'axios';
+import qs from 'qs';
 
 /* HTTP相关,使用Axios作为http库 */
 Vue.prototype.$http = axios;
@@ -17,10 +18,10 @@ axios.defaults.baseURL = 'http://192.168.1.40:8080/';
 
 // 添加请求拦截器
 axios.interceptors.request.use(function (config) {
-    config.data = JSON.stringify(config.data);
+    config.data = qs.stringify(config.data);
   // 在发送请求之前做些什么
     config.headers = {
-        'Content-Type': 'application/x-www-form-urlencoded'
+        'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
     };
     return config;
 }, function (error) {
@@ -57,7 +58,7 @@ function fetch (type, url, params) {
     });
 }
 
-/* 权限管理相关接口 *****/
+/* 通用相关相关接口 *****/
 export const common = {
   /**
    * 登录接口
@@ -76,7 +77,7 @@ export const common = {
 export const Jurisdiction = {
     // ****企业管理相关接口
     /**
-     * 企业列表添加
+     * 企业添加
      * name:  //公司名称 String
      * address:  //公司地址 String
      * contacts: //联系人 String
@@ -85,7 +86,7 @@ export const Jurisdiction = {
      * @returns
      */
     addBusiness (data) {
-        return fetch('get', '/admin/organization/add', data);
+        return fetch('post', '/admin/organization/add', data);
     },
     /**
      * 删除企业
@@ -107,7 +108,7 @@ export const Jurisdiction = {
         return fetch('get', '/admin/organization/list', data);
     },
     /**
-     * 查看公司详情
+     * 查看企业详情
      * id
      * @param {any} data
      * @returns

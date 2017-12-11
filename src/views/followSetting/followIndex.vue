@@ -52,19 +52,13 @@
               <Option value="07">通用</Option>
             </Select>
         </FormItem>
-        <FormItem label="启用状态">
-            <Select v-model="formItem.status">
-              <Option value="0">启用</Option>
-              <Option value="1">停用</Option>
-           
-            </Select>
-        </FormItem>
         <!-- <FormItem label="启用状态">
-            <Select v-model="formItem.status">
+            <Select v-model="formItem.select2">
               <Option value="0">启用</Option>
               <Option value="1">停用</Option>
             </Select>
         </FormItem> -->
+       
         <FormItem label="结果类型"  >
             <RadioGroup v-model="formItem.radio" @on-change="radioChange">
               <Radio label="string">文本</Radio>
@@ -123,6 +117,7 @@
             key: 'otype',
             align: 'center',
             render: (h, params) => {
+              
               if(params.row.otype == '01') {
                 return params.row.otype = '症状'
               }else if(params.row.otype == '02') {
@@ -139,6 +134,7 @@
                 return params.row.otype = '通用'
               }
               return h('div', {
+
               }, params.row.otype);
             }
           },
@@ -173,6 +169,11 @@
             }
           },
           {
+            title: '备注',
+            key: 'remark',
+            align: 'center',
+          },
+          {
             title: 'Action',
             key: 'action',
             width: 250,
@@ -189,19 +190,22 @@
                   },
                   on: {
                     click: () => {
-                      console.log(params.row)
                     	this.patientText = true
                       API.follSetting.editList({
                         id: params.row.id
                       }).then((res) => {
                         if(res.code == 0) {
+
                           this.formItem.id = res.data.id
                           this.formItem.name = res.data.name
                           this.formItem.radio = res.data.type
-                          this.formItem.status = res.data.status
-                          this.formItem.remake = res.data.remake
                           this.formItem.select = res.data.otype
-                          console.log(this.formItem.status)
+                          this.formItem.select2 = res.data.status
+                          this.formItem.textarea = res.data.remark
+                          this.formItem.top = res.data.thresholdValueStart
+                          this.formItem.bottom = res.data.thresholdValueEnd
+                          this.formItem.bottom = res.data.thresholdValueEnd
+                          console.log(this.formItem.select2)
 
 
                           //判断指标类型
@@ -223,16 +227,18 @@
                               this.label = label;
                             }
                           }
+                          let p1;
                           for(let i=0; i<kk.length;i++ ){
-                            let p1 = new Point(kk[i],kk[i])
+                            p1 = new Point(kk[i],kk[i])
                             this.optionList.push(p1)
-                            console.log(this.optionList)
                           }
-                          // this.formItem.model10 = this.optionList
+                          //预警阀值
+                          this.formItem.model10 = kk
+                          //备注
 
                           
                         }else {
-                          alert(res.message)
+                          console.log(res)
                         }
                       }).catch((error) => {
                         console.log(error)
@@ -261,14 +267,16 @@
         ],
         datalist: [],
         pageTotal: 0,
-        patientText: false,
+        patientText: false,//添加--修改模态框
         formItem: {
           select: '',
           radio: 'string',
-          status: '',
+          select2: '',
           textarea: '',
           indexName: '',
-          model10: []
+          model10: [],
+          top: '',
+          bottom: ''
         },
         optionList: [],
         radioText: false,
@@ -302,10 +310,24 @@
       *获取分页列表数据
       */
       currentPage: function (page) {
-       this.list(page)
+       API.follSetting.list({
+          pager: page,
+          limit: '10',
+          name: this.IndexSearch.name,
+          otype: this.IndexSearch.select
+        }).then((res) => {
+          if(res.code == 0) {
+            this.datalist = res.data
+            this.pageTotal = res.total
+          }else {
+            console.log(res.message)
+          }
+        }).catch((error) => {
+          console.log(error)
+        })
       },
       /*
-      *搜索
+      *查询
       */
       handleSearch() {
         API.follSetting.list({
@@ -324,7 +346,7 @@
           console.log(error)
         })
       },
-       /*
+      /*
       *删除
       */
       deleteRow(id){
@@ -346,47 +368,66 @@
         })
       },
       /*
-      *添加
+      *添加指标
+      */
+      addBtn() {
+        this.patientText = true
+      },
+      /*
+      *确定添加
       */
       addModel() {
-        console.log(this.formItem.radio)
         let addPram
         let addPram1 = {
-          name: this.formItem.name,
-          status: this.formItem.status,
-          type: this.formItem.select,
-          otype: this.formItem.radio,
-          remark: this.formItem.textarea
+          "name": this.formItem.name,
+          "status": this.formItem.select2,
+          "type": this.formItem.radio,
+          "otype": this.formItem.select,
+          "remark": this.formItem.textarea
+        }
+        console.log(this.formItem.model10)
+        let strModel = this.formItem.model10.join(",")
+        let addPram2 = {
+          "name": this.formItem.name,
+          "status": this.formItem.select2,
+          "type": this.formItem.radio,
+          "otype": this.formItem.select,
+          "optionValues": strModel,
+          "remark": this.formItem.textarea,
+        }
+        let addPram3 = {
+          "name": this.formItem.name,
+          "status": this.formItem.select2,
+          "type": this.formItem.radio,
+          "otype": this.formItem.select,
+          "thresholdValueStart": this.formItem.top,
+          "thresholdValueEnd": this.formItem.bottom,
+          "remark": this.formItem.textarea
         }
         console.log(addPram1)
         if(this.formItem.radio == 'string') {
-
           addPram = addPram1
         }
         if(this.formItem.radio == 'digit') {
-
-          addPram = {
-            
-          }
+          addPram = addPram3
         }
         if(this.formItem.radio == 'select') {
-
-          addPram = {
-
-          }
+          addPram = addPram2
         }
-        API.follSetting.addList({
-          name: this.formItem.name,
-          status: this.formItem.status,
-          type: this.formItem.select,
-          otype: this.formItem.radio,
-          remark: this.formItem.textarea
-        }).then((res) => {
+        API.follSetting.addList(addPram).then((res) => {
           if(res.code == 0) {
             console.log(res.message)
-           
+            this.formItem.name = ''
+            this.formItem.select2 = ''
+            this.formItem.select = ''
+            this.formItem.radio = 'string'
+            this.formItem.textarea = ''
+            this.patientText = false;
+            this.list(1)
           }else {
-            alert(res.message)
+
+            // alert(res.message)
+            alert('res.message='+res.message)
           }
         }).catch((error) => {
           console.log(error)
@@ -407,12 +448,7 @@
 					this.radioNumber = false
 				}
 			},
-			/*
-      *添加指标
-      */
-      addBtn() {
-        this.patientText = true
-      },
+			
       /*
       *编辑指标
       */

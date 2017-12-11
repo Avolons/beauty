@@ -21,7 +21,8 @@ axios.interceptors.request.use(function (config) {
     config.data = qs.stringify(config.data);
   // 在发送请求之前做些什么
     config.headers = {
-        'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
+        'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
+
     };
     return config;
 }, function (error) {
@@ -200,13 +201,37 @@ export const follSetting = {
         return fetch('get', 'visit/questiontarget/list', data);
     },
     deleteList (data) {
-        return fetch('get', 'visit/questiontarget/delete', data);
+        return fetch('get', 'visit/question/delete', data);
     },
     addList (data) {
-        return fetch('post', 'visit/questiontarget/add', data);
+        return fetch('post', 'visit/questiontarget/save', data);
     },
     editList (data) {
         return fetch('get', 'visit/questiontarget/get', data);
+    }
+};
+/* 随访设置--随访问题接口 *****/
+export const followProblems = {
+  /**
+   * 随访问题所有信息展示
+   * page//当前页码(必选)
+   * limit//当每页条数,默认是10(必选)
+   * title//指标名称(可选)
+   * diseaseId //指标类型(可选)
+   * @param {any} data
+   * @returns
+   */
+    list (data) {
+        return fetch('get', 'visit/question/list', data);
+    },
+    deleteList(data) {
+        return fetch('get', 'visit/questiontarget/delete', data);
+    },
+    addList (data) {
+        return fetch('post', 'visit/question/save', data);
+    },
+    editList (data) {
+        return fetch('get', 'visit/question/get', data);
     }
 };
 

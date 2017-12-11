@@ -2,136 +2,71 @@
 	<Row class="patientSearch">
 		<!-- 搜索栏 -->
 		<Col span="24" class="patientSearch">
-			<Form ref="formInline" :model="formInline" :rules="ruleInline" :label-width="80" inline >
-        <FormItem prop="user" label="问题标题">
-          <Input type="text" v-model="formInline.user" placeholder="Username"></Input>
+			<Form ref="proSearch" :model="proSearch" :rules="ruleInline" :label-width="80" inline >
+        <FormItem prop="title" label="问题标题">
+          <Input type="text" v-model="proSearch.title" placeholder="请输入问题名称"></Input>
         </FormItem>
-        <FormItem prop="user" label="疾病类型">
-          <Input type="text" v-model="formInline.user" placeholder="Username"></Input>
+        <FormItem prop="diseaseName" label="疾病类型">
+          <Input type="text" v-model="proSearch.diseaseName" placeholder="请输入疾病类型"></Input>
         </FormItem>
         <FormItem>
-          <Button type="primary" @click="handleSubmit('formInline')">查询</Button>
+          <Button type="primary" @click="handleSearch('proSearch')">查询</Button>
       	</FormItem>
       	<FormItem>
-          <Button type="primary" @click="handleSubmit('formInline')">添加问题</Button>
+          <Button type="primary" @click="addBtn">添加问题</Button>
       	</FormItem>
 		  </Form>
 		</Col>
 		<!-- 表格 -->
 		<Col span="24" class="patientList">
-			<Table border :columns="columns7" :data="data6"></Table>
+			<Table border :columns="columns7" :data="pardata"></Table>
 		</Col>
 		<!-- 分页 -->
 		<Col span="24" class="pages">
-			<Page :total="100" show-elevator show-total></Page>
+			<Page :total="pageTotal" @on-change="currentPage" show-elevator show-total></Page>
 		</Col>
 		<!-- 详情模态框 -->
-		<Modal v-model="patientDetail" title="患者信息" class-name="patientInfo" @on-ok="ok" @on-cancel="cancel" :styles="{top: '180px'}" width="1000">
-      <Row class="infoRow">
-        <Col span="12" class="infoCol12 mb12">
-        	<div class="info">
-        		<div class="info-row">
-        			<div class="info1 bb1">姓名</div><div class="info2 bdx1">薛卫国</div>
-        		</div>
-        		<div class="info-row">
-        			<div class="info1">性别</div><div class="info2">男</div>
-        		</div>
-        	</div>
-        </Col>
-        <Col span="12" class="infoCol12 mb12">
-        	<div class="info">
-        		<div class="info-row">
-        			<div class="info1 bb1">电话</div><div class="info2 bdx1">15225099945</div>
-        		</div>
-        		<div class="info-row">
-        			<div class="info1">地址</div><div class="info2">杭州市下城区</div>
-        		</div>
-        	</div>
-        </Col>
-        <Col span="12" class="infoCol12 mb12">
-        	<div class="info">
-        		<div class="info-row">
-        			<div class="info1 bb1">年龄</div><div class="info2 bdx1">52</div>
-        		</div>
-        		<div class="info-row">
-        			<div class="info1">民族</div><div class="info2">维吾尔族</div>
-        		</div>
-        	</div>
-        </Col>
-        <Col span="24" class="infoCol24">
-					<Row class="infoRow2">
-						<Col span="4" class="sfCol4">
-							<div class="counts">
-								<p class="suifang">随访</p>
-								<p class="sfCounts">69天</p>
-							</div>
-						</Col>
-						<Col span="20" class="sfCol20">
-							<h3 class="sfName">薛卫国</h3>
-							<p class="sfTime mb12"><span>2017年09月28日18点05分</span>随访</p>
-							<Row>
-								<Col span="12">
-									<p>是否知道全科医生签约服务:<span>是</span></p>
-									<p>对他(她)的服务是否满意:<span>是</span></p>
-									<p>医生意见:<span>是</span></p>
-								</Col>
-								<Col span="12">
-									<p>是否知道自己的签约医生:<span>是</span></p>
-									<p>是否经常在我中心就诊:<span>不太来</span></p>
-								</Col>
-							</Row>
-						</Col>
-					</Row>
-        </Col>
-      </Row>
-	  </Modal>
-	  <!-- 编辑功能模态框 -->
-		<Modal v-model="patientText" title="编辑患者信息" class-name="editInfo" @on-ok="ok" @on-cancel="cancel" :styles="{top: '180px'}" width="800">
-    	<Form ref="formCustom" :model="formCustom" :rules="editRules" :label-width="80">
-        <FormItem label="姓名" prop="ptNa">
-            <span v-model="formCustom.ptNa">{{formCustom.ptNa}}</span>
+	  <Modal v-model="patientText" title="添加问题 / 编辑问题"  @on-ok="ok" @on-cancel="cancel" width="650" class-name="patientInfo">
+      <Form :model="formItem" :label-width="90" ref="">
+        <FormItem label="问题标题">
+            <Input v-model="formItem.title" placeholder="请输入问题标题"></Input>
         </FormItem>
-        <FormItem label="电话" prop="ptPhone">
-            <Input v-model="formCustom.ptPhone" placeholder="请输入电话号码"></Input>
+        <FormItem label="随访问题内容">
+            <Input v-model="formItem.content" placeholder="请输入随访问题内容"></Input>
         </FormItem>
-        <FormItem label="住址" prop="ptAdd">
-            <Input type="text" v-model="formCustom.ptAdd" placeholder="请输入住址"></Input>
+        <FormItem label="关联指标">
+            <Input v-model="formItem.targetName" placeholder="根据首字母进行搜索"></Input>
         </FormItem>
-        <FormItem label="邮编" prop="ptYb">
-            <Input type="text" v-model="formCustom.ptYb" placeholder="请输入邮编"></Input>
+        <FormItem label="疾病标签">
+          <Input v-model="formItem.diseaseName" placeholder="根据首字母进行搜索" style="width:80%"></Input>
+          <Button type="primary" @click="addTag">添加</Button>
         </FormItem>
-        <FormItem label="联系人姓名" prop="ptName">
-            <Input type="text" v-model="formCustom.ptName" placeholder="请输入联系人姓名"></Input>
+        <FormItem label="">
+          <tag v-for="item in tagCount" color="blue" :key="item" :name="item" closable @on-close="tagClose">{{item}}</tag>
         </FormItem>
-        <FormItem label="联系人关系" prop="ptRe">
-            <Input type="text" v-model="formCustom.ptRe" placeholder="请输入联系人关系"></Input>
-        </FormItem>
-        <FormItem label="联系地址" prop="ptDz">
-            <Input type="text" v-model="formCustom.ptDz" placeholder="请输入联系人地址"></Input>
-        </FormItem>
-        <FormItem label="联系电话" prop="ptDh">
-            <Input type="text" v-model="formCustom.ptDh" placeholder="请输入联系人电话号码"></Input>
-        </FormItem>
-        <FormItem label="单位名称" prop="ptDe">
-            <Input type="text" v-model="formCustom.ptDe" placeholder="请输入单位名称"></Input>
+        <FormItem label="纯放音"  >
+            <RadioGroup v-model="formItem.playWavOnly" @on-change="radioChange">
+              <Radio label="1">是</Radio>
+              <Radio label="0">否</Radio>
+            </RadioGroup>
         </FormItem>
         <FormItem>
-            <Button type="primary" style="margin-left: 110px;" @click="handleEdit('formCustom')">提交</Button>
-            <Button type="ghost" style="margin-left: 8px">重置</Button>
+            <Button type="primary" @click="addModel">保存</Button>
         </FormItem>
-	    </Form>
+      </Form>
     </Modal>
+	 
 	</Row>
 </template>
 
 <script>
+  import {API} from '@/services';
 	export default {
 		data() {
 			return {
-				formInline: {//搜索框
-          user: '',
-          password: '',
-          select: '',
+				proSearch: {//搜索框
+          title: '',
+          diseaseName: '',
         },
         ruleInline: {//搜索框校验
           user: [
@@ -143,18 +78,31 @@
           ]
         },
         columns7: [//表格栏
-          
+
           {
-              title: '问题名称',
-              key: 'name'
+            title: 'id',
+            key: 'id',
+            align: 'center'
+          },         
+          {
+            title: '问题名称',
+            key: 'title',
+            align: 'center'
           },
           {
-              title: '疾病类型',
-              key: 'age'
+            title: '疾病标签',
+            key: 'diseaseName',
+            align: 'center'
           },
           {
-              title: '问题内容',
-              key: 'address'
+            title: '问题内容',
+            key: 'content',
+            align: 'center'
+          },
+          {
+            title: '关联指标',
+            key: 'targetName',
+            align: 'center'
           },
           {
               title: '操作',
@@ -173,7 +121,25 @@
                           },
                           on: {
                             click: () => {
-                            	this.patientDetail = true
+                            	this.patientText = true
+                              API.followProblems.editList({
+                                id: params.row.id
+                              }).then((res) => {
+                                if(res.code == 0) {
+                                  console.log(res)
+                                  this.formItem.id = res.data.id
+                                  this.formItem.title = res.data.title
+                                  this.formItem.content = res.data.content
+                                  this.formItem.targetName = res.data.targetName
+                                  this.formItem.playWavOnly = res.data.playWavOnly
+                                  //this.formItem.textarea = res.data.remark
+                                 
+                                }else {
+                                  console.log(res)
+                                }
+                              }).catch((error) => {
+                                console.log(error)
+                              })
                             }
                           }
                       }, '编辑'),
@@ -193,7 +159,7 @@
 								                    title: 'Title',
 								                    content: '<p>确定要删除吗?</p>',
 								                    onOk: () => {
-								                        this.remove(params.index)
+								                        this.deleteRow(params.row.id)
 								                    },
 								                    onCancel: () => {
 								                        // this.$Message.info('Clicked cancel');
@@ -220,107 +186,184 @@
                   ]);
               }
 				}],
-        data6: [//表格data
-            {
-                name: '血糖低了怎么办',
-                age: '糖尿病',
-                address: '血糖低了可以多吃点药，药不能听'
-            },
-            {
-                name: 'Jim Green',
-                age: 24,
-                address: 'London No. 1 Lake Park'
-            },
-            {
-                name: 'Joe Black',
-                age: 30,
-                address: 'Sydney No. 1 Lake Park'
-            },
-            {
-                name: 'Jon Snow',
-                age: 26,
-                address: 'Ottawa No. 2 Lake Park'
-            },{
-                name: '血糖低了怎么办',
-                age: '糖尿病',
-                address: '血糖低了可以多吃点药，药不能听'
-            },
-            {
-                name: 'Jim Green',
-                age: 24,
-                address: 'London No. 1 Lake Park'
-            },
-            {
-                name: 'Joe Black',
-                age: 30,
-                address: 'Sydney No. 1 Lake Park'
-            },
-            {
-                name: 'Jon Snow',
-                age: 26,
-                address: 'Ottawa No. 2 Lake Park'
-            },{
-                name: '血糖低了怎么办',
-                age: '糖尿病',
-                address: '血糖低了可以多吃点药，药不能听'
-            },
-            {
-                name: 'Jim Green',
-                age: 24,
-                address: 'London No. 1 Lake Park'
-            },
-            {
-                name: 'Joe Black',
-                age: 30,
-                address: 'Sydney No. 1 Lake Park'
-            },
-            {
-                name: 'Jon Snow',
-                age: 26,
-                address: 'Ottawa No. 2 Lake Park'
-            },
-        ],
-        patientDetail: false,//详情模态框
+        pardata: [],//表格data
+        pageTotal: 0,//数据总计
         patientText: false,//编辑模态框
-		    formCustom: {//编辑表格data
-		    	ptNa: '薛卫国',
-		    	ptPhone: '',
-		    	ptAdd: '',
-		    	ptYb: '',
-		    	ptName: '',
-		    	ptRe: '',
-		    	ptDz: '',
-		    	ptDh: '',
-		    	ptDe: ''
-		    },
+		    formItem: {
+          title: '',
+          content: '',
+          targetName: '',
+          diseaseName: '',
+          model10: [],
+          playWavOnly: 'string',
+        },
+        tagCount: [],
 		    editRules: {
-		    	// ptPhone: [
-       //      { required: true, message: '请填写联系电话', trigger: 'blur' },
-       //      { type: 'number', message: 'The password length cannot be less than 6 bits', trigger: 'blur' }
-       //    ],
+		    	
 		    } 
 			}
 		},
+    mounted() {
+      this.list(1)
+     
+    },
+
 		methods: {
-			//搜索栏提交按钮
-			handleSubmit(name) {
-        this.$refs[name].validate((valid) => {
-          if (valid) {
-            this.$Message.success('Success!');
-          } else {
-            this.$Message.error('Fail!');
+       /*
+      *获取prolist列表数据
+      */
+      list(pager) {
+        API.followProblems.list({
+          pager: pager,
+          limit: '10',
+        }).then((res) => {
+          if(res.code == 0) {
+            this.pardata = res.data
+            this.pageTotal = res.total
+          }else {
+            console.log(res.message)
           }
+        }).catch((error) => {
+          console.log(error)
         })
-    	},
+      },
+      /*
+      *获取分页列表数据
+      */
+      currentPage: function (page) {
+       API.followProblems.list({
+          pager: page,
+          limit: '10',
+          title: this.proSearch.title,
+          diseaseName: this.proSearch.diseaseName
+        }).then((res) => {
+          if(res.code == 0) {
+            this.pardata = res.data
+            this.pageTotal = res.total
+          }else {
+            console.log(res.message)
+          }
+        }).catch((error) => {
+          console.log(error)
+        })
+      },
+      /*
+      *查询功能
+      */
+      handleSearch() {
+        API.followProblems.list({
+          pager: 1,
+          limit: '10',
+          title: this.proSearch.title,
+          diseaseName: this.proSearch.diseaseName
+        }).then((res) => {
+          if(res.code == 0) {
+            this.pardata = res.data
+            this.pageTotal = res.total
+          }else {
+            console.log(res.message)
+          }
+        }).catch((error) => {
+          console.log(error)
+        })
+      },
+      /*
+      *添加指标
+      */
+      addBtn() {
+        this.patientText = true
+      },
+      /*
+      *确定添加
+      */
+      addModel(id) {
+        let jbnam = this.tagCount.join(',')
+        let addPram = {
+          id: '',
+          "title": this.formItem.title,
+          "content": this.formItem.content,
+          "targetName": this.formItem.targetName,
+          "diseaseName": this.tagCount.join(','),
+          "playWavOnly": this.formItem.playWavOnly,
+          "status": 0,
+         
+        }
+        API.followProblems.addList(addPram).then((res) => {
+          if(res.code == 0) {
+            console.log(res.message)
+            this.formItem.name = ''
+            this.formItem.select2 = ''
+            this.formItem.select = ''
+            this.formItem.radio = 'string'
+            this.formItem.textarea = ''
+            this.patientText = false;
+            this.list(1)
+            console.log(res)
+          }else {
+            alert('res.message='+res.message)
+          }
+        }).catch((error) => {
+          console.log(error)
+        })
+      },
+      /*
+      *删除
+      */
+      deleteRow(id){
+        API.follSetting.deleteList({
+         id:id
+        }).then((res) => {
+          if(res.code == 0) {
+            console.log(res.message)
+            this.list(1)
+            this.$Message.success({
+              content: '删除成功',
+              top: 500
+            });
+          }else {
+            alert(res.message)
+          }
+        }).catch((error) => {
+          console.log(error)
+        })
+      },
+      /*
+      *添加标签
+      */
+      addTag() {
+        this.tagCount.push(this.formItem.diseaseName)
+        this.formItem.diseaseName = ''
+        // if (this.tagCount.length) {
+        //   this.tagCount.push(this.tagCount[this.tagCount.length - 1] + 1);
+        // } else {
+        //   this.tagCount.push(0);
+        // }
+
+      },
+      /*
+      *删除标签
+      */
+      tagClose(event, name) {
+        const index = this.tagCount.indexOf(name);
+        this.tagCount.splice(index, 1);
+      },
+      /*
+      *监听是否纯放音的单选
+      */
+      radioChange(value) {
+        console.log('value='+value)
+      },
+      
+			
     	//详情模态框
     	show (index) {
         this.$Modal.info({
             title: 'User Info',
-            content: `Name：${this.data6[index].name}<br>Age：${this.data6[index].age}<br>Address：${this.data6[index].address}`
+            content: `Name：${this.pardata[index].name}<br>Age：${this.pardata[index].age}<br>Address：${this.pardata[index].address}`
         })
       },
       remove (index) {
-      	this.data6.splice(index, 1);
+      	this.pardata.splice(index, 1);
       },
       //详情关闭确认点击事件
       ok () {

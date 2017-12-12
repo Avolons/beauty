@@ -23,7 +23,7 @@
 		</Col>
 		<!-- 分页 -->
 		<Col span="24" class="pages">
-			<Page :total="100" show-elevator show-total></Page>
+			<Page :total="pageTotal" show-elevator show-total></Page>
 		</Col>
 		<!-- 详情模态框 -->
 		<Modal v-model="patientDetail" title="患者信息" class-name="patientInfo" @on-ok="ok" @on-cancel="cancel" :styles="{top: '180px'}" width="1000">
@@ -205,66 +205,8 @@
               ]);
             }
 				}],
-        data6: [//表格data
-            {
-                name: '血糖低了怎么办',
-                age: '糖尿病',
-                address: '血糖低了可以多吃点药，药不能听'
-            },
-            {
-                name: 'Jim Green',
-                age: 24,
-                address: 'London No. 1 Lake Park'
-            },
-            {
-                name: 'Joe Black',
-                age: 30,
-                address: 'Sydney No. 1 Lake Park'
-            },
-            {
-                name: 'Jon Snow',
-                age: 26,
-                address: 'Ottawa No. 2 Lake Park'
-            },{
-                name: '血糖低了怎么办',
-                age: '糖尿病',
-                address: '血糖低了可以多吃点药，药不能听'
-            },
-            {
-                name: 'Jim Green',
-                age: 24,
-                address: 'London No. 1 Lake Park'
-            },
-            {
-                name: 'Joe Black',
-                age: 30,
-                address: 'Sydney No. 1 Lake Park'
-            },
-            {
-                name: 'Jon Snow',
-                age: 26,
-                address: 'Ottawa No. 2 Lake Park'
-            },{
-                name: '血糖低了怎么办',
-                age: '糖尿病',
-                address: '血糖低了可以多吃点药，药不能听'
-            },
-            {
-                name: 'Jim Green',
-                age: 24,
-                address: 'London No. 1 Lake Park'
-            },
-            {
-                name: 'Joe Black',
-                age: 30,
-                address: 'Sydney No. 1 Lake Park'
-            },
-            {
-                name: 'Jon Snow',
-                age: 26,
-                address: 'Ottawa No. 2 Lake Park'
-            },
-        ],
+        datalist: [],//表格data,
+        pageTotal: 0,//总数据数
         patientDetail: false,//详情模态框
         patientText: false,//编辑模态框
 		    formCustom: {//编辑表格data
@@ -286,7 +228,28 @@
 		    } 
 			}
 		},
-		methods: {
+    mounted() {
+      this.list(1)
+    },
+    methods: {
+      /*
+      *获取list列表数据
+      */
+      list(pager) {
+        API.follSetting.list({
+          pager: pager,
+          limit: '10',
+        }).then((res) => {
+          if(res.code == 0) {
+            this.datalist = res.data
+            this.pageTotal = res.total
+          }else {
+            console.log(res.message)
+          }
+        }).catch((error) => {
+          console.log(error)
+        })
+      },
 			//搜索栏提交按钮
 			handleSubmit(name) {
         this.$refs[name].validate((valid) => {

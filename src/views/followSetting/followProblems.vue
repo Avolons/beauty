@@ -28,9 +28,10 @@
 		<!-- 详情模态框 -->
 	  <Modal v-model="patientText" title="添加问题 / 编辑问题"  @on-ok="ok" @on-cancel="cancel" width="650" class-name="patientInfo">
       <Form :model="formItem" :label-width="90" ref="">
+        <input type="hidden" v-model="formItem.id" placeholder="id">
         <FormItem label="问题标题">
             <Input v-model="formItem.title" placeholder="请输入问题标题"></Input>
-        </FormItem>
+        </FormItem> 
         <FormItem label="随访问题内容">
             <Input v-model="formItem.content" placeholder="请输入随访问题内容"></Input>
         </FormItem>
@@ -133,7 +134,7 @@
                                   this.formItem.targetName = res.data.targetName
                                   this.formItem.playWavOnly = res.data.playWavOnly
                                   //this.formItem.textarea = res.data.remark
-                                 
+                                  addModel(this.formItem.id)
                                 }else {
                                   console.log(res)
                                 }
@@ -190,6 +191,7 @@
         pageTotal: 0,//数据总计
         patientText: false,//编辑模态框
 		    formItem: {
+          id:'',
           title: '',
           content: '',
           targetName: '',
@@ -276,17 +278,16 @@
       /*
       *确定添加
       */
-      addModel(id) {
+      addModel() {
         let jbnam = this.tagCount.join(',')
         let addPram = {
-          id: '',
+          "id": this.formItem.id,
           "title": this.formItem.title,
           "content": this.formItem.content,
           "targetName": this.formItem.targetName,
           "diseaseName": this.tagCount.join(','),
           "playWavOnly": this.formItem.playWavOnly,
           "status": 0,
-         
         }
         API.followProblems.addList(addPram).then((res) => {
           if(res.code == 0) {

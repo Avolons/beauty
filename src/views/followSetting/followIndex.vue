@@ -38,6 +38,7 @@
 		<!-- 编辑功能模态框 -->
 		<Modal v-model="patientText" title="添加指标 / 编辑指标"  @on-ok="ok" @on-cancel="cancel" width="650" class-name="patientInfo">
       <Form :model="formItem" :label-width="80" ref="">
+        <input type="hidden" v-model="formItem.id" placeholder="id">
         <FormItem label="指标名称">
             <Input v-model="formItem.name" placeholder="请输入指标名称"></Input>
         </FormItem>
@@ -372,6 +373,16 @@
       */
       addBtn() {
         this.patientText = true
+        this.formItem.id = ''
+        this.formItem.name = ''
+        this.formItem.radio = 'string'
+        this.formItem.textarea = ''
+        this.formItem.top = ''
+        this.formItem.bottom = ''
+        this.optionList = []
+        this.radioText = false
+        this.radioNumber = false
+       
       },
       /*
       *确定添加
@@ -379,6 +390,7 @@
       addModel() {
         let addPram
         let addPram1 = {
+          "id": this.formItem.id,
           "name": this.formItem.name,
           "status": this.formItem.select2,
           "type": this.formItem.radio,
@@ -388,6 +400,7 @@
         console.log(this.formItem.model10)
         let strModel = this.formItem.model10.join(",")
         let addPram2 = {
+          "id": this.formItem.id,
           "name": this.formItem.name,
           "status": this.formItem.select2,
           "type": this.formItem.radio,
@@ -396,6 +409,7 @@
           "remark": this.formItem.textarea,
         }
         let addPram3 = {
+          "id": this.formItem.id,
           "name": this.formItem.name,
           "status": this.formItem.select2,
           "type": this.formItem.radio,
@@ -417,6 +431,7 @@
         API.follSetting.addList(addPram).then((res) => {
           if(res.code == 0) {
             console.log(res.message)
+            this.formItem.id = ''
             this.formItem.name = ''
             this.formItem.select2 = ''
             this.formItem.select = ''
@@ -425,8 +440,6 @@
             this.patientText = false;
             this.list(1)
           }else {
-
-            // alert(res.message)
             alert('res.message='+res.message)
           }
         }).catch((error) => {

@@ -7,16 +7,15 @@
           <Input type="text" v-model="proSearch.title" placeholder="请输入问题名称"></Input>
         </FormItem>
         <FormItem prop="diseaseName" label="疾病类型">
-           <!--  <Input type="text" v-model="proSearch.diseaseName" placeholder="请输入疾病类型" @on-keyup="keyupSearch($event)"></Input> -->
-            <Select v-model="proSearch.diseaseName" filterable remote :remote-method="remoteMethod2" :loading="loading2"  @on-keyup="keyupSearch($event)">
-              <Option v-for="(option, index) in options2" :value="option.value" :key="index">{{option.label}}</Option>
-            </Select>
+          <Select v-model="proSearch.diseaseName" filterable remote :remote-method="remoteMethod2" :loading="loading2" >
+            <Option v-for="(option, index) in options2" :value="option.value" :key="index">{{option.label}}</Option>
+          </Select>
         </FormItem>
         <FormItem>
           <Button type="primary" @click="handleSearch('proSearch')">查询</Button>
       	</FormItem>
       	<FormItem>
-          <Button type="primary" @click="addBtn">添加问题</Button>
+          <Button type="primary" @click="addBtn('proRuleModel')">添加问题</Button>
       	</FormItem>
 		  </Form>
 		</Col>
@@ -45,11 +44,10 @@
             </Select>
         </FormItem>
         <FormItem label="疾病标签" prop="diseaseName">
-          <Select v-model="formItem.diseaseName" filterable remote :remote-method="remoteMethod2" :loading="loading2"  @on-keyup="keyupSearch($event)" style="width: 70%;float: left ">
+          <Select v-model="formItem.diseaseName" filterable remote :remote-method="remoteMethod2" :loading="loading2" clearable @label-in-value="true"  @on-keyup="keyupSearch($event)" style="width: 70%;float: left;margin-right:20px;" @on-change="selectChange" not-found-text="" :label-in-value=true>
             <Option v-for="(option, index) in options2" :value="option.value" :key="index">{{option.label}}</Option>
           </Select>
-          <p>{{formItem.diseaseName}}</p>
-          <Button type="primary" @click="addTag">添加</Button>
+          <Button type="primary" @click="addTag" ref="addTagbtn">添加</Button>
         </FormItem>
         <FormItem label="" prop="">
           <tag v-for="item in tagCount" color="blue" :key="item" :name="item" closable @on-close="tagClose">{{item}}</tag>
@@ -214,6 +212,7 @@
         },             
 
         tagCount: [],
+        tagCount2: [],
 		    editRules: {
 		    	
 		    }, 
@@ -271,6 +270,12 @@
         })
       },
       /*
+      *获取选中的疾病标签列value
+      */
+      selectChange(value) {
+        console.log(value)
+      },
+      /*
       *查询功能
       */
       handleSearch() {
@@ -293,14 +298,14 @@
       /*
       *添加指标
       */
-      addBtn() {
-        this.patientText = true
+      addBtn(name) {
+        this.patientText = true;//打开模态框
+        this.$refs[name].resetFields();//清空表单
       },
       /*
       *确定添加
       */
       addModel(name) {
-
         let jbnam = this.tagCount.join(',')
         let addPram = {
           "id": this.formItem.id,
@@ -335,7 +340,6 @@
             this.$Message.error('Fail!');
           }
         })
-        
       },
       /*
       *删除
@@ -362,15 +366,24 @@
       *添加标签
       */
       addTag() {
+        
+        // this.tagCount.push(this.formItem.diseaseName)
+        let flag=0;
+        this.tagCount.forEach((item) => {
+          if(this.formItem.diseaseName == item || this.formItem.diseaseName == '') {
+            flag++; 
+          }
+        })
+        
+        if(flag>0){
+          this.formItem.diseaseName = ''
+          return false;
+
+        }
         this.tagCount.push(this.formItem.diseaseName)
+        
         this.formItem.diseaseName = ''
-
-        // if (this.tagCount.length) {
-        //   this.tagCount.push(this.tagCount[this.tagCount.length - 1] + 1);
-        // } else {
-        //   this.tagCount.push(0);
-        // }
-
+        
       },
       /*
       *删除标签
@@ -385,8 +398,6 @@
       radioChange(value) {
         console.log('value='+value)
       },
-      
-			
     	//详情模态框
     	show (index) {
         this.$Modal.info({
@@ -414,21 +425,6 @@
           }
         })
     	},
-      keyupSearch: function(ev) {
-        console.log(this.proSearch.targetName1)
-        // API.followProblems.disease({
-        //   'zjm': this.proSearch.diseaseName
-        // }).then((res) => {
-        //   if(res.code == 0) {
-        //     console.log(res)
-           
-        //   }else {
-        //     console.log(res)
-        //   }
-        // }).catch((error) => {
-        //   console.log(error)
-        // })
-      },
       /*
       *知名名称，根据助记码搜索指标类型
       */
@@ -438,70 +434,7 @@
       /*
       *指标类型--远程搜索
       */ 
-      // remoteMethod1 (query) {
-      //   API.follSetting.list({
-      //     'pager': '1',
-      //     'limit': '1000',
-      //     'zjm': this.formItem.targetName
-      //   }).then((res) => {
-      //     if(res.code == 0) {
-           
-      //       if(res.data.length) {
-      //         for(let i =0 ;i< res.data.length;i++) {
-      //           this.zjmdata.push(res.data[i].zjm,res.data[i].name)
-      //         }
-      //       }
-      //       this.listdata = this.zjmdata
-           
-      //       console.log(this.listdata)
-            
-      //     }else {
-      //       console.log(res)
-      //     }
-      //   }).catch((error) => {
-      //     console.log(error)
-      //   })
-      //   if (query !== '') {
-      //     this.loading1 = true;
-      //     setTimeout(() => {
-      //         this.loading1 = false;
-      //         const listdata = this.listdata.map(item => {
-      //             return {
-      //                 value: item,
-      //                 label: item
-      //             };
-      //         });
-      //         this.options1 = listdata.filter(item => item.label.toLowerCase().indexOf(query.toLowerCase()) > -1);
-      //     }, 200);
-      //     console.log('oooooo')
-      //     console.log(this.options1)
-      //   } else {
-      //     this.options1 = [];
-      //   }
-      // },
-      // _normalizeSinger(list) {
-      //   class Point {
-      //     constructor(value, label) {
-      //       this.value = value;
-      //       this.label = label;
-      //     }
-      //   }
-      //   let map = {
-      //     items: []
-      //   }
-      //   list.forEach((item,index) => {
-      //     map.items.push(new Point {
-      //       value: item.name,
-      //       label: item.zjm
-      //     })
-      //   })
-      //   console.log(map)
-      // },
-       /*
-      *疾病类型--远程搜索
-      */
       remoteMethod1 (query) {
-        console.log(query)
         API.follSetting.list({
           'pager': '1',
           'limit': '1000',
@@ -542,6 +475,9 @@
         })
         
       },
+      /*
+      *疾病类型--远程搜索
+      */
       remoteMethod2 (query) {
         API.followProblems.disease({
           'zjm': query

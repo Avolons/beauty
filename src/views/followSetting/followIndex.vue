@@ -37,12 +37,12 @@
 	
 		<!-- 编辑功能模态框 -->
 		<Modal v-model="patientText" title="添加指标 / 编辑指标"  @on-ok="ok" @on-cancel="cancel" width="650" class-name="patientInfo">
-      <Form :model="formItem" :label-width="80" ref="">
+      <Form :model="formItem" :label-width="80" ref="formValidate" :rules="ruleValidate">
         <input type="hidden" v-model="formItem.id" placeholder="id">
-        <FormItem label="指标名称">
+        <FormItem label="指标名称" prop="name">
             <Input v-model="formItem.name" placeholder="请输入指标名称"></Input>
         </FormItem>
-        <FormItem label="指标类型">
+        <FormItem label="指标类型" prop="select">
             <Select v-model="formItem.select">
               <Option value="01">症状</Option>
               <Option value="02">体征</Option>
@@ -53,39 +53,32 @@
               <Option value="07">通用</Option>
             </Select>
         </FormItem>
-        <!-- <FormItem label="启用状态">
-            <Select v-model="formItem.select2">
-              <Option value="0">启用</Option>
-              <Option value="1">停用</Option>
-            </Select>
-        </FormItem> -->
-       
-        <FormItem label="结果类型"  >
+        <FormItem label="结果类型"  prop="radio">
             <RadioGroup v-model="formItem.radio" @on-change="radioChange">
               <Radio label="string">文本</Radio>
               <Radio label="select">选项</Radio>
               <Radio label="digit">数值</Radio>
             </RadioGroup>
         </FormItem>
-        	<FormItem label="指标选项" v-if="radioText">
+        	<FormItem label="指标选项" v-if="radioText" prop="indexName">
             <Input v-model="formItem.indexName" placeholder="请输入指标选项" style="width:80%"></Input>
             <Button type="primary" @click="addItem">添加</Button>
         	</FormItem>
-        <FormItem label="预警阀值"  v-if="radioText">
+        <FormItem label="预警阀值"  v-if="radioText" prop="model10">
         	<Select v-model="formItem.model10" multiple style="width:260px">
 			        <Option v-for="item in optionList" :value="item.value" :key="item.value">{{ item.label }}</Option>
 			    </Select>
         </FormItem>
-        <FormItem label="预警阀值"  v-if="radioNumber">
-        	<Input v-model="formItem.top" placeholder="请输入下限" style="width:20%"></Input>
+        <FormItem label="预警阀值"  v-if="radioNumber" >
+        	<Input v-model="formItem.top" type="text" placeholder="请输入下限" style="width:20%" number prop="top"></Input>
         	<span>-</span>
-        	<Input v-model="formItem.bottom" placeholder="请输入上限" style="width:20%"></Input>
+        	<Input v-model="formItem.bottom" type="text" placeholder="请输入上限" style="width:20%" number></Input>
         </FormItem>
         <FormItem label="备注">
             <Input v-model="formItem.textarea" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="添加备注"></Input>
         </FormItem>
         <FormItem>
-            <Button type="primary" @click="addModel">保存</Button>
+            <Button type="primary" @click="addModel('formValidate')">保存</Button>
         </FormItem>
     </Form>
     </Modal>
@@ -96,6 +89,17 @@
   import {API} from '@/services';
 	export default {
 		data() {
+      const validateAge = (rule, value, callback) => {
+          if (!value) {
+              return callback(new Error('Age cannot be empty'));
+          }
+          
+          if (!Number.isInteger(value)) {
+              callback(new Error('Please enter a numeric value'));
+          } else {
+          }
+         
+      };
 			return {
 				IndexSearch: {
 					name: '',
@@ -279,6 +283,26 @@
           top: '',
           bottom: ''
         },
+
+        ruleValidate: {
+          name: [
+            { required: true, message: '指标名称不能为空', trigger: 'blur' }
+          ],
+          select: [
+            { required: true, message: '指标类型不能为空', trigger: 'change' }
+          ],
+          radio: [
+            { required: true, message: '请选择是否放音', trigger: 'change' }
+          ],
+          // model10: [
+          //   { required: true, message: '指标选项不能为空', trigger: 'blur' },
+          //   { type: 'string', message: '来来来' ,trigger: 'blur'}
+          // ],
+          // top: [
+          //   { validator: validateAge, trigger: 'blur' }
+          // ],
+         
+        },
         optionList: [],
         radioText: false,
         radioNumber: false,
@@ -387,64 +411,72 @@
       /*
       *确定添加
       */
-      addModel() {
-        let addPram
-        let addPram1 = {
-          "id": this.formItem.id,
-          "name": this.formItem.name,
-          "status": this.formItem.select2,
-          "type": this.formItem.radio,
-          "otype": this.formItem.select,
-          "remark": this.formItem.textarea
-        }
-        console.log(this.formItem.model10)
-        let strModel = this.formItem.model10.join(",")
-        let addPram2 = {
-          "id": this.formItem.id,
-          "name": this.formItem.name,
-          "status": this.formItem.select2,
-          "type": this.formItem.radio,
-          "otype": this.formItem.select,
-          "optionValues": strModel,
-          "remark": this.formItem.textarea,
-        }
-        let addPram3 = {
-          "id": this.formItem.id,
-          "name": this.formItem.name,
-          "status": this.formItem.select2,
-          "type": this.formItem.radio,
-          "otype": this.formItem.select,
-          "thresholdValueStart": this.formItem.top,
-          "thresholdValueEnd": this.formItem.bottom,
-          "remark": this.formItem.textarea
-        }
-        console.log(addPram1)
-        if(this.formItem.radio == 'string') {
-          addPram = addPram1
-        }
-        if(this.formItem.radio == 'digit') {
-          addPram = addPram3
-        }
-        if(this.formItem.radio == 'select') {
-          addPram = addPram2
-        }
-        API.follSetting.addList(addPram).then((res) => {
-          if(res.code == 0) {
-            console.log(res.message)
-            this.formItem.id = ''
-            this.formItem.name = ''
-            this.formItem.select2 = ''
-            this.formItem.select = ''
-            this.formItem.radio = 'string'
-            this.formItem.textarea = ''
-            this.patientText = false;
-            this.list(1)
-          }else {
-            alert('res.message='+res.message)
+      addModel(name) {
+        this.$refs[name].validate((valid) => {
+          if (valid) {
+            this.$Message.success('Success!');
+            let addPram
+            let addPram1 = {
+              "id": this.formItem.id,
+              "name": this.formItem.name,
+              "status": this.formItem.select2,
+              "type": this.formItem.radio,
+              "otype": this.formItem.select,
+              "remark": this.formItem.textarea
+            }
+            console.log(this.formItem.model10)
+            let strModel = this.formItem.model10.join(",")
+            let addPram2 = {
+              "id": this.formItem.id,
+              "name": this.formItem.name,
+              "status": this.formItem.select2,
+              "type": this.formItem.radio,
+              "otype": this.formItem.select,
+              "optionValues": strModel,
+              "remark": this.formItem.textarea,
+            }
+            let addPram3 = {
+              "id": this.formItem.id,
+              "name": this.formItem.name,
+              "status": this.formItem.select2,
+              "type": this.formItem.radio,
+              "otype": this.formItem.select,
+              "thresholdValueStart": this.formItem.top,
+              "thresholdValueEnd": this.formItem.bottom,
+              "remark": this.formItem.textarea
+            }
+            console.log(addPram1)
+            if(this.formItem.radio == 'string') {
+              addPram = addPram1
+            }
+            if(this.formItem.radio == 'digit') {
+              addPram = addPram3
+            }
+            if(this.formItem.radio == 'select') {
+              addPram = addPram2
+            }
+            API.follSetting.addList(addPram).then((res) => {
+              if(res.code == 0) {
+                console.log(res.message)
+                this.formItem.id = ''
+                this.formItem.name = ''
+                this.formItem.select2 = ''
+                this.formItem.select = ''
+                this.formItem.radio = 'string'
+                this.formItem.textarea = ''
+                this.patientText = false;
+                this.list(1)
+              }else {
+                alert('res.message='+res.message)
+              }
+            }).catch((error) => {
+              console.log(error)
+            })
+          } else {
+            this.$Message.error('Fail!');
           }
-        }).catch((error) => {
-          console.log(error)
         })
+        
       },
       /*
       *监听增加/编辑单选状态

@@ -7,7 +7,7 @@
           <Input type="text" v-model="proSearch.title" placeholder="请输入问题名称"></Input>
         </FormItem>
         <FormItem prop="diseaseName" label="疾病类型">
-          <Input type="text" v-model="proSearch.diseaseName" placeholder="请输入疾病类型"></Input>
+          <Input type="text" v-model="proSearch.diseaseName" placeholder="请输入疾病类型" @on-keyup="keyupSearch($event)"></Input>
         </FormItem>
         <FormItem>
           <Button type="primary" @click="handleSearch('proSearch')">查询</Button>
@@ -27,32 +27,35 @@
 		</Col>
 		<!-- 详情模态框 -->
 	  <Modal v-model="patientText" title="添加问题 / 编辑问题"  @on-ok="ok" @on-cancel="cancel" width="650" class-name="patientInfo">
-      <Form :model="formItem" :label-width="90" ref="">
+      <Form :model="formItem" :label-width="100" ref="proRuleModel" :rules="proRuleModel">
         <input type="hidden" v-model="formItem.id" placeholder="id">
-        <FormItem label="问题标题">
+        <FormItem label="问题标题" prop="title">
             <Input v-model="formItem.title" placeholder="请输入问题标题"></Input>
         </FormItem> 
-        <FormItem label="随访问题内容">
+        <FormItem label="随访问题内容" prop="content">
             <Input v-model="formItem.content" placeholder="请输入随访问题内容"></Input>
         </FormItem>
-        <FormItem label="关联指标">
-            <Input v-model="formItem.targetName" placeholder="根据首字母进行搜索"></Input>
+        <FormItem label="关联指标" prop="targetName">
+            <!-- <Input v-model="formItem.targetName" placeholder="根据首字母进行搜索" @on-keyup="keyupzb($event)"></Input> -->
+            <Select v-model="formItem.targetName" filterable remote :remote-method="remoteMethod1" :loading="loading1">
+                <Option v-for="(option, index) in options1" :value="option.value" :key="index">{{option.label}}</Option>
+            </Select>
         </FormItem>
-        <FormItem label="疾病标签">
+        <FormItem label="疾病标签" prop="diseaseName">
           <Input v-model="formItem.diseaseName" placeholder="根据首字母进行搜索" style="width:80%"></Input>
           <Button type="primary" @click="addTag">添加</Button>
         </FormItem>
-        <FormItem label="">
+        <FormItem label="" prop="">
           <tag v-for="item in tagCount" color="blue" :key="item" :name="item" closable @on-close="tagClose">{{item}}</tag>
         </FormItem>
-        <FormItem label="纯放音"  >
+        <FormItem label="纯放音">
             <RadioGroup v-model="formItem.playWavOnly" @on-change="radioChange">
               <Radio label="1">是</Radio>
               <Radio label="0">否</Radio>
             </RadioGroup>
         </FormItem>
         <FormItem>
-            <Button type="primary" @click="addModel">保存</Button>
+            <Button type="primary" @click="addModel('proRuleModel')">保存</Button>
         </FormItem>
       </Form>
     </Modal>
@@ -79,7 +82,6 @@
           ]
         },
         columns7: [//表格栏
-
           {
             title: 'id',
             key: 'id',
@@ -106,86 +108,82 @@
             align: 'center'
           },
           {
-              title: '操作',
-              key: 'action',
-              width: 250,
-              align: 'center',
-              render: (h, params) => {
-                  return h('div', [
-                      h('Button', {
-                          props: {
-                              type: 'primary',
-                              size: 'small'
-                          },
-                          style: {
-                              marginRight: '5px'
-                          },
-                          on: {
-                            click: () => {
-                            	this.patientText = true
-                              API.followProblems.editList({
-                                id: params.row.id
-                              }).then((res) => {
-                                if(res.code == 0) {
-                                  console.log(res)
-                                  this.formItem.id = res.data.id
-                                  this.formItem.title = res.data.title
-                                  this.formItem.content = res.data.content
-                                  this.formItem.targetName = res.data.targetName
-                                  this.formItem.playWavOnly = res.data.playWavOnly
-                                  //this.formItem.textarea = res.data.remark
-                                  addModel(this.formItem.id)
-                                }else {
-                                  console.log(res)
-                                }
-                              }).catch((error) => {
-                                console.log(error)
-                              })
-                            }
-                          }
-                      }, '编辑'),
-                     
-                      h('Button', {
-                          props: {
-                              type: 'warning',
-                              size: 'small'
-                          },
-                          style: {
-                          	marginRight: '5px'
-                          },
-                          on: {
-                              click: () => {
-                                  
-                                  this.$Modal.confirm({
-								                    title: 'Title',
-								                    content: '<p>确定要删除吗?</p>',
-								                    onOk: () => {
-								                        this.deleteRow(params.row.id)
-								                    },
-								                    onCancel: () => {
-								                        // this.$Message.info('Clicked cancel');
-								                    }
-								                });
-                              }
-                          }
-                      }, '删除'),
-                      h('Button', {
-                          props: {
-                              type: 'warning',
-                              size: 'small'
-                          },
-                          style: {
-
-                          },
-                          on: {
-                              click: () => {
-                                  this.$router.push({path:'/followSetting/voice/voice/:123'});
-                                 
-                              }
-                          }
-                      }, '编辑话述')
-                  ]);
-              }
+            title: '操作',
+            key: 'action',
+            width: 250,
+            align: 'center',
+            render: (h, params) => {
+              return h('div', [
+                h('Button', {
+                  props: {
+                    type: 'primary',
+                    size: 'small'
+                  },
+                  style: {
+                    marginRight: '5px'
+                  },
+                  on: {
+                    click: () => {
+                    	this.patientText = true
+                      API.followProblems.editList({
+                        "id": params.row.id
+                      }).then((res) => {
+                        if(res.code == 0) {
+                          console.log(res)
+                          this.formItem.id = res.data.id
+                          this.formItem.title = res.data.title
+                          this.formItem.content = res.data.content
+                          this.formItem.targetName = res.data.targetName
+                          this.formItem.playWavOnly = res.data.playWavOnly
+                          //this.formItem.textarea = res.data.remark
+                          addModel(this.formItem.id)
+                        }else {
+                          console.log(res)
+                        }
+                      }).catch((error) => {
+                        console.log(error)
+                      })
+                    }
+                  }
+                }, '编辑'),
+               
+                h('Button', {
+                  props: {
+                    type: 'warning',
+                    size: 'small'
+                  },
+                  style: {
+                  	marginRight: '5px'
+                  },
+                  on: {
+                    click: () => {
+                      this.$Modal.confirm({
+		                    title: 'Title',
+		                    content: '<p>确定要删除吗?</p>',
+		                    onOk: () => {
+	                        this.deleteRow(params.row.id)
+		                    },
+		                    onCancel: () => {
+		                        // this.$Message.info('Clicked cancel');
+		                    }
+		                  });
+                    }
+                  }
+                }, '删除'),
+                h('Button', {
+                  props: {
+                    type: 'warning',
+                    size: 'small'
+                  },
+                  style: {},
+                  on: {
+                    click: () => {
+                      this.$router.push({path:'/followSetting/voice/voice/:123'});
+                    }
+                  }
+                }, '编辑话述')
+              ]);
+            }
 				}],
         pardata: [],//表格data
         pageTotal: 0,//数据总计
@@ -197,12 +195,33 @@
           targetName: '',
           diseaseName: '',
           model10: [],
-          playWavOnly: 'string',
+          playWavOnly: '1',
         },
+        proRuleModel: {//模态框校验
+          title: [
+            { required: true, message: '问题标题问题标题不能为空', trigger: 'blur' },
+            { type: 'string', max: 30, message: '最大长度不超过30', trigger: 'blur' }
+          ],
+          content: [
+            { required: true, message: '问题内容不能为空', trigger: 'blur' }
+          ],
+          targetName: [
+            { required: true, message: '关联指标不能为空', trigger: 'blur' }
+          ],
+          password: [
+            { required: true, message: 'Please fill in the password.', trigger: 'blur' },
+            { type: 'string', min: 6, message: 'The password length cannot be less than 6 bits', trigger: 'blur' }
+          ]
+        },             
+
         tagCount: [],
 		    editRules: {
 		    	
-		    } 
+		    }, 
+        zjmdata: [],//助记码array
+        loading1: false,
+        options1: [],
+        listdata: []
 			}
 		},
     mounted() {
@@ -278,34 +297,43 @@
       /*
       *确定添加
       */
-      addModel() {
+      addModel(name) {
+
         let jbnam = this.tagCount.join(',')
         let addPram = {
           "id": this.formItem.id,
           "title": this.formItem.title,
           "content": this.formItem.content,
-          "targetName": this.formItem.targetName,
+          "targetId": this.formItem.targetName,
           "diseaseName": this.tagCount.join(','),
           "playWavOnly": this.formItem.playWavOnly,
           "status": 0,
         }
-        API.followProblems.addList(addPram).then((res) => {
-          if(res.code == 0) {
-            console.log(res.message)
-            this.formItem.name = ''
-            this.formItem.select2 = ''
-            this.formItem.select = ''
-            this.formItem.radio = 'string'
-            this.formItem.textarea = ''
-            this.patientText = false;
-            this.list(1)
-            console.log(res)
-          }else {
-            alert('res.message='+res.message)
+        this.$refs[name].validate((valid) => {
+          if (valid) {
+            this.$Message.success('Success!');
+            API.followProblems.addList(addPram).then((res) => {
+              if(res.code == 0) {
+                console.log(res.message)
+                this.formItem.name = ''
+                this.formItem.select2 = ''
+                this.formItem.select = ''
+                this.formItem.radio = 'string'
+                this.formItem.textarea = ''
+                this.patientText = false;
+                this.list(1)
+                console.log(res)
+              }else {
+                alert('res.message='+res.message)
+              }
+            }).catch((error) => {
+              console.log(error)
+            })
+          } else {
+            this.$Message.error('Fail!');
           }
-        }).catch((error) => {
-          console.log(error)
         })
+        
       },
       /*
       *删除
@@ -383,6 +411,67 @@
           }
         })
     	},
+      keyupSearch: function(ev) {
+        console.log(this.proSearch.diseaseName)
+        // API.followProblems.disease({
+        //   'zjm': this.proSearch.diseaseName
+        // }).then((res) => {
+        //   if(res.code == 0) {
+        //     console.log(res)
+           
+        //   }else {
+        //     console.log(res)
+        //   }
+        // }).catch((error) => {
+        //   console.log(error)
+        // })
+      },
+      /*
+      *知名名称，根据助记码搜索指标类型
+      */
+      keyupzb: function(ev) {
+        console.log(this.formItem.targetName)
+        
+      },
+      remoteMethod1 (query) {
+        API.follSetting.list({
+          'pager': 1,
+          'limit': '10000000',
+          'zjm': this.formItem.targetName
+        }).then((res) => {
+          if(res.code == 0) {
+            console.log(res)
+            if(res.data.length) {
+              for(let i =0 ;i< res.data.length;i++) {
+                this.zjmdata.push(res.data[i].zjm)
+              }
+            }
+            this.listdata = this.zjmdata
+           
+            console.log(this.listdata)
+            
+          }else {
+            console.log(res)
+          }
+        }).catch((error) => {
+          console.log(error)
+        })
+        if (query !== '') {
+          this.loading1 = true;
+          setTimeout(() => {
+              this.loading1 = false;
+              const listdata = this.listdata.map(item => {
+                  return {
+                      value: item,
+                      label: item
+                  };
+              });
+              this.options1 = listdata.filter(item => item.label.toLowerCase().indexOf(query.toLowerCase()) > -1);
+          }, 200);
+        } else {
+          this.options1 = [];
+        }
+      },
 		}
 	}
 </script>

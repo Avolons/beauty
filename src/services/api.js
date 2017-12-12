@@ -232,6 +232,9 @@ export const followProblems = {
     },
     editList (data) {
         return fetch('get', 'visit/question/get', data);
-    }
+    },
+    disease (data) {
+        return fetch('get', 'visit/disease/autocomplete', data);
+    },
 };
 

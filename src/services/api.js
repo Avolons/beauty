@@ -237,4 +237,31 @@ export const followProblems = {
         return fetch('get', 'visit/disease/autocomplete', data);
     },
 };
+/* 随访设置--随访问题接口 *****/
+export const followTemplate = {
+  /**
+   * 随访问题所有信息展示
+   * page//当前页码(必选)
+   * limit//当每页条数,默认是10(必选)
+   * title//指标名称(可选)
+   * diseaseId //指标类型(可选)
+   * @param {any} data
+   * @returns
+   */
+    list (data) {
+        return fetch('get', 'visit/questiontemple/list', data);
+    },
+    deleteList(data) {
+        return fetch('get', 'visit/questiontemple/delete', data);
+    },
+    addList (data) {
+        return fetch('post', 'visit/questiontemple/save', data);
+    },
+    editList (data) {
+        return fetch('get', 'visit/questiontemple/get', data);
+    },
+    disease (data) {
+        return fetch('get', 'visit/disease/autocomplete', data);
+    },
+};
 

@@ -2,12 +2,15 @@
 	<Row class="patientSearch">
 		<!-- 搜索栏 -->
 		<Col span="24" class="patientSearch">
-			<Form ref="proSearch" :model="proSearch" :rules="ruleInline" :label-width="80" inline >
+			<Form ref="proSearch" :model="proSearch" :label-width="80" inline >
         <FormItem prop="title" label="问题标题">
           <Input type="text" v-model="proSearch.title" placeholder="请输入问题名称"></Input>
         </FormItem>
         <FormItem prop="diseaseName" label="疾病类型">
-          <Input type="text" v-model="proSearch.diseaseName" placeholder="请输入疾病类型" @on-keyup="keyupSearch($event)"></Input>
+           <!--  <Input type="text" v-model="proSearch.diseaseName" placeholder="请输入疾病类型" @on-keyup="keyupSearch($event)"></Input> -->
+            <Select v-model="proSearch.diseaseName" filterable remote :remote-method="remoteMethod2" :loading="loading2"  @on-keyup="keyupSearch($event)">
+              <Option v-for="(option, index) in options2" :value="option.value" :key="index">{{option.label}}</Option>
+            </Select>
         </FormItem>
         <FormItem>
           <Button type="primary" @click="handleSearch('proSearch')">查询</Button>
@@ -35,14 +38,17 @@
         <FormItem label="随访问题内容" prop="content">
             <Input v-model="formItem.content" placeholder="请输入随访问题内容"></Input>
         </FormItem>
-        <FormItem label="关联指标" prop="targetName">
+        <FormItem label="关联指标" prop="targetName1">
             <!-- <Input v-model="formItem.targetName" placeholder="根据首字母进行搜索" @on-keyup="keyupzb($event)"></Input> -->
-            <Select v-model="formItem.targetName" filterable remote :remote-method="remoteMethod1" :loading="loading1">
+            <Select v-model="formItem.targetName1" filterable remote :remote-method="remoteMethod1" :loading="loading1">
                 <Option v-for="(option, index) in options1" :value="option.value" :key="index">{{option.label}}</Option>
             </Select>
         </FormItem>
         <FormItem label="疾病标签" prop="diseaseName">
-          <Input v-model="formItem.diseaseName" placeholder="根据首字母进行搜索" style="width:80%"></Input>
+          <Select v-model="formItem.diseaseName" filterable remote :remote-method="remoteMethod2" :loading="loading2"  @on-keyup="keyupSearch($event)" style="width: 70%;float: left ">
+            <Option v-for="(option, index) in options2" :value="option.value" :key="index">{{option.label}}</Option>
+          </Select>
+          <p>{{formItem.diseaseName}}</p>
           <Button type="primary" @click="addTag">添加</Button>
         </FormItem>
         <FormItem label="" prop="">
@@ -71,15 +77,6 @@
 				proSearch: {//搜索框
           title: '',
           diseaseName: '',
-        },
-        ruleInline: {//搜索框校验
-          user: [
-            { required: true, message: 'Please fill in the user name', trigger: 'blur' }
-          ],
-          password: [
-            { required: true, message: 'Please fill in the password.', trigger: 'blur' },
-            { type: 'string', min: 6, message: 'The password length cannot be less than 6 bits', trigger: 'blur' }
-          ]
         },
         columns7: [//表格栏
           {
@@ -188,12 +185,14 @@
         pardata: [],//表格data
         pageTotal: 0,//数据总计
         patientText: false,//编辑模态框
+        diseaseIdInp: '',//疾病id隐藏域
 		    formItem: {
           id:'',
           title: '',
           content: '',
-          targetName: '',
+          targetName1: '',
           diseaseName: '',
+          diseaseId: '',
           model10: [],
           playWavOnly: '1',
         },
@@ -205,7 +204,7 @@
           content: [
             { required: true, message: '问题内容不能为空', trigger: 'blur' }
           ],
-          targetName: [
+          targetName1: [
             { required: true, message: '关联指标不能为空', trigger: 'blur' }
           ],
           password: [
@@ -221,12 +220,15 @@
         zjmdata: [],//助记码array
         loading1: false,
         options1: [],
-        listdata: []
+        listdata: [],
+        loading2: false,
+        options2: [],
+        listdata2: [],
+        diseasedata: []
 			}
 		},
     mounted() {
       this.list(1)
-     
     },
 
 		methods: {
@@ -235,14 +237,14 @@
       */
       list(pager) {
         API.followProblems.list({
-          pager: pager,
-          limit: '10',
+          'pager': pager,
+          'limit': '10',
         }).then((res) => {
           if(res.code == 0) {
             this.pardata = res.data
             this.pageTotal = res.total
           }else {
-            console.log(res.message)
+            console.log(res.code)
           }
         }).catch((error) => {
           console.log(error)
@@ -273,10 +275,10 @@
       */
       handleSearch() {
         API.followProblems.list({
-          pager: 1,
-          limit: '10',
-          title: this.proSearch.title,
-          diseaseName: this.proSearch.diseaseName
+          'pager': 1,
+          'limit': '10',
+          'title': this.proSearch.title,
+          'diseaseId': this.proSearch.diseaseName
         }).then((res) => {
           if(res.code == 0) {
             this.pardata = res.data
@@ -304,8 +306,8 @@
           "id": this.formItem.id,
           "title": this.formItem.title,
           "content": this.formItem.content,
-          "targetId": this.formItem.targetName,
-          "diseaseName": this.tagCount.join(','),
+          "targetId": this.formItem.targetName1,
+          "diseaseId": this.tagCount.join(','),
           "playWavOnly": this.formItem.playWavOnly,
           "status": 0,
         }
@@ -362,6 +364,7 @@
       addTag() {
         this.tagCount.push(this.formItem.diseaseName)
         this.formItem.diseaseName = ''
+
         // if (this.tagCount.length) {
         //   this.tagCount.push(this.tagCount[this.tagCount.length - 1] + 1);
         // } else {
@@ -412,7 +415,7 @@
         })
     	},
       keyupSearch: function(ev) {
-        console.log(this.proSearch.diseaseName)
+        console.log(this.proSearch.targetName1)
         // API.followProblems.disease({
         //   'zjm': this.proSearch.diseaseName
         // }).then((res) => {
@@ -431,24 +434,105 @@
       */
       keyupzb: function(ev) {
         console.log(this.formItem.targetName)
-        
       },
+      /*
+      *指标类型--远程搜索
+      */ 
+      // remoteMethod1 (query) {
+      //   API.follSetting.list({
+      //     'pager': '1',
+      //     'limit': '1000',
+      //     'zjm': this.formItem.targetName
+      //   }).then((res) => {
+      //     if(res.code == 0) {
+           
+      //       if(res.data.length) {
+      //         for(let i =0 ;i< res.data.length;i++) {
+      //           this.zjmdata.push(res.data[i].zjm,res.data[i].name)
+      //         }
+      //       }
+      //       this.listdata = this.zjmdata
+           
+      //       console.log(this.listdata)
+            
+      //     }else {
+      //       console.log(res)
+      //     }
+      //   }).catch((error) => {
+      //     console.log(error)
+      //   })
+      //   if (query !== '') {
+      //     this.loading1 = true;
+      //     setTimeout(() => {
+      //         this.loading1 = false;
+      //         const listdata = this.listdata.map(item => {
+      //             return {
+      //                 value: item,
+      //                 label: item
+      //             };
+      //         });
+      //         this.options1 = listdata.filter(item => item.label.toLowerCase().indexOf(query.toLowerCase()) > -1);
+      //     }, 200);
+      //     console.log('oooooo')
+      //     console.log(this.options1)
+      //   } else {
+      //     this.options1 = [];
+      //   }
+      // },
+      // _normalizeSinger(list) {
+      //   class Point {
+      //     constructor(value, label) {
+      //       this.value = value;
+      //       this.label = label;
+      //     }
+      //   }
+      //   let map = {
+      //     items: []
+      //   }
+      //   list.forEach((item,index) => {
+      //     map.items.push(new Point {
+      //       value: item.name,
+      //       label: item.zjm
+      //     })
+      //   })
+      //   console.log(map)
+      // },
+       /*
+      *疾病类型--远程搜索
+      */
       remoteMethod1 (query) {
+        console.log(query)
         API.follSetting.list({
-          'pager': 1,
-          'limit': '10000000',
-          'zjm': this.formItem.targetName
+          'pager': '1',
+          'limit': '1000',
+          'zjm': query
         }).then((res) => {
           if(res.code == 0) {
-            console.log(res)
-            if(res.data.length) {
-              for(let i =0 ;i< res.data.length;i++) {
-                this.zjmdata.push(res.data[i].zjm)
+            
+            console.log(res.data)
+            class Point {
+              constructor(item) {
+                this.value = item.value;
+                this.label = item.label;
               }
             }
-            this.listdata = this.zjmdata
-           
-            console.log(this.listdata)
+            let parr = []
+            let more = res.data
+            more.forEach((item) => {
+              parr.push(new Point({
+                value: item.zjm,
+                label: item.name
+              }))
+            })
+
+            this.options1 = parr
+            if (query !== '') {
+              this.options1 = parr
+              
+            } else {
+              this.options1 = [];
+            }
+
             
           }else {
             console.log(res)
@@ -456,21 +540,46 @@
         }).catch((error) => {
           console.log(error)
         })
-        if (query !== '') {
-          this.loading1 = true;
-          setTimeout(() => {
-              this.loading1 = false;
-              const listdata = this.listdata.map(item => {
-                  return {
-                      value: item,
-                      label: item
-                  };
-              });
-              this.options1 = listdata.filter(item => item.label.toLowerCase().indexOf(query.toLowerCase()) > -1);
-          }, 200);
-        } else {
-          this.options1 = [];
-        }
+        
+      },
+      remoteMethod2 (query) {
+        API.followProblems.disease({
+          'zjm': query
+        }).then((res) => {
+         
+          console.log(res)
+          if(res.code == 0) {
+            class Point {
+              constructor(item) {
+                this.value = item.value;
+                this.label = item.label;
+              }
+            }
+            let parr2 = []
+            let more2 = res.data
+            more2.forEach((item) => {
+              parr2.push(new Point({
+                value: item.id,
+                label: item.value
+              }))
+            })
+
+            this.options2 = parr2
+            if (query !== '') {
+              this.options2 = parr2
+              
+            } else {
+              this.options2 = [];
+              this.proSearch.diseaseName = ''
+            }
+
+            
+          }else {
+            console.log(res)
+          }
+        }).catch((error) => {
+          console.log(error)
+        })
       },
 		}
 	}

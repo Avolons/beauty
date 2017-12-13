@@ -459,7 +459,7 @@
             let more = res.data
             more.forEach((item) => {
               parr.push(new Point({
-                value: item.zjm,
+                value: item.id,
                 label: item.name
               }))
             })

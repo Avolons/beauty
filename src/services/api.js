@@ -14,15 +14,14 @@ Vue.prototype.$http = axios;
 /* 默认最长响应时间 */
 axios.defaults.timeout = 500;
 /* 默认的接口地址 */
-axios.defaults.baseURL = 'http://192.168.1.100:8080/';
+axios.defaults.baseURL = 'http://192.168.1.40:8080/';
 
 // 添加请求拦截器
 axios.interceptors.request.use(function (config) {
     config.data = qs.stringify(config.data);
   // 在发送请求之前做些什么
     config.headers = {
-        'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
-
+        'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
     };
     return config;
 }, function (error) {
@@ -175,8 +174,54 @@ export const Jurisdiction = {
    */
     delPosition (data) {
         return fetch('get', '/admin/position/del', data);
+    },
+    /**
+     * 权限设置-功能树
+     * @returns
+     */
+    listFun (data) {
+        return fetch('get', 'http://192.168.1.52:8080/visit/admin/action/list', data);
+    },
+    /**
+     * name:'我的测试11',    //功能名称
+     * url:'/visit/test/11',  //功能对应的URL
+     * isMenu:true,     //菜单为true,功能为false
+     * icon:'fa-home',  //默认为fa-home
+     * menuPosStr:'',  //默认为空
+     * paixu:0,        //排列顺序
+     * pid:341       //父ID
+     * @param {any} data
+     * @returns
+     */
+    editFun (data) {
+        return fetch('post', 'http://192.168.1.52:8080/visit/admin/action/save', data);
+    },
+    /**
+     * 功能删除
+     * id 功能id
+     * @param {any} data
+     * @returns
+     */
+    delFun (data) {
+        return fetch('post', 'http://192.168.1.52:8080/visit/admin/action/del', data);
     }
 
+};
+
+/* 系统设置与相关接口 *****/
+export const System = {
+    /**
+     * 企业添加
+     * name:  //公司名称 String
+     * address:  //公司地址 String
+     * contacts: //联系人 String
+     * phone:  //公司电话 String
+     * @param {any} data
+     * @returns
+     */
+    addBusiness (data) {
+        return fetch('get', '/admin/newSysConfig/list', data);
+    }
 };
 
 export const mine = {
@@ -193,7 +238,7 @@ export const follSetting = {
    * page
    * limit
    * name
-   * otype 
+   * otype
    * @param {any} data
    * @returns
    */
@@ -224,7 +269,7 @@ export const followProblems = {
     list (data) {
         return fetch('get', 'visit/question/list', data);
     },
-    deleteList(data) {
+    deleteList (data) {
         return fetch('get', 'visit/questiontarget/delete', data);
     },
     addList (data) {
@@ -264,4 +309,3 @@ export const followTemplate = {
         return fetch('get', 'visit/disease/autocomplete', data);
     },
 };
-

@@ -1,7 +1,7 @@
 <style lang="less" >
     .groupList{
         &_list{
-
+            margin-top: 10px;
         }
         &_page{
             margin-top: 15px;

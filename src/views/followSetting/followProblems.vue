@@ -7,7 +7,7 @@
           <Input type="text" v-model="proSearch.title" placeholder="请输入问题名称"></Input>
         </FormItem>
         <FormItem prop="diseaseName" label="疾病类型">
-          <Select v-model="proSearch.diseaseName" filterable remote :remote-method="remoteMethod2" :loading="loading2" >
+          <Select v-model="proSearch.diseaseName" filterable remote not-found-text="" :remote-method="remoteMethod2" :loading="loading2" >
             <Option v-for="(option, index) in options2" :value="option.value" :key="index">{{option.label}}</Option>
           </Select>
         </FormItem>
@@ -37,19 +37,28 @@
         <FormItem label="问题内容" prop="content">
             <Input v-model="formItem.content" placeholder="请输入随访问题内容"></Input>
         </FormItem>
-        <FormItem label="关联指标" prop="targetName1">
+        <FormItem label="采集指标">
+            <RadioGroup v-model="formItem.isTarget" @on-change="targetChange">
+              <Radio label="0">是</Radio>
+              <Radio label="1">否</Radio>
+            </RadioGroup>
+        </FormItem>
+        <FormItem label="关联指标" prop="targetName1" v-if="targetShow">
             <!-- <Input v-model="formItem.targetName" placeholder="根据首字母进行搜索" @on-keyup="keyupzb($event)"></Input> -->
-            <Select v-model="formItem.targetName1" filterable remote :remote-method="remoteMethod1" :loading="loading1" clearable>
+            <Select v-model="formItem.targetName1" filterable remote :remote-method="remoteMethod1" :loading="loading1" clearable :label-in-value=true @on-change="targetRadio">
                 <Option v-for="(option, index) in options1" :value="option.value" :key="index">{{option.label}}</Option>
             </Select>
         </FormItem>
-        <FormItem label="疾病标签" prop="diseaseName">
-          <Select v-model="formItem.diseaseName" filterable remote :remote-method="remoteMethod2" :loading="loading2" clearable @label-in-value="true"  @on-keyup="keyupSearch($event)" style="width: 70%;float: left;margin-right:20px;" @on-change="selectChange" not-found-text="" :label-in-value=true>
+        <FormItem label="" prop="" label="指标类型" v-if="targetShow">
+          <Tag color="blue" v-if="tagShow">{{targetTag}}</Tag>
+        </FormItem>
+        <FormItem label="疾病类型" prop="diseaseName">
+          <Select v-model="formItem.diseaseName" filterable remote :remote-method="remoteMethod2" :loading="loading2" clearable style="width: 70%;float: left;margin-right:20px;" @on-change="selectChange" not-found-text="" :label-in-value=true placeholder="搜索疾病类型添加至疾病标签">
             <Option v-for="(option, index) in options2" :value="option.value" :key="index">{{option.label}}</Option>
           </Select>
           <Button type="primary" @click="addTag" ref="addTagbtn">添加</Button>
         </FormItem>
-        <FormItem label="" prop="">
+        <FormItem label="" prop="" label="疾病标签">
           <tag v-for="item in tagCount" color="blue" :key="item" :name="item" closable @on-close="tagClose">{{item}}</tag>
         </FormItem>
         <FormItem label="纯放音">
@@ -193,6 +202,7 @@
           diseaseId: '',
           model10: [],
           playWavOnly: '1',
+          isTarget: '0'//是否采集指标
         },
         proRuleModel: {//模态框校验
           title: [
@@ -223,7 +233,10 @@
         listdata2: [],
         diseasedata: [],
         selectLabel: '',
-        selectValue: ''
+        selectValue: '',
+        targetShow: true,//判断是否疾病标签是否展示
+        targetTag: '',//指标标签
+        tagShow: false,//标签是否展示
 			}
 		},
     mounted() {
@@ -253,11 +266,12 @@
       *获取分页列表数据
       */
       currentPage: function (page) {
+        console.log(this.proSearch.diseaseName)
        API.followProblems.list({
           pager: page,
           limit: '10',
           title: this.proSearch.title,
-          diseaseName: this.proSearch.diseaseName
+          diseaseId: this.proSearch.diseaseName
         }).then((res) => {
           if(res.code == 0) {
             this.pardata = res.data
@@ -276,6 +290,50 @@
         console.log(value.label)
         this.selectLabel = value.label
         this.selectValue = value.value
+      },
+      /*
+      *获取选中的指标value
+      */
+      targetRadio(value) {
+        console.log(value.label)
+        API.follSetting.list({
+          pager: 1,
+          limit: '10',
+          name: value.label,
+          
+        }).then((res) => {
+          if(res.code == 0) {
+            console.log(res.data[0].otype)
+            let otypeName
+            if(res.data[0].otype == '01') {
+              otypeName = '症状'
+            }else if(res.data[0].otype == '02') {
+              otypeName = '体征'
+            }else if(res.data[0].otype == '03') {
+              otypeName = '生活方式指导'
+            }else if(res.data[0].otype == '04') {
+              otypeName = '辅助检查'
+            }else if(res.data[0].otype == '05') {
+              otypeName = '用药反馈'
+            }else if(res.data[0].otype == '06') {
+              otypeName = '转诊情况'
+            }else if(res.data[0].otype == '07') {
+              otypeName = '通用'
+            }
+            if(this.formItem.targetName1 != '') {
+              this.tagShow = true
+              this.targetTag = otypeName
+            }else {
+              this.tagShow = false
+              this.targetTag = ''
+            }
+            console.log('this.targetTag='+this.targetTag)
+          }else {
+            console.log(res.message)
+          }
+        }).catch((error) => {
+          console.log(error)
+        })
       },
       /*
       *查询功能
@@ -312,6 +370,7 @@
         let addPram = {
           "id": this.formItem.id,
           "title": this.formItem.title,
+          "isTarget": this.formItem.isTarget,
           "content": this.formItem.content,
           "targetId": this.formItem.targetName1,
           "diseaseId": this.tagCount2.join(','),
@@ -331,8 +390,6 @@
                 this.formItem.textarea = ''
                 this.patientText = false;
                 this.tagCount = []//清空疾病标签
-
-
                 this.list(1)
                 console.log(res)
               }else {
@@ -399,7 +456,18 @@
       *监听是否纯放音的单选
       */
       radioChange(value) {
-        console.log('value='+value)
+        console.log('是否纯放音='+value)
+      },
+      /*
+      *监听是否采集指标
+      */
+      targetChange(value) {
+        console.log('是否采集指标='+value)
+        if(value == '0') {
+          this.targetShow = true
+        }else {
+          this.targetShow = false
+        }
       },
     	//详情模态框
     	show (index) {
@@ -445,8 +513,7 @@
           'zjm': query
         }).then((res) => {
           if(res.code == 0) {
-            
-            console.log(res.data)
+            // console.log(res.data)
             class Point {
               constructor(item) {
                 this.value = item.value;
@@ -469,15 +536,12 @@
             } else {
               this.options1 = [];
             }
-
-            
           }else {
             console.log(res)
           }
         }).catch((error) => {
           console.log(error)
         })
-        
       },
       /*
       *疾病类型--远程搜索

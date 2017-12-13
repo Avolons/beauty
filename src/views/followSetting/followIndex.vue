@@ -294,13 +294,6 @@
           radio: [
             { required: true, message: '请选择是否放音', trigger: 'change' }
           ],
-          // model10: [
-          //   { required: true, message: '指标选项不能为空', trigger: 'blur' },
-          //   { type: 'string', message: '来来来' ,trigger: 'blur'}
-          // ],
-          // top: [
-          //   { validator: validateAge, trigger: 'blur' }
-          // ],
          
         },
         optionList: [],
@@ -419,7 +412,7 @@
             let addPram1 = {
               "id": this.formItem.id,
               "name": this.formItem.name,
-              "status": this.formItem.select2,
+              "status": '0',
               "type": this.formItem.radio,
               "otype": this.formItem.select,
               "remark": this.formItem.textarea
@@ -429,7 +422,7 @@
             let addPram2 = {
               "id": this.formItem.id,
               "name": this.formItem.name,
-              "status": this.formItem.select2,
+              "status": '0',
               "type": this.formItem.radio,
               "otype": this.formItem.select,
               "optionValues": strModel,
@@ -438,7 +431,7 @@
             let addPram3 = {
               "id": this.formItem.id,
               "name": this.formItem.name,
-              "status": this.formItem.select2,
+              "status": '0',
               "type": this.formItem.radio,
               "otype": this.formItem.select,
               "thresholdValueStart": this.formItem.top,

@@ -34,12 +34,12 @@
         <FormItem label="问题标题" prop="title">
             <Input v-model="formItem.title" placeholder="请输入问题标题"></Input>
         </FormItem> 
-        <FormItem label="随访问题内容" prop="content">
+        <FormItem label="问题内容" prop="content">
             <Input v-model="formItem.content" placeholder="请输入随访问题内容"></Input>
         </FormItem>
         <FormItem label="关联指标" prop="targetName1">
             <!-- <Input v-model="formItem.targetName" placeholder="根据首字母进行搜索" @on-keyup="keyupzb($event)"></Input> -->
-            <Select v-model="formItem.targetName1" filterable remote :remote-method="remoteMethod1" :loading="loading1">
+            <Select v-model="formItem.targetName1" filterable remote :remote-method="remoteMethod1" :loading="loading1" clearable>
                 <Option v-for="(option, index) in options1" :value="option.value" :key="index">{{option.label}}</Option>
             </Select>
         </FormItem>

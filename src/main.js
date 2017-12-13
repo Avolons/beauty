@@ -8,9 +8,11 @@ import '@/locale';
 import 'iview/dist/styles/iview.css';
 import VueI18n from 'vue-i18n';
 import util from '@/libs/util';
+import validate from './validate.js';
 
 Vue.use(VueI18n);
 Vue.use(iView);
+Vue.prototype.validate = validate;
 /* 全局设置API */
 
 new Vue({

@@ -47,25 +47,6 @@
     <div class="user">
         <div class="sys-syslog_main">
             <Row class="sys-syslog_main_search" :gutter="15">
-                <Col span="6">
-                <span>
-                    模块名称：
-                </span>
-                <Input v-model="value1"  placeholder="large size"></Input>
-                </Col>
-				
-                <Col span="6">
-                <span>
-                    操作类型：
-                </span>
-                <Input v-model="value1"  placeholder="large size"></Input>
-                </Col>
-                <Col span="6">
-                <span>
-                    操作名称：
-                </span>
-                <Input v-model="value1"  placeholder="large size"></Input>
-                </Col>
 				<Col span="6">
                 <span>
                 	链接地址：
@@ -80,23 +61,17 @@
                     <Option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                 </Select>
                 </Col>
-				<Col span="6">
+                <Col span="6">
                 <span>
-                    内容：
+                    时间起止：
                 </span>
-                <Input v-model="value1"  placeholder="large size"></Input>
+                <DatePicker type="daterange" placement="bottom-end" placeholder="Select date" ></DatePicker>
                 </Col>
 				<Col span="6">
                 <span>
                     IP地址：
                 </span>
                 <Input v-model="value1"  placeholder="large size"></Input>
-                </Col>
-				<Col span="6">
-                <span>
-                    时间起止：
-                </span>
-                <DatePicker type="daterange" placement="bottom-end" placeholder="Select date" ></DatePicker>
                 </Col>
 				<Col span="6">
 					<Button @click="searchuser" type="primary">查询</Button>

@@ -1,385 +1,371 @@
 <template>
-	<Row>
-		<!-- 搜索栏 -->
-		<Col span="24" class="followPlan">
-			<Form ref="formInline" :model="formInline" :rules="ruleInline" :label-width="90" inline >
-        <FormItem prop="user" label="患者姓名">
-          <Input type="text" v-model="formInline.user" placeholder="Username"></Input>
-        </FormItem>
-        <FormItem prop="user" label="引用随访方案">
-          <Input type="text" v-model="formInline.user" placeholder="Username"></Input>
-        </FormItem>
-        <FormItem prop="user" label="审核状态">
-          <Select v-model="formInline.select">
-            <Option value="beijing">不限</Option>
-            <Option value="shanghai">待审核</Option>
-            <Option value="shenzhen">不通过</Option>
-            <Option value="beijing">审核通过</Option>
-            <Option value="shanghai">已排期</Option>
-            <Option value="shenzhen">已取消</Option>
-          </Select>
-        </FormItem>
-        <FormItem>
-          <Button type="primary" @click="handleSubmit('formInline')">查询</Button>
-      	</FormItem>
-		  </Form>
-		</Col>
-		<!-- 表格 -->
-		<Col span="24" class="fpTable">
-			<Table border :columns="columns7" :data="data6" class="margin-bottom-10"></Table>
-			<Row>
-				<Col span="10">
-					<Button type="error" @click="examineBtn" class="margin-left-20">审核</Button>
-		      <Button type="warning" @click="testBtn" class="margin-left-20">通过</Button>
-		    </Col>
-		     <Col span="14" class="text-right padding-right-20">
-		      <Page :total="100" show-elevator show-total></Page>
-				</Col>
-			</Row>
-		</Col>
-		<!-- 随访模态框 -->
-		<Modal v-model="patientDetail" title="随访电话" class-name="patientInfo" @on-ok="ok" @on-cancel="cancel" :styles="{top: '180px'}" >
-			<Form ref="formInline" :model="AIform" :rules="ruleInline" inline :label="80" class="AIform">
-        <FormItem prop="user" label="电话">
-            <Input v-model="AIform.AIphone" placeholder="请输入号码" type="text"></Input>
-        </FormItem>
-        <FormItem>
-          <Button type="primary" @click="testBtn">提交AI</Button>
-      	</FormItem>
-      </Form>
-	  </Modal>
-	</Row>
+    <Row>
+        <!-- 搜索栏 -->
+        <Col span="24" class="followPlan">
+        <Form :label-width="90" inline>
+            <FormItem label="科室">
+                <Select v-model="searchParams.depart">
+                    <Option v-for="item in departList" :value="item.val" :key="item.id">{{item.title}}</Option>
+                </Select>
+            </FormItem>
+            <FormItem label="医生">
+                <Select v-model="searchParams.doctor">
+                    <Option v-for="item in doctorList" :value="item.val" :key="item.id">{{item.title}}</Option>
+                </Select>
+            </FormItem>
+            <FormItem label="患者姓名">
+                <Input type="text" v-model="searchParams.patient" placeholder="请输入患者姓名"></Input>
+            </FormItem>
+            <FormItem label="随访方案">
+                <Select v-model="searchParams.action">
+                    <Option v-for="item in actionList" :value="item.val" :key="item.id">{{item.title}}</Option>
+                </Select>
+            </FormItem>
+            <FormItem label="审核状态">
+                <Select v-model="searchParams.status">
+                    <Option v-for="item in statusList" :value="item.val" :key="item.id">{{item.title}}</Option>
+                </Select>
+            </FormItem>
+            <FormItem>
+                <Button type="primary" @click="getData">查询</Button>
+            </FormItem>
+        </Form>
+        </Col>
+        <!-- 表格 -->
+        <Col span="24" class="fpTable">
+        <Table border :columns="config" :data="dataList" class="margin-bottom-10"></Table>
+        <Row>
+            <Page style="float:right" :total="totalPage" @on-change="changePage" show-elevator show-total></Page>
+        </Row>
+        </Col>
+        <!-- 随访模态框 -->
+        <Modal v-model="followShow" title="随访电话" class-name="patientInfo" :styles="{top: '180px'}">
+            <Form :model="AIform" :rules="validate" inline :label="80" class="AIform">
+                <FormItem prop="phone" label="电话">
+                    <Input v-model="AIform.AIphone" placeholder="请输入号码" type="text"></Input>
+                </FormItem>
+                <FormItem>
+                    <Button type="primary" @click="submitData">提交AI</Button>
+                </FormItem>
+            </Form>
+        </Modal>
+    </Row>
 </template>
 
 <script>
-	export default {
-		data() {
-			return {
-				formInline: {//搜索框
-          user: '',
-          password: '',
-          select: '',
-        },
-        ruleInline: {//搜索框校验
-          user: [
-            { required: true, message: 'Please fill in the user name', trigger: 'blur' }
-          ],
-          password: [
-            { required: true, message: 'Please fill in the password.', trigger: 'blur' },
-            { type: 'string', min: 6, message: 'The password length cannot be less than 6 bits', trigger: 'blur' }
-          ]
-        },
-        columns7: [//表格栏
-        	{
-                type: 'selection',
-                width: 60,
-                align: 'center'
+export default {
+    data() {
+        return {
+            //搜索选项
+            searchParams: {
+                depart: '',//科室
+                doctor: '',//医生
+                patient: '',//患者姓名
+                action: '',//随访方案
+                status: '',//审核状态
             },
-            {
-              title: 'Name',
-              key: 'name',
-              align: 'center'
-          },
-          {
-              title: '引用随访方案',
-              key: 'age',
-              align: 'center'
-          },
-          
-          {
-              title: '状态',
-              key: 'age',
-              align: 'center'
-          },
-          {
-              title: '生成时间',
-              key: 'address',
-              align: 'center'
-          },
-          {
-              title: '审核时间',
-              key: 'address',
-              align: 'center'
-          },
-          {
-              title: 'Action',
-              key: 'action',
-              width: 250,
-              align: 'center',
-              render: (h, params) => {
-                  return h('div', [
-                      h('Button', {
-                          props: {
-                              type: 'primary',
-                              size: 'small'
-                          },
-                          style: {
-                              marginRight: '5px'
-                          },
-                          on: {
-                            click: () => {
-                            	this.patientDetail = true
-                            }
-                          }
-                      }, '随访'),
-                      h('Button', {
-                          props: {
-                              type: 'success',
-                              size: 'small'
-                          },
-                          style: {
-                              marginRight: '5px'
-                          },
-                          on: {
-                              click: () => {
-                                this.patientText = true
-                                this.$router.push({path:'/followBusiness/page/page'});
-                              }
-                          }
-                      }, '修改'),
-                      h('Button', {
-                          props: {
-                              type: 'warning',
-                              size: 'small'
-                          },
-                          style: {
+            //列表配置
+            config: [
+                {
+                    title: '患者姓名',
+                    key: 'name',
+                    align: 'center'
+                },
+                {
+                    title: '随访方案',
+                    key: 'age',
+                    align: 'center'
+                },
 
-                          },
-                          on: {
-                              click: () => {
-                                  this.remove(params.index)
-                              }
-                          }
-                      }, '删除')
-                  ]);
-              }
-				}],
-        data6: [//表格data
-            {
-                name: 'John Brown',
-                age: 18,
-                address: 'New York No. 1 Lake Park'
+                {
+                    title: '状态',
+                    key: 'age',
+                    align: 'center'
+                },
+                {
+                    title: '生成时间',
+                    key: 'address',
+                    align: 'center'
+                },
+                {
+                    title: '审核时间',
+                    key: 'address',
+                    align: 'center'
+                },
+                {
+                    title: '操作',
+                    key: 'action',
+                    width: 250,
+                    align: 'center',
+                    /** 
+                     * 按钮状态
+                     * 随访中  停止随访  删除
+                     * 未开始  随访     删除
+                     * 已暂停  恢复随访  删除
+                     * 完成    删除
+                     */
+                    render: (h, params) => {
+                        return h('div', [
+                            h('Button', {
+                                props: {
+                                    type: 'primary',
+                                    size: 'small'
+                                },
+                                style: {
+                                    marginRight: '5px'
+                                },
+                                on: {
+                                    click: () => {
+                                        this.startPlan(params.row.id);
+                                    }
+                                }
+                            }, '随访'),
+                            h('Button', {
+                                props: {
+                                    type: 'primary',
+                                    size: 'small'
+                                },
+                                style: {
+                                    marginRight: '5px'
+                                },
+                                on: {
+                                    click: () => {
+                                    }
+                                }
+                            }, '停止计划'),
+                            h('Button', {
+                                props: {
+                                    type: 'warning',
+                                    size: 'small'
+                                },
+                                style: {
+
+                                },
+                                on: {
+                                    click: () => {
+                                        /** 
+                                         * 删除计划
+                                         */
+                                        this.deletPlan(params.row.id);
+                                    }
+                                }
+                            }, '删除')
+                        ]);
+                    }
+                }],
+            //列表数据
+            dataList: [
+                {
+                    name: 'John Brown',
+                    age: 18,
+                    address: 'New York No. 1 Lake Park'
+                },
+                {
+                    name: 'Jim Green',
+                    age: 24,
+                    address: 'London No. 1 Lake Park'
+                },
+                {
+                    name: 'Joe Black',
+                    age: 30,
+                    address: 'Sydney No. 1 Lake Park'
+                },
+                {
+                    name: 'Jon Snow',
+                    age: 26,
+                    address: 'Ottawa No. 2 Lake Park'
+                },
+                {
+                    name: 'John Brown',
+                    age: 18,
+                    address: 'New York No. 1 Lake Park'
+                },
+                {
+                    name: 'Jim Green',
+                    age: 24,
+                    address: 'London No. 1 Lake Park'
+                },
+                {
+                    name: 'Joe Black',
+                    age: 30,
+                    address: 'Sydney No. 1 Lake Park'
+                },
+                {
+                    name: 'Jon Snow',
+                    age: 26,
+                    address: 'Ottawa No. 2 Lake Park'
+                },],
+
+            departList: [],//科室选项列表
+            actionList: [],//随访方案列表
+            doctorList: [],//医生选项列表
+            statusList: [],//审核状态选项列表
+            id: -1,//当前被选中的数据id
+            page: 1,//当前页码
+            totalPage: 100,//总页数
+            followShow: false,//编辑模态框
+            formCustom: {//编辑表格data
+                ptNa: '薛卫国',
+                ptPhone: '',
+                ptAdd: '',
+                ptYb: '',
+                ptName: '',
+                ptRe: '',
+                ptDz: '',
+                ptDh: '',
+                ptDe: ''
             },
-            {
-                name: 'Jim Green',
-                age: 24,
-                address: 'London No. 1 Lake Park'
+            //随访数据
+            AIform: {
+                AIphone: '',
             },
-            {
-                name: 'Joe Black',
-                age: 30,
-                address: 'Sydney No. 1 Lake Park'
-            },
-            {
-                name: 'Jon Snow',
-                age: 26,
-                address: 'Ottawa No. 2 Lake Park'
-            },
-            {
-                name: 'John Brown',
-                age: 18,
-                address: 'New York No. 1 Lake Park'
-            },
-            {
-                name: 'Jim Green',
-                age: 24,
-                address: 'London No. 1 Lake Park'
-            },
-            {
-                name: 'Joe Black',
-                age: 30,
-                address: 'Sydney No. 1 Lake Park'
-            },
-            {
-                name: 'Jon Snow',
-                age: 26,
-                address: 'Ottawa No. 2 Lake Park'
-            },
-            {
-                name: 'John Brown',
-                age: 18,
-                address: 'New York No. 1 Lake Park'
-            },
-            {
-                name: 'Jim Green',
-                age: 24,
-                address: 'London No. 1 Lake Park'
-            },
-            {
-                name: 'Joe Black',
-                age: 30,
-                address: 'Sydney No. 1 Lake Park'
-            },
-            {
-                name: 'Jon Snow',
-                age: 26,
-                address: 'Ottawa No. 2 Lake Park'
-            }
-        ],
-        patientDetail: false,//详情模态框
-        patientText: false,//编辑模态框
-		    formCustom: {//编辑表格data
-		    	ptNa: '薛卫国',
-		    	ptPhone: '',
-		    	ptAdd: '',
-		    	ptYb: '',
-		    	ptName: '',
-		    	ptRe: '',
-		    	ptDz: '',
-		    	ptDh: '',
-		    	ptDe: ''
-		    },
-		    AIform: {
-		    	AIphone: '',
-		    },
-		    editRules: {
-		    	// ptPhone: [
-       //      { required: true, message: '请填写联系电话', trigger: 'blur' },
-       //      { type: 'number', message: 'The password length cannot be less than 6 bits', trigger: 'blur' }
-       //    ],
-		    } 
-			}
-		},
-		methods: {
-			//搜索栏提交按钮
-			handleSubmit(name) {
-	        this.$refs[name].validate((valid) => {
-	          if (valid) {
-	            this.$Message.success('Success!');
-	          } else {
-	            this.$Message.error('Fail!');
-	          }
-	        })
-	    	},
-	    	//详情模态框
-	    	show (index) {
-		        this.$Modal.info({
-		            title: 'User Info',
-		            content: `Name：${this.data6[index].name}<br>Age：${this.data6[index].age}<br>Address：${this.data6[index].address}`
-		        })
-	        },
-		      remove (index) {
-		      	this.data6.splice(index, 1);
-		      },
-		      //详情关闭确认点击事件
-		      ok () {
-		        this.$Message.info('Clicked ok');
-		      },
-		      cancel () {
-		        this.$Message.info('Clicked cancel');
-		      },
-		      //编辑模态框提交按钮
-		      handleEdit(name) {
-		        this.$refs[name].validate((valid) => {
-		          if (valid) {
-		            this.$Message.success('Success!');
-		          } else {
-		            this.$Message.error('Fail!');
-		          }
-		        })
-		    },
-		    examineBtn() {
-		    	alert('审核')
-		    },
-		    testBtn() {
-		    	alert('测试')
-		    }
-		},
-	}
+        }
+    },
+    methods: {
+        /** 
+		 * 获取列表数据,搜索接口
+		 */
+        getData() {
+
+        },
+		/** 
+		 * 页码改变
+		 */
+        changePage(index) {
+            this.page = index;
+            this.getData();
+        },
+        //随访提交
+        submitData(name) {
+            this.$refs[name].validate((valid) => {
+                if (valid) {
+                    /** 
+					 * 此处填写具体的ajax请求
+					 */
+                    this.$Message.success('保存成功!');
+                } else {
+                    this.$Message.error('请正确填写信息');
+                }
+            })
+        },
+        /** 
+         * 删除随访计划
+         */
+        deletPlan(id) {
+            /* 删除后在回调中刷新当前数据 */
+            this.getData();
+        },
+        /** 
+         * 开始随访
+         */
+        startPlan(id) {
+            this.id = id;
+            this.followShow = true;
+        },
+        /** 
+         * 停止计划
+         */
+        stopPlan(id) {
+            /* 暂停后在回调中刷新当前数据 */
+            this.getData();
+        }
+    },
+    mounted () {
+        this.getData();
+    }
+}
 </script>
 
 <style lang="less">
-
 @import "../../styles/common.less";
 
-	.followPlan {
-		background: #fff;
-			form {
-				.ivu-form-item {
-					margin-bottom: 0;
-					padding: 20px 0;
-					width: 250px;
-					.ivu-form-item-label:before {
-						content: ''
-					}
-			}
-		}
-		.fpTable {
-			padding: 10px;
-		}
-	}
-		.pages{
-			.ivu-page {
-				float: right;
-				padding: 10px 20px 10px 0;
-			}
-		}
-	//模态框垂直居中
-	.vertical-center-modal{
-	    display: flex;
-	    align-items: center;
-	    justify-content: center;
+.followPlan {
+    background: #fff;
+    form {
+        .ivu-form-item {
+            margin-bottom: 0;
+            padding: 20px 0;
+            width: 250px;
+            .ivu-form-item-label:before {
+                content: ''
+            }
+        }
+    }
+    .fpTable {
+        padding: 10px;
+    }
+}
 
-	    .ivu-modal{
-	        top: 0;
-	    }
-	}
-	
-	//详情
-	.patientInfo .ivu-modal .ivu-modal-content {
-		.ivu-modal-header {
-			.ivu-modal-header-inner, .ivu-modal-header p {
-				font-size: 16px;
-		    	color: #1c2432;
-		    	font-weight: normal;
-			}
-		}
-		.ivu-modal-body {
-			.AIform {
-				text-align: center;
-				.ivu-form-item {
-					padding: 10px 0;
-					width: 250px;
-					margin-bottom: 0;
-					.ivu-form-item-label:before {
-						content: ''
-					}
-					.ivu-form-item-content .ivu-input-wrapper {
-						width: 80%;
-					}
-				}
-			}
-		}
-		.ivu-modal-footer {
-			display: none;
-		}
-	}
-	
-	//编辑
-	.editInfo .ivu-modal .ivu-modal-content {
-		.ivu-modal-header {
-			.ivu-modal-header-inner, .ivu-modal-header p {
-				font-size: 16px;
-		    	color: #1c2432;
-		    	font-weight: normal;
-			}
-		}
-		.ivu-modal-body {
-			padding: 32px 132px;
+.pages {
+    .ivu-page {
+        float: right;
+        padding: 10px 20px 10px 0;
+    }
+} //模态框垂直居中
+.vertical-center-modal {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-		}
-		.ivu-modal-footer {
-			display: none;
-		}
-	}
-	.bb1 {
-		border-bottom: 1px solid #fff; 
-	}
-	.bdx1 {
-		border-bottom: 1px dotted #EDF3F4;
-	}
-	.mb12 {
-		margin-bottom: 12px;
-	}
+    .ivu-modal {
+        top: 0;
+    }
+} //详情
+.patientInfo .ivu-modal .ivu-modal-content {
+    .ivu-modal-header {
+        .ivu-modal-header-inner,
+        .ivu-modal-header p {
+            font-size: 16px;
+            color: #1c2432;
+            font-weight: normal;
+        }
+    }
+    .ivu-modal-body {
+        .AIform {
+            text-align: center;
+            .ivu-form-item {
+                padding: 10px 0;
+                width: 250px;
+                margin-bottom: 0;
+                .ivu-form-item-label:before {
+                    content: ''
+                }
+                .ivu-form-item-content .ivu-input-wrapper {
+                    width: 80%;
+                }
+            }
+        }
+    }
+    .ivu-modal-footer {
+        display: none;
+    }
+} //编辑
+.editInfo .ivu-modal .ivu-modal-content {
+    .ivu-modal-header {
+        .ivu-modal-header-inner,
+        .ivu-modal-header p {
+            font-size: 16px;
+            color: #1c2432;
+            font-weight: normal;
+        }
+    }
+    .ivu-modal-body {
+        padding: 32px 132px;
+    }
+    .ivu-modal-footer {
+        display: none;
+    }
+}
 
+.bb1 {
+    border-bottom: 1px solid #fff;
+}
+
+.bdx1 {
+    border-bottom: 1px dotted #EDF3F4;
+}
+
+.mb12 {
+    margin-bottom: 12px;
+}
 </style>

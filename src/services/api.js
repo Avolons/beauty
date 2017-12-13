@@ -14,13 +14,13 @@ Vue.prototype.$http = axios;
 /* 默认最长响应时间 */
 axios.defaults.timeout = 500;
 /* 默认的接口地址 */
-axios.defaults.baseURL = 'http://192.168.1.100:8080/';
+axios.defaults.baseURL = 'http://192.168.1.40:8080/';
 
 // 添加请求拦截器
 axios.interceptors.request.use(function (config) {
   // 在发送请求之前做些什么
     // config.data = qs.stringify(config.data);
-    if (config.url == 'http://192.168.1.100:8080/visit/question/script/save' || config.url == 'http://192.168.1.100:8080/visit/questiontemple/save' || config.url =='http://192.168.1.100:8080/visit/questiontarget/save') {
+    if (config.url == 'http://192.168.1.100:8080/visit/question/script/save' || config.url == 'http://192.168.1.100:8080/visit/questiontemple/save' || config.url == 'http://192.168.1.100:8080/visit/questiontarget/save') {
     // config.data = JSON.stringify(config.data);
         config.headers = {
             'Content-Type': 'application/json;charset=utf-8'
@@ -183,6 +183,36 @@ export const Jurisdiction = {
    */
     delPosition (data) {
         return fetch('get', '/admin/position/del', data);
+    },
+    /**
+     * 权限设置-功能树
+     * @returns
+     */
+    listFun (data) {
+        return fetch('get', 'http://192.168.1.52:8080/visit/admin/action/list', data);
+    },
+    /**
+     * name:'我的测试11',    //功能名称
+     * url:'/visit/test/11',  //功能对应的URL
+     * isMenu:true,     //菜单为true,功能为false
+     * icon:'fa-home',  //默认为fa-home
+     * menuPosStr:'',  //默认为空
+     * paixu:0,        //排列顺序
+     * pid:341       //父ID
+     * @param {any} data
+     * @returns
+     */
+    editFun (data) {
+        return fetch('post', 'http://192.168.1.52:8080/visit/admin/action/save', data);
+    },
+    /**
+     * 功能删除
+     * id 功能id
+     * @param {any} data
+     * @returns
+     */
+    delFun (data) {
+        return fetch('post', 'http://192.168.1.52:8080/visit/admin/action/del', data);
     }
 
 };

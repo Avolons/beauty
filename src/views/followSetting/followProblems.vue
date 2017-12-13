@@ -223,7 +223,9 @@
         loading2: false,
         options2: [],
         listdata2: [],
-        diseasedata: []
+        diseasedata: [],
+        selectLabel: '',
+        selectValue: ''
 			}
 		},
     mounted() {
@@ -273,7 +275,9 @@
       *获取选中的疾病标签列value
       */
       selectChange(value) {
-        console.log(value)
+        console.log(value.label)
+        this.selectLabel = value.label
+        this.selectValue = value.value
       },
       /*
       *查询功能
@@ -312,7 +316,7 @@
           "title": this.formItem.title,
           "content": this.formItem.content,
           "targetId": this.formItem.targetName1,
-          "diseaseId": this.tagCount.join(','),
+          "diseaseId": this.tagCount2.join(','),
           "playWavOnly": this.formItem.playWavOnly,
           "status": 0,
         }
@@ -328,6 +332,9 @@
                 this.formItem.radio = 'string'
                 this.formItem.textarea = ''
                 this.patientText = false;
+                this.tagCount = []//清空疾病标签
+
+
                 this.list(1)
                 console.log(res)
               }else {
@@ -366,24 +373,22 @@
       *添加标签
       */
       addTag() {
-        
-        // this.tagCount.push(this.formItem.diseaseName)
         let flag=0;
         this.tagCount.forEach((item) => {
-          if(this.formItem.diseaseName == item || this.formItem.diseaseName == '') {
+          if(this.selectLabel == item || this.selectLabel == '') {
             flag++; 
+            alert('您添加的为空或者重复添加')
           }
         })
-        
         if(flag>0){
-          this.formItem.diseaseName = ''
+          this.selectLabel = ''
           return false;
-
         }
-        this.tagCount.push(this.formItem.diseaseName)
-        
+        this.tagCount.push(this.selectLabel)
+        this.tagCount2.push(this.selectValue)
+        this.selectLabel = ''
+        this.selectValue = ''
         this.formItem.diseaseName = ''
-        
       },
       /*
       *删除标签
@@ -410,10 +415,11 @@
       },
       //详情关闭确认点击事件
       ok () {
-        this.$Message.info('Clicked ok');
+        this.$Message.info('您打开了弹框');
       },
       cancel () {
-        this.$Message.info('Clicked cancel');
+        this.$Message.info('您关闭了弹框');
+        this.tagCount = []//清空疾病标签
       },
       //编辑模态框提交按钮
       handleEdit(name) {

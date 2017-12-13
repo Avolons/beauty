@@ -217,6 +217,22 @@ export const Jurisdiction = {
 
 };
 
+/* 系统设置与相关接口 *****/
+export const System = {
+    /**
+     * 企业添加
+     * name:  //公司名称 String
+     * address:  //公司地址 String
+     * contacts: //联系人 String
+     * phone:  //公司电话 String
+     * @param {any} data
+     * @returns
+     */
+    addBusiness (data) {
+        return fetch('get', '/admin/newSysConfig/list', data);
+    }
+};
+
 export const mine = {
     result (data) {
         return fetch('get', '/mine/patient', data);

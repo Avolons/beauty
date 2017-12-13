@@ -196,6 +196,9 @@
                   on: {
                     click: () => {
                     	this.patientText = true
+
+                      this.formItem.model10 = []
+                      this.optionList = []
                       API.follSetting.editList({
                         id: params.row.id
                       }).then((res) => {
@@ -240,8 +243,6 @@
                           //预警阀值
                           this.formItem.model10 = kk
                           //备注
-
-                          
                         }else {
                           console.log(res)
                         }

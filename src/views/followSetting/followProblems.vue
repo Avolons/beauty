@@ -45,7 +45,7 @@
         </FormItem>
         <FormItem label="关联指标" prop="targetName1" v-if="targetShow">
             <!-- <Input v-model="formItem.targetName" placeholder="根据首字母进行搜索" @on-keyup="keyupzb($event)"></Input> -->
-            <Select v-model="formItem.targetName1" filterable remote :remote-method="remoteMethod1" :loading="loading1" clearable :label-in-value=true @on-change="targetRadio">
+            <Select v-model="formItem.targetName1" filterable remote :remote-method="remoteMethod1" :loading="loading1" clearable :label-in-value=true @on-change="targetRadio" not-found-text="">
                 <Option v-for="(option, index) in options1" :value="option.value" :key="index">{{option.label}}</Option>
             </Select>
         </FormItem>
@@ -152,13 +152,11 @@
                             otypeName = '通用'
                           }
                           
-                          console.log(res.data.targetName)
-                          this.options1.push({
-                            value: res.data.targetId,
-                            label: res.data.targetName
-                          })
-                          this.formItem.targetName1 = res.data.targetId
-                          console.log('this.formItem.targetName1='+this.formItem.targetName1)
+                          // this.options1.push({
+                          //   value: res.data.targetId,
+                          //   label: res.data.targetName
+                          // })
+                          // this.formItem.targetName1 = res.data.targetId
                           this.formItem.id = res.data.id
                           this.formItem.title = res.data.title
                           this.formItem.content = res.data.content
@@ -177,8 +175,6 @@
                           }
                           this.tagCount = res.data.diseaseName.split(",")
                           this.tagCountId = res.data.diseaseId.split(",")
-                          console.log(this.tagCountId)
-                          // addModel(this.formItem.id)
                         }else {
                           console.log(res)
                         }
@@ -494,10 +490,8 @@
         console.log(event)
         console.log(name)
         const index = this.tagCount.indexOf(name);
-
         this.tagCount.splice(index, 1);
         this.tagCountId.splice(index,1);
-        console.log(this.tagCountId)
       },
       /*
       *监听是否纯放音的单选

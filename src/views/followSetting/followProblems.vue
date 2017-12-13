@@ -165,18 +165,18 @@
                     }
                   }
                 }, '删除'),
-                h('Button', {
-                  props: {
-                    type: 'warning',
-                    size: 'small'
-                  },
-                  style: {},
-                  on: {
-                    click: () => {
-                      this.$router.push({path:'/followSetting/voice/voice/:123'});
-                    }
-                  }
-                }, '编辑话述')
+                // h('Button', {
+                //   props: {
+                //     type: 'warning',
+                //     size: 'small'
+                //   },
+                //   style: {},
+                //   on: {
+                //     click: () => {
+                //       this.$router.push({path:'/followSetting/voice/voice/:123'});
+                //     }
+                //   }
+                // }, '编辑话述')
               ]);
             }
 				}],
@@ -210,11 +210,9 @@
             { type: 'string', min: 6, message: 'The password length cannot be less than 6 bits', trigger: 'blur' }
           ]
         },             
-
         tagCount: [],
         tagCount2: [],
 		    editRules: {
-		    	
 		    }, 
         zjmdata: [],//助记码array
         loading1: false,

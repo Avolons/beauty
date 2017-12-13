@@ -251,41 +251,19 @@ export default {
             //所需验证数据
             formValidate: {
                 name: '',//企业名称
-                repre: '',//企业法人
+                repre:"",//企业法人
                 nature: '',//企业性质
                 industry: '',//行业分类
                 product: '',//产品
                 city: [],//企业所在地
                 address: "",//街道地址
-                contacts:'',//企业联系人
+                contacts:"",//企业联系人
                 phone:'',//企业联系电话
                 mail: '',//企业邮箱
                 desc: ''//企业简介
             },
             /* 验证规则 */ 
-            ruleValidate: {
-                name: [
-                    { required: true, message: '请填写企业名称', trigger: 'blur' }
-                ],
-                mail: [
-                    { type: 'email', message: '错误的邮箱格式', trigger: 'blur' }
-                ],
-                phone: [
-                    { required: true, message: '请输入手机号码', trigger: 'blur' }
-                ],
-                city: [
-                    { required: true, type: 'array', message: '请输入企业所在地', trigger: 'change' }
-                ],
-                address: [
-                    { required: true, message: '请输入街道地址', trigger: 'blur' }
-                ],
-                contacts: [
-                    { required: true, message: '请输入联系人姓名', trigger: 'blur' }
-                ],
-                desc: [
-                    { type: 'string', min: 20, message: '请至少输入20字以上的简介', trigger: 'blur' }
-                ]
-            }
+            ruleValidate: this.validate
         }
     },
     methods: {

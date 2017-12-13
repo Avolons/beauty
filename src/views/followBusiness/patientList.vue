@@ -144,38 +144,28 @@
 	<Row class="patientSearch">
 		<!-- 搜索栏 -->
 		<Col span="24" class="patientSearch">
-		<Form ref="formInline" :model="formInline" :rules="ruleInline" :label-width="80" inline>
-			<FormItem label="病人编号">
-				<Input type="text" v-model="formInline.user" placeholder="Username"></Input>
+		<Form :label-width="80" inline>
+			<FormItem label="患者编号">
+				<Input type="text" v-model="searchParams.code" placeholder="请输入患者编号"></Input>
 			</FormItem>
-			<FormItem label="姓名">
-				<Input type="text" v-model="formInline.user" placeholder="Username"></Input>
-			</FormItem>
-			<FormItem label="就诊信息">
-				<Select v-model="formInline.select">
-					<Option value="beijing">New York</Option>
-					<Option value="shanghai">London</Option>
-					<Option value="shenzhen">Sydney</Option>
-				</Select>
-			</FormItem>
-			<FormItem label="疾病类型">
-				<Input type="text" v-model="formInline.user" placeholder="Username"></Input>
+			<FormItem label="患者姓名">
+				<Input type="text" v-model="searchParams.user" placeholder="请输入患者姓名"></Input>
 			</FormItem>
 			<FormItem>
-				<Button type="primary" @click="handleSubmit('formInline')">查询</Button>
+				<Button type="primary" @click="getData">查询</Button>
 			</FormItem>
 		</Form>
 		</Col>
 		<!-- 表格 -->
 		<Col span="24" class="patientList">
-		<Table border :columns="columns7" :data="data6"></Table>
+		<Table border :columns="config" :data="dataList"></Table>
 		</Col>
 		<!-- 分页 -->
 		<Col span="24" class="pages">
-		<Page :total="100" show-elevator show-total></Page>
+		<Page :total="totalPage" show-elevator @on-change="changePage" show-total></Page>
 		</Col>
 		<!-- 详情模态框 -->
-		<Modal v-model="patientDetail" title="患者信息" class-name="patientInfo" @on-ok="ok" @on-cancel="cancel" :styles="{top: '180px'}" width="1000">
+		<Modal v-model="patientDetail" title="患者信息" class-name="patientInfo" :styles="{top: '180px'}" width="1000">
 			<Row class="infoRow">
 				<Col span="12" class="infoCol12 mb12">
 				<div class="info">
@@ -252,9 +242,9 @@
 			</Row>
 		</Modal>
 		<!-- 编辑功能模态框 -->
-		<Modal v-model="patientText" title="编辑患者信息" class-name="editInfo" @on-ok="ok" @on-cancel="cancel" :styles="{top: '180px'}" width="800">
-			<Form ref="formCustom" :model="formCustom" :rules="editRules" :label-width="80">
-				<FormItem label="姓名" prop="ptNa">
+		<Modal v-model="patientText" title="编辑患者信息" class-name="editInfo" :styles="{top: '180px'}" width="800">
+			<Form ref="formCustom" :model="formCustom" :rules="validate" :label-width="80">
+				<FormItem label="姓名">
 					<span v-model="formCustom.ptNa">{{formCustom.ptNa}}</span>
 				</FormItem>
 				<FormItem label="电话" prop="ptPhone">
@@ -282,8 +272,8 @@
 					<Input type="text" v-model="formCustom.ptDe" placeholder="请输入单位名称"></Input>
 				</FormItem>
 				<FormItem>
-					<Button type="primary" style="margin-left: 110px;" @click="handleEdit('formCustom')">提交</Button>
-					<Button type="ghost" style="margin-left: 8px">重置</Button>
+					<Button type="primary" style="margin-left: 110px;" @click="submitData">提交</Button>
+					<Button type="ghost" style="margin-left: 8px" @click="handleReset('formCustom')" >重置</Button>
 				</FormItem>
 			</Form>
 		</Modal>
@@ -294,125 +284,33 @@
 export default {
 	data() {
 		return {
-			formInline: {//搜索框
-				user: '',
-				password: '',
-				select: '',
+			//搜索条件对象
+			searchParams: {
+				code:'',//患者编号
+				user: '',//患者姓名
 			},
-			ruleInline: {//搜索框校验
-				user: [
-					{ required: true, message: 'Please fill in the user name', trigger: 'blur' }
-				],
-				password: [
-					{ required: true, message: 'Please fill in the password.', trigger: 'blur' },
-					{ type: 'string', min: 6, message: 'The password length cannot be less than 6 bits', trigger: 'blur' }
-				]
+			page:1,//当前页码
+			totalPage:100,//总页数
+			//当前被点击患者，编辑和详情按钮触发时更换数据
+			currentData:{},
+			//详情模态框
+			patientDetail: false,
+			//编辑模态框
+			patientText: false,
+			//编辑功能form数据,暂时未知必填信息，字段未知
+			formCustom: {
+				ptNa: '薛卫国',//姓名
+				ptPhone: '',//电话
+				ptAdd: '',//地址
+				ptYb: '',//邮编
+				ptName: '',//联系人名
+				ptRe: '',//联系人关系
+				ptDz: '',//联系地址
+				ptDh: '',//联系电话
+				ptDe: ''//单位名称
 			},
-			columns7: [//表格栏
-				{
-					title: 'Name',
-					key: 'name',
-					render: (h, params) => {
-						return h('div', [
-							h('Icon', {
-								props: {
-									type: 'person'
-								}
-							}),
-							h('strong', params.row.name)
-						]);
-					}
-				},
-				{
-					title: 'Age',
-					key: 'age'
-				},
-				{
-					title: 'Age',
-					key: 'age'
-				},
-				{
-					title: 'Age',
-					key: 'age'
-				},
-				{
-					title: 'Age',
-					key: 'age'
-				},
-				{
-					title: 'Age',
-					key: 'age'
-				},
-				{
-					title: 'Age',
-					key: 'age'
-				},
-				{
-					title: 'Age',
-					key: 'age'
-				},
-				{
-					title: 'Age',
-					key: 'age'
-				},
-				{
-					title: 'Address',
-					key: 'address'
-				},
-				{
-					title: 'Action',
-					key: 'action',
-					width: 250,
-					align: 'center',
-					render: (h, params) => {
-						return h('div', [
-							h('Button', {
-								props: {
-									type: 'primary',
-									size: 'small'
-								},
-								style: {
-									marginRight: '5px'
-								},
-								on: {
-									click: () => {
-										this.patientDetail = true
-									}
-								}
-							}, '详情'),
-							h('Button', {
-								props: {
-									type: 'success',
-									size: 'small'
-								},
-								style: {
-									marginRight: '5px'
-								},
-								on: {
-									click: () => {
-										this.patientText = true
-										console.log('99')
-									}
-								}
-							}, '编辑'),
-							h('Button', {
-								props: {
-									type: 'warning',
-									size: 'small'
-								},
-								style: {
-
-								},
-								on: {
-									click: () => {
-										this.remove(params.index)
-									}
-								}
-							}, '增加随访')
-						]);
-					}
-				}],
-			data6: [//表格data
+			//表格数据
+			dataList: [
 				{
 					name: 'John Brown',
 					age: 18,
@@ -434,65 +332,161 @@ export default {
 					address: 'Ottawa No. 2 Lake Park'
 				}
 			],
-			patientDetail: false,//详情模态框
-			patientText: false,//编辑模态框
-			formCustom: {//编辑表格data
-				ptNa: '薛卫国',
-				ptPhone: '',
-				ptAdd: '',
-				ptYb: '',
-				ptName: '',
-				ptRe: '',
-				ptDz: '',
-				ptDh: '',
-				ptDe: ''
-			},
-			editRules: {
-				// ptPhone: [
-				//      { required: true, message: '请填写联系电话', trigger: 'blur' },
-				//      { type: 'number', message: 'The password length cannot be less than 6 bits', trigger: 'blur' }
-				//    ],
-			}
+			//表格配置
+			config: [
+				{
+					title: '编号',
+					key: 'age'
+				},
+				{
+					title: '姓名',
+					key: 'age'
+				},
+				{
+					title: '民族',
+					key: 'age'
+				},
+				{
+					title: '出生年月',
+					key: 'age'
+				},
+				{
+					title: '性别',
+					key: 'age'
+				},
+				{
+					title: '家庭电话',
+					key: 'age'
+				},
+				{
+					title: '居住地址',
+					key: 'age'
+				},
+				{
+					title: '单位名称',
+					key: 'address'
+				},
+				{
+					title: 'Action',
+					key: 'action',
+					width: 250,
+					align: 'center',
+					render: (h, params) => {
+						return h('div', [
+							h('Button', {
+								props: {
+									type: 'primary',
+									size: 'small'
+								},
+								style: {
+									marginRight: '5px'
+								},
+								on: {
+									click: () => {
+										/* 传递相关的id，渲染完成后显示出模态框 */
+										this.editPat(params.row);
+									}
+								}
+							}, '编辑'),
+							h('Button', {
+								props: {
+									type: 'info',
+									size: 'small'
+								},
+								style: {
+									marginRight: '5px'
+								},
+								on: {
+									click: () => {
+										this.getInfo(params.row);
+									}
+								}
+							}, '详情'),
+							h('Button', {
+								props: {
+									type: 'warning',
+									size: 'small'
+								},
+								style: {
+
+								},
+								on: {
+									click: () => {
+										this.addFollow(params.row);
+									}
+								}
+							}, '增加随访')
+						]);
+					}
+				}],
+			
+			
 		}
 	},
 	methods: {
-		//搜索栏提交按钮
-		handleSubmit(name) {
+		editPat(data){
+			this.currentData=data;
+			this.patientText = true;
+		},
+		/** 
+		 * 查看患者详情
+		 */
+		getInfo(data){
+			this.currentData=data;
+			this.patientDetail = true;
+		},
+		/** 
+		 * 修改患者信息
+		 */
+		submitData() {
 			this.$refs[name].validate((valid) => {
 				if (valid) {
-					this.$Message.success('Success!');
+					/** 
+					 * 此处填写具体的ajax请求
+					 */
+					this.$Message.success('保存成功!');
 				} else {
-					this.$Message.error('Fail!');
+					this.$Message.error('请正确填写信息');
 				}
 			})
 		},
-		//详情模态框
-		show(index) {
-			this.$Modal.info({
-				title: 'User Info',
-				content: `Name：${this.data6[index].name}<br>Age：${this.data6[index].age}<br>Address：${this.data6[index].address}`
-			})
+		/** 
+		 * 获取列表数据,搜索接口
+		 */
+		getData(){
+
 		},
-		remove(index) {
-			this.data6.splice(index, 1);
+		/** 
+		 * 页码改变
+		 */
+		changePage(index){
+			this.page=index;
+			this.getData();
 		},
-		//详情关闭确认点击事件
-		ok() {
-			this.$Message.info('Clicked ok');
-		},
-		cancel() {
-			this.$Message.info('Clicked cancel');
-		},
-		//编辑模态框提交按钮
-		handleEdit(name) {
-			this.$refs[name].validate((valid) => {
-				if (valid) {
-					this.$Message.success('Success!');
-				} else {
-					this.$Message.error('Fail!');
+		/** 
+		 * 增加随访
+		 */
+		addFollow(data){
+			const id=data.id;
+			/** 
+			 * 此处填写具体页面跳转，携带id
+			 */
+			this.$route.push({
+				path:"/",//替换成具体的地址
+				query:{
+					id:id,
 				}
 			})
 		},
+		/** 
+         * 重置所有属性
+         */
+        handleReset(name) {
+            this.$refs[name].resetFields();
+        },
+	},
+	mounted () {
+		this.getData();
 	}
 }
 </script>

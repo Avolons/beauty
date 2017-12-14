@@ -47,86 +47,67 @@
                 <span>
                     任务名称：
                 </span>
-                <Input v-model="value1"  placeholder="large size"></Input>
+                <Input v-model="searchParam.namelk"  placeholder="large size"></Input>
                 </Col>
 				<Col span="6">
                 <span>
                     是否成功：
                 </span>
-                <Select v-model="model1" style="width:200px">
-                    <Option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                <Select v-model="searchParam.state" style="width:200px">
+                    <Option value="" >全部</Option>
+                    <Option value=0 >成功</Option>
+                    <Option value=1 >未成功</Option>
                 </Select>
                 </Col>
                 <Col span="6">
-					<Button @click="searchuser" type="primary">查询</Button>
+					<Button @click="getData" type="primary">查询</Button>
                 </Col>
                 
             </Row>
             <div class="sys-tasklog_main_list">
-                <Table border :columns="columns7" :data="data6"></Table>
+                <Table border :columns="config" :data="dataList"></Table>
             </div>
             <Row class="sys-tasklog_main_page">
-            <Page :total="100" :current="1" show-elevator style="float:right" @on-change="changePage"></Page>
+            <Page :total="totalPage" :current="searchParam.page" show-elevator style="float:right" @on-change="changePage"></Page>
             </Row>
         </div>
     </div>
 </template>
 
 <script>
+import { API } from '../../services/index.js';
 export default {
     data() {
         return {
-            value1: "",
-             cityList: [
-                    {
-                        value: 'New York',
-                        label: 'New York'
-                    },
-                    {
-                        value: 'London',
-                        label: 'London'
-                    },
-                    {
-                        value: 'Sydney',
-                        label: 'Sydney'
-                    },
-                    {
-                        value: 'Ottawa',
-                        label: 'Ottawa'
-                    },
-                    {
-                        value: 'Paris',
-                        label: 'Paris'
-                    },
-                    {
-                        value: 'Canberra',
-                        label: 'Canberra'
-                    }
-                ],
-                model1: '',
-            columns7: [
+            searchParam:{
+                 page: 1,//当前页码
+                 namelk:"",
+                 state:null,
+            },
+            totalPage: 10,//总页码
+            config: [
                 {
                     title: '序号',
-                    key: 'role',
+                    key: 'id',
                 },
                 {
                     title: '任务名称',
-                    key: 'username'
+                    key: 'moduleName'
                 },
                 {
                     title: '主机',
-                    key: 'time'
+                    key: 'hostname'
                 },
                 {
                     title: 'IP地址',
-                    key: 'action',
+                    key: 'ipAddress',
 				},
 				{
                     title: '是否成功',
                     key: 'look',
                     align: 'center',
                     render:(h, params)=>{
-                        if(params.row.look==1){
+                        if(params.row.isSuccess){
                             return h('Icon',{
                                 props:{
                                     type:"android-done",
@@ -151,72 +132,44 @@ export default {
                 },
                 {
                     title: '开始时间',
-                    key: 'name'
+                    key: 'createdAt'
                 },
                 {
                     title: '结束时间',
-                    key: 'mobile'
+                    key: 'updatedAt'
                 },
             ],
-            data6: [
-                {
-                    role:"医生",
-                    username:"1245786",
-                    time:"2017-11-30 11:08:30",
-                    action:"随访测试",
-                    name:"测试",
-                    mobile:14578884125,
-                    look:1,
-                },
-                {
-                    role:"医生",
-                    username:"1245786",
-                    time:"2017-11-30 11:08:30",
-                    action:"随访测试",
-                    name:"测试",
-                    mobile:14578884125,
-                    look:1,
-                },
-                {
-                    role:"医生",
-                    username:"1245786",
-                    time:"2017-11-30 11:08:30",
-                    action:"随访测试",
-                    name:"测试",
-                    mobile:14578884125,
-                    look:1,
-                },
-                {
-                    role:"医生",
-                    username:"1245786",
-                    time:"2017-11-30 11:08:30",
-                    action:"随访测试",
-                    name:"测试",
-                    mobile:14578884125,
-                    look:1,
-                }
-            ]
+            dataList: []
         }
     },
     methods: {
-        show(index) {
-            this.$Modal.info({
-                title: 'User Info',
-                content: `Name：${this.data6[index].name}<br>Age：${this.data6[index].age}<br>Address：${this.data6[index].address}`
-            })
+        /** 
+         * 搜索日志
+         */
+        searchResult(){
+            this.searchParam.page=1;
+            this.getData();
         },
-        remove(index) {
-            this.data6.splice(index, 1);
-        },
-        adduser(){
-            this.$router.push('/access/user/sys-tasklog_add/0');
-        },
-        changePage(){
+        /** 
+         * 获取数据
+         */
+        getData(){
+            API.Systems.listTimeLog(this.searchParam).then((res) => {
+                this.totalPage=res.data.totalPage;
+                this.dataList=res.data.result;
+            }).catch((err) => {
 
+            });
         },
-        searchuser(){
-            
-        }
+        /** 
+         * 页码更改
+         */
+        changePage(page){
+            this.searchParam.page=page;
+            this.getData();
+        },
+    },mounted () {
+        this.getData();
     }
 }
 </script>

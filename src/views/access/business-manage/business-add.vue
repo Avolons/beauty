@@ -263,7 +263,7 @@ export default {
                 desc: ''//企业简介
             },
             /* 验证规则 */ 
-            ruleValidate: this.validate
+            ruleValidate: this.validate.addBussiness
         }
     },
     methods: {

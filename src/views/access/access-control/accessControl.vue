@@ -90,8 +90,8 @@
             </h3>
             <Tree :data="depart" :render="renderContent"></Tree>
         </Card>
-        <Modal v-model="modal" title="功能编辑">
-            <Form ref="access" class="access_main_form" :model="access" :rules="validate.access" :label-width="80">
+        <Modal v-model="modal" :title="title">
+            <Form ref="access" class="access_main_form" :model="access" :rules="validate.access" :label-width="90">
                 <FormItem label="名称" prop="name">
                     <Input v-model="access.name" placeholder="请填写名称"></Input>
                 </FormItem>
@@ -100,14 +100,17 @@
                 </FormItem>
                 <FormItem label="是否为菜单" prop="isMenu">
                     <Select v-model="access.isMenu" placeholder="请选择类型">
-                        <Option value="true" >菜单</Option>
-                        <Option value="false" >功能</Option>
+                        <Option value="0">菜单</Option>
+                        <Option value="1">功能</Option>
                     </Select>
                 </FormItem>
-                <div slot="footer" class="sys-sysset_main_btnList">
-                    <Button type="primary" @click="addAccess">确认</Button>
-                </div>
+                <FormItem label="上级编号" prop="pid">
+                    <Cascader v-model="access.pid" :data="cascardList" change-on-select></Cascader>
+                </FormItem>
             </Form>
+            <div slot="footer" class="sys-sysset_main_btnList">
+                <Button type="primary" @click="addAccess">确认</Button>
+            </div>
         </Modal>
     </div>
 </template>
@@ -118,21 +121,37 @@ export default {
     data() {
         return {
             access: {
-                name:'', //功能名称
-                url:'', //功能对应的URL
-                isMenu:"",  //菜单为true,功能为false
-                icon:'fa-home',  //默认为fa-home
-                menuPosStr:'',  //默认为空
-                paixu:0,   //排列顺序
-                pid:341    //父ID
+                name: '', //功能名称
+                url: '', //功能对应的URL
+                isMenu: "",  //菜单为true,功能为false
+                icon: 'fa-home',  //默认为fa-home
+                menuPosStr: '',  //默认为空
+                paixu: 0,   //排列顺序
+                pid: []   //父ID
 
             },
+            title: "新增功能",
+            dataTree: [],
             modal: false,
+            cascardList: [
+                {
+                    value: 0,
+                    label: '认识医生',
+                    children: [],
+                }
+            ],
             depart: [
                 {
                     name: '认识医生',
                     expand: true,
-                    id: -1,
+                    id: 0,
+                    name: '', //功能名称
+                    url: '', //功能对应的URL
+                    isMenu: "",  //菜单为true,功能为false
+                    icon: 'fa-home',  //默认为fa-home
+                    menuPosStr: '',  //默认为空
+                    paixu: 0,   //排列顺序
+                    pid: [],  //父ID
                     render: (h, { root, node, data }) => {
                         return h('span', {
                             style: {
@@ -167,7 +186,18 @@ export default {
                                                 width: '100px'
                                             },
                                             on: {
-                                                click: () => { this.editDepart(data) }
+                                                click: () => {
+                                                    this.addFun({
+                                                        id: 0,
+                                                        name: '', //功能名称
+                                                        url: '', //功能对应的URL
+                                                        isMenu: "0",  //菜单为true,功能为false
+                                                        icon: 'fa-home',  //默认为fa-home
+                                                        menuPosStr: '',  //默认为空
+                                                        paixu: 0,   //排列顺序
+                                                        pid: [0],  //父ID
+                                                    })
+                                                }
                                             }
                                         }, "新增子功能")
                                     ])
@@ -186,7 +216,25 @@ export default {
         /** 
          * 添加新功能
          */
-        addAccess(){
+        addAccess() {
+            this.$refs['access'].validate((valid) => {
+                if (valid) {
+                    this.access.pid = this.access.pid[this.access.pid.length - 1];
+                    this.access.isMenu = this.access.isMenu == 0 ? true : false;
+                    if (this.title = "新增功能") {
+                        this.access.id = null;
+                    }
+                    API.Jurisdiction.editFun(this.access).then((res) => {
+                        this.$Message.success("编辑成功");
+                        this.modal=false;
+                    }).catch((error) => {
+
+                    });
+                } else {
+                    this.$Message.error('补全信息!');
+                }
+
+            })
 
         },
         /** 
@@ -199,17 +247,25 @@ export default {
                     width: '100%'
                 }
             }, [
-                    h('span', [
-                        h('Icon', {
-                            props: {
-                                type: 'ios-paper-outline'
-                            },
-                            style: {
-                                marginRight: '8px'
-                            }
-                        }),
-                        h('span', data.name)
-                    ]),
+                    h('span', {
+                        style: {
+                            border: "1px solid #efefef",
+                            padding: "5px",
+                            borderRadius: "3px",
+                            fontSize: "12px"
+                        }
+                    }, [
+                            h('Icon', {
+                                props: {
+                                    type: 'ios-paper-outline'
+                                },
+                                style: {
+                                    marginRight: '8px'
+                                }
+                            }),
+                            h('span', {
+                            }, data.name + "url地址" + " " + "[" + data.url + "]")
+                        ]),
                     h('span', {
                         style: {
                             display: 'inline-block',
@@ -236,7 +292,7 @@ export default {
                                     marginRight: '8px'
                                 },
                                 on: {
-                                    click: () => { this.editFun(data) }
+                                    click: () => { this.editFun(data, 1) }
                                 }
                             }, '编辑'),
                             h('Button', {
@@ -251,25 +307,73 @@ export default {
                 ]);
         },
         /** 
+         * 新增子功能
+         */
+        addFun(data) {
+            this.editFun(data, 0);
+        },
+        /** 
          * 编辑子部门
          */
-        editFun(data) {
+        editFun(data, type) {
+            if (type == 0) {
+                this.title = "新增功能"
+            } else {
+                this.title = "编辑功能";
+            }
+            this.modal = true;
             /* 根据id拉取具体信息 */
+            if (data.id == 0) {
+                this.access = data;
+            } else {
+                let copyData = JSON.parse(JSON.stringify(data));
+                copyData.pid = this.lookFor(data, type);
+                copyData.isMenu = copyData.isMenu ? "0" : "1";
+                if (type == 0) {
+                    copyData.name = "";
+                    copyData.isMenu = "0";
+                    copyData.url = "";
+                }
+                this.access = copyData;
+            }
+
+        },
+        /** 
+         * 层级回溯
+         */
+        lookFor(data, type) {
+            let level = data.level - 0;
+            if (level == 0) {
+                return [0];
+            }
+            let pidList = [data.pid];
+            let idList = [];
+            if (type == 0) {
+                idList = [data.id];
+            }
+            for (let i = level; i > 0; i--) {
+                for (let item of this.dataTree[i - 1]) {
+                    if (item.id == pidList[pidList.length - 1]) {
+                        idList.push(item.id);
+                        pidList.push(item.pid);
+                    }
+                }
+            }
+            idList.push(0);
+            return idList.reverse();
         },
         /** 
          * 删除整个部门
          */
         delFun(data) {
             this.$Modal.confirm({
-                title: "删除部门",
+                title: "删除功能",
                 content: "确定删除该功能模块以及所有子功能模块",
                 okText: "删除",
                 cancelText: "取消",
                 onOk: () => {
-                    /**具体的删除逻辑，删除之后重新拉取数据 */
-                    let action = async () => {
-                    }
-                    action();
+                    /**具体的删除逻辑，删除之后不重新拉取 */
+
                 }
             })
         },
@@ -279,8 +383,8 @@ export default {
          */
         treeInit() {
             API.Jurisdiction.listFun().then((res) => {
-                
                 this.depart[0].children = this.dataFormat(res.data);
+                this.cascardList[0].children = this.dataFormat(res.data);
             }).catch((err) => {
 
             });
@@ -289,17 +393,40 @@ export default {
          * 数据格式化
          */
         dataFormat(data) {
+            let arrList = [];
+            /** 
+             * 等级分组
+             */
             for (let item of data) {
                 item.expand = true;
-                if (item.children) {
-                    this.dataFormat(item.children);
+                item.label = item.name;
+                item.value = item.id;
+                if (!arrList[item.level]) {
+                    arrList[item.level] = [];
+                }
+                arrList[item.level].push(item);
+            }
+            this.dataTree = arrList;
+            let appendChild = (child, parent) => {
+                for (let item of child) {
+                    for (const ite of parent) {
+                        if (item.pid == ite.id) {
+                            if (!ite.children) {
+                                ite.children = [];
+                            }
+                            ite.children.push(item);
+                        }
+                    }
                 }
             }
-            return data;
+
+            for (let i = arrList.length - 1; i > 0; i--) {
+                appendChild(arrList[i], arrList[i - 1]);
+            }
+            return arrList[0];
         }
     },
     mounted() {
-        this.id = this.$route.query.access_id;
         this.treeInit();
     }
 }

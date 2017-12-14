@@ -55,7 +55,10 @@ export default {
             { required: true, message: '请填写链接地址', trigger: 'blur' }
         ],
         isMenu: [
-            { required: true, message: '请选择类型', trigger: 'blur' }
+            { required: false, message: '请选择类型', trigger: 'blur' }
+        ],
+        pid: [
+            { required: true, type: 'array', message: '请选择上级', trigger: 'blur' }
         ]
     },
     depart: {

@@ -8,6 +8,10 @@
         &_page {
             margin-top: 10px;
         }
+        &_treeBox{
+           /*  height: 400px;
+            overflow-y: auto; */
+        }
     }
 }
 </style>
@@ -23,10 +27,10 @@
                 <Table border :columns="config" :data="dataList"></Table>
             </div>
             <!-- <Row class="role_main_page">
-                <Page :total="100" :current="1" style="float:right" @on-change="changePage"></Page>
-             </Row> -->
-            <Modal v-model="modal" title="title">
-                <Form ref="addData" class="sys-sysset_main_form" :model="formData" :rules="validate.system" :label-width="80">
+                    <Page :total="100" :current="1" style="float:right" @on-change="changePage"></Page>
+                 </Row> -->
+            <Modal v-model="modal" :title="title" width="1000">
+                <Form ref="addData" class="role_main_form" :model="formData" :rules="validate.system" :label-width="80">
                     <FormItem label="名称" prop="key">
                         <Input v-model="formData.key" placeholder="请填写名称"></Input>
                     </FormItem>
@@ -34,10 +38,12 @@
                         <Input v-model="formData.value" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="请填写说明"></Input>
                     </FormItem>
                     <FormItem label="权限" >
-                        <Tree :data="treeList" show-checkbox multiple></Tree>
+                        <div class="role_main_treeBox">
+                                <Tree :data="treeList" multiple ></Tree>
+                        </div>
                     </FormItem>
                 </Form>
-                <div slot="footer" class="sys-sysset_main_btnList">
+                <div slot="footer" class="role_main_btnList">
                     <Button type="primary" @click="submitRole">确认</Button>
                 </div>
             </Modal>
@@ -50,7 +56,7 @@ import { API } from '../../../services';
 export default {
     data() {
         return {
-            title:"编辑参数",
+            title: "编辑参数",
             modal: false,
             //添加的数据
             formData: {
@@ -59,6 +65,8 @@ export default {
                 value: "",
                 remark: "",
             },
+            //权限列表
+            treeData: [],
             config: [
                 {
                     title: '编号',
@@ -89,7 +97,7 @@ export default {
                                 },
                                 on: {
                                     click: () => {
-                                        this.editRole(params.index)
+                                        this.editRole(params.row.id,1)
                                     }
                                 }
                             }, '编辑'),
@@ -109,45 +117,21 @@ export default {
                 }
             ],
             dataList: [],
+            //权限树
             treeList: [
-                    {
-                        title: 'parent 1',
-                        expand: true,
-                        selected: true,
-                        children: [
-                            {
-                                title: 'parent 1-1',
-                                expand: true,
-                                children: [
-                                    {
-                                        title: 'leaf 1-1-1',
-                                        disabled: true
-                                    },
-                                    {
-                                        title: 'leaf 1-1-2'
-                                    }
-                                ]
-                            },
-                            {
-                                title: 'parent 1-2',
-                                expand: true,
-                                children: [
-                                    {
-                                        title: 'leaf 1-2-1',
-                                        checked: true
-                                    },
-                                    {
-                                        title: 'leaf 1-2-1'
-                                    }
-                                ]
-                            }
-                        ]
-                    }
-                ]
+                {
+                    title: '认识医生',
+                    expand: true,
+                    /* selected: true, */
+                    children: [
+
+                    ]
+                }
+            ]
         }
     },
     methods: {
-        submitRole(){
+        submitRole() {
             this.$refs['addData'].validate((valid) => {
                 if (valid) {
                     API.Systems.addSystem(this.formData).then((res) => {
@@ -180,15 +164,85 @@ export default {
 
             });
         },
+
         /** 
         * 新增角色
         */
         addRole() {
-            this.modal=true;
+           this.$router.push({
+                path:"/access/role/role_add",
+                query:{
+                    type:0,
+                }
+            }) 
         },
         //编辑角色
-        editRole(data){
-           this.modal=true; 
+        editRole(id,type) {
+            this.$router.push({
+                path:"/access/role/role_add",
+                query:{
+                    id:id,
+                    type:type,
+                }
+            });
+            this.modal = true;
+            /* API.Jurisdiction.infoRoles({
+                id: id
+            }).then((res) => {
+                this.treeData = res.data;
+                this.treeList[0].children = this.dataFormat(res.data, res.beanAction);
+            }).catch((err) => {
+
+            }); */
+        },
+        /** 
+         * 数据格式化
+         */
+        dataFormat(data, access) {
+            let arrList = [];
+            /** 
+             * 等级分组
+             */
+            let copyAccess = JSON.parse(JSON.stringify(access));
+            for (let item of data) {
+                item.expand = true;
+                item.title = item.name + "URL地址：" + "[" + item.url + "]";
+                item.value = item.id;
+                /** 
+                 * 循环优化
+                 */
+                if (copyAccess.length > 0) {
+                    for (let ite of copyAccess) {
+                        if (ite.aid == item.id) {
+                            item.selected = true;
+                            continue;
+                            copyAccess.shift();
+                        }
+                    }
+                }
+                if (!arrList[item.level]) {
+                    arrList[item.level] = [];
+                }
+                arrList[item.level].push(item);
+
+            }
+            let appendChild = (child, parent) => {
+                for (let item of child) {
+                    for (const ite of parent) {
+                        if (item.pid == ite.id) {
+                            if (!ite.children) {
+                                ite.children = [];
+                            }
+                            ite.children.push(item);
+                        }
+                    }
+                }
+            }
+
+            for (let i = arrList.length - 1; i > 0; i--) {
+                appendChild(arrList[i], arrList[i - 1]);
+            }
+            return arrList[0];
         },
         delRole(id) {
             this.$Modal.confirm({

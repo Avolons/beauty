@@ -50,7 +50,7 @@
 				<span>
 					科室名称：
 				</span>
-				<Input v-model="searchParam.name" placeholder="请选择科室"></Input>
+				<Input v-model="searchParam.dpname" placeholder="请选择科室"></Input>
 				</Col>
 				<Col span="6">
 				<span>
@@ -85,7 +85,7 @@
 				<Table border :columns="config" :data="dataList"></Table>
 			</div>
 			<Row class="sys-depart_main_page">
-				<Page :total="totalPage" :current="searchParam.page" show-elevator style="float:right" @on-change="changePage"></Page>
+				<Page :page-size="pageSize" :total="totalPage" :current="searchParam.page" show-elevator style="float:right" @on-change="changePage"></Page>
 			</Row>
 		</div>
 		<Modal v-model="modal" :title="title">
@@ -167,11 +167,12 @@ export default {
 			//搜索参数
 			searchParam: {
 				page: 1,//当前页码
-				name: "",
+				dpname: "",
 				iUse: null,
 				types: null,
 				mType: null,
 			},
+			pageSize:10,
 			totalPage: 10,//总页码
 			actionList: [{
 				value: "",
@@ -333,7 +334,8 @@ export default {
          */
 		getData() {
 			API.Systems.listDepart(this.searchParam).then((res) => {
-				this.totalPage = res.totalPage;
+				this.totalPage = res.data.totalRow;
+				this.pageSize=res.data.pageSize;
 				this.dataList = res.data.result;
 			}).catch((err) => {
 
@@ -418,7 +420,7 @@ export default {
 						state:this.currentData.isUse-0,
 					}).then((res) => {
 						this.$Message.success("修改成功");
-						this.modal = false;
+						this.modalexit = false;
 						this.getData();
 					}).catch((err) => {
 

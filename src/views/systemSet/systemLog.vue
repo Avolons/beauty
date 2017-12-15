@@ -73,7 +73,7 @@
                 <Table border :columns="config" :data="dataList"></Table>
             </div>
             <Row class="sys-syslog_main_page">
-                <Page :total="totalPage" :current="searchParam.page" show-elevator style="float:right" @on-change="changePage"></Page>
+                <Page :page-size="pageSize"  :total="totalPage" :current="searchParam.page" show-elevator style="float:right" @on-change="changePage"></Page>
             </Row>
         </div>
     </div>
@@ -84,6 +84,7 @@ import { API } from '../../services/index.js';
 export default {
     data() {
         return {
+            pageSize:10,
             totalPage: 10,//总页码
             //当前被点击触发的数据
             currentInfo: {
@@ -108,12 +109,12 @@ export default {
                 {
                     title: '操作',
                     key: 'oprateType',
-                    width: 100
+                    width: 80
                 },
                 {
                     title: '当前权限',
                     key: 'name',
-                    width: 150
+                    width: 120
                 },
                 {
                     title: '相关链接',
@@ -127,12 +128,12 @@ export default {
                 {
                     title: '管理员',
                     key: 'realName',
-                    width: 100,
+                    width: 80,
                 },
                 {
                     title: 'ip',
                     key: 'ip',
-                    width: 150,
+                    width: 120,
                 },
                 {
                     title: '操作时间',
@@ -162,7 +163,8 @@ export default {
             }
             ).then((res) => {
                 this.dataList = this.dataForm(res.data);
-                this.totalPage = res.totalpage;
+                this.totalPage = res.totalRow;
+                this.pageSize=res.pageSize;
             }).catch((err) => {
 
             });

@@ -84,7 +84,7 @@
 <template>
     <div class="roleAdd">
         <div class="roleAdd_main">
-            <h3>添加新角色</h3>
+            <h3>{{type==0?"新增角色":"编辑角色"}}</h3>
             <Form ref="role" class="roleAdd_main_form" :model="formData" :rules="validate.role" :label-width="90">
                 <FormItem label="名称：" prop="name" style="width:500px">
                     <Input v-model="formData.name" placeholder="请填写名称"></Input>
@@ -118,8 +118,8 @@ export default {
             modal: false,
             //添加的数据
             formData: {
-                name: "护工", 
-                profile: "护工人员", 
+                name: "", 
+                profile: "", 
                 actionsIds: []
             },
             //权限列表
@@ -194,8 +194,9 @@ export default {
             API.Jurisdiction.infoRoles({
                 id: this.id
             }).then((res) => {
+                this.formData.name=res.bean.name;
+                this.formData.profile=res.bean.profile;
                 this.treeData = res.data;
-                console.log(res.beanAction);
                 this.treeList[0].children = this.dataFormat(res.data, res.beanAction);
             }).catch((err) => {
 
@@ -268,26 +269,44 @@ export default {
         saveRole(){
              let arrList=[];
              let data=this.$refs.tree.getCheckedNodes();
-             for (let item of data) {
+             /* for (let item of data) {
                 if (!arrList[item.level]) {
                     arrList[item.level] = [];
                 }
                 arrList[item.level].push(item);
             }
-            for (let i = 0; i < arrList.length-1; i++) {
-                for (let j = 0; j < arrList[i].length; j++) {
-                    for (let k = 0; k < arrList[i+1].length; k++) {
-                        if(arrList[i][j].id==arrList[i+1][k].pid){
-                            arrList[i+1].splice(k,1);
+            for (let i = arrList.length-1; i >0 ; i--) {
+                for (let j = 0; j < arrList[i-1].length; j++) {
+                    for (let k = 0; k < arrList[i].length; k++) {
+                        if(arrList[i-1][j].id==arrList[i][k].pid){
+                            arrList[i].splice(k,1);
                             k--;
                         }
                     }
                 }
+            } */
+            for (let item of data) {
+                arrList.push(item.id);
             }
-            console.log(arrList);
+            if(this.type==1){
+                this.formData.id=this.id;
+            }
+            this.formData.actionsIds=arrList;
+            API.Jurisdiction.editRoles(this.formData).then((res)=>{
+                    this.$Message.success("编辑成功");
+            }).catch((err)=>{
+
+            });
+            console.log(data);
+
         }
     },
     mounted () {
+        this.formData= {
+                name: "", 
+                profile: "", 
+                actionsIds: []
+            };
         this.type=this.$route.query.type;
         this.id=this.$route.query.id;
         if(this.type==0){

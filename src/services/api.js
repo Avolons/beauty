@@ -25,7 +25,6 @@ axios.interceptors.request.use(function (config) {
   if(config.url == "http://192.168.1.100:8080/visit/question/script/save") {
      console.log('test')
     config.headers = {
-      // 'Content-Type': 'application/json; charset=utf-8',
       "Content-Type": "application/json;charset=utf-8"
     }
   }else {
@@ -212,7 +211,7 @@ export const follSetting = {
         return fetch('get', 'visit/questiontarget/list', data);
     },
     deleteList (data) {
-        return fetch('get', 'visit/question/delete', data);
+        return fetch('get', 'visit/questiontarget/delete', data);
     },
     addList (data) {
         return fetch('post', 'visit/questiontarget/save', data);
@@ -275,7 +274,7 @@ export const followTemplate = {
         return fetch('get', 'visit/disease/autocomplete', data);
     },
     /*
-    *话述设置
+    *话述信息
     *questionId(问题id)
     */ 
     question (data) {

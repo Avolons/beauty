@@ -7,9 +7,12 @@
           <Input type="text" v-model="proSearch.title" placeholder="请输入问题名称"></Input>
         </FormItem>
         <FormItem prop="diseaseName" label="疾病类型">
+
           <Select v-model="proSearch.diseaseName" filterable remote not-found-text="" :remote-method="remoteMethod2" :loading="loading2" >
             <Option v-for="(option, index) in options2" :value="option.value" :key="index">{{option.label}}</Option>
           </Select>
+
+          
         </FormItem>
         <FormItem>
           <Button type="primary" @click="handleSearch('proSearch')">查询</Button>

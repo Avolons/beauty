@@ -18,17 +18,15 @@ axios.defaults.baseURL = 'http://192.168.1.100:8080/';
 
 // 添加请求拦截器
 axios.interceptors.request.use(function (config) {
-  console.log(JSON.stringify(config))
-    
   // 在发送请求之前做些什么
-    config.data = qs.stringify(config.data);
+    // config.data = qs.stringify(config.data);
   if(config.url == "http://192.168.1.100:8080/visit/question/script/save") {
-     console.log('test')
+    // config.data = JSON.stringify(config.data);
     config.headers = {
       "Content-Type": "application/json;charset=utf-8"
     }
   }else {
-    
+    config.data = qs.stringify(config.data);
     config.headers = {
       'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
     };
@@ -247,52 +245,58 @@ export const followProblems = {
         return fetch('get', 'visit/disease/autocomplete', data);
     },
 };
+/*随访设置--话述信息  *****/
+export const voiceSetting = {
+ /*
+  *话述信息
+  *questionId(问题id)
+  */ 
+  question (data) {
+    return fetch('get', 'visit/question/script/list', data);
+  },
+  /*
+  *话述设置--删除
+  *questionId(问题id)
+  */ 
+  questionDelete (data) {
+      return fetch('get', 'visit/question/script/delete', data);
+  },
+  /*
+  *话述设置--保存
+  *questionId(问题id)
+  */ 
+  questionSave (data) {
+      return fetch('post', 'visit/question/script/save', data);
+  },
+
+
+}
 /* 随访设置--随访问题接口 *****/
 export const followTemplate = {
-  /**
-   * 随访问题所有信息展示
-   * page//当前页码(必选)
-   * limit//当每页条数,默认是10(必选)
-   * title//指标名称(可选)
-   * diseaseId //指标类型(可选)
-   * @param {any} data
-   * @returns
-   */
-    list (data) {
-        return fetch('get', 'visit/questiontemple/list', data);
-    },
-    deleteList(data) {
-        return fetch('get', 'visit/questiontemple/delete', data);
-    },
-    addList (data) {
-        return fetch('post', 'visit/questiontemple/save', data);
-    },
-    editList (data) {
-        return fetch('get', 'visit/questiontemple/get', data);
-    },
-    disease (data) {
-        return fetch('get', 'visit/disease/autocomplete', data);
-    },
-    /*
-    *话述信息
-    *questionId(问题id)
-    */ 
-    question (data) {
-        return fetch('get', 'visit/question/script/list', data);
-    },
-    /*
-    *话述设置--删除
-    *questionId(问题id)
-    */ 
-    questionDelete (data) {
-        return fetch('get', 'visit/question/script/delete', data);
-    },
-    /*
-    *话述设置--保存
-    *questionId(问题id)
-    */ 
-    questionSave (data) {
-        return fetch('post', 'visit/question/script/save', data);
-    },
+ /*
+ * 随访问题所有信息展示
+ * page//当前页码(必选)
+ * limit//当每页条数,默认是10(必选)
+ * title//指标名称(可选)
+ * diseaseId //指标类型(可选)
+ * @param {any} data
+ * @returns
+ */
+  list (data) {
+      return fetch('get', 'visit/questiontemple/list', data);
+  },
+  deleteList(data) {
+      return fetch('get', 'visit/questiontemple/delete', data);
+  },
+  addList (data) {
+      return fetch('post', 'visit/questiontemple/save', data);
+  },
+  editList (data) {
+      return fetch('get', 'visit/questiontemple/get', data);
+  },
+  disease (data) {
+      return fetch('get', 'visit/disease/autocomplete', data);
+  },
+   
 };
 

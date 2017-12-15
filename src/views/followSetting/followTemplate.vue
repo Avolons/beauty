@@ -329,11 +329,11 @@
       *删除
       */
       deleteRow(id){
-        API.follSetting.deleteList({
+        API.followTemplate.deleteList({
          id:id
         }).then((res) => {
           if(res.code == 0) {
-            console.log(res.message)
+            alert(res.message)
             this.list(1)
             this.$Message.success({
               content: '删除成功',

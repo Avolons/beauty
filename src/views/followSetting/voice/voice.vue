@@ -27,11 +27,11 @@
 		<Col span="24" class="voicepz">
 			<span class="fontvoice voicetitle">话术配置</span>
       <ul>
-      	<li v-for="(item,index) in switchArr" @click="questionClick(index)">
+      	<li v-for="(item,index) in switchArr">
     			 <Row class="itemli">
     			 	<Col span="4" class="textCenter">switchID</Col>
     			 	<Col span="12"><Input v-model="item.switchID" placeholder="large size"></Input></Col>
-    			 	<Col span="2" offset="6"><Icon type="close-circled" size="22" color="#f70000" style="line-height: 45px;" @click="removequestion(index)"></Icon></Col>
+    			 	<Col span="2" offset="6" @click.native="removequestion(index)" style="background:#0f0"><Icon type="close-circled" size="22" color="#f70000" style="line-height: 45px;"></Icon></Col>
     			 </Row> 
     			 <Row class="itemli">
     			 	<Col span="4" class="textCenter">名称</Col>
@@ -61,92 +61,121 @@
 
 <script>
 import {API} from '@/services';
-import axios from 'axios'
 	export default {
 		data() {
 			return {
-				cfRadio: 'yes',
-				AIpro: '',
-				value: '',
 				questionId: '',//话述id(从路由获取)
 				questionName: '',//随访问题，
 				questionTargetName: '',//随访指标
 				questionTargetStyle: '',//指标类型，
 				questionTargetfz: '',//指标阀值
         switchArr: [],
+        saveSwitch: [],
 			}
 		},
 		created(){
-			
-			//this.fetchData()
+			this.fetchData()
 		},
 		mounted() {
-			 
-			//this.questionInfo()
+			this.questionInfo()
 		},
 		methods: {
 			/*
 			*获取问题信息
 			*/
 			questionInfo() {
-				API.followTemplate.question({
+				API.voiceSetting.question({
+          "questionId": this.questionId
+        }).then((res) => {
+          if(res.code == 0) {
+
+            this.saveSwitch = res.data
+            class Point {
+						  constructor(item) {
+						    this.switchID = item.switchID
+						    this.switchRegexText = item.switchRegexText
+						    this.keyname = item.keyname
+						    this.outRptSwitchID = item.outRptSwitchID
+						    this.keyvalue = item.keyvalue
+						  }
+						}
+						this.saveSwitch.forEach((item) => {
+            	this.switchArr.push(new Point({
+            		switchID : item.switchID,
+						    switchRegexText : item.switchRegexText,
+						    keyname : item.keyname,
+						    outRptSwitchID : item.outRptSwitchID,
+						    keyvalue : item.keyvalue
+            	}))
+            })
+           
+          }
+        }).catch((error)=> {
+        })
+        //根据问题id获取指标id
+        API.followProblems.editList({
           "id": this.questionId
         }).then((res) => {
           if(res.code == 0) {
-            console.log(res)
-            this.questionName = res.data.title
-            this.questionTargetName = res.data.targetName
-            this.questionTargetStyle = res.data.targetName
-            this.questionTargetfz = res.data.targetName
+          	 this.questionName = res.data.title
+            let getTargetIDVoice = res.data.targetId
+            /*************/
+            API.follSetting.editList({
+              id: getTargetIDVoice
+            }).then((res) => {
+              if(res.code == 0) {
+              	//alert('刷新成功')
+              	this.questionTargetName = res.data.name
+              	//获取指标类型，阀值
+              	if(res.data.type == 'digit') {
+		               this.questionTargetStyle = '数值'
+		            }else if(res.data.type == 'select') {
+		              this.questionTargetStyle = '选项'
+		            }else if(res.data.type == 'string') {
+		              this.questionTargetStyle = '文本'
+		            }
+		            //获取指标阀值
+		            this.questionTargetfz = res.data.optionValues
+              }
+            }).catch((error)=>{
+            	alert(error.data)
+            })
           }
         }).catch((error)=> {
 
         })
-			},
-			/*
-			*获取指标选项，阀值
-			*/
-			targetInfo() {
-				API.followProblems.editList({
-          "id": this.questionId
-        }).then((res) => {
-          if(res.code == 0) {
-            console.log(res)
-            this.questionName = res.data.title
-            this.questionTargetName = res.data.targetName
-            this.questionTargetStyle = res.data.targetName
-            this.questionTargetfz = res.data.targetName
-          }
-        }).catch((error)=> {
 
-        })
 			},
 			/*
 			*获取问题id
 			*/ 
 			fetchData () {
 	      this.questionId = this.$route.params.id
-	      console.log('questionId='+this.questionId)
 	    },
 	    /*
 			*添加话述
 			*/
 			addVoice() {
 				this.switchArr.push({
-					"switchID": '',
-					"keyname": '',
-					"switchRegexText": '',
-					"outRptSwitchID": '',
-					"keyvalue": '',
 				})
-				console.log(this.switchArr)
+				this.switchArr.forEach((item, index) => {
+					//item.switchID = index
+					console.log('index='+index)
+					item.switchID = index+1
+				})
+				// console.log(this.switchArr)
 			},
 			/*
 			*删除话述
 			*/
-			removequestion() {
-				this.switchArr.splice()
-				console.log(this.switchArr)
+			removequestion(index) {
+				this.switchArr.splice(index,1)
+				this.switchArr.forEach((item, index) => {
+					//item.switchID = index
+					console.log('index='+index)
+					console.log('item.switchID='+item.switchID)
+					item.switchID = index+1
+				})
 			},
     
 			/*
@@ -160,39 +189,25 @@ import axios from 'axios'
 			*/
 			handleSubmit() {
 				console.log(this.switchArr)
-				// API.followTemplate.questionDelete({
-    //       "questionId": this.questionId,
-    //     }).then((res) => {
-    //       if(res.code == 0) {
-    //         console.log(res)
-            
-    //       }
-    //     }).catch((error)=> {
+				API.voiceSetting.questionDelete({
+          "questionId": this.questionId,
+        }).then((res) => {
+          if(res.code == 0) {
+          	//alert('删除成功')
+            API.voiceSetting.questionSave({
+		          "id": this.questionId,   //问题id
+						  "questionCallScripts": this.switchArr
+		        }).then((res) => {
+		          if(res.code == 0) {
+		            console.log(res)
+		          }
+		        }).catch((error)=> {
 
-    //     })
-    
-        // API.followTemplate.questionSave({
-        //   "id": JSON.stringify(this.questionId),
-        //   "questionCallScripts": JSON.stringify(this.switchArr)
-        // }).then((res) => {
-        //   if(res.code == 0) {
-        //     console.log(res)
-            
-        //   }
-        // }).catch((error)=> {
+		        })
+		          }
+		        }).catch((error)=> {
 
-        // })
-        // axios.post('http://192.168.1.100:8080/visit/question/script/save',{
-        // 	"id": JSON.stringify(this.questionId),
-        // 	"questionCallScripts": JSON.stringify(this.switchArr)
-        // }).then((res) => {
-        //   if(res.code == 0) {
-        //     console.log(res)
-            
-        //   }
-        // }).catch((error)=> {
-
-        // })
+		        })
 			},
 		},
 		watch:{

@@ -145,7 +145,6 @@ export default {
                     name: '认识医生',
                     expand: true,
                     id: 0,
-                    name: '', //功能名称
                     url: '', //功能对应的URL
                     isMenu: "",  //菜单为true,功能为false
                     icon: 'fa-home',  //默认为fa-home
@@ -219,14 +218,16 @@ export default {
         addAccess() {
             this.$refs['access'].validate((valid) => {
                 if (valid) {
-                    this.access.pid = this.access.pid[this.access.pid.length - 1];
-                    this.access.isMenu = this.access.isMenu == 0 ? true : false;
+                    let copyData=JSON.parse(JSON.stringify(this.access));
+                    copyData.pid = copyData.pid[copyData.pid.length - 1];
+                    copyData.isMenu = copyData.isMenu == 0 ? true : false;
                     if (this.title = "新增功能") {
-                        this.access.id = null;
+                        copyData.id = null;
                     }
-                    API.Jurisdiction.editFun(this.access).then((res) => {
+                    API.Jurisdiction.editFun(copyData).then((res) => {
                         this.$Message.success("编辑成功");
                         this.modal=false;
+                        this.treeInit();
                     }).catch((error) => {
 
                     });
@@ -244,7 +245,8 @@ export default {
             return h('span', {
                 style: {
                     display: 'inline-block',
-                    width: '100%'
+                    width: 'calc(100% - 30px)',
+                    backgroundColor:' #f0f6fd'
                 }
             }, [
                     h('span', {
@@ -270,7 +272,6 @@ export default {
                         style: {
                             display: 'inline-block',
                             float: 'right',
-                            marginRight: '32px'
                         }
                     }, [
                             h('Button', {
@@ -278,7 +279,10 @@ export default {
                                     icon: 'ios-plus-empty'
                                 }),
                                 style: {
-                                    marginRight: '8px'
+                                    marginRight: '8px',
+                                    backgroundColor: '#2d8cf0',
+                                    borderColor: '#2d8cf0',
+                                    color:'#fff'
                                 },
                                 on: {
                                     click: () => { this.addFun(data) }
@@ -289,7 +293,10 @@ export default {
                                     icon: 'compose'
                                 }),
                                 style: {
-                                    marginRight: '8px'
+                                    marginRight: '8px',
+                                    backgroundColor: '#2d8cf0',
+                                    borderColor: '#2d8cf0',
+                                    color:'#fff'
                                 },
                                 on: {
                                     click: () => { this.editFun(data, 1) }
@@ -299,6 +306,11 @@ export default {
                                 props: Object.assign({}, this.buttonProps, {
                                     icon: 'ios-minus-empty'
                                 }),
+                                style: {
+                                    backgroundColor: '#ffad33',
+                                    borderColor: '#ffad33',
+                                    color:'#fff'
+                                },
                                 on: {
                                     click: () => { this.delFun(data) }
                                 }
@@ -373,7 +385,13 @@ export default {
                 cancelText: "取消",
                 onOk: () => {
                     /**具体的删除逻辑，删除之后不重新拉取 */
+                    API.Jurisdiction.delFun({
+                        id:data.id
+                    }).then((res)=>{
+                        this.treeInit();
+                    }).catch((err)=>{
 
+                    })
                 }
             })
         },

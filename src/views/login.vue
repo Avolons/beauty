@@ -28,8 +28,8 @@
                 </p>
                 <div class="form-con">
                     <Form ref="loginForm" :model="form" :rules="rules">
-                        <FormItem prop="userName">
-                            <Input v-model="form.userName" placeholder="请输入用户名">
+                        <FormItem prop="name">
+                            <Input v-model="form.name" placeholder="请输入用户名">
                             <span slot="prepend">
                                 <Icon :size="16" type="person"></Icon>
                             </span>
@@ -42,19 +42,19 @@
                             </span>
                             </Input>
                         </FormItem>
-                        <FormItem prop="code" class="login_form_code">
+                       <!--  <FormItem prop="code" class="login_form_code">
                             <Input type="text" v-model="form.code" placeholder="请输入验证码">
                             <span slot="prepend">
                                 <Icon :size="14" type="key"></Icon>
                             </span>
                             </Input>
-                            <img :src="'http://192.168.1.40:8080/code?rnd=' + '0.12'" alt="code">
-                        </FormItem>
+                            <img src="/kaptcha.jpg" alt="code">
+                        </FormItem> -->
                         <FormItem>
                             <Button @click="handleSubmit" type="primary" long>登录</Button>
                         </FormItem>
                     </Form>
-                    <p class="login-tip">输入任意用户名和密码即可</p>
+                    <p class="login-tip">输入您的用户名和密码</p>
                 </div>
             </Card>
         </div>
@@ -71,20 +71,20 @@ export default {
              * 登录验证
              */
             form: {
-                userName: 'admin',
+                name: 'admin',
                 password: 'renshi',
-                code: "1234",
+               /*  code: "1234", */
             },
             rules: {
-                userName: [
+                name: [
                     { required: true, message: '账号不能为空', trigger: 'blur' }
                 ],
                 password: [
                     { required: true, message: '密码不能为空', trigger: 'blur' }
                 ],
-                code: [
+               /*  code: [
                     { required: true, message: '验证码不能为空', trigger: 'blur' }
-                ]
+                ] */
             }
         };
     },
@@ -92,23 +92,25 @@ export default {
         handleSubmit() {
             this.$refs.loginForm.validate((valid) => {
                 if (valid) {
-                        Cookies.set('user', this.form.userName);
-                        Cookies.set('password', this.form.password);
-                        this.$store.commit('setAvator', 'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=3448484253,3685836170&fm=27&gp=0.jpg');
-                        if (this.form.userName === 'iview_admin') {
-                            Cookies.set('access', 0);
-                        } else {
-                            Cookies.set('access', 1);
-                        }
-                        this.$router.push({
-                            name: 'home_index'
-                        });
+                    
                     API.common.login({
-                        username: this.form.userName,
+                        username: this.form.name,
                         password: this.form.password,
-                        picCode: this.form.code
+                        /* picCode: this.form.code */
                     }).then((res) => {
-                        
+                        console.log(res.data);
+                            localStorage.setItem('access',JSON.stringify(res.data));
+                             Cookies.set('user', this.form.name);
+                            Cookies.set('password', this.form.password);
+                            this.$store.commit('setAvator', 'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=3448484253,3685836170&fm=27&gp=0.jpg');
+                            if (this.form.name === 'iview_admin') {
+                                Cookies.set('access', 0);
+                            } else {
+                                Cookies.set('access', 1);
+                            }
+                            this.$router.push({
+                                name: 'home_index'
+                            });
                     }).catch((err) => {
                         console.log(err);
                     });

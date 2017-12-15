@@ -19,10 +19,8 @@
             <div class="sys-sysset_main_list">
                 <Table border :columns="config" :data="dataList"></Table>
             </div>
-
-
             <Row class="sys-sysset_main_page">
-                <Page :total="totalPage" :current="page" show-elevator style="float:right" @on-change="changePage"></Page>
+                <Page :page-size="pageSize" :total="totalPage" :current="page" show-elevator style="float:right" @on-change="changePage"></Page>
             </Row>
         </div>
         <Modal v-model="modal" title="添加参数" >
@@ -34,6 +32,12 @@
                 </FormItem>
                 <FormItem label="编码" prop="key">
                     <Input v-model="formData.key" placeholder="请输入编码"></Input>
+                </FormItem>
+                <FormItem label="分类信息" prop="main_type">
+                    <Input v-model="formData.main_type" placeholder="请输入分类信息"></Input>
+                </FormItem>
+                <FormItem label="排序字段" prop="sort">
+                   <Input v-model="formData.sort" placeholder="请输入排序字段，整数"></Input>
                 </FormItem>
                 <FormItem label="参数值" prop="value">
                     <Input v-model="formData.value" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="请填写参数值"></Input>
@@ -72,6 +76,7 @@ export default {
         return {
             page: 1,//当前页码
             totalPage: 10,//总页码
+            pageSize:10,
             //当前被点击触发的数据
             currentInfo: {
                 type: "",
@@ -85,6 +90,8 @@ export default {
                 key: "",
                 value: "",
                 remark: "",
+                main_type:"",
+                sort:0,
             },
             //类型选项列表
             typeList: [
@@ -112,6 +119,14 @@ export default {
                 {
                     title: '值',
                     key: 'value'
+                },
+                {
+                    title: '分类信息',
+                    key: 'main_type',
+                },
+                {
+                    title: '排序字段',
+                    key: 'sort'
                 },
                 {
                     title: '备注',
@@ -178,6 +193,8 @@ export default {
                 page: this.page
             }).then((res) => {
                 this.dataList=res.data;
+                this.totalPage = res.data.totalRow;
+				this.pageSize=res.data.pageSize;
             }).catch((err) => {
 
             });

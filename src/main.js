@@ -14,10 +14,11 @@ import promise from 'es6-promise';
 promise.polyfill();
 Vue.use(VueI18n);
 Vue.use(iView);
+
 Vue.prototype.validate = validate;
 /* 全局设置API */
 
-new Vue({
+window.RSYS = new Vue({
     el: '#app',
     router: router,
     store: store,

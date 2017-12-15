@@ -37,7 +37,11 @@ function fetch (type, url, params) {
                 params: params
             })
                 .then(response => {
-                    resolve(JSON.parse(response.data));
+                    if (JSON.parse(response.data).code === 0) {
+                        resolve(JSON.parse(response.data));
+                    } else {
+                        window.RSYS.$Message.warning(JSON.parse(response.data).message);
+                    }
                 }, err => {
                     reject(err);
                 })
@@ -47,7 +51,11 @@ function fetch (type, url, params) {
         } else {
             axios.post(url, params)
                 .then(response => {
-                    resolve(JSON.parse(response.data));
+                    if (JSON.parse(response.data).code === 0) {
+                        resolve(JSON.parse(response.data));
+                    } else {
+                        window.RSYS.$Message.error(JSON.parse(response.data).message);
+                    }
                 }, err => {
                     reject(err);
                 })
@@ -62,14 +70,14 @@ function fetch (type, url, params) {
 export const common = {
     /**
      * 登录接口
-     * username
+     * name
      * password
      * picCode
      * @param {any} data
      * @returns
      */
     login (data) {
-        return fetch('post', '/visit/login/check', data);
+        return fetch('post', 'http://192.168.1.100:8080/visit/admin/login/check', data);
     }
 };
 
@@ -392,7 +400,84 @@ export const Systems = {
      */
     delDepart (data) {
         return fetch('post', '/visit/newDepartment/del', data);
+    },
+    /**
+     * 疾病信息列表
+     * page:1 //当前页码
+     * dsName: //疾病名称
+     * zName: //助记码
+     * iName: //ICD编码
+     * @param {any} data
+     * @returns
+     */
+    listDisease (data) {
+        return fetch('get', '/visit/newDisease/list', data);
+    },
+    /**
+     * 疾病添加
+     * name:aaa //疾病名称
+     * zjmName:bbb //助记码
+     * icdName:ccc //ICD编码
+     * state:0 //状态（0正常，1禁用）
+     * remark:ddd //备注
+     * @param {any} data
+     * @returns
+     */
+    addDisease  (data) {
+        return fetch('post', '/visit/newDisease/add', data);
+    },
+    /**
+     * 疾病编辑
+     * id: //当前疾病ID
+     * name:aaa //疾病名称
+     * zjmName:bbb //助记码
+     * icdName:ccc //ICD编码
+     * state:0 //状态（0正常，1禁用）
+     * remark:ddd //备注
+     * @param {any} data
+     * @returns
+     */
+    editDisease  (data) {
+        return fetch('post', '/visit/newDisease/update', data);
+    },
+    /**
+     * 疾病删除
+     * id
+     * @param {any} data
+     * @returns
+     */
+    delDisease  (data) {
+        return fetch('post', '/visit/newDisease/del', data);
+    },
+    /**
+     * 查询所有部门接口
+     * @param {any} data
+     * @returns
+     */
+    listDisDepart  (data) {
+        return fetch('post', '/visit/newDisease/del', data);
+    },
+    /**
+     * 保存方案接口
+     * id: //疾病ID
+     * qtId: //模板ID
+     * @param {any} data
+     * @returns
+     */
+    saveDisAction (data) {
+        return fetch('post', '/visit/newDisease/del', data);
+    },
+    /**
+     * 查询对应模板方案
+     * departmentId:0 //部门ID
+     * diseaseId:0 //疾病ID
+     * @param {any} data
+     * @returns
+     */
+    listDisTemp  (data) {
+        return fetch('post', '/visit/newDisease/findTemp', data);
     }
+
 };
 
 /* 随访设置--随访指标接口 *****/

@@ -33,6 +33,6 @@
     box-sizing: border-box;
     padding: 10px;
     margin: 0;
-    height: 100%;
+    min-height: 100%;
 }
 </style>

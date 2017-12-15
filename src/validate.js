@@ -45,7 +45,14 @@ export default {
         ],
         remark: [
             { required: true, message: '请填写备注', trigger: 'blur' }
+        ],
+        main_type: [
+            { required: true, message: '请输入分类信息', trigger: 'blur' }
+        ],
+        sort: [
+            { required: true, type: 'number', message: '请填写排序字段，必须为整数', trigger: 'blur' }
         ]
+
     },
     access: {
         name: [
@@ -88,6 +95,22 @@ export default {
         ],
         remark: [
             { required: false, message: '请输入备注', trigger: 'blur' }
+        ]
+    },
+    role: {
+        name: [
+            { required: true, message: '请输入名称', trigger: 'blur' }
+        ],
+        profile: [
+            { required: false, message: '请输入说明', trigger: 'blur' }
+        ]
+    },
+    disease: {
+        name: [
+            { required: true, message: '请输入名称', trigger: 'blur' }
+        ],
+        profile: [
+            { required: false, message: '请输入说明', trigger: 'blur' }
         ]
     }
 

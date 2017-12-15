@@ -7,7 +7,7 @@
           <Input type="text" v-model="proSearch.title" placeholder="请输入问题名称"></Input>
         </FormItem>
         <FormItem prop="diseaseName" label="疾病类型">
-          <Select v-model="proSearch.diseaseName" filterable remote :remote-method="remoteMethod2" :loading="loading2" >
+          <Select v-model="proSearch.diseaseName" filterable remote not-found-text="" :remote-method="remoteMethod2" :loading="loading2" >
             <Option v-for="(option, index) in options2" :value="option.value" :key="index">{{option.label}}</Option>
           </Select>
         </FormItem>
@@ -34,22 +34,31 @@
         <FormItem label="问题标题" prop="title">
             <Input v-model="formItem.title" placeholder="请输入问题标题"></Input>
         </FormItem> 
-        <FormItem label="随访问题内容" prop="content">
+        <FormItem label="问题内容" prop="content">
             <Input v-model="formItem.content" placeholder="请输入随访问题内容"></Input>
         </FormItem>
-        <FormItem label="关联指标" prop="targetName1">
+        <FormItem label="采集指标">
+            <RadioGroup v-model="formItem.isTarget" @on-change="targetChange">
+              <Radio label="0">是</Radio>
+              <Radio label="1">否</Radio>
+            </RadioGroup>
+        </FormItem>
+        <FormItem label="关联指标" prop="targetName1" v-if="targetShow">
             <!-- <Input v-model="formItem.targetName" placeholder="根据首字母进行搜索" @on-keyup="keyupzb($event)"></Input> -->
-            <Select v-model="formItem.targetName1" filterable remote :remote-method="remoteMethod1" :loading="loading1">
+            <Select v-model="formItem.targetName1" filterable remote :remote-method="remoteMethod1" :loading="loading1" clearable :label-in-value=true @on-change="targetRadio" not-found-text="">
                 <Option v-for="(option, index) in options1" :value="option.value" :key="index">{{option.label}}</Option>
             </Select>
         </FormItem>
-        <FormItem label="疾病标签" prop="diseaseName">
-          <Select v-model="formItem.diseaseName" filterable remote :remote-method="remoteMethod2" :loading="loading2" clearable @label-in-value="true"  @on-keyup="keyupSearch($event)" style="width: 70%;float: left;margin-right:20px;" @on-change="selectChange" not-found-text="" :label-in-value=true>
+        <FormItem label="" prop="" label="指标类型" v-if="targetShow">
+          <Tag color="blue" v-if="tagShow">{{targetTag}}</Tag>
+        </FormItem>
+        <FormItem label="疾病类型" prop="diseaseName">
+          <Select v-model="formItem.diseaseName" filterable remote :remote-method="remoteMethod2" :loading="loading2" clearable style="width: 70%;float: left;margin-right:20px;" @on-change="selectChange" not-found-text="" :label-in-value=true placeholder="搜索疾病类型添加至疾病标签">
             <Option v-for="(option, index) in options2" :value="option.value" :key="index">{{option.label}}</Option>
           </Select>
           <Button type="primary" @click="addTag" ref="addTagbtn">添加</Button>
         </FormItem>
-        <FormItem label="" prop="">
+        <FormItem label="" prop="" label="疾病标签">
           <tag v-for="item in tagCount" color="blue" :key="item" :name="item" closable @on-close="tagClose">{{item}}</tag>
         </FormItem>
         <FormItem label="纯放音">
@@ -125,13 +134,47 @@
                       }).then((res) => {
                         if(res.code == 0) {
                           console.log(res)
+
+                          let otypeName
+                          if(res.data.otype == '01') {
+                            otypeName = '症状'
+                          }else if(res.data.otype == '02') {
+                            otypeName = '体征'
+                          }else if(res.data.otype == '03') {
+                            otypeName = '生活方式指导'
+                          }else if(res.data.otype == '04') {
+                            otypeName = '辅助检查'
+                          }else if(res.data.otype == '05') {
+                            otypeName = '用药反馈'
+                          }else if(res.data.otype == '06') {
+                            otypeName = '转诊情况'
+                          }else if(res.data.otype == '07') {
+                            otypeName = '通用'
+                          }
+                          
+                          // this.options1.push({
+                          //   value: res.data.targetId,
+                          //   label: res.data.targetName
+                          // })
+                          // this.formItem.targetName1 = res.data.targetId
                           this.formItem.id = res.data.id
                           this.formItem.title = res.data.title
                           this.formItem.content = res.data.content
-                          this.formItem.targetName = res.data.targetName
+                          
                           this.formItem.playWavOnly = res.data.playWavOnly
-                          //this.formItem.textarea = res.data.remark
-                          addModel(this.formItem.id)
+                          this.formItem.isTarget = res.data.isTarget
+                          this.formItem.diseaseId = res.data.diseaseId
+                          if(res.data.isTarget == '0') {
+                            this.targetShow = true
+                            this.tagShow = true
+                            this.targetTag = otypeName
+                          }else {
+                            this.targetShow = false
+                            this.tagShow = false
+                            this.targetTag = ''
+                          }
+                          this.tagCount = res.data.diseaseName.split(",")
+                          this.tagCountId = res.data.diseaseId.split(",")
                         }else {
                           console.log(res)
                         }
@@ -165,18 +208,19 @@
                     }
                   }
                 }, '删除'),
-                // h('Button', {
-                //   props: {
-                //     type: 'warning',
-                //     size: 'small'
-                //   },
-                //   style: {},
-                //   on: {
-                //     click: () => {
-                //       this.$router.push({path:'/followSetting/voice/voice/:123'});
-                //     }
-                //   }
-                // }, '编辑话述')
+                h('Button', {
+                  props: {
+                    type: 'warning',
+                    size: 'small'
+                  },
+                  style: {},
+                  on: {
+                    click: () => {
+                      let id = params.row.id
+                      this.$router.push({path:`/followSetting/voice/voice/${params.row.id}`});
+                    }
+                  }
+                }, '编辑话述')
               ]);
             }
 				}],
@@ -188,11 +232,13 @@
           id:'',
           title: '',
           content: '',
+          targetId: '',
           targetName1: '',
           diseaseName: '',
           diseaseId: '',
           model10: [],
           playWavOnly: '1',
+          isTarget: '0'//是否采集指标
         },
         proRuleModel: {//模态框校验
           title: [
@@ -202,9 +248,9 @@
           content: [
             { required: true, message: '问题内容不能为空', trigger: 'blur' }
           ],
-          targetName1: [
-            { required: true, message: '关联指标不能为空', trigger: 'blur' }
-          ],
+          // targetName1: [
+          //   { required: true, message: '关联指标不能为空', trigger: 'blur' }
+          // ],
           password: [
             { required: true, message: 'Please fill in the password.', trigger: 'blur' },
             { type: 'string', min: 6, message: 'The password length cannot be less than 6 bits', trigger: 'blur' }
@@ -212,6 +258,7 @@
         },             
         tagCount: [],
         tagCount2: [],
+        tagCountId: [],
 		    editRules: {
 		    }, 
         zjmdata: [],//助记码array
@@ -223,7 +270,11 @@
         listdata2: [],
         diseasedata: [],
         selectLabel: '',
-        selectValue: ''
+        selectValue: '',
+        targetShow: true,//判断是否疾病标签是否展示
+        targetTag: '',//指标标签
+        tagShow: false,//标签是否展示,
+        targetSelectId: '',//选中指标的id
 			}
 		},
     mounted() {
@@ -253,11 +304,12 @@
       *获取分页列表数据
       */
       currentPage: function (page) {
+        console.log(this.proSearch.diseaseName)
        API.followProblems.list({
           pager: page,
           limit: '10',
           title: this.proSearch.title,
-          diseaseName: this.proSearch.diseaseName
+          diseaseId: this.proSearch.diseaseName
         }).then((res) => {
           if(res.code == 0) {
             this.pardata = res.data
@@ -270,12 +322,48 @@
         })
       },
       /*
-      *获取选中的疾病标签列value
+      *获取选中的指标value
       */
-      selectChange(value) {
+      targetRadio(value) {
         console.log(value.label)
-        this.selectLabel = value.label
-        this.selectValue = value.value
+        API.follSetting.list({
+          pager: 1,
+          limit: '10',
+          name: value.label,
+        }).then((res) => {
+          if(res.code == 0) {
+            console.log(res)
+            let otypeName
+            if(res.data[0].otype == '01') {
+              otypeName = '症状'
+            }else if(res.data[0].otype == '02') {
+              otypeName = '体征'
+            }else if(res.data[0].otype == '03') {
+              otypeName = '生活方式指导'
+            }else if(res.data[0].otype == '04') {
+              otypeName = '辅助检查'
+            }else if(res.data[0].otype == '05') {
+              otypeName = '用药反馈'
+            }else if(res.data[0].otype == '06') {
+              otypeName = '转诊情况'
+            }else if(res.data[0].otype == '07') {
+              otypeName = '通用'
+            }
+            if(this.formItem.targetName1 != '') {
+              this.tagShow = true
+              this.targetTag = otypeName
+              this.targetSelectId = res.data[0].id
+            }else {
+              this.tagShow = false
+              this.targetTag = ''
+            }
+            // console.log('this.targetTag='+this.targetTag)
+          }else {
+            console.log(res.message)
+          }
+        }).catch((error) => {
+          console.log(error)
+        })
       },
       /*
       *查询功能
@@ -305,6 +393,14 @@
         this.$refs[name].resetFields();//清空表单
       },
       /*
+      *获取选中的疾病标签列value
+      */
+      selectChange(value) {
+        console.log(value.label)
+        this.selectLabel = value.label
+        this.selectValue = value.value
+      },
+      /*
       *确定添加
       */
       addModel(name) {
@@ -312,9 +408,10 @@
         let addPram = {
           "id": this.formItem.id,
           "title": this.formItem.title,
+          "isTarget": this.formItem.isTarget,
           "content": this.formItem.content,
-          "targetId": this.formItem.targetName1,
-          "diseaseId": this.tagCount2.join(','),
+          "targetId": this.targetSelectId,
+          "diseaseId": this.tagCountId.join(','),
           "playWavOnly": this.formItem.playWavOnly,
           "status": 0,
         }
@@ -331,8 +428,6 @@
                 this.formItem.textarea = ''
                 this.patientText = false;
                 this.tagCount = []//清空疾病标签
-
-
                 this.list(1)
                 console.log(res)
               }else {
@@ -384,6 +479,7 @@
         }
         this.tagCount.push(this.selectLabel)
         this.tagCount2.push(this.selectValue)
+        this.tagCountId.push(this.selectValue)
         this.selectLabel = ''
         this.selectValue = ''
         this.formItem.diseaseName = ''
@@ -392,14 +488,28 @@
       *删除标签
       */
       tagClose(event, name) {
+        console.log(event)
+        console.log(name)
         const index = this.tagCount.indexOf(name);
         this.tagCount.splice(index, 1);
+        this.tagCountId.splice(index,1);
       },
       /*
       *监听是否纯放音的单选
       */
       radioChange(value) {
-        console.log('value='+value)
+        console.log('是否纯放音='+value)
+      },
+      /*
+      *监听是否采集指标
+      */
+      targetChange(value) {
+        console.log('是否采集指标='+value)
+        if(value == '0') {
+          this.targetShow = true
+        }else {
+          this.targetShow = false
+        }
       },
     	//详情模态框
     	show (index) {
@@ -445,8 +555,7 @@
           'zjm': query
         }).then((res) => {
           if(res.code == 0) {
-            
-            console.log(res.data)
+            // console.log(res.data)
             class Point {
               constructor(item) {
                 this.value = item.value;
@@ -469,15 +578,12 @@
             } else {
               this.options1 = [];
             }
-
-            
           }else {
             console.log(res)
           }
         }).catch((error) => {
           console.log(error)
         })
-        
       },
       /*
       *疾病类型--远程搜索

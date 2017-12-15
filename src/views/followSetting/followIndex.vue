@@ -34,7 +34,6 @@
 				</Col>
 			</Row>
 		</Col>
-	
 		<!-- 编辑功能模态框 -->
 		<Modal v-model="patientText" title="添加指标 / 编辑指标"  @on-ok="ok" @on-cancel="cancel" width="650" class-name="patientInfo">
       <Form :model="formItem" :label-width="80" ref="formValidate" :rules="ruleValidate">
@@ -52,6 +51,15 @@
               <Option value="06">转诊情况</Option>
               <Option value="07">通用</Option>
             </Select>
+        </FormItem>
+        <FormItem label="疾病标签" prop="diseaseName">
+          <Select v-model="formItem.diseaseName" filterable remote :remote-method="remoteMethod2" :loading="loading2" clearable @label-in-value="true"  @on-keyup="keyupSearch($event)" style="width: 70%;float: left;margin-right:20px;" @on-change="selectChange" not-found-text="" :label-in-value=true>
+            <Option v-for="(option, index) in options2" :value="option.value" :key="index">{{option.label}}</Option>
+          </Select>
+          <Button type="primary" @click="addTag" ref="addTagbtn">添加</Button>
+        </FormItem>
+        <FormItem label="" prop="">
+          <tag v-for="item in tagCount" color="blue" :key="item" :name="item" closable @on-close="tagClose">{{item}}</tag>
         </FormItem>
         <FormItem label="结果类型"  prop="radio">
             <RadioGroup v-model="formItem.radio" @on-change="radioChange">
@@ -90,15 +98,13 @@
 	export default {
 		data() {
       const validateAge = (rule, value, callback) => {
-          if (!value) {
-              return callback(new Error('Age cannot be empty'));
-          }
-          
-          if (!Number.isInteger(value)) {
-              callback(new Error('Please enter a numeric value'));
-          } else {
-          }
-         
+        if (!value) {
+          return callback(new Error('Age cannot be empty'));
+        }
+        if (!Number.isInteger(value)) {
+          callback(new Error('Please enter a numeric value'));
+        } else {
+        }
       };
 			return {
 				IndexSearch: {
@@ -110,7 +116,6 @@
             title: 'id',
             key: 'id',
             align: 'center',
-            
           },
           {
             title: '指标名称',
@@ -196,6 +201,9 @@
                   on: {
                     click: () => {
                     	this.patientText = true
+
+                      this.formItem.model10 = []
+                      this.optionList = []
                       API.follSetting.editList({
                         id: params.row.id
                       }).then((res) => {
@@ -240,8 +248,6 @@
                           //预警阀值
                           this.formItem.model10 = kk
                           //备注
-
-                          
                         }else {
                           console.log(res)
                         }
@@ -281,9 +287,13 @@
           indexName: '',
           model10: [],
           top: '',
-          bottom: ''
+          bottom: '',
+          diseaseName: '',//疾病标签 
         },
-
+        options2: [],//疾病标签下拉框数组
+        tagCount: [],
+        tagCount2: [],           
+        loading2: false,
         ruleValidate: {
           name: [
             { required: true, message: '指标名称不能为空', trigger: 'blur' }
@@ -324,7 +334,7 @@
           console.log(error)
         })
       },
-     /*
+      /*
       *获取分页列表数据
       */
       currentPage: function (page) {
@@ -399,7 +409,6 @@
         this.optionList = []
         this.radioText = false
         this.radioNumber = false
-       
       },
       /*
       *确定添加
@@ -412,6 +421,7 @@
             let addPram1 = {
               "id": this.formItem.id,
               "name": this.formItem.name,
+              "diseaseId": this.tagCount2.join(','),
               "status": '0',
               "type": this.formItem.radio,
               "otype": this.formItem.select,
@@ -422,6 +432,7 @@
             let addPram2 = {
               "id": this.formItem.id,
               "name": this.formItem.name,
+              "diseaseId": this.tagCount2.join(','),
               "status": '0',
               "type": this.formItem.radio,
               "otype": this.formItem.select,
@@ -431,6 +442,7 @@
             let addPram3 = {
               "id": this.formItem.id,
               "name": this.formItem.name,
+              "diseaseId": this.tagCount2.join(','),
               "status": '0',
               "type": this.formItem.radio,
               "otype": this.formItem.select,
@@ -469,7 +481,6 @@
             this.$Message.error('Fail!');
           }
         })
-        
       },
       /*
       *监听增加/编辑单选状态
@@ -486,7 +497,6 @@
 					this.radioNumber = false
 				}
 			},
-			
       /*
       *编辑指标
       */
@@ -516,17 +526,89 @@
 				    this.label = label;
 				  }
 				}
-
 				let p1 = new Point(this.formItem.indexName,this.formItem.indexName)
 				this.optionList.push(p1)
     		this.formItem.indexName = ''
     		console.log(this.optionList)
-    	}
-		},
-    /*
-    *预警阀值
-    */
-  
+    	},
+      /*
+      *获取选中的疾病标签列value
+      */
+      selectChange(value) {
+        console.log(value.label)
+        this.selectLabel = value.label
+        this.selectValue = value.value
+      },
+      /*
+      *疾病类型--远程搜索
+      */
+      remoteMethod2 (query) {
+        API.followProblems.disease({
+          'zjm': query
+        }).then((res) => {
+          console.log(res)
+          if(res.code == 0) {
+            class Point {
+              constructor(item) {
+                this.value = item.value;
+                this.label = item.label;
+              }
+            }
+            let parr2 = []
+            let more2 = res.data
+            more2.forEach((item) => {
+              parr2.push(new Point({
+                value: item.id,
+                label: item.value
+              }))
+            })
+
+            this.options2 = parr2
+            if (query !== '') {
+              this.options2 = parr2
+              
+            } else {
+              this.options2 = [];
+              this.proSearch.diseaseName = ''
+            }
+
+            
+          }else {
+            console.log(res)
+          }
+        }).catch((error) => {
+          console.log(error)
+        })
+      },
+       /*
+      *添加标签
+      */
+      addTag() {
+        let flag=0;
+        this.tagCount.forEach((item) => {
+          if(this.selectLabel == item || this.selectLabel == '') {
+            flag++; 
+            alert('您添加的为空或者重复添加')
+          }
+        })
+        if(flag>0){
+          this.selectLabel = ''
+          return false;
+        }
+        this.tagCount.push(this.selectLabel)
+        this.tagCount2.push(this.selectValue)
+        this.selectLabel = ''
+        this.selectValue = ''
+        this.formItem.diseaseName = ''
+      },
+      /*
+      *删除标签
+      */
+      tagClose(event, name) {
+        const index = this.tagCount.indexOf(name);
+        this.tagCount.splice(index, 1);
+      },
+    },
 		
 	}
 </script>

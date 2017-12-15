@@ -18,13 +18,24 @@ axios.defaults.baseURL = 'http://192.168.1.100:8080/';
 
 // 添加请求拦截器
 axios.interceptors.request.use(function (config) {
-    config.data = qs.stringify(config.data);
+  console.log(JSON.stringify(config))
+    
   // 在发送请求之前做些什么
+    config.data = qs.stringify(config.data);
+  if(config.url == "http://192.168.1.100:8080/visit/question/script/save") {
+     console.log('test')
     config.headers = {
-        'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
-
+      // 'Content-Type': 'application/json; charset=utf-8',
+      "Content-Type": "application/json;charset=utf-8"
+    }
+  }else {
+    
+    config.headers = {
+      'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
     };
-    return config;
+  }
+ 
+  return config;
 }, function (error) {
   // 对请求错误做些什么
     return Promise.reject(error);
@@ -262,6 +273,27 @@ export const followTemplate = {
     },
     disease (data) {
         return fetch('get', 'visit/disease/autocomplete', data);
+    },
+    /*
+    *话述设置
+    *questionId(问题id)
+    */ 
+    question (data) {
+        return fetch('get', 'visit/question/script/list', data);
+    },
+    /*
+    *话述设置--删除
+    *questionId(问题id)
+    */ 
+    questionDelete (data) {
+        return fetch('get', 'visit/question/script/delete', data);
+    },
+    /*
+    *话述设置--保存
+    *questionId(问题id)
+    */ 
+    questionSave (data) {
+        return fetch('post', 'visit/question/script/save', data);
     },
 };
 

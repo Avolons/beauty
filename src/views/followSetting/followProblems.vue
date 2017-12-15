@@ -208,18 +208,19 @@
                     }
                   }
                 }, '删除'),
-                // h('Button', {
-                //   props: {
-                //     type: 'warning',
-                //     size: 'small'
-                //   },
-                //   style: {},
-                //   on: {
-                //     click: () => {
-                //       this.$router.push({path:'/followSetting/voice/voice/:123'});
-                //     }
-                //   }
-                // }, '编辑话述')
+                h('Button', {
+                  props: {
+                    type: 'warning',
+                    size: 'small'
+                  },
+                  style: {},
+                  on: {
+                    click: () => {
+                      let id = params.row.id
+                      this.$router.push({path:`/followSetting/voice/voice/${params.row.id}`});
+                    }
+                  }
+                }, '编辑话述')
               ]);
             }
 				}],

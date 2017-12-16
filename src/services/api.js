@@ -86,13 +86,14 @@ export const common = {
      * @returns
      */
     login (data) {
-        return fetch('post', 'http://192.168.1.100:8080/visit/admin/login/check', data);
+        return fetch('post', '/visit/admin/login/check', data);
     }
 };
 
 /* 权限管理相关接口 *****/
 export const Jurisdiction = {
     // ****企业管理相关接口
+
     /**
      * 企业添加
      * name:  //公司名称 String
@@ -197,9 +198,10 @@ export const Jurisdiction = {
      * @returns
      */
     listFun (data) {
-        return fetch('get', 'http://192.168.1.100:8080/visit/admin/action/list', data);
+        return fetch('get', '/visit/admin/action/list', data);
     },
     /**
+     * 编辑功能
      * name:'我的测试11', 功能名称
      * url:'/visit/test/11', 功能对应的URL
      * isMenu:true, 菜单为true,功能为false
@@ -211,7 +213,7 @@ export const Jurisdiction = {
      * @returns
      */
     editFun (data) {
-        return fetch('post', 'http://192.168.1.100:8080/visit/admin/action/save', data);
+        return fetch('post', '/visit/admin/action/save', data);
     },
     /**
      * 功能删除
@@ -220,14 +222,14 @@ export const Jurisdiction = {
      * @returns
      */
     delFun (data) {
-        return fetch('post', 'http://192.168.1.100:8080/visit/admin/action/del', data);
+        return fetch('post', '/visit/admin/action/del', data);
     },
     /**
      * 角色列表
      * @returns
      */
     listRoles (data) {
-        return fetch('get', 'http://192.168.1.100:8080/visit/admin/roles/list', data);
+        return fetch('get', '/visit/admin/roles/list', data);
     },
     /**
      * 角色详情
@@ -235,9 +237,10 @@ export const Jurisdiction = {
      * @returns
      */
     infoRoles (data) {
-        return fetch('get', 'http://192.168.1.100:8080/visit/admin/roles/add', data);
+        return fetch('get', '/visit/admin/roles/add', data);
     },
     /**
+     * 角色编辑
      * "name": "护工"
      * "profile": "护工人员"
      * "actionsIds": [0]
@@ -245,7 +248,7 @@ export const Jurisdiction = {
      * @returns
      */
     editRoles (data) {
-        return fetch('post', 'http://192.168.1.100:8080/visit/admin/roles/save', data);
+        return fetch('post', '/visit/admin/roles/save', data);
     },
     /**
      * 角色删除
@@ -254,7 +257,7 @@ export const Jurisdiction = {
      * @returns
      */
     delRoles (data) {
-        return fetch('post', 'http://192.168.1.100:8080/visit/admin/roles/del', data);
+        return fetch('post', '/visit/admin/roles/del', data);
     }
 
 };
@@ -311,7 +314,7 @@ export const Systems = {
         return fetch('get', '/visit/newSysTaskHandle/list', data);
     },
     /**
-     * 定时任务列表
+     * 禁用启用定时任务
      * id
      * @param {any} data
      * @returns
@@ -320,7 +323,7 @@ export const Systems = {
         return fetch('get', '/visit/newSysTaskHandle/enable', data);
     },
     /**
-     * 定时任务列表
+     * 定时任务备注
      * id:
      * remark
      * @param {any} data
@@ -464,7 +467,7 @@ export const Systems = {
      * @returns
      */
     listDisDepart  (data) {
-        return fetch('post', '/visit/newDisease/del', data);
+        return fetch('post', '/visit/newDisease/findDep', data);
     },
     /**
      * 保存方案接口
@@ -474,7 +477,7 @@ export const Systems = {
      * @returns
      */
     saveDisAction (data) {
-        return fetch('post', '/visit/newDisease/del', data);
+        return fetch('post', '/visit/newDisease/save', data);
     },
     /**
      * 查询对应模板方案
@@ -484,7 +487,7 @@ export const Systems = {
      * @returns
      */
     listDisTemp  (data) {
-        return fetch('post', '/visit/newDisease/findTemp', data);
+        return fetch('get', '/visit/newDisease/findTemp', data);
     }
 
 };

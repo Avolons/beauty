@@ -11,6 +11,7 @@ import util from '@/libs/util';
 import validate from './validate.js';
 import promise from 'es6-promise';
 
+/** 解决es5的兼容性问题 */
 promise.polyfill();
 Vue.use(VueI18n);
 Vue.use(iView);
@@ -48,3 +49,8 @@ window.RSYS = new Vue({
         this.$store.commit('setTagsList', tagsList);
     }
 });
+
+/** 全局权限指令设置 */
+let menuShow = (url) => {
+
+};

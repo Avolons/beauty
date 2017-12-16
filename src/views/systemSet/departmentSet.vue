@@ -363,7 +363,7 @@ export default {
 				title: '删除设置',
 				content: '确定删除该系统设置？',
 				onOk: () => {
-					API.Systems.delSystem({
+					API.Systems.delDepart({
 						id: id
 					}).then((res) => {
 						self.$Message.success("删除成功");

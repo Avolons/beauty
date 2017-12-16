@@ -157,7 +157,6 @@ export default {
             this.$Modal.confirm({
                 title: '删除设置',
                 content: '确定删除该系统设置？',
-                loading: true,
                 onOk: () => {
                     API.Systems.delSystem({
                         id: id

@@ -28,10 +28,12 @@
 			<span class="fontvoice voicetitle">话术配置</span>
       <ul>
       	<li v-for="(item,index) in switchArr">
-    			 <Row class="itemli">
+    			 <Row class="itemli" style="background:#f7f7f7">
     			 	<Col span="4" class="textCenter">switchID</Col>
-    			 	<Col span="12"><Input v-model="item.switchID" placeholder="large size"></Input></Col>
-    			 	<Col span="2" offset="6" @click.native="removequestion(index)" style="background:#0f0"><Icon type="close-circled" size="22" color="#f70000" style="line-height: 45px;"></Icon></Col>
+    			 	<Col span="12"></Input>
+							<span>{{item.switchID}}</span>
+    			 </Col>
+    			 	<Col span="2" offset="6" @click.native="removequestion(index)"><Icon type="close-circled" size="22" color="#f70000" style="line-height: 45px;"></Icon></Col>
     			 </Row> 
     			 <Row class="itemli">
     			 	<Col span="4" class="textCenter">名称</Col>
@@ -200,6 +202,7 @@ import {API} from '@/services';
 		        }).then((res) => {
 		          if(res.code == 0) {
 		            console.log(res)
+		            this.$Message.success('添加成功!');
 		          }
 		        }).catch((error)=> {
 
@@ -210,6 +213,9 @@ import {API} from '@/services';
 		        })
 			},
 		},
+		success () {
+      this.$Message.success('This is a success tip');
+    },
 		watch:{
 			'$route': 'fetchData'
 		}

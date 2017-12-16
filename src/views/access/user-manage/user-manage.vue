@@ -4,7 +4,6 @@
         &_add {
             margin-bottom: 10px;
         }
-        &_list {}
         &_search{
             box-sizing: border-box;
             margin-bottom: 10px;
@@ -64,7 +63,8 @@
                     身份：
                 </span>
                 <Select v-model="model1" style="width:200px">
-                    <Option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                    <Option value="0" >管理员</Option>
+                    <Option value="1" >医生</Option>
                 </Select>
                 </Col>
                 <Col span="6">
@@ -72,20 +72,22 @@
                     状态：
                 </span>
                 <Select v-model="model1" style="width:200px">
-                    <Option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                   <Option value="0" >锁定</Option>
+                   <Option value="1" >正常</Option>
                 </Select>
                 </Col>
             </Row>
             <div class="user_main_add">
-                <Button @click="searchuser" type="primary">查询</Button>
+                <Button @click="searchUser" type="primary">查询</Button>
                 <Button @click="adduser" type="primary">新增用户</Button>
             </div>
             <div class="user_main_list">
-                <Table border :columns="columns7" :data="data6"></Table>
+                <Table border :columns="config" :data="dataList"></Table>
             </div>
             <Row class="user_main_page">
             <Page :total="100" :current="1" style="float:right" @on-change="changePage"></Page>
             </Row>
+            
         </div>
     </div>
 </template>
@@ -94,35 +96,16 @@
 export default {
     data() {
         return {
-            value1: "",
-             cityList: [
-                    {
-                        value: 'New York',
-                        label: 'New York'
-                    },
-                    {
-                        value: 'London',
-                        label: 'London'
-                    },
-                    {
-                        value: 'Sydney',
-                        label: 'Sydney'
-                    },
-                    {
-                        value: 'Ottawa',
-                        label: 'Ottawa'
-                    },
-                    {
-                        value: 'Paris',
-                        label: 'Paris'
-                    },
-                    {
-                        value: 'Canberra',
-                        label: 'Canberra'
-                    }
-                ],
-                model1: '',
-            columns7: [
+            totalPage: 10,//总页码
+            pageSize: 10,//每页数据
+            //搜索参数
+            searchParam: {
+                page: 1,//当前页码
+                dsName: "",//疾病名称
+                zName: "",//助记码
+                iName: "", //ICD编码
+            },
+            config: [
                 {
                     title: '角色',
                     key: 'role',
@@ -260,68 +243,175 @@ export default {
                     }
                 }
             ],
-            data6: [
-                {
-                    role:"医生",
-                    username:"1245786",
-                    time:"2017-11-30 11:08:30",
-                    action:"随访测试",
-                    name:"测试",
-                    mobile:14578884125,
-                    department:"技术部",
-                    look:1,
-                },
-                {
-                    role:"医生",
-                    username:"1245786",
-                    time:"2017-11-30 11:08:30",
-                    action:"随访测试",
-                    name:"测试",
-                    mobile:14578884125,
-                    department:"技术部",
-                    look:1,
-                },
-                {
-                    role:"医生",
-                    username:"1245786",
-                    time:"2017-11-30 11:08:30",
-                    action:"随访测试",
-                    name:"测试",
-                    mobile:14578884125,
-                    department:"技术部",
-                    look:1,
-                },
-                {
-                    role:"医生",
-                    username:"1245786",
-                    time:"2017-11-30 11:08:30",
-                    action:"随访测试",
-                    name:"测试",
-                    mobile:14578884125,
-                    department:"技术部",
-                    look:1,
-                }
-            ]
+            dataList: []
         }
     },
     methods: {
-        show(index) {
-            this.$Modal.info({
-                title: 'User Info',
-                content: `Name：${this.data6[index].name}<br>Age：${this.data6[index].age}<br>Address：${this.data6[index].address}`
+       /** 
+         * 获取所有数据
+         */
+        getData() {
+            API.Systems.listUser(this.searchParam).then((res) => {
+                this.dataList = res.data;
+                this.totalPage = res.totalRow;
+                this.pageSize = res.pageSize;
+            }).catch((err) => {
+
+            });
+        },
+        /** 
+         * 搜索数据
+         */
+        searchUser() {
+            this.searchParam.page = 1;
+            this.getData();
+        },
+        /** 
+         * 设置默认模板
+         */
+        actionUser(id) {
+            console.log(id);
+            this.actionmodal = true;
+            this.UserId=id;
+            this.actionList= {
+                departmentId: -1,//部门ID 
+                UserId: -1 //疾病ID
+            };
+            this.listDisTemp();
+        },
+       
+        /** 
+         * 新增系统设置
+         */
+        addUser() {
+            this.$refs["formData"].validate((valid) => {
+                if (valid) {
+                    API.Systems.addUser(this.formData).then((res) => {
+                        this.$Message.success("新增成功");
+                        this.modal = false;
+                        this.getData();
+                        this.formData = {
+                            name: "", //疾病名称
+                            zjmName: "",//助记码
+                            icdName: "", //ICD编码
+                            state: "0",//状态（0正常，1禁用）
+                            remark: "" //备注
+                        };
+                    }).catch((err) => {
+
+                    });
+                } else {
+                    this.$Message.error('补全信息!');
+                    return false;
+                }
+
             })
         },
-        remove(index) {
-            this.data6.splice(index, 1);
-        },
-        adduser(){
-            this.$router.push('/access/user/user_add/0');
-        },
-        changePage(){
+        /** 
+         * 删除疾病
+         */
+        delUser(id) {
+            let self = this;
+            this.$Modal.confirm({
+                title: '删除疾病',
+                content: '确定删除该疾病？',
+                onOk: () => {
+                    API.Systems.delUser({
+                        id: id
+                    }).then((res) => {
+                        self.$Message.success("删除成功");
+                        self.getData();
+                    }).catch((err) => {
+
+                    });
+                }
+            });
 
         },
-        searchuser(){
-            
+        /** 
+         * 编辑疾病设置
+         */
+        editUser(data) {
+            this.editmodal = true;
+            let copyData = JSON.parse(JSON.stringify(data.User));
+            this.currentInfo = {
+                id: copyData.id,
+                name: copyData.name, //疾病名称
+                zjmName: copyData.zjm,//助记码
+                icdName: copyData.icd, //ICD编码
+                state: copyData.isUse ? "0" : "1",//状态（0正常，1禁用）
+                remark: copyData.remark //备注
+            }
+        },
+        /** 
+         * 查询所有部门接口
+         */
+        listDisDepart() {
+            API.Systems.listDisDepart().then((res) => {
+                this.departList = [{
+                   name:"所有科室",
+                   id:-1 
+                },{
+                   name:"公共科室",
+                   id:0
+                }].concat(res.data);
+            }).catch((err) => {
+
+            });
+        },
+        /** 
+         * 查询对应的模板
+         */
+        listDisTemp() {
+            API.Systems.listDisTemp({
+                departmentId:this.actionList.departmentId==-1?null:this.actionList.departmentId,
+                UserId:this.actionList.UserId==-1?null:this.actionList.UserId
+            }).then((res) => {
+                this.actionTree = res.data;
+            }).catch((err) => {
+
+            });
+        },
+        /** 
+         * 保存方案
+         */
+        saveDisAction(id) {
+            API.Systems.saveDisAction({
+               id:this.UserId,
+               qtId:id
+            }).then((res) => {
+                this.$Message.success("选择成功");
+                this.actionmodal=false;
+                this.getData();
+            }).catch((err) => {
+
+            });
+        },
+        /** 
+         * 提交修改
+         */
+        submitUser() {
+            this.$refs['currentInfo'].validate((valid) => {
+                if (valid) {
+                    API.Systems.editUser(this.currentInfo).then((res) => {
+                        this.$Message.success("修改成功");
+                        this.editmodal = false;
+                        this.getData();
+                    }).catch((err) => {
+
+                    });
+                } else {
+                    this.$Message.error('补全信息!');
+                }
+
+            })
+        },
+        /** 
+         * 分页更改
+         */
+        changePage(page) {
+            this.searchParam.page = page;
+            this.getData();
         }
     }
 }

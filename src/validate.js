@@ -109,9 +109,16 @@ export default {
         name: [
             { required: true, message: '请输入名称', trigger: 'blur' }
         ],
-        profile: [
-            { required: false, message: '请输入说明', trigger: 'blur' }
+        zjmName: [
+            { required: true, message: '请输入助记码', trigger: 'blur' }
+        ],
+        icdName: [
+            { required: true, message: '请输入ICD编码', trigger: 'blur' }
+        ],
+        remark: [
+            { required: false, message: '请输入备注', trigger: 'blur' }
         ]
+
     }
 
 };

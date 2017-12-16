@@ -92,27 +92,48 @@ export default {
         handleSubmit() {
             this.$refs.loginForm.validate((valid) => {
                 if (valid) {
-                    
                     API.common.login({
                         username: this.form.name,
                         password: this.form.password,
                         /* picCode: this.form.code */
                     }).then((res) => {
-                        console.log(res.data);
-                            localStorage.setItem('access',JSON.stringify(res.data));
-                             Cookies.set('user', this.form.name);
+                            /** 
+                             * 菜单权限和功能权限
+                             */
+                            let menuList=[];//菜单权限列表
+                            let funList=[];//功能权限列表
+                            for (let item of res.data) {
+                                if(item.isMenu){
+                                 menuList.push(item);
+                                }else{
+                                    funList.push(item);
+                                }
+                            }
+                            /** 
+                             * 本地存储用户名和用户密码
+                             */
+                            localStorage.setItem('menuList',JSON.stringify(menuList));
+                            localStorage.setItem('funList',JSON.stringify(funList));
+                            /** 
+                             * cookie保存用户名和用户密码
+                             */
+                            Cookies.set('user', this.form.name);
                             Cookies.set('password', this.form.password);
+                            /** 
+                             * 登录后设置头像
+                             */
                             this.$store.commit('setAvator', 'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=3448484253,3685836170&fm=27&gp=0.jpg');
-                            if (this.form.name === 'iview_admin') {
+                            
+                           /*  if (this.form.name === 'iview_admin') {
                                 Cookies.set('access', 0);
                             } else {
                                 Cookies.set('access', 1);
-                            }
+                            } */
+                            /** 页面跳转 */
                             this.$router.push({
                                 name: 'home_index'
                             });
                     }).catch((err) => {
-                        console.log(err);
                     });
 
                 }

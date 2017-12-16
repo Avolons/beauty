@@ -25,6 +25,7 @@ const app = {
             }
         ],  // 面包屑数组
         menuList: [],
+        // 路由数组
         routers: [
             otherRouter,
             ...appRouter
@@ -37,11 +38,32 @@ const app = {
         setTagsList (state, list) {
             state.tagsList.push(...list);
         },
+        /**
+         * 按钮权限判断
+         */
+        updateButton (state, Button) {
+
+        },
+        /**
+         * 更新左侧菜单列表
+         */
         updateMenulist (state) {
-            let accessCode = parseInt(Cookies.get('access'));
+            /**
+             * 当前权限代码
+             */
+            /* 获取菜单权限数组 */
+            let menuArray = JSON.parse(localStorage.getItem('menuList'));
+            let accessCode = [];
+            for (let item of menuArray) {
+                accessCode.push(item.url);
+            }
             let menuList = [];
             appRouter.forEach((item, index) => {
+                /**
+                 * 控制侧边栏显示
+                 */
                 if (item.access !== undefined) {
+                    /** 进行菜单判断 */
                     if (Util.showThisRoute(item.access, accessCode)) {
                         if (item.children.length === 1) {
                             menuList.push(item);
@@ -50,7 +72,7 @@ const app = {
                             let childrenArr = [];
                             childrenArr = item.children.filter(child => {
                                 if (child.access !== undefined) {
-                                    if (child.access === accessCode) {
+                                    if (Util.showThisRoute(child.access, accessCode)) {
                                         return child;
                                     }
                                 } else {
@@ -114,6 +136,9 @@ const app = {
                 state.cachePage = JSON.parse(localStorage.cachePage);
             }
         },
+        /**
+         * 删除tag标签
+         */
         removeTag (state, name) {
             state.pageOpenedList.map((item, index) => {
                 if (item.name === name) {
@@ -132,11 +157,19 @@ const app = {
             state.pageOpenedList.splice(get.index, 1, openedPage);
             localStorage.pageOpenedList = JSON.stringify(state.pageOpenedList);
         },
+        /**
+         * 清除所有标签
+         *
+         */
         clearAllTags (state) {
             state.pageOpenedList.splice(1);
             state.cachePage.length = 0;
             localStorage.pageOpenedList = JSON.stringify(state.pageOpenedList);
         },
+        /**
+         * 清除其他的tag标签
+         *
+         */
         clearOtherTags (state, vm) {
             let currentName = vm.$route.name;
             let currentIndex = 0;
@@ -169,6 +202,9 @@ const app = {
         setAvator (state, path) {
             localStorage.avatorImgPath = path;
         },
+        /**
+         * 切换语言
+         */
         switchLang (state, lang) {
             state.lang = lang;
             Vue.config.lang = lang;

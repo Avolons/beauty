@@ -6,6 +6,9 @@ import packjson from '../../package.json';
 let util = {
 
 };
+/**
+ * 设置页面title值，没有的话默认显示
+ */
 util.title = function (title) {
     title = title || 'myAiDoctor';
     window.document.title = title;
@@ -40,7 +43,10 @@ util.oneOf = function (ele, targetArr) {
     }
 };
 
-util.showThisRoute = function (itAccess, currentAccess) {
+util.showThisRoute = function (currentAccess, itAccess) {
+    /**
+     * 直接使用url来判断
+     */
     if (typeof itAccess === 'object' && Array.isArray(itAccess)) {
         return util.oneOf(currentAccess, itAccess);
     } else {

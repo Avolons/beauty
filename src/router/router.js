@@ -58,7 +58,8 @@ export const otherRouter = {
         { path: 'access/user/user_add/:user_id', title: '添加用户', name: 'user_add', component: resolve => { require(['@/views/access/user-manage/user-add.vue'], resolve); } },
         { path: 'followBusiness/page/page', title: '空白页', name: 'page', component: resolve => { require(['@/views/followBusiness/page/page.vue'], resolve); } },
         { path: 'followSetting/voice/voice/:id', title: '语音编辑', name: 'voice', component: resolve => { require(['@/views/followSetting/voice/voice.vue'], resolve); } },
-        { path: 'followSetting/template/template/:id', title: '模板编辑', name: 'template', component: resolve => { require(['@/views/followSetting/template/template.vue'], resolve); } }
+        { path: 'followSetting/template/template/:id', title: '模板编辑', name: 'template', component: resolve => { require(['@/views/followSetting/template/template.vue'], resolve); } },
+        { path: 'followSetting/way/way/:id', title: '方案编辑', name: 'way', component: resolve => { require(['@/views/followSetting/way/way.vue'], resolve); } }
     ]
 };
 

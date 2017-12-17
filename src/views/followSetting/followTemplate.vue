@@ -85,8 +85,6 @@
                   },
                   on: {
                     click: () => {
-                      
-                      let id = params.row.id
                       this.$router.push({path:`/followSetting/template/template/${params.row.id}`});
                     }
                   }
@@ -239,16 +237,7 @@
       *添加指标
       */
       addBtn() {
-        this.patientText = true
-        this.formItem.id = ''
-        this.formItem.name = ''
-        this.formItem.radio = 'string'
-        this.formItem.textarea = ''
-        this.formItem.top = ''
-        this.formItem.bottom = ''
-        this.optionList = []
-        this.radioText = false
-        this.radioNumber = false
+        this.$router.push({path:`/followSetting/template/template/new`});
       },
       /*
       *确定添加

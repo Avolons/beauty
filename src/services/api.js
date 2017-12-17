@@ -20,7 +20,7 @@ axios.defaults.baseURL = 'http://192.168.1.100:8080/';
 axios.interceptors.request.use(function (config) {
   // 在发送请求之前做些什么
     // config.data = qs.stringify(config.data);
-  if(config.url == "http://192.168.1.100:8080/visit/question/script/save") {
+  if(config.url == "http://192.168.1.100:8080/visit/question/script/save" || "http://192.168.1.100:8080/visit/questiontemple/save") {
     // config.data = JSON.stringify(config.data);
     config.headers = {
       "Content-Type": "application/json;charset=utf-8"
@@ -303,6 +303,47 @@ export const followTemplate = {
   */
   questionList (data) {
       return fetch('get', 'visit/questiontemple/question/list', data);
+  },
+   
+};
+/* 随访设置--随访方案接口 *****/
+export const followWay = {
+ /*
+ * 科室列表
+ */
+  departmentList (data) {
+      return fetch('get', 'visit/department/list', data);
+  },
+  /*
+  * 随访方案列表
+  */
+  list (data) {
+      return fetch('get', 'visit/questionscheme/list', data);
+  },
+  /*
+  *删除
+  */
+  deleteList(data) {
+      return fetch('get', 'visit/questionscheme/delete', data);
+  },
+  /*
+  *添加/修改
+  *json格式
+  */
+  addList (data) {
+      return fetch('post', 'visit/questionscheme/save', data);
+  },
+  /*
+  *编辑展示
+  */
+  editList (data) {
+      return fetch('get', 'visit/questionscheme/get', data);
+  },
+  /*
+  *根据模板id获取语音
+  */
+  voiceList (data) {
+      return fetch('get', 'visit/questionscheme/temple/list', data);
   },
    
 };

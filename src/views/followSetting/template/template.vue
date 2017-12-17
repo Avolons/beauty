@@ -6,7 +6,6 @@
         <Input v-model="templateForm.name" placeholder="Enter your name"></Input>
       </FormItem>
       <FormItem label="疾病类型" prop="jibName">
-       <!--  <Input v-model="templateForm.jibName" placeholder="Enter your name"></Input> -->
 	      <Select v-model="diseaseName" filterable remote not-found-text="" :remote-method="remoteMethod2" clearable>
 	        <Option v-for="(option, index) in options2" :value="option.value" :key="index">{{option.label}}</Option>
 	      </Select>
@@ -155,10 +154,10 @@
 				</Col>
 				<Col span="12" class="questionSelect">
 					<Timeline  >
-						 <TimelineItem color="green" v-for="item in this.templateList1">
+						 <TimelineItem color="green" v-for="(item, index) in this.templateList1" :key="item.questionIdXml">
 		        	 <Button type="primary">{{item.questionIdXml}}</Button>
 		        	<Collapse v-model="collapse">
-				       <Panel name="1">
+				       <Panel name="index">
 			          {{item.questionName}}<Icon type="close-circled" size="22" color="#f70000" style="line-height: 45px; float:right;"></Icon>
 			           
 			           <ul slot="content" v-for="item1 in item.questionTempleQuestionJumps">
@@ -197,7 +196,8 @@
 		        
 		        
 			    </Timeline>
-					
+					<Button type="primary" @click="addTemplate">创建随访模板</Button>
+
 				</Col>
 			</Row>
 		</Col>
@@ -238,6 +238,7 @@ import {API} from '@/services';
 				collapse: '1',
 				switchArr: [],//语音list
 				templateList1: [],//模板语音开场白
+
 			}
 		},
 		created(){
@@ -265,12 +266,11 @@ import {API} from '@/services';
           if(res.code == 0) {
             this.templateForm.name = res.data.name
             this.diseaseName = res.data.name
-            // console.log(res.data.name)
             this.templateForm.silencetime = res.data.silencetime
             this.templateForm.outrepeattimes = res.data.outrepeattimes
             this.templateForm.firsttaskid = res.data.firsttaskid
             this.templateForm.person = res.data.person
-            this.templateForm.submoulds = res.data.submoulds
+            this.tagCount = res.data.submoulds.split(',')
           }else {
             console.log(res.message)
           }
@@ -278,31 +278,6 @@ import {API} from '@/services';
           console.log(error)
         })
       },
-      /*
-      *序列化模板问题
-      */
-       _normalizeSinger(getList1,getList2) {
-     //   	 class switchList {
-					//   constructor(item1) {
-					//     this.questionName = item1.questionName
-					//     this.questionIdXml = item1.questionIdXml
-					//     this.templeId = item1.templeId
-					//     this.questionId = item1.questionId
-					//     this.keyvalue = item.keyvalue
-					//   }
-					// }
-	        
-	    //     getList1.forEach((item, index) => {
-	    //       map.hot.items.push(new switchList({
-	    //         switchId: item.switchId,//话术分支ID (-1 无匹配；-2 无声音；-3 通用处理)
-	    //         questionIdXml: item.questionIdXml, //xml中从1000开始的问题编号
-	    //         switchRegexText: item.switchRegexText,//判别规则
-	    //         switchWav: item.switchWav,
-	    //         outRptSwitchID: item.outRptSwitchID,//超时跳转
-	    //         nextQuestionId: item.nextQuestionId,//下个问题
-	    //       }))
-	    //     })
-	      },
       /*
 			*通过模板id获取模板处理信息
 			*/ 
@@ -315,13 +290,46 @@ import {API} from '@/services';
             // console.log(res.data)
             
             if(res.data.length>0) {
-            	this.templateList1 = res.data
-            	
-            	console.log(this.templateList1)
-            	
+            	// this.templateList1 = res.data
             }
-            
 
+            /*********************************************/
+            
+            let map = {
+            	questionId: '',
+            	questionIdXml: '',
+            	targetId: '',
+            	questionTempleQuestionJumps: []
+            }
+
+						class Point1 {
+						  constructor(item) {
+						    this.questionId = item.questionId
+						    this.questionIdXml = item.questionIdXml
+						    this.targetId = item.targetId
+						    this.questionTempleQuestionJumps = item.questionTempleQuestionJumps
+						  }
+						}
+						class Point2 {
+						  constructor(item) {
+						    this.questionId = item.questionId
+						    this.switchID = item.switchID
+						    this.questionIdXml = item.questionIdXml
+						    this.outRptSwitchID = item.outRptSwitchID
+						    this.nextQuestionId = item.nextQuestionId
+						  }
+						}
+
+					
+						res.data.forEach((item) => {
+            	this.templateList1.push(new Point1({
+            		questionId : item.questionId,
+						    questionIdXml : item.questionIdXml,
+						    targetId : item.targetId,
+						    questionTempleQuestionJumps : item.questionTempleQuestionJumps
+            	}))
+            	
+            })
           }else {
             console.log(res.message)
           }
@@ -462,8 +470,23 @@ import {API} from '@/services';
       *点击第二部的问题的操作
       */
       addThirdQuestion(item) {
-      	// console.log(item)
-      	
+      	this.templateList1.push(this.templateList1[0])
+      	console.log(this.templateList1)
+      
+					
+			
+      	API.followTemplate.questionList({
+          'id': item.id,
+        }).then((res) => {
+          if(res.code == 0) {
+            console.log(res)
+            
+          }else {
+            console.log(res.code)
+          }
+        }).catch((error) => {
+          console.log(error)
+        })
       },
       /*
       *tabs点击操作
@@ -521,7 +544,28 @@ import {API} from '@/services';
 					item.switchID = index+1
 				})
 			},
+			/*
+			*删除模板配置
+			*/
+			addTemplate() {
+				API.followTemplate.addList ({
+					"id":"", //不传表示新增 
+			    "diseaseId":122741,                          //疾病id      
+			    "name":"测试模板11",                           //模板名称      
+			    "silencetime":3,                             //静默时间      
+			    "outrepeattimes":5,                          //重复次数      
+			    "person":0,                                  //女声传0 男声传1      
+			    "status":0,                                  //0 正常 1 停用      
+			    "submoulds":"糖尿病.xml,高血压.xml",         //通用库        
+			    "firsttaskid":"1000",                        //起始问题编号      
+			    "questionTempleQuestions": this.templateList1
 
+				}).then((res)=>{
+					alert("成功")
+				}).catch((error) => {
+					alert("失败")
+				})
+			}
 		},
 		watch:{
 			'$route': 'fetchData'

@@ -90,8 +90,8 @@ import {API} from '@/services';
           "questionId": this.questionId
         }).then((res) => {
           if(res.code == 0) {
-
             this.saveSwitch = res.data
+
             class Point {
 						  constructor(item) {
 						    this.switchID = item.switchID
@@ -110,7 +110,12 @@ import {API} from '@/services';
 						    keyvalue : item.keyvalue
             	}))
             })
-           
+            this.switchArr.push({})
+            this.switchArr.push({})
+            this.switchArr.push({})
+            this.switchArr.forEach((item, index) => {
+							item.switchID = index -3
+						})
           }
         }).catch((error)=> {
         })
@@ -161,11 +166,9 @@ import {API} from '@/services';
 				this.switchArr.push({
 				})
 				this.switchArr.forEach((item, index) => {
-					//item.switchID = index
-					console.log('index='+index)
 					item.switchID = index+1
 				})
-				// console.log(this.switchArr)
+				console.log(this.switchArr)
 			},
 			/*
 			*删除话述
@@ -173,7 +176,6 @@ import {API} from '@/services';
 			removequestion(index) {
 				this.switchArr.splice(index,1)
 				this.switchArr.forEach((item, index) => {
-					//item.switchID = index
 					console.log('index='+index)
 					console.log('item.switchID='+item.switchID)
 					item.switchID = index+1

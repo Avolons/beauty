@@ -190,12 +190,11 @@ import {API} from '@/services';
 			*保存话述
 			*/
 			handleSubmit() {
-				console.log(this.switchArr)
 				API.voiceSetting.questionDelete({
           "questionId": this.questionId,
         }).then((res) => {
           if(res.code == 0) {
-          	//alert('删除成功')
+          	alert('删除成功')
             API.voiceSetting.questionSave({
 		          "id": this.questionId,   //问题id
 						  "questionCallScripts": this.switchArr
@@ -213,9 +212,6 @@ import {API} from '@/services';
 		        })
 			},
 		},
-		success () {
-      this.$Message.success('This is a success tip');
-    },
 		watch:{
 			'$route': 'fetchData'
 		}

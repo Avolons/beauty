@@ -1,7 +1,7 @@
 <template>
 	<Row class="template">
 		<Col span="24" class="line"> <h2>随访方案信息:</h2></Col>
-		<Form ref="templateForm" :model="templateForm" :label-width="80">
+		<Form ref="templateForm" :model="templateForm" :rules="ruleValidate" :label-width="80">
       <FormItem label="方案名称" prop="name">
         <Input v-model="templateForm.name" placeholder="Enter your name"></Input>
       </FormItem>
@@ -11,12 +11,15 @@
 	      </Select>
 	    </FormItem>
       <FormItem label="静默时间" prop="silencetime">
+       <!--  <InputNumber v-model="templateForm.silencetime" :min="0" style="width:100%;" placeholder="请输入静默时间,类型为数字"></InputNumber> -->
         <Input v-model="templateForm.silencetime" placeholder="Enter your name"></Input>
       </FormItem>
       <FormItem label="重复次数" prop="outrepeattimes">
+        <!-- <InputNumber v-model="templateForm.outrepeattimes" :min="0" style="width:100%;" placeholder="请输入重复次数,类型为数字"></InputNumber> -->
         <Input v-model="templateForm.outrepeattimes" placeholder="Enter your name"></Input>
       </FormItem>
       <FormItem label="起始问题" prop="firsttaskid">
+        <!-- <InputNumber v-model="templateForm.firsttaskid" :min="0" style="width:100%;" placeholder="Enter your name"></InputNumber> -->
         <Input v-model="templateForm.firsttaskid" placeholder="Enter your name"></Input>
       </FormItem>
       <FormItem label="合成声音" prop="person">
@@ -30,9 +33,7 @@
         <Button type="primary" @click="addTag">添加</Button>
       </FormItem>
       <FormItem label="通用库" prop="submoulds">
-        
         <tag v-for="item in tagCount" color="blue" :key="item" :name="item" closable @on-close="tagClose">{{item}}</tag>
-        
       </FormItem>
     </Form>
 		<Col span="24" class="line"> <h2>配置随访问题:</h2></Col>
@@ -156,42 +157,46 @@
 					<Timeline  >
 						 <TimelineItem color="green" v-for="(item, index) in this.templateList1" :key="item.questionIdXml">
 		        	 <Button type="primary">{{item.questionIdXml}}</Button>
-		        	<Collapse v-model="collapse">
-				       <Panel name="index">
-			          {{item.questionName}}<Icon type="close-circled" size="22" color="#f70000" style="line-height: 45px; float:right;"></Icon>
-			           
-			           <ul slot="content" v-for="item1 in item.questionTempleQuestionJumps">
-						      	<li>
-						    			<Row class="itemli">
-						    			 	<h3>处理: {{item1.switchId}}</h3>
-						    			 
-							    			<Row class="padleft40 mb5">
-							    			 	<Col span="4" class="lineheight32">名称:</Col>
-							    			 	<Col span="20" class="textCenter"><span></span></Col>
-							    			</Row>
-							    			<Row class="padleft40 mb5">
-							    			 <Col span="4" class="lineheight32">判别规则:</Col>
-								    			<Col span="20" class="textCenter"><span>{{item1.switchRegexText}}</span></Col>
-							    			</Row>
-							    			<Row class="padleft40 mb5">
-							    			 	<Col span="4" class="lineheight32">指标值:</Col>
-								    			<Col span="20" class="textCenter"><span>{{item1.keyname}}</span></Col>
-							    			</Row>
-							    			<Row class="padleft40 mb5">
-							    			 	<Col span="4" class="lineheight32">跳转问题编号:</Col>
-								    			<Col span="20" class="textCenter"><Input placeholder="large size" v-model="item1.nextQuestionId"></Input></Col>
-							    			</Row>
-							    			<Row class="padleft40 mb5">
-							    			 	<Col span="4" class="lineheight32">无匹配超次数跳转:</Col>
-							    			 	<Col span="20" class="textCenter"><Input  placeholder="large size" v-model="item1.outRptSwitchID"></Input></Col>
-							    			</Row>
-							    			
-							    		</Row>	
-						      	</li>
-						      </ul>
-						      
-				        </Panel> 
-					    </Collapse>
+		        	 <Row>
+		        	 	<Col span="20">
+		        	 		<Collapse v-model="collapse">
+							      <Panel :name="index+1+''" >
+							       {{item.questionName}}
+						           <ul slot="content" v-for="item1 in item.questionTempleQuestionJumps">
+									      	<li>
+									    			<Row class="itemli">
+									    			 	<h3>处理: {{item1.switchId}}</h3>
+									    			 
+										    			<!-- <Row class="padleft40 mb5" v-show="!showRow">
+										    			 	<Col span="4" class="lineheight32">名称:</Col>
+										    			 	<Col span="20" class="textCenter"><span></span></Col>
+										    			</Row> -->
+										    			<Row class="padleft40 mb5" v-show="item1.switchRegexText">
+										    			 <Col span="4" class="lineheight32">判别规则:</Col>
+											    			<Col span="20" class="textCenter lineheight32" ><span>{{item1.switchRegexText}}</span></Col>
+										    			</Row>
+										    			<Row class="padleft40 mb5" v-show="item1.keyname">
+										    			 	<Col span="4" class="lineheight32">指标值:</Col>
+											    			<Col span="20" class="textCenter lineheight32"><span>{{item1.keyname}}</span></Col>
+										    			</Row>
+										    			<Row class="padleft40 mb5">
+										    			 	<Col span="4" class="lineheight32">跳转问题编号:</Col>
+											    			<Col span="20" class="textCenter"><Input placeholder="large size" v-model="item1.nextQuestionId"></Input></Col>
+										    			</Row>
+										    			<Row class="padleft40 mb5">
+										    			 	<Col span="4" class="lineheight32">无匹配超次数跳转:</Col>
+										    			 	<Col span="20" class="textCenter"><Input  placeholder="large size" v-model="item1.outRptSwitchID"></Input></Col>
+										    			</Row>
+										    		</Row>	
+									      	</li>
+									      </ul>
+									      
+							      </Panel> 
+					   		  </Collapse>
+		        	 	</Col>
+		        	 	<Col span="4" @click.native="deleteCol(index)"> <Icon type="close-circled" size="22" color="#f70000" style="line-height: 45px; float:left;"></Icon></Col>
+		        	 </Row>
+		        	
 		        </TimelineItem>
 		        
 		        
@@ -207,19 +212,37 @@
 <script>
 import {API} from '@/services';
 	export default {
+		
 		data() {
 			return {
 				templateId: '',//模板id
 				templateForm: {
 					name: '',
 					jibName: '',
-					silencetime: '',
-					outrepeattimes: '',
-					firsttaskid: '',
+					silencetime: 0,
+					outrepeattimes: 0,
+					firsttaskid: 0,
 					person: '0',
 					submoulds: '',
 					addSubmoulds: ''
 				},
+				ruleValidate: {
+            name: [
+              { required: true, message: '模板名称不能为空', trigger: 'blur' }
+            ],
+            silencetime: [
+              { required: true, message: '静默时间不能为空', trigger: 'blur' }
+            ],
+            // outrepeattimes: [
+            //   { required: true, message: '重复次数不能为空', trigger: 'change' },
+            // ],
+            // firsttaskid: [
+            //   { required: true, message: '起始问题不能为空', trigger: 'change' },
+            // ],
+            // submoulds: [
+            //   { required: true, type: 'date', message: 'Please select the date', trigger: 'change' }
+            // ],
+        },
 				diseName: '',//第一步--选择疾病类型
 				diseaseName: '',
 				options2: [],
@@ -238,7 +261,7 @@ import {API} from '@/services';
 				collapse: '1',
 				switchArr: [],//语音list
 				templateList1: [],//模板语音开场白
-
+				showRow: false,
 			}
 		},
 		created(){
@@ -270,7 +293,7 @@ import {API} from '@/services';
             this.templateForm.outrepeattimes = res.data.outrepeattimes
             this.templateForm.firsttaskid = res.data.firsttaskid
             this.templateForm.person = res.data.person
-            this.tagCount = res.data.submoulds.split(',')
+            this.tagCount = res.data.submoulds.split(';')
           }else {
             console.log(res.message)
           }
@@ -307,6 +330,7 @@ import {API} from '@/services';
 						    this.questionId = item.questionId
 						    this.questionIdXml = item.questionIdXml
 						    this.targetId = item.targetId
+						    this.questionName = item.questionName
 						    this.questionTempleQuestionJumps = item.questionTempleQuestionJumps
 						  }
 						}
@@ -320,16 +344,31 @@ import {API} from '@/services';
 						  }
 						}
 
-					
 						res.data.forEach((item) => {
             	this.templateList1.push(new Point1({
             		questionId : item.questionId,
 						    questionIdXml : item.questionIdXml,
 						    targetId : item.targetId,
+						    questionName : item.questionName,
 						    questionTempleQuestionJumps : item.questionTempleQuestionJumps
             	}))
-            	
             })
+						//处理格式化
+            res.data.forEach((item) => {
+            	item.questionTempleQuestionJumps.forEach((item1)=>{
+            		if(item1.switchId == -1) {
+            			return item1.switchId = '无匹配'
+            		}
+            		if(item1.switchId == -2) {
+            			return item1.switchId = '无声音'
+            		}
+            		if(item1.switchId == -3) {
+            			return item1.switchId = '通用处理'
+            		}
+            	})
+            })
+            	
+            //console.log(this.templateList1)
           }else {
             console.log(res.message)
           }
@@ -431,6 +470,7 @@ import {API} from '@/services';
         // console.log(value)
         if(value != ''){
         	this.seleceDiseId = value
+        	// console.log(this.seleceDiseId)
 	        API.followProblems.list({
 	          'pager': 1,
 	          'limit': '1000',
@@ -470,9 +510,69 @@ import {API} from '@/services';
       *点击第二部的问题的操作
       */
       addThirdQuestion(item) {
-      	this.templateList1.push(this.templateList1[0])
+      	console.log(item)
+      	API.voiceSetting.question({
+          "questionId": this.questionId
+        }).then((res) => {
+          if(res.code == 0) {
+            this.saveSwitch = res.data
+
+            class Point {
+						  constructor(item) {
+						    this.switchID = item.switchID
+						    this.switchRegexText = item.switchRegexText
+						    this.keyname = item.keyname
+						    this.outRptSwitchID = item.outRptSwitchID
+						    this.keyvalue = item.keyvalue
+						  }
+						}
+						this.saveSwitch.forEach((item) => {
+            	this.switchArr.push(new Point({
+            		switchID : item.switchID,
+						    switchRegexText : item.switchRegexText,
+						    keyname : item.keyname,
+						    outRptSwitchID : item.outRptSwitchID,
+						    keyvalue : item.keyvalue
+            	}))
+            })
+            this.switchArr.push({})
+            this.switchArr.push({})
+            this.switchArr.push({})
+            console.log( this.switchArr)
+            this.switchArr.forEach((item, index) => {
+							item.switchID = index -3
+						})
+						this.switchArr.forEach((item) => {
+        	
+        		if(item.switchID == -1) {
+        			return item.switchID = '无匹配'
+        		}
+        		if(item1.switchID == -2) {
+        			return item.switchID = '无声音'
+        		}
+        		if(item1.switchID == -3) {
+        			return item.switchID = '通用处理'
+        		}
+        
+          })
+          }
+        }).catch((error)=> {
+
+        })
+      	class Point1 {
+				  constructor(item) {
+				    this.questionId = item.questionId
+				    this.questionIdXml = item.questionIdXml
+				    this.targetId = item.targetId
+				    this.questionName = item.questionName
+				    this.questionTempleQuestionJumps = item.questionTempleQuestionJumps
+				  }
+				}
+			
+    
+      	this.templateList1.push(new Point1({}))
       	console.log(this.templateList1)
-      
+        
 					
 			
       	API.followTemplate.questionList({
@@ -545,19 +645,26 @@ import {API} from '@/services';
 				})
 			},
 			/*
-			*删除模板配置
+			*增加模板配置
 			*/
 			addTemplate() {
+				let ids
+				if(this.templateId == 'new') {
+					ids = ''
+					alert('新增')
+				}else{
+					ids = this.templateId
+				}
 				API.followTemplate.addList ({
-					"id":"", //不传表示新增 
-			    "diseaseId":122741,                          //疾病id      
-			    "name":"测试模板11",                           //模板名称      
-			    "silencetime":3,                             //静默时间      
-			    "outrepeattimes":5,                          //重复次数      
-			    "person":0,                                  //女声传0 男声传1      
+					"id":ids, //不传表示新增 
+			    "diseaseId":this.seleceDiseId,                          //疾病id      
+			    "name":this.templateForm.name,                           //模板名称      
+			    "silencetime":this.templateForm.silencetime,                             //静默时间      
+			    "outrepeattimes":this.templateForm.outrepeattimes,                          //重复次数      
+			    "person":this.templateForm.person,                                  //女声传0 男声传1      
 			    "status":0,                                  //0 正常 1 停用      
-			    "submoulds":"糖尿病.xml,高血压.xml",         //通用库        
-			    "firsttaskid":"1000",                        //起始问题编号      
+			    "submoulds":this.tagCount2.join(';'),         //通用库        
+			    "firsttaskid": this.templateForm.firsttaskid,                        //起始问题编号      
 			    "questionTempleQuestions": this.templateList1
 
 				}).then((res)=>{
@@ -565,6 +672,14 @@ import {API} from '@/services';
 				}).catch((error) => {
 					alert("失败")
 				})
+			},
+			/*
+			*删除一条模板
+			*/ 
+			deleteCol(index) {
+				console.log(index)
+				this.templateList1.splice(index,1)
+				console.log(this.templateList1)
 			}
 		},
 		watch:{

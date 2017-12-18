@@ -113,9 +113,23 @@ import {API} from '@/services';
             this.switchArr.push({})
             this.switchArr.push({})
             this.switchArr.push({})
+            console.log( this.switchArr)
             this.switchArr.forEach((item, index) => {
 							item.switchID = index -3
 						})
+						this.switchArr.forEach((item) => {
+        	
+        		if(item.switchID == -1) {
+        			return item.switchID = '无匹配'
+        		}
+        		if(item1.switchID == -2) {
+        			return item.switchID = '无声音'
+        		}
+        		if(item1.switchID == -3) {
+        			return item.switchID = '通用处理'
+        		}
+        
+        })
           }
         }).catch((error)=> {
         })
@@ -166,7 +180,7 @@ import {API} from '@/services';
 				this.switchArr.push({
 				})
 				this.switchArr.forEach((item, index) => {
-					item.switchID = index+1
+					item.switchID = index-3
 				})
 				console.log(this.switchArr)
 			},
@@ -178,7 +192,7 @@ import {API} from '@/services';
 				this.switchArr.forEach((item, index) => {
 					console.log('index='+index)
 					console.log('item.switchID='+item.switchID)
-					item.switchID = index+1
+					item.switchID = index-3
 				})
 			},
     
@@ -195,23 +209,21 @@ import {API} from '@/services';
 				API.voiceSetting.questionDelete({
           "questionId": this.questionId,
         }).then((res) => {
+          consoel.log(res)
+        }).catch((error)=> {
+
+        })
+        API.voiceSetting.questionSave({
+          "id": this.questionId,   //问题id
+				  "questionCallScripts": this.switchArr
+        }).then((res) => {
           if(res.code == 0) {
-          	alert('删除成功')
-            API.voiceSetting.questionSave({
-		          "id": this.questionId,   //问题id
-						  "questionCallScripts": this.switchArr
-		        }).then((res) => {
-		          if(res.code == 0) {
-		            console.log(res)
-		            this.$Message.success('添加成功!');
-		          }
-		        }).catch((error)=> {
+            console.log(res)
+            this.$Message.success('添加成功!');
+          }
+        }).catch((error)=> {
 
-		        })
-		          }
-		        }).catch((error)=> {
-
-		        })
+        })
 			},
 		},
 		watch:{

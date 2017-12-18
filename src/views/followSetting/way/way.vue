@@ -1,5 +1,5 @@
 <template>
-	<Row class="template">
+	<Row class="way">
 		<Col span="24" class="line"> <h2>随访方案信息:</h2></Col>
 		<Form ref="wayForm" :model="wayForm" :label-width="80">
       <FormItem label="方案名称" prop="name">
@@ -9,12 +9,14 @@
 	      <Select v-model="wayForm.diseaseId" filterable remote not-found-text="" :remote-method="remoteMethod2" clearable>
 	        <Option v-for="(option, index) in options2" :value="option.value" :key="index">{{option.label}}</Option>
 	      </Select>
+	      <p>{{wayForm.diseaseId}}</p>
 	    </FormItem>
       <FormItem label="选择模板" prop="wayTem">
         <Input v-model="wayForm.wayTem" placeholder="Enter your name"></Input>
       </FormItem>
       <FormItem label="科室类别" prop="departmentId">
         <Input v-model="wayForm.departmentId" placeholder="Enter your name"></Input>
+        <p>{{wayForm.departmentId}}</p>
       </FormItem>
       <FormItem label="方案类型" prop="person">
         <RadioGroup v-model="wayForm.person" @on-change="radioChange">
@@ -98,9 +100,11 @@
 
 <script>
 import {API} from '@/services';
+import aa from '@/views/followSetting/template/aa.js'
 	export default {
 		data() {
 			return {
+				getData: aa,
 				templateId: '',//模板id
 				wayForm: {
 					name: '',
@@ -119,7 +123,7 @@ import {API} from '@/services';
 		},
 		mounted() {
 			this.templateInfo()
-			this.templateResolve()
+			//this.templateResolve()
 		},
 		methods: {
 			/*
@@ -132,19 +136,17 @@ import {API} from '@/services';
 			*通过模板id获取模板表单信息
 			*/ 
 			templateInfo() {
-        API.followTemplate.editList({
+        API.followWay.editList({
           id: this.templateId,
         }).then((res) => {
         	// console.log(res)
           if(res.code == 0) {
             this.wayForm.name = res.data.name
             this.diseaseName = res.data.name
-            // console.log(res.data.name)
-            this.wayForm.silencetime = res.data.silencetime
-            this.wayForm.outrepeattimes = res.data.outrepeattimes
-            this.wayForm.firsttaskid = res.data.firsttaskid
-            this.wayForm.person = res.data.person
-            this.wayForm.submoulds = res.data.submoulds
+            this.wayForm.diseaseId = res.data.diseaseId
+            this.wayForm.departmentId = res.data.departmentId
+            this.wayForm.person = res.data.activeType
+          
           }else {
             console.log(res.message)
           }
@@ -239,6 +241,9 @@ import {API} from '@/services';
 </script>
 
 <style lang="less">
+	.way {
+		background: #fff;
+	}
 	.line {
 		padding: 5px 20px;
 		border-bottom: 1px solid #b1b1b1;

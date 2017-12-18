@@ -1,79 +1,79 @@
 <template>
 	<Row class="way">
+		<!-- 随访方案信息 -->
 		<Col span="24" class="line">
-		<h2>随访方案信息:</h2>
+			<h2>随访方案信息:</h2>
+			<Form ref="wayForm" :model="wayForm" :label-width="80" class="wayForm">
+				<FormItem label="方案名称" prop="name">
+					<Input v-model="wayForm.name" placeholder="Enter your name"></Input>
+				</FormItem>
+				<FormItem label="疾病类型" prop="diseaseId">
+					<Select v-model="wayForm.diseaseId" filterable remote :remote-method="remoteMethod2" clearable style="width: 70%;float: left;margin-right:20px;" @on-change="selectChange" not-found-text="" :label-in-value=true placeholder="搜索疾病类型添加至疾病标签">
+            <Option v-for="(option, index) in options2" :value="option.value" :key="index">{{option.label}}</Option>
+          </Select>
+          <Button type="primary" @click="addTag" ref="addTagbtn">添加</Button>
+					<p>{{wayForm.diseaseId}}</p>
+				</FormItem>
+				<FormItem label="" prop="" label="疾病标签">
+          <tag v-for="item in tagCount" color="blue" :key="item" :name="item" closable @on-close="tagClose">{{item}}</tag>
+        </FormItem>
+				<FormItem label="选择模板" prop="wayTem">
+					<Input v-model="wayForm.wayTem" placeholder="Enter your name"></Input>
+				</FormItem>
+				<FormItem label="科室类别" prop="departmentId">
+					<Input v-model="wayForm.departmentId" placeholder="Enter your name"></Input>
+					<p>{{wayForm.departmentId}}</p>
+				</FormItem>
+				<FormItem label="方案类型" prop="person">
+					<RadioGroup v-model="wayForm.person" @on-change="radioChange">
+						<Radio label="0">随访</Radio>
+						<Radio label="1">通知</Radio>
+					</RadioGroup>
+				</FormItem>
+			</Form>
 		</Col>
-		<Form ref="wayForm" :model="wayForm" :label-width="80">
-			<FormItem label="方案名称" prop="name">
-				<Input v-model="wayForm.name" placeholder="Enter your name"></Input>
-			</FormItem>
-			<FormItem label="疾病类型" prop="diseaseId">
-				<Select v-model="wayForm.diseaseId" filterable remote not-found-text="" :remote-method="remoteMethod2" clearable>
-					<Option v-for="(option, index) in options2" :value="option.value" :key="index">{{option.label}}</Option>
-				</Select>
-				<p>{{wayForm.diseaseId}}</p>
-			</FormItem>
-			<FormItem label="选择模板" prop="wayTem">
-				<Input v-model="wayForm.wayTem" placeholder="Enter your name"></Input>
-			</FormItem>
-			<FormItem label="科室类别" prop="departmentId">
-				<Input v-model="wayForm.departmentId" placeholder="Enter your name"></Input>
-				<p>{{wayForm.departmentId}}</p>
-			</FormItem>
-			<FormItem label="方案类型" prop="person">
-				<RadioGroup v-model="wayForm.person" @on-change="radioChange">
-					<Radio label="0">随访</Radio>
-					<Radio label="1">通知</Radio>
-				</RadioGroup>
-			</FormItem>
-		</Form>
-		<Col span="24" class="line">
-		<h2>配置随访方案:</h2>
-		</Col>
-		<Row class="wayNumber">
+		<!-- 配置随访方案 -->
+		<Col span="24" class="line"><h2>配置随访方案:</h2></Col>
+		<Col span="24" class="border1" v-for="(item,index) in getData.questionTemples" :key="index">
+			<!-- 模板名称&&随访周期 -->
+			<Row class="wayIndex" >
+				<Col span="1" class="lineheight32">
+					<h3>{{index+1}}</h3>
+				</Col>
+				<Col span="2" class="lineheight32">
+					<strong>模板名称:</strong>
+				</Col>
+				<Col span="21" class="lineheight32">
+					<strong>{{item.questionTempleFrequency.templeId}}</strong>
+				</Col>
+				<Col span="2" class="lineheight32" offset="1">
+					<strong>随访周期:</strong>
+				</Col>
+				<Col span="21" class="lineheight32">
+					<span>随访次数:
+						<InputNumber :max="100" :min="1" v-model="item.questionTempleFrequency.number"></InputNumber>第
+						<InputNumber :min="0" v-model="item.questionTempleFrequency.firstday"></InputNumber>天,第一次随访,每隔
+						<InputNumber :max="100" :min="0" v-model="item.questionTempleFrequency.intervalDays"></InputNumber>天，随访一次。
+					</span>
+				</Col>
+			</Row> 
+			<!-- 随访区间 -->
+			<Row class="wayIndex" >
+				<Col span="2" class="lineheight32" offset="1">
+					<strong>随访区间:</strong>
+				</Col>
+				<Col span="21" class="lineheight32">
+					<Row>
+						<Col span="2"><span>时间段</span></Col>
+						<Col span="4"><Time-picker format="HH-mm" placeholder="选择时间" style="width: 100px"></Time-picker></Col>
+						<Col span="4"><Time-picker format="HH-mm" placeholder="选择时间" style="width: 100px"></Time-picker></Col>
+						<Col span="2"><Icon type="plus" style="margin-right:20px;"></Icon><Icon type="minus"></Icon></Col>
+					</Row>
+				</Col>
+			</Row> 
 
-			<Row class="wayIndex" v-for="item,index in getData.questionTemples" :key="index">
-				<Col span="1">
-				<h3>1</h3>
-				</Col>
-				<Col span="1">
-				<strong>模板名称:</strong>
-				</Col>
-				<Col span="21">
-				<strong>糖尿病一号模板</strong>
-				</Col>
-					<Row class="wayIndex">
-				<Col span="1" offset="1">
-				<strong>随访周期:</strong>
-				</Col>
-				<Col span="21">
-				<p>随访次数:
-					<InputNumber :max="10" :min="1"></InputNumber>第
-					<InputNumber :max="10" :min="1"></InputNumber>天,第一次随访,每隔
-					<InputNumber :max="10" :min="1"></InputNumber>天，随访一次。</p>
-				</Col>
-			</Row>
-			<Row class="wayIndex">
-				<!-- 随访区间 -->
-				<Col span="1" offset="1">
-				<strong>随访区间:</strong>
-				</Col>
-				<Col span="22">
-				<ul>
-					<li v-for="ite in item.questionTempleTimeRanges" :key="ite.templeId">
-						<!-- <time-picker format="HH：mm" placeholder="Select time" style="width: 100px"></time-picker>
-			          <span style="padding: 0 10px;">-</span>
-			          <time-picker format="HH：mm" placeholder="Select time" style="width: 100px"></time-picker>
-			          <Icon type="plus" style="padding-left:20px;"></Icon><Icon type="minus" style="padding-left:20px;"></Icon> -->
-						<span>{{ite.beginTime}}</span> -
-						<span>{{ite.endTime}}</span>
-
-					</li>
-				</ul>
-				</Col>
-			</Row>
 			<!-- title和只能语音单独处理 -->
-			<Row class="wayIndex" v-for="ite,index in item.questionSchemeWavs" :key="index" v-if="index>0">
+			<!-- <Row class="wayIndex" v-for="ite,index in item.questionSchemeWavs" :key="index" v-if="index>0">
 				<Col span="1" offset="1">
 				<strong>语音配置:</strong>
 				</Col>
@@ -120,11 +120,9 @@
 				</Collapse>
 
 				</Col>
-			</Row>
-			</Row>
+			</Row> -->
+			</Col>
 		
-		</Row>
-
 	</Row>
 </template>
 
@@ -146,6 +144,13 @@ export default {
 			},
 			options2: [],
 			collapse: '1',
+			tagCount: [],
+			tagCount2: [],
+			selectLabel: '',
+      selectValue: '',
+      targetShow: true,//判断是否疾病标签是否展示
+      targetTag: '',//指标标签
+      tagShow: false,//标签是否展示,
 		}
 	},
 	created() {
@@ -218,14 +223,7 @@ export default {
 		*/
 		remoteMethod2(query) {
 			if (query == '') {
-				this.allQuestions.length = 0
-				this.question1.length = 0
-				this.question2.length = 0
-				this.question3.length = 0
-				this.question4.length = 0
-				this.question5.length = 0
-				this.question6.length = 0
-				this.question7.length = 0
+			
 			}
 			API.followProblems.disease({
 				'zjm': query
@@ -261,6 +259,57 @@ export default {
 				console.log(error)
 			})
 		},
+		/*
+    *获取选中的疾病标签列value
+    */
+    selectChange(value) {
+      console.log(value.label)
+      this.selectLabel = value.label
+      this.selectValue = value.value
+    },
+		 /*
+    *添加标签
+    */
+    addTag() {
+	    let flag=0;
+	    this.tagCount.forEach((item) => {
+	      if(this.selectLabel == item || this.selectLabel == '') {
+	        flag++; 
+	        alert('您添加的为空或者重复添加')
+	      }
+	    })
+	    if(flag>0){
+	      this.selectLabel = ''
+	      return false;
+	    }
+	    console.log(this.selectLabel)
+	    console.log(this.selectValue)
+	    this.tagCount.push(this.selectLabel)
+	    this.tagCount2.push(this.selectValue)
+	    console.log(this.tagCount)
+	    // this.tagCountId.push(this.selectValue)
+	    this.selectLabel = ''
+	    this.selectValue = ''
+	    this.wayForm.diseaseId = ''
+	  },
+	  /*
+	  *删除标签
+	  */
+	  tagClose(event, name) {
+	    console.log(event)
+	    console.log(name)
+	    const index = this.tagCount.indexOf(name);
+	    this.tagCount.splice(index, 1);
+	    // this.tagCountId.splice(index,1);
+	  },
+	  /*
+		*删除一条模板
+		*/ 
+		deleteCol(index) {
+			console.log(index)
+			this.templateList1.splice(index,1)
+			console.log(this.templateList1)
+		}
 
 	},
 	watch: {
@@ -327,8 +376,12 @@ export default {
 		}
 	}
 }
+.wayForm .ivu-form-item:nth-of-type(2) .ivu-form-item-content .ivu-select{
 
+	width: 60%;
+}
 .wayForm2 .ivu-form-item {
 	margin-bottom: 10px;
+	width: 50%;
 }
 </style>

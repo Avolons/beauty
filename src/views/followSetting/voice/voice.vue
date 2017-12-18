@@ -129,7 +129,7 @@ import {API} from '@/services';
         			return item.switchID = '通用处理'
         		}
         
-        })
+          })
           }
         }).catch((error)=> {
         })

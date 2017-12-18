@@ -110,7 +110,7 @@ export const otherRouter = {
     {
         path: '/access/user/user_add',
         title: '添加用户',
-        access: '/access/user/user_add/:user_id', // access已经添加
+        access: '/access/user/user_add', // access已经添加
         name: 'user_add',
         component: resolve => {
             require(['@/views/access/user-manage/user-add.vue'], resolve);

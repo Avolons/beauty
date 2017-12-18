@@ -119,6 +119,20 @@ export default {
             { required: false, message: '请输入备注', trigger: 'blur' }
         ]
 
+    },
+    users: {
+        uName: [
+            { required: true, message: '请输入名称', trigger: 'blur' }
+        ],
+        password: [
+            { required: true, message: '请输入助记码', trigger: 'blur' }
+        ],
+        reName: [
+            { required: true, message: '请输入ICD编码', trigger: 'blur' }
+        ],
+        tel: [
+            { required: false, message: '请输入备注', trigger: 'blur' }
+        ]
     }
 
 };

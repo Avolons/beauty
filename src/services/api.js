@@ -14,7 +14,7 @@ Vue.prototype.$http = axios;
 /* 默认最长响应时间 */
 axios.defaults.timeout = 500;
 /* 默认的接口地址 */
-axios.defaults.baseURL = 'http://192.168.1.100:8080/';
+axios.defaults.baseURL = 'http://192.168.1.40:8080/';
 
 // 添加请求拦截器
 axios.interceptors.request.use(function (config) {
@@ -488,6 +488,82 @@ export const Systems = {
      */
     listDisTemp  (data) {
         return fetch('get', '/visit/newDisease/findTemp', data);
+    },
+    /**
+     * 用户列表
+     * page:1 //当前页码
+     * dpId: //科室Id
+     * yhName: //用户名
+     * types: //身份（0管理员，1医生）
+     * state: //状态（0锁定，1正常）
+     * @param {any} data
+     * @returns
+     */
+    listUser (data) {
+        return fetch('get', '/visit/admin/list', data);
+    },
+    /**
+     * 用户添加
+     * types:0 //身份（0管理员，1医生）
+     * dpId:1 //部门id
+     * uName:abc //用户名
+     * password:1 //密码
+     * reName:acb //姓名
+     * tel:123 // 电话号码
+     * rIds: //权限Id（可多选）
+     * @param {any} data
+     * @returns
+     */
+    addUser (data) {
+        return fetch('post', '/visit/admin/add', data);
+    },
+    /**
+     * 用户编辑
+     * types:0 //身份（0管理员，1医生）
+     * dpId:1 //部门id
+     * uName: //用户名
+     * aId: //当前用户ID
+     * reName:acb //姓名
+     * tel:123 // 电话号码
+     * rIds: //权限Id（可多选）
+     * @param {any} data
+     * @returns
+     */
+    editUser (data) {
+        return fetch('post', '/visit/admin/update', data);
+    },
+    /**
+     * 用户删除
+     * id
+     * @param {any} data
+     * @returns
+     */
+    delUser  (data) {
+        return fetch('post', '/visit/newDisease/del', data);
+    },
+    /**
+     * 角色信息展示接口
+     * @param {any} data
+     * @returns
+     */
+    roleList  (data) {
+        return fetch('get', '/visit/newDisease/del', data);
+    },
+    /**
+     *
+     * @param {any} data
+     * @returns
+     */
+    lookaUser (data) {
+        return fetch('post', '/visit/admin/stop', data);
+    },
+    /**
+     *
+     * @param {any} data
+     * @returns
+     */
+    unLookUser (data) {
+        return fetch('post', '/visit/admin/unstop', data);
     }
 
 };

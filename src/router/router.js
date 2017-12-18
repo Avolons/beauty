@@ -81,67 +81,57 @@ export const otherRouter = {
         }
     },
     {
-        path: 'access/business/add',
+        path: '/access/business/add',
         title: '添加企业',
+        access: '/access/business/add', // access已经添加
         name: 'business_add',
         component: resolve => {
             require(['@/views/access/business-manage/business-add.vue'], resolve);
         }
     },
     {
-        path: 'access/business/depart',
+        path: '/access/business/depart',
         title: '编辑部门信息',
+        access: '/access/business/depart', // access已经添加
         name: 'business_depart',
         component: resolve => {
             require(['@/views/access/business-manage/business-depart.vue'], resolve);
         }
     },
     {
-        path: 'access/role/role_add',
+        path: '/access/role/role_add',
         title: '角色编辑',
+        access: '/access/role/role_add', // access已经添加
         name: 'role_add',
         component: resolve => {
             require(['@/views/access/role-manage/role-add.vue'], resolve);
         }
     },
     {
-        path: 'access/user/user_add/:user_id',
+        path: '/access/user/user_add',
         title: '添加用户',
+        access: '/access/user/user_add', // access已经添加
         name: 'user_add',
         component: resolve => {
             require(['@/views/access/user-manage/user-add.vue'], resolve);
         }
     },
     {
-        path: 'followBusiness/page/page',
+        path: '/followBusiness/page/page',
         title: '空白页',
+        access: '/followBusiness/page/page', // access已经添加
         name: 'page',
         component: resolve => {
             require(['@/views/followBusiness/page/page.vue'], resolve);
         }
     },
     {
-        path: 'followSetting/voice/voice/:id',
+        path: '/followSetting/voice/voice/:id',
         title: '语音编辑',
+        access: '/followSetting/voice/voice/:id', // access已经添加
         name: 'voice',
         component: resolve => {
             require(['@/views/followSetting/voice/voice.vue'], resolve);
-        }
-    },
-    {
-        path: 'followSetting/template/template/:id',
-        title: '模板编辑',
-        name: 'template',
-        component: resolve => {
-            require(['@/views/followSetting/template/template.vue'], resolve);
-        }
-    },
-    {
-        path: 'followSetting/way/way/:id',
-        title: '方案编辑',
-        name: 'way',
-        component: resolve => {
-            require(['@/views/followSetting/way/way.vue'], resolve);
         }
     }
     ]

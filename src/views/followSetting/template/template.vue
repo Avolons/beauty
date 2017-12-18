@@ -166,11 +166,6 @@
 									      	<li>
 									    			<Row class="itemli">
 									    			 	<h3>处理: {{item1.switchId}}</h3>
-									    			 
-										    			<!-- <Row class="padleft40 mb5" v-show="!showRow">
-										    			 	<Col span="4" class="lineheight32">名称:</Col>
-										    			 	<Col span="20" class="textCenter"><span></span></Col>
-										    			</Row> -->
 										    			<Row class="padleft40 mb5" v-show="item1.switchRegexText">
 										    			 <Col span="4" class="lineheight32">判别规则:</Col>
 											    			<Col span="20" class="textCenter lineheight32" ><span>{{item1.switchRegexText}}</span></Col>
@@ -262,6 +257,7 @@ import {API} from '@/services';
 				switchArr: [],//语音list
 				templateList1: [],//模板语音开场白
 				showRow: false,
+				lastQuestionId: '',//最后一个问题的索引
 			}
 		},
 		created(){
@@ -312,10 +308,6 @@ import {API} from '@/services';
           if(res.code == 0) {
             // console.log(res.data)
             
-            if(res.data.length>0) {
-            	// this.templateList1 = res.data
-            }
-
             /*********************************************/
             
             let map = {
@@ -510,6 +502,11 @@ import {API} from '@/services';
       *点击第二部的问题的操作
       */
       addThirdQuestion(item) {
+      	// console.log('-----------------------------------')
+      	console.log(item)
+      	// console.log('-----------------------------------')
+      //	console.log(this.templateList1)
+      	// console.log('-----------------------------------')
       	API.voiceSetting.question({
           "questionId": item.id
         }).then((res) => {
@@ -537,10 +534,26 @@ import {API} from '@/services';
             this.switchArr.push({})
             this.switchArr.push({})
             this.switchArr.push({})
-            console.log( this.switchArr)
+             // console.log('-------------this.switchArr----------------------')
+            // console.log( this.switchArr)
+            
+
             this.switchArr.forEach((item, index) => {
 							item.switchID = index -3
+							item.switchID>=0?item.switchID = item.switchID+1: item.switchID //除去switchId = 0
 						})
+						let map = {
+	          	questionId: item.id,
+	          	questionIdXml: '1003',
+	          	questionName: item.title,
+	          	targetId: item.targetId,
+	          	questionTempleQuestionJumps:[]
+	          }
+	          map.questionTempleQuestionJumps=this.switchArr
+	        console.log('--------------111111111111---------------------')
+	      	this.templateList1.push(map)
+	      	console.log(this.templateList1)
+						console.log('--------------222222222222---------------------')
 						this.switchArr.forEach((item) => {
         	
         		if(item.switchID == -1) {
@@ -552,9 +565,21 @@ import {API} from '@/services';
         		if(item1.switchID == -3) {
         			return item.switchID = '通用处理'
         		}
-        
+        	
           })
           }
+          
+
+          let map = {
+          	questionId: item.id,
+          	questionIdXml: '1003',
+          	targetId: item.targetId,
+          	questionTempleQuestionJumps:[]
+          }
+          map.questionTempleQuestionJumps.push(this.switchArr)
+        console.log('--------------this.templateList1---------------------')
+      	console.log(map)
+      	console.log('-----------------------------------')
         }).catch((error)=> {
 
         })
@@ -569,10 +594,7 @@ import {API} from '@/services';
 				}
 			
     
-      	this.templateList1.push(new Point1({}))
-      	console.log(this.templateList1)
-        console.log("itemde"+JSON.stringify(item))
-					
+      
 			
       	API.followTemplate.questionList({
           id: item.id,
@@ -665,11 +687,10 @@ import {API} from '@/services';
 			    "submoulds":this.tagCount2.join(';'),         //通用库        
 			    "firsttaskid": this.templateForm.firsttaskid,                        //起始问题编号      
 			    "questionTempleQuestions": this.templateList1
-
 				}).then((res)=>{
 					alert("成功")
 				}).catch((error) => {
-					alert("失败")
+					
 				})
 			},
 			/*

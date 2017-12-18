@@ -257,6 +257,130 @@ export const Jurisdiction = {
      */
     delRoles (data) {
         return fetch('post', '/visit/admin/roles/del', data);
+    },
+    /**
+     * 用户列表
+     * page:1 //当前页码
+     * dpId: //科室Id
+     * yhName: //用户名
+     * types: //身份（0管理员，1医生）
+     * state: //状态（0锁定，1正常）
+     * @param {any} data
+     * @returns
+     */
+    listUser (data) {
+        return fetch('get', '/visit/admin/list', data);
+    },
+    /**
+     * 用户添加
+     * types:0 //身份（0管理员，1医生）
+     * dpId:1 //部门id
+     * uName:abc //用户名
+     * password:1 //密码
+     * reName:acb //姓名
+     * tel:123 // 电话号码
+     * rIds: //权限Id（可多选）
+     * @param {any} data
+     * @returns
+     */
+    addUser (data) {
+        return fetch('post', '/visit/admin/add', data);
+    },
+    /**
+     * 用户编辑
+     * types:0 //身份（0管理员，1医生）
+     * dpId:1 //部门id
+     * uName: //用户名
+     * aId: //当前用户ID
+     * reName:acb //姓名
+     * tel:123 // 电话号码
+     * rIds: //权限Id（可多选）
+     * @param {any} data
+     * @returns
+     */
+    editUser (data) {
+        return fetch('post', '/visit/admin/update', data);
+    },
+    /**
+     * 用户删除
+     * id
+     * @param {any} data
+     * @returns
+     */
+    delUser  (data) {
+        return fetch('post', '/visit/admin/del', data);
+    },
+    /**
+     * 角色详细信息
+     * id: //用户Id
+     * @param {any} data
+     * @returns
+     */
+    userInfo  (data) {
+        return fetch('get', '/visit/admin/findAdmin', data);
+    },
+    /**
+     * 角色信息展示接口
+     * @param {any} data
+     * @returns
+     */
+    roleList  (data) {
+        return fetch('get', '/visit/admin/roleList', data);
+    },
+    /**
+     * 部门列表
+     * @param {any} data
+     * @returns
+     */
+    departList  (data) {
+        return fetch('get', '/visit/admin/adList', data);
+    },
+    /**
+     * 职位列表
+     * adId: //部门Id
+     * @param {any} data
+     * @returns
+     */
+    positionList  (data) {
+        return fetch('get', '/visit/admin/apList', data);
+    },
+    /**
+     * 禁用用户
+     * id
+     * @param {any} data
+     * @returns
+     */
+    lookaUser (data) {
+        return fetch('post', '/visit/admin/stop', data);
+    },
+    /**
+     * 启用用户
+     * id
+     * @param {any} data
+     * @returns
+     */
+    unLookUser (data) {
+        return fetch('post', '/visit/admin/unstop', data);
+    },
+    /**
+     * 重置密码
+     * id: //当前用户ID
+     * pwd: //新密码
+     * @param {any} data
+     * @returns
+     */
+    updataPass (data) {
+        return fetch('post', '/visit/admin/resetPwd', data);
+    },
+    /**
+     * 保存方案
+     * id: //当前用户ID
+     * qtId: //模板ID
+     * @param {any} data
+     * @returns
+     */
+    saveAction (data) {
+        return fetch('post', '/visit/admin/save', data);
     }
 
 };
@@ -487,82 +611,6 @@ export const Systems = {
      */
     listDisTemp  (data) {
         return fetch('get', '/visit/newDisease/findTemp', data);
-    },
-    /**
-     * 用户列表
-     * page:1 //当前页码
-     * dpId: //科室Id
-     * yhName: //用户名
-     * types: //身份（0管理员，1医生）
-     * state: //状态（0锁定，1正常）
-     * @param {any} data
-     * @returns
-     */
-    listUser (data) {
-        return fetch('get', '/visit/admin/list', data);
-    },
-    /**
-     * 用户添加
-     * types:0 //身份（0管理员，1医生）
-     * dpId:1 //部门id
-     * uName:abc //用户名
-     * password:1 //密码
-     * reName:acb //姓名
-     * tel:123 // 电话号码
-     * rIds: //权限Id（可多选）
-     * @param {any} data
-     * @returns
-     */
-    addUser (data) {
-        return fetch('post', '/visit/admin/add', data);
-    },
-    /**
-     * 用户编辑
-     * types:0 //身份（0管理员，1医生）
-     * dpId:1 //部门id
-     * uName: //用户名
-     * aId: //当前用户ID
-     * reName:acb //姓名
-     * tel:123 // 电话号码
-     * rIds: //权限Id（可多选）
-     * @param {any} data
-     * @returns
-     */
-    editUser (data) {
-        return fetch('post', '/visit/admin/update', data);
-    },
-    /**
-     * 用户删除
-     * id
-     * @param {any} data
-     * @returns
-     */
-    delUser  (data) {
-        return fetch('post', '/visit/newDisease/del', data);
-    },
-    /**
-     * 角色信息展示接口
-     * @param {any} data
-     * @returns
-     */
-    roleList  (data) {
-        return fetch('get', '/visit/newDisease/del', data);
-    },
-    /**
-     *
-     * @param {any} data
-     * @returns
-     */
-    lookaUser (data) {
-        return fetch('post', '/visit/admin/stop', data);
-    },
-    /**
-     *
-     * @param {any} data
-     * @returns
-     */
-    unLookUser (data) {
-        return fetch('post', '/visit/admin/unstop', data);
     }
 
 };

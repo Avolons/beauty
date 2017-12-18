@@ -122,16 +122,31 @@ export default {
     },
     users: {
         uName: [
-            { required: true, message: '请输入名称', trigger: 'blur' }
+            { required: true, message: '请输入用户名', trigger: 'blur' }
         ],
         password: [
-            { required: true, message: '请输入助记码', trigger: 'blur' }
+            { required: true, message: '请输入密码', trigger: 'blur' }
         ],
         reName: [
-            { required: true, message: '请输入ICD编码', trigger: 'blur' }
+            { required: true, message: '请输入真实姓名', trigger: 'blur' }
         ],
         tel: [
-            { required: false, message: '请输入备注', trigger: 'blur' }
+            { required: true, message: '请输入手机号码', trigger: 'blur' }
+        ],
+        types: [
+            { required: false, message: '请输入手机号码', trigger: 'blur' }
+        ],
+        rIds: [
+            { required: true, message: '请选择用户角色', trigger: 'blur' }
+        ],
+        adId: [
+            { required: true, message: '请选择所属部门', trigger: 'blur' }
+        ],
+        apId: [
+            { required: false, message: '请选择用户职位', trigger: 'blur' }
+        ],
+        dpId: [
+            { required: true, message: '请选择所属科室', trigger: 'blur' }
         ]
     }
 

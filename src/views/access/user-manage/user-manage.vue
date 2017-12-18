@@ -81,7 +81,7 @@
             </Row>
             <div class="user_main_add">
                 <Button @click="searchUser" type="primary">查询</Button>
-                <Button @click="editUser" type="primary">新增用户</Button>
+                <Button @click="editUser(-1)" type="primary">新增用户</Button>
             </div>
             <div class="user_main_list">
                 <Table border :columns="config" :data="dataList"></Table>
@@ -112,10 +112,10 @@
                 <div slot="footer" class="user_main_btnList">
                 </div>
             </Modal>
-            <Modal v-model="passwordmodal" title="重置密码" >
+            <Modal v-model="passwordmodal" title="重置密码">
                 <Input v-model="newPassword" placeholder="请输入新密码"></Input>
                 <div slot="footer" class="user_main_btnList">
-                    <Button type="primary">确认</Button>
+                    <Button type="primary" @click="submitPassword">确认</Button>
                 </div>
             </Modal>
         </div>
@@ -266,7 +266,7 @@ export default {
                             }, '重置密码'),
                             h('Button', {
                                 props: {
-                                    type: 'primary',
+                                    type: params.row.admin.isLock ? 'primary' : 'info',
                                     size: 'small'
                                 },
                                 style: {
@@ -275,10 +275,15 @@ export default {
                                 on: {
                                     click: () => {
                                         /** 禁用/启用用户 */
-                                        this.cancelUser(params.row.admin.id);
+                                        if (params.row.admin.isLock) {
+                                            this.unLookUser(params.row.admin.id);
+                                        } else {
+                                            this.lookUser(params.row.admin.id);
+                                        }
+
                                     }
                                 }
-                            }, '禁用'),
+                            }, params.row.admin.isLock ? '启用' : '禁用'),
                             h('Button', {
                                 props: {
                                     type: 'warning',
@@ -289,7 +294,7 @@ export default {
                                 },
                                 on: {
                                     click: () => {
-                                        this.remove(params.index)
+                                        this.actionUser(params.row.admin.id);
                                     }
                                 }
                             }, '默认方案'),
@@ -347,21 +352,6 @@ export default {
     },
     methods: {
         /** 
-         * 保存方案
-         */
-        saveDisAction(id) {
-            API.Systems.saveDisAction({
-                id: this.diseaseId,
-                qtId: id
-            }).then((res) => {
-                this.$Message.success("选择成功");
-                this.actionmodal = false;
-                this.getData();
-            }).catch((err) => {
-
-            });
-        },
-        /** 
          * 获取所有部门
          */
         getDepart() {
@@ -373,19 +363,6 @@ export default {
                     name: "公共科室",
                     id: 0
                 }].concat(res.data);
-            }).catch((err) => {
-
-            });
-        },
-        /** 
-         * 查询对应的模板
-         */
-        listDisTemp() {
-            API.Systems.listDisTemp({
-                departmentId: this.actionList.departmentId == -1 ? null : this.actionList.departmentId,
-                diseaseId: this.actionList.diseaseId == -1 ? null : this.actionList.diseaseId
-            }).then((res) => {
-                this.actionTree = res.data;
             }).catch((err) => {
 
             });
@@ -407,7 +384,7 @@ export default {
             if (copyData.state == -1) {
                 delete copyData.state;
             }
-            API.Systems.listUser(copyData).then((res) => {
+            API.Jurisdiction.listUser(copyData).then((res) => {
                 this.dataList = res.data;
                 this.totalPage = res.totalRow;
                 this.pageSize = res.pageSize;
@@ -434,19 +411,84 @@ export default {
             };
             this.listDisTemp();
         },
-        updataPassword() {
-                this.passwordmodal=true;
+        /** 
+         * 设置默认模板
+         */
+        updataPassword(id) {
+            this.passwordmodal = true;
+            this.UserId = id;
+        },
+        /** 
+         * 提交密码修改
+         */
+        submitPassword() {
+            if (this.newPassword.trim()) {
+                API.Jurisdiction.updataPass({
+                    id: this.UserId,
+                    pwd: this.newPassword
+                }).then((res) => {
+                    this.$Message.success("密码重置成功");
+                    this.getData();
+                    this.passwordmodal=false;
+                    this.newPassword="";
+                }).catch((err) => {
+
+                });
+            } else {
+                this.$Message.warning("请输入新密码");
+            }
+
         },
         /** 
          * 新增/编辑用户
          */
-        editUser(id = -1) {
+        editUser(id) {
             this.$router.push({
                 path: "/access/user/user_add",
                 query: {
-                    id: id,
+                    id:id,
                 }
             })
+        },
+        /** 
+         * 
+         */
+        lookUser(id) {
+            let self = this;
+            this.$Modal.confirm({
+                title: '禁用用户',
+                content: '确定禁用该用户？',
+                onOk: () => {
+                    API.Jurisdiction.lookaUser({
+                        id: id
+                    }).then((res) => {
+                        self.$Message.success("禁用成功");
+                        self.getData();
+                    }).catch((err) => {
+
+                    });
+                }
+            });
+        },
+        /** 
+         * 
+         */
+        unLookUser(id) {
+            let self = this;
+            this.$Modal.confirm({
+                title: '启用用户',
+                content: '确定启用该用户？',
+                onOk: () => {
+                    API.Jurisdiction.unLookUser({
+                        id: id
+                    }).then((res) => {
+                        self.$Message.success("启用成功");
+                        self.getData();
+                    }).catch((err) => {
+
+                    });
+                }
+            });
         },
         /** 
          * 删除用户
@@ -457,7 +499,7 @@ export default {
                 title: '删除用户',
                 content: '确定删除该用户？',
                 onOk: () => {
-                    API.Systems.delUser({
+                    API.Jurisdiction.delUser({
                         id: id
                     }).then((res) => {
                         self.$Message.success("删除成功");
@@ -502,7 +544,7 @@ export default {
          * 保存方案
          */
         saveDisAction(id) {
-            API.Systems.saveDisAction({
+            API.Jurisdiction.saveAction({
                 id: this.UserId,
                 qtId: id
             }).then((res) => {

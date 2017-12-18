@@ -510,9 +510,8 @@ import {API} from '@/services';
       *点击第二部的问题的操作
       */
       addThirdQuestion(item) {
-      	console.log(item)
       	API.voiceSetting.question({
-          "questionId": this.questionId
+          "questionId": item.id
         }).then((res) => {
           if(res.code == 0) {
             this.saveSwitch = res.data
@@ -572,11 +571,11 @@ import {API} from '@/services';
     
       	this.templateList1.push(new Point1({}))
       	console.log(this.templateList1)
-        
+        console.log("itemde"+JSON.stringify(item))
 					
 			
       	API.followTemplate.questionList({
-          'id': item.id,
+          id: item.id,
         }).then((res) => {
           if(res.code == 0) {
             console.log(res)

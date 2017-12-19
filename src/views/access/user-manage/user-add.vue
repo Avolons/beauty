@@ -1,4 +1,7 @@
 <style lang="less">
+.main .single-page-con .single-page{
+    height: 100%;
+}
 .busadd {
     height: 100%;
     &_main {
@@ -73,9 +76,9 @@
                 <FormItem label="用户名" prop="uName" style="width:450px;">
                     <Input v-model="formData.uName" placeholder="请输入用户名"></Input>
                 </FormItem>
-                <FormItem label="密码" prop="password" style="width:450px;">
+               <!--  <FormItem label="密码" prop="password" style="width:450px;">
                     <Input v-model="formData.password" type="password" placeholder="请输入密码"></Input>
-                </FormItem>
+                </FormItem> -->
                 <FormItem label="真实姓名" prop="reName" style="width:450px;">
                     <Input v-model="formData.reName" placeholder="请输入真实姓名"></Input>
                 </FormItem>
@@ -111,7 +114,7 @@
                     </Select>
                 </FormItem>
                 <FormItem>
-                    <Button type="primary" @click="handleSubmit('formData')">下一步</Button>
+                    <Button type="primary" @click="handleSubmit('formData')">保存</Button>
                     <Button type="ghost" @click="handleReset('formData')" style="margin-left: 8px">重置条件</Button>
                 </FormItem>
             </Form>
@@ -205,7 +208,7 @@ export default {
          */
         dataForm(data) {
             return {
-                id: data.id,
+                aId: data.id,
                 types: data.type+'',//身份（0管理员，1医生）
                 dpId: data.departmentId, //科室id
                 uName: data.username,//用户名

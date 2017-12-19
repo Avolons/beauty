@@ -239,6 +239,7 @@
                             this.radioNumber = false
                           }
                           let oplist = res.data.optionValues;
+                          let oplist2 = res.data.thresholdValue;//指标阀值所有选项
                           var kk = oplist.split(",");//以逗号作为分隔字符串
                           class Point {
                             constructor(value, label) {
@@ -247,10 +248,17 @@
                             }
                           }
                           let p1;
+                          // for(let i=0; i<kk.length;i++ ){
+                          //   p1 = new Point(kk[i],kk[i])
+                          //   this.optionList.push(p1)
+                          // }
+                          let p2;
+                          this.optionList = []
                           for(let i=0; i<kk.length;i++ ){
-                            p1 = new Point(kk[i],kk[i])
-                            this.optionList.push(p1)
+                            p2 = new Point(kk[i],kk[i])
+                            this.optionList.push(p2)
                           }
+                          console.log(this.optionList)
                           //预警阀值
                           this.formItem.model10 = kk
                           //备注
@@ -494,7 +502,8 @@
       },
       cancel (name) {
         // this.$refs[name].resetFields();
-       this.defaultData = JSON.parse(JSON.stringify(this.$data.formItem));
+       // this.defaultData = JSON.parse(JSON.stringify(this.$data.formItem));//清空表单
+       // this.$data = Object.assign(this.$data, this.defaultData)
        this.selectLabel = ''
       },
       //编辑模态框提交按钮

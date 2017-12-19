@@ -165,10 +165,10 @@
 						           <ul slot="content" v-for="item1 in item.questionTempleQuestionJumps">
 									      	<li>
 									    			<Row class="itemli">
-									    			 	<h3>处理: {{item1.switchID}}</h3>
+									    			 	<h3>处理: {{item1.switchId==-1?"无匹配":item1.switchId==-2?"无声音":item1.switchId==-3?"通用处理":item1.switchId}}</h3>
 										    			<Row class="padleft40 mb5" v-show="item1.switchRegexText">
 										    			 <Col span="4" class="lineheight32">判别规则:</Col>
-											    			<Col span="20" class="textCenter lineheight32" ><span>{{item1.switchRegexText}}</span></Col>
+											    			<Col span="20" class="textCenter lineheight32"><span>{{item1.switchRegexText}}</span></Col>
 										    			</Row>
 										    			<Row class="padleft40 mb5" v-show="item1.keyname">
 										    			 	<Col span="4" class="lineheight32">指标值:</Col>
@@ -191,8 +191,6 @@
 		        	 	<Col span="4" @click.native="deleteCol(index)"> <Icon type="close-circled" size="22" color="#f70000" style="line-height: 45px; float:left;"></Icon></Col>
 		        	 </Row>
 		        </TimelineItem>
-		        
-		        
 			    </Timeline>
 					<Button type="primary" @click="addTemplate">创建随访模板</Button>
 
@@ -578,9 +576,6 @@ import {API} from '@/services';
 				    this.questionTempleQuestionJumps = item.questionTempleQuestionJumps
 				  }
 				}
-			
-    
-      
 			
       	API.followTemplate.questionList({
           id: item.id,

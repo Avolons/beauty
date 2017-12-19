@@ -20,18 +20,18 @@ axios.defaults.baseURL = 'http://192.168.1.100:8080/';
 axios.interceptors.request.use(function (config) {
   // 在发送请求之前做些什么
     // config.data = qs.stringify(config.data);
-  if(config.url == "http://192.168.1.100:8080/visit/question/script/save" || "http://192.168.1.100:8080/visit/questiontemple/save") {
+  if(config.url == "http://192.168.1.100:8080/visit/question/script/save" || config.url =="http://192.168.1.100:8080/visit/questiontemple/save" || config.url =="http://192.168.1.100:8080/visit/questiontarget/save") {
     // config.data = JSON.stringify(config.data);
     config.headers = {
       "Content-Type": "application/json;charset=utf-8"
     }
+
   }else {
     config.data = qs.stringify(config.data);
     config.headers = {
       'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
     };
   }
- 
   return config;
 }, function (error) {
   // 对请求错误做些什么
@@ -233,7 +233,7 @@ export const followProblems = {
         return fetch('get', 'visit/question/list', data);
     },
     deleteList(data) {
-        return fetch('get', 'visit/questiontarget/delete', data);
+        return fetch('get', 'visit/question/delete', data);
     },
     addList (data) {
         return fetch('post', 'visit/question/save', data);

@@ -104,22 +104,6 @@
 			line-height: 21px;
 			margin-top: 5px;
 		}
-		&_questitle{
-			border: 1px solid #f1f1f1;
-			border-radius: 5px;
-			background-color: #f1f1f1;
-			.ivu-form-item-label{
-				color: #2d8cf0;
-				font-size: 15px;
-				padding-top: 8px;
-			}
-			.ivu-form-item-content{
-				 color: #2d8cf0;
-				font-size: 15px;
-			 }
-			color: #2d8cf0;
-			font-size: 15px;
-		}
 	}
 }
 </style>
@@ -234,8 +218,8 @@
 							<!-- <FormItem label="问题AI语音">
 									<Input placeholder="请输入问题ai语音"></Input>
 								</FormItem> -->
-							<FormItem class="way_main_questitle" label="处理">
-								<span>{{(it.switchId=="无匹配"||it.switchId=="无声音"||it.switchId=="通用处理")?it.switchId:it.switchId==""?"人工ai":"自定义处理"}}</span>
+							<FormItem label="处理">
+								<span>{{(it.switchId=="无匹配"||it.switchId=="无声音"||it.switchId==-"通用处理")?it.switchId:it.switchId==""?"人工ai":"自定义处理"}}</span>
 							</FormItem>
 							<FormItem label="名称">
 								<Input v-model="it.switchText" placeholder="请输入名称"></Input>

@@ -165,7 +165,7 @@
 						           <ul slot="content" v-for="item1 in item.questionTempleQuestionJumps">
 									      	<li>
 									    			<Row class="itemli">
-									    			 	<h3>处理: {{item1.switchId}}</h3>
+									    			 	<h3>处理: {{item1.switchID}}</h3>
 										    			<Row class="padleft40 mb5" v-show="item1.switchRegexText">
 										    			 <Col span="4" class="lineheight32">判别规则:</Col>
 											    			<Col span="20" class="textCenter lineheight32" ><span>{{item1.switchRegexText}}</span></Col>

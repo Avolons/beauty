@@ -2,7 +2,7 @@
 	<Row>
 		<!-- 搜索栏 -->
 		<Col span="24" class="searchCol" style="background: #fff;">
-			<Form ref="IndexSearch" :model="IndexSearch" :label-width="90" inline style="padding:20px;" class="wayForm">
+			<Form ref="IndexSearch" :model="IndexSearch" :label-width="80" inline style="padding:20px;" class="wayForm">
 				<FormItem label="指标名称" class="width200">
           <Input type="text" v-model="IndexSearch.name" placeholder="请输入指标名称"></Input>
         </FormItem>
@@ -19,7 +19,7 @@
           </Select>
         </FormItem>
         <FormItem prop="diseaseName" label="疾病类型">
-          <Select v-model="IndexSearch.diseaseName" filterable remote not-found-text="" :remote-method="remoteMethod2" :label-in-value=true clearable @on-change="selectChange">
+          <Select v-model="IndexSearch.diseaseName" filterable remote not-found-text="" :remote-method="remoteMethod2" :label-in-value=true clearable @on-change="selectChange" placeholder="请输入名称首字母">
             <Option v-for="(option, index) in options2" :value="option.value" :key="index">{{option.label}}</Option>
           </Select>
         </FormItem>
@@ -32,7 +32,7 @@
 		  </Form>
 		</Col>
 		<Col span="24" class="fpTable">
-			<Table border :columns="columns7" :data="datalist" class="margin-bottom-10"></Table>
+			<Table border :columns="columns7" :data="datalist" class="margin-bottom-10" style="padding:15px;"></Table>
 			<Row>
 				<Col span="10"></Col>
 		     <Col span="14" class="text-right padding-right-20">
@@ -690,7 +690,7 @@
 	}
   .wayForm {
     .ivu-form-item {
-      width: 200px;
+      width: 240px;
     }
     .ivu-form-item:nth-of-type(4), .ivu-form-item:nth-of-type(5){
       width: 100px;

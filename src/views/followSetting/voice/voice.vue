@@ -29,16 +29,17 @@
       <ul>
       	<li v-for="(item,index) in switchArr">
     			 <Row class="itemli" style="background:#f7f7f7">
-    			 	<Col span="4" class="textCenter">switchID</Col>
+    			 	<Col span="4" class="textCenter">处理</Col>
     			 	<Col span="12"></Input>
+							<!-- <span>{{item.switchID==-1?"无匹配":item.switchID==-2?"无声音":item.switchID==-3?"通用处理":item.switchID}}</span> -->
 							<span>{{item.switchID}}</span>
     			 </Col>
     			 	<Col span="2" offset="6" @click.native="removequestion(index)"><Icon type="close-circled" size="22" color="#f70000" style="line-height: 45px;"></Icon></Col>
     			 </Row> 
     			 <Row class="itemli">
-    			 	<Col span="4" class="textCenter">名称</Col>
-    			 	<Col span="20"><Input v-model="item.keyname" placeholder="large size"></Input></Col>
-    			 </Row> 
+    			 	<Col span="4" class="textCenter">话述名称</Col>
+    			 	<Col span="20"><Input v-model="item.switchText" placeholder="large size"></Input></Col>
+    			 </Row>
     			 <Row class="itemli">
     			 	<Col span="4" class="textCenter">判别规则</Col>
     			 	<Col span="20"><Input v-model="item.switchRegexText" placeholder="large size"></Input></Col>
@@ -46,6 +47,10 @@
     			 <Row class="itemli">
     			 	<Col span="4" class="textCenter">超时跳转</Col>
     			 	<Col span="20"><Input v-model="item.outRptSwitchID" placeholder="large size"></Input></Col>
+    			 </Row> 
+    			 <Row class="itemli">
+    			 	<Col span="4" class="textCenter">指标名称称</Col>
+    			 	<Col span="20"><Input v-model="item.keyname" placeholder="large size"></Input></Col>
     			 </Row> 
     			 <Row class="itemli">
     			 	<Col span="4" class="textCenter">指标值</Col>
@@ -95,6 +100,7 @@ import {API} from '@/services';
             class Point {
 						  constructor(item) {
 						    this.switchID = item.switchID
+						    this.switchText = item.switchText
 						    this.switchRegexText = item.switchRegexText
 						    this.keyname = item.keyname
 						    this.outRptSwitchID = item.outRptSwitchID
@@ -104,32 +110,19 @@ import {API} from '@/services';
 						this.saveSwitch.forEach((item) => {
             	this.switchArr.push(new Point({
             		switchID : item.switchID,
+            		switchText : item.switchText,
 						    switchRegexText : item.switchRegexText,
 						    keyname : item.keyname,
 						    outRptSwitchID : item.outRptSwitchID,
 						    keyvalue : item.keyvalue
             	}))
             })
-            this.switchArr.push({})
-            this.switchArr.push({})
-            this.switchArr.push({})
+            
             console.log( this.switchArr)
             this.switchArr.forEach((item, index) => {
 							item.switchID = index -3
 						})
-						this.switchArr.forEach((item) => {
-        	
-        		if(item.switchID == -1) {
-        			return item.switchID = '无匹配'
-        		}
-        		if(item1.switchID == -2) {
-        			return item.switchID = '无声音'
-        		}
-        		if(item1.switchID == -3) {
-        			return item.switchID = '通用处理'
-        		}
-        
-          })
+						
           }
         }).catch((error)=> {
         })
@@ -177,8 +170,7 @@ import {API} from '@/services';
 			*添加话述
 			*/
 			addVoice() {
-				this.switchArr.push({
-				})
+				this.switchArr.push({})
 				this.switchArr.forEach((item, index) => {
 					item.switchID = index-3
 				})
@@ -206,6 +198,11 @@ import {API} from '@/services';
 			*保存话述
 			*/
 			handleSubmit() {
+				this.switchArr.forEach((item) =>{
+					if(item.switchID>=0) {
+						item.switchID = item.switchID +1
+					}
+				})
 				API.voiceSetting.questionDelete({
           "questionId": this.questionId,
         }).then((res) => {
@@ -213,6 +210,7 @@ import {API} from '@/services';
         }).catch((error)=> {
 
         })
+        console.log(this.switchArr.length)
         API.voiceSetting.questionSave({
           "id": this.questionId,   //问题id
 				  "questionCallScripts": this.switchArr

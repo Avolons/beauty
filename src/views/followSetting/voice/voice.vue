@@ -33,7 +33,7 @@
     			 	<Col span="12"></Input>
 							<span>{{item.switchID==-1?"无匹配":item.switchID==-2?"无声音":item.switchID==-3?"通用处理":item.switchID}}</span>
     			 </Col>
-    			 	<Col span="2" offset="6" @click.native="removequestion(index)"><Icon type="close-circled" size="22" color="#f70000" style="line-height: 45px;" v-show="index>2"></Icon></Col>
+    			 	<Col span="2" offset="6" @click.native="removequestion(index)"><Icon type="close-circled" size="22" color="#f70000" style="line-height: 45px;"></Icon></Col>
     			 </Row> 
     			 <Row class="itemli">
     			 	<Col span="4" class="textCenter">话述名称</Col>
@@ -73,9 +73,11 @@ import {API} from '@/services';
 				questionName: '',//随访问题，
 				questionTargetName: '',//随访指标
 				questionTargetStyle: '',//指标类型，
-				questionTargetfz: '',//指标阀值
+				questionTargetfz: '',//指标阀值字符串
+				fzArray: [],//指标阀值数组
         switchArr: [],
         saveSwitch: [],
+        switchInfo: '',
 			}
 		},
 		created(){
@@ -86,61 +88,38 @@ import {API} from '@/services';
 		},
 		methods: {
 			/*
-			*获取问题信息,填充话述列表
+			*根据问题id，获取switch信息
 			*/
 			questionInfo() {
 				API.voiceSetting.question({
           "questionId": this.questionId
         }).then((res) => {
           if(res.code == 0) {
-            this.saveSwitch = res.data
-            class Point {
-						  constructor(item) {
-						    this.switchID = item.switchID
-						    this.switchText = item.switchText
-						    this.switchRegexText = item.switchRegexText
-						    this.keyname = item.keyname
-						    this.outRptSwitchID = item.outRptSwitchID
-						    this.keyvalue = item.keyvalue
-						  }
-						}
-						this.saveSwitch.forEach((item) => {
-            	this.switchArr.push(new Point({
-            		switchID : item.switchID,
-            		switchText : item.switchText,
-						    switchRegexText : item.switchRegexText,
-						    keyname : item.keyname,
-						    outRptSwitchID : item.outRptSwitchID,
-						    keyvalue : item.keyvalue
-            	}))
-            })
-            if(res.data.length == 0) {
-            	this.switchArr.push({})
-            	this.switchArr.push({})
-            	this.switchArr.push({})
-            	this.switchArr.forEach((item, index) => {
-								item.switchID = index -3
-							})
+          	res.data.forEach((item, index) => {
+							item.switchID = index+1
+						})
+            if(res.data.length){
+            	this.switchArr = res.data
             }
-            console.log( this.switchArr)
-            
-						
           }
         }).catch((error)=> {
         })
-        //根据问题id获取指标id
+	      /*
+				*根据问题id，获取指标id
+				*/
         API.followProblems.editList({
           "id": this.questionId
         }).then((res) => {
           if(res.code == 0) {
-          	 this.questionName = res.data.title
-            let getTargetIDVoice = res.data.targetId
-            /*************/
+          	this.questionName = res.data.title
+          	/*
+						*根据指标id，获取指标阀值等信息
+						*/
+            let getTargetIDVoice = res.data.targetId//问题名称
             API.follSetting.editList({
               id: getTargetIDVoice
             }).then((res) => {
               if(res.code == 0) {
-              	//alert('刷新成功')
               	this.questionTargetName = res.data.name
               	//获取指标类型，阀值
               	if(res.data.type == 'digit') {
@@ -152,9 +131,42 @@ import {API} from '@/services';
 		            }
 		            //获取指标阀值
 		            this.questionTargetfz = res.data.optionValues
+		            this.fzArray = this.questionTargetfz.split(',')
+
+		            /*switch信息*/ 
+		             class Point {
+								  constructor(item) {
+								    this.switchID = item.switchID
+								    this.switchText = item.switchText
+								    this.switchRegexText = item.switchRegexText
+								    this.keyname = item.keyname
+								    this.outRptSwitchID = item.outRptSwitchID
+								    this.keyvalue = item.keyvalue
+								  }
+								}
+								if(this.switchArr.length==0) {
+									this.fzArray.forEach((item,index) => {
+		            	this.switchArr.push(new Point({
+		            		switchID : index+1,
+		            		// switchText : '',
+								    switchRegexText : '',
+								    keyname : '',
+								    outRptSwitchID : '',
+								    keyvalue : item
+		            	}))
+		            })
+								this.switchArr.forEach((item,index) => {
+									item.keyname = this.questionTargetName
+								})
+							}
+								
+		            console.log(this.switchArr)
+              }else{
+              	console.log('指标id='+res.code)
               }
             }).catch((error)=>{
-            	alert(error.data)
+            	//alert('error')
+            	console.log(error)
             })
           }
         }).catch((error)=> {
@@ -174,11 +186,7 @@ import {API} from '@/services';
 			addVoice() {
 				this.switchArr.push({})
 				this.switchArr.forEach((item, index) => {
-					if(item.switchID <0) {
-						item.switchID = index-3
-					}else {
-						item.switchID = index-2
-					}
+					item.switchID = index+1
 				})
 				console.log(this.switchArr)
 			},
@@ -192,7 +200,6 @@ import {API} from '@/services';
 				pp.forEach((item)=>{
 					item.switchID = item.switchID-1
 				})
-				console.log(pp)
 				this.switchArr = this.switchArr.concat(pp)
 				console.log(this.switchArr)
 			},

@@ -1,7 +1,6 @@
 <style lang="less">
 .sys-syslog {
     &_main {
-        &_list {}
         &_search {
             box-sizing: border-box;
             margin-bottom: 10px;
@@ -101,10 +100,12 @@ export default {
                 {
                     title: '序号',
                     key: 'id',
+                    width: 150
                 },
                 {
                     title: '所属模块',
-                    key: 'moduleType'
+                    key: 'moduleType',
+                    width: 120
                 },
                 {
                     title: '操作',
@@ -118,12 +119,12 @@ export default {
                 },
                 {
                     title: '相关链接',
-                    key: 'uri'
+                    key: 'uri',
+                    width: 120
                 },
                 {
                     title: '操作记录',
                     key: 'msg',
-                    width: 300
                 },
                 {
                     title: '管理员',
@@ -138,7 +139,7 @@ export default {
                 {
                     title: '操作时间',
                     key: 'dateAdd',
-                    width: 150,
+                    width: 120,
                 },
 
             ],
@@ -146,6 +147,9 @@ export default {
         }
     },
     methods: {
+        /** 
+         * 搜索数据
+         */
         searchResult() {
             this.searchParam.page = 1;
             this.getData();
@@ -169,15 +173,6 @@ export default {
 
             });
         },
-        show(index) {
-            this.$Modal.info({
-                title: 'User Info',
-                content: `Name：${this.dataList[index].name}<br>Age：${this.dataList[index].age}<br>Address：${this.dataList[index].address}`
-            })
-        },
-        remove(index) {
-            this.dataList.splice(index, 1);
-        },
         /** 
          * 分页更改
          */
@@ -185,9 +180,15 @@ export default {
             this.searchParam.page = page;
             this.getData();
         },
+        /** 
+         * 时间切换
+         */
         changeVal(data) {
             this.searchParam.time = data;
         },
+        /** 
+         * 数据格式化
+         */
         dataForm(data) {
             let arrList = [];
             for (let item of data) {

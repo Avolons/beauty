@@ -221,9 +221,10 @@ export default {
                     let copyData=JSON.parse(JSON.stringify(this.access));
                     copyData.pid = copyData.pid[copyData.pid.length - 1];
                     copyData.isMenu = copyData.isMenu == 0 ? true : false;
-                    if (this.title = "新增功能") {
+                    if (this.title == "新增功能") {
                         copyData.id = null;
                     }
+                    delete copyData["children"];
                     API.Jurisdiction.editFun(copyData).then((res) => {
                         this.$Message.success("编辑成功");
                         this.modal=false;
@@ -259,14 +260,14 @@ export default {
                     }, [
                             h('Icon', {
                                 props: {
-                                    type: 'ios-paper-outline'
+                                    type: data.isMenu?'ios-paper-outline':'settings'
                                 },
                                 style: {
                                     marginRight: '8px'
                                 }
                             }),
                             h('span', {
-                            }, data.name + "url地址" + " " + "[" + data.url + "]")
+                            }, data.name +"---"+ "url地址" + " " + "[" + data.url + "]")
                         ]),
                     h('span', {
                         style: {
@@ -339,11 +340,16 @@ export default {
                 this.access = data;
             } else {
                 let copyData = JSON.parse(JSON.stringify(data));
+                /** 
+                 * 删除多余属性
+                 */
+              /*   delete copyData
+                copyData */
                 copyData.pid = this.lookFor(data, type);
                 copyData.isMenu = copyData.isMenu ? "0" : "1";
                 if (type == 0) {
                     copyData.name = "";
-                    copyData.isMenu = "0";
+                    copyData.isMenu = "1";
                     copyData.url = "";
                 }
                 this.access = copyData;
@@ -355,7 +361,10 @@ export default {
          */
         lookFor(data, type) {
             let level = data.level - 0;
-            if (level == 0) {
+            /** 
+             * 一级目录并且操作为编辑时，直接返回顶级目录id
+             */
+            if (level == 0 && type==1) {
                 return [0];
             }
             let pidList = [data.pid];
@@ -401,8 +410,9 @@ export default {
          */
         treeInit() {
             API.Jurisdiction.listFun().then((res) => {
-                this.depart[0].children = this.dataFormat(res.data);
-                this.cascardList[0].children = this.dataFormat(res.data);
+                let copyData=this.dataFormat(res.data);
+                this.depart[0].children = JSON.parse(JSON.stringify(copyData));
+                this.cascardList[0].children = JSON.parse(JSON.stringify(copyData));
             }).catch((err) => {
 
             });

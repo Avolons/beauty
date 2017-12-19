@@ -20,19 +20,19 @@ axios.defaults.baseURL = 'http://192.168.1.100:8080/';
 axios.interceptors.request.use(function (config) {
   // 在发送请求之前做些什么
     // config.data = qs.stringify(config.data);
-  if(config.url == "http://192.168.1.100:8080/visit/question/script/save" || config.url =="http://192.168.1.100:8080/visit/questiontemple/save" || config.url =="http://192.168.1.100:8080/visit/questiontarget/save") {
+    if (config.url == 'http://192.168.1.100:8080/visit/question/script/save' || config.url == 'http://192.168.1.100:8080/visit/questiontemple/save') {
     // config.data = JSON.stringify(config.data);
-    config.headers = {
-      "Content-Type": "application/json;charset=utf-8"
+        config.headers = {
+            'Content-Type': 'application/json;charset=utf-8'
+        };
+    } else {
+        config.data = qs.stringify(config.data);
+        config.headers = {
+            'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
+        };
     }
 
-  }else {
-    config.data = qs.stringify(config.data);
-    config.headers = {
-      'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
-    };
-  }
-  return config;
+    return config;
 }, function (error) {
   // 对请求错误做些什么
     return Promise.reject(error);
@@ -201,7 +201,7 @@ export const follSetting = {
    * page
    * limit
    * name
-   * otype 
+   * otype
    * @param {any} data
    * @returns
    */
@@ -232,8 +232,8 @@ export const followProblems = {
     list (data) {
         return fetch('get', 'visit/question/list', data);
     },
-    deleteList(data) {
-        return fetch('get', 'visit/question/delete', data);
+    deleteList (data) {
+        return fetch('get', 'visit/questiontarget/delete', data);
     },
     addList (data) {
         return fetch('post', 'visit/question/save', data);
@@ -243,108 +243,106 @@ export const followProblems = {
     },
     disease (data) {
         return fetch('get', 'visit/disease/autocomplete', data);
-    },
+    }
 };
-/*随访设置--话述信息  *****/
+/* 随访设置--话述信息  *****/
 export const voiceSetting = {
  /*
   *话述信息
   *questionId(问题id)
-  */ 
-  question (data) {
-    return fetch('get', 'visit/question/script/list', data);
-  },
+  */
+    question (data) {
+        return fetch('get', 'visit/question/script/list', data);
+    },
   /*
   *话述设置--删除
   *questionId(问题id)
-  */ 
-  questionDelete (data) {
-      return fetch('get', 'visit/question/script/delete', data);
-  },
+  */
+    questionDelete (data) {
+        return fetch('get', 'visit/question/script/delete', data);
+    },
   /*
   *话述设置--保存
   *questionId(问题id)
-  */ 
-  questionSave (data) {
-      return fetch('post', 'visit/question/script/save', data);
-  },
+  */
+    questionSave (data) {
+        return fetch('post', 'visit/question/script/save', data);
+    }
 
-
-}
+};
 /* 随访设置--随访模板接口 *****/
 export const followTemplate = {
  /*
  * 随访模板所有信息展示
  */
-  list (data) {
-      return fetch('get', 'visit/questiontemple/list', data);
-  },
+    list (data) {
+        return fetch('get', 'visit/questiontemple/list', data);
+    },
   /*
   *删除
   */
-  deleteList(data) {
-      return fetch('get', 'visit/questiontemple/delete', data);
-  },
+    deleteList (data) {
+        return fetch('get', 'visit/questiontemple/delete', data);
+    },
   /*
   *添加/修改
   *json格式
   */
-  addList (data) {
-      return fetch('post', 'visit/questiontemple/save', data);
-  },
+    addList (data) {
+        return fetch('post', 'visit/questiontemple/save', data);
+    },
   /*
   *编辑展示
   */
-  editList (data) {
-      return fetch('get', 'visit/questiontemple/get', data);
-  },
+    editList (data) {
+        return fetch('get', 'visit/questiontemple/get', data);
+    },
   /*
   *根据模板id获取模板问题接口
   */
-  questionList (data) {
-      return fetch('get', 'visit/questiontemple/question/list', data);
-  },
-   
+    questionList (data) {
+        return fetch('get', 'visit/questiontemple/question/list', data);
+    }
+
 };
 /* 随访设置--随访方案接口 *****/
 export const followWay = {
  /*
  * 科室列表
  */
-  departmentList (data) {
-      return fetch('get', 'visit/department/list', data);
-  },
+    departmentList (data) {
+        return fetch('get', 'visit/department/list', data);
+    },
   /*
   * 随访方案列表
   */
-  list (data) {
-      return fetch('get', 'visit/questionscheme/list', data);
-  },
+    list (data) {
+        return fetch('get', 'visit/questionscheme/list', data);
+    },
   /*
   *删除
   */
-  deleteList(data) {
-      return fetch('get', 'visit/questionscheme/delete', data);
-  },
+    deleteList (data) {
+        return fetch('get', 'visit/questionscheme/delete', data);
+    },
   /*
   *添加/修改
   *json格式
   */
-  addList (data) {
-      return fetch('post', 'visit/questionscheme/save', data);
-  },
+    addList (data) {
+        return fetch('post', 'visit/questionscheme/save', data);
+    },
   /*
   *编辑展示
   */
-  editList (data) {
-      return fetch('get', 'visit/questionscheme/get', data);
-  },
+    editList (data) {
+        return fetch('get', 'visit/questionscheme/get', data);
+    },
   /*
-  *根据模板id获取语音
+  *方案模板信息
   */
-  voiceList (data) {
-      return fetch('get', 'visit/questionscheme/temple/list', data);
-  },
-   
-};
+    voiceList (data) {
+        return fetch('get', 'visit/questionscheme/temple/list', data);
+    }
 
+};

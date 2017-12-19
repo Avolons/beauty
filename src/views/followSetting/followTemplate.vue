@@ -7,17 +7,15 @@
           <Input type="text" v-model="IndexSearch.name" placeholder="请输入模板名称"></Input>
         </FormItem>
         <FormItem prop="diseaseName" label="疾病类型">
-            <Input type="text" v-model="IndexSearch.diseaseName" placeholder="请输入疾病类型" @on-keyup="keyupSearch($event)"></Input>
-           <!-- <Select v-model="proSearch.diseaseName" filterable remote :remote-method="remoteMethod2" :loading="loading2"  @on-keyup="keyupSearch($event)">
-              <Option v-for="(option, index) in options2" :value="option.value" :key="index">{{option.label}}</Option>
-            </Select> -->
+          <Select v-model="IndexSearch.diseaseName" filterable remote not-found-text="" :remote-method="remoteMethod2" clearable>
+            <Option v-for="(option, index) in options2" :value="option.value" :key="index">{{option.label}}</Option>
+          </Select>
         </FormItem>
-        
         <FormItem>
           <Button type="primary" @click="handleSearch('IndexSearch')">查询</Button>
         </FormItem>
         <FormItem>
-          <Button type="primary" @click="addBtn">添加指标</Button>
+          <Button type="primary" @click="addBtn">添加模板</Button>
         </FormItem>
       </Form>
     </Col>
@@ -30,68 +28,6 @@
         </Col>
       </Row>
     </Col>
-  
-    <!-- 编辑功能模态框 -->
-    <Modal v-model="patientText" title="添加模板 / 编辑指标"  @on-ok="ok" @on-cancel="cancel" width="650" class-name="patientInfo">
-      <Form :model="formItem" :label-width="80" ref="formValidate" :rules="ruleValidate">
-        <input type="hidden" v-model="formItem.id" placeholder="id">
-        <FormItem label="模板名称" prop="name">
-          <Input v-model="formItem.name" placeholder="请输入模板名称"></Input>
-        </FormItem>
-        <FormItem label="疾病类型" prop="name">
-          <Input v-model="formItem.name" placeholder="icd"></Input>
-        </FormItem>
-        <FormItem label="静默时间" prop="name">
-          <Input v-model="formItem.name" placeholder="请输入静默时间"></Input>
-        </FormItem>
-        <FormItem label="无匹配重复次数" prop="name">
-          <Input v-model="formItem.name" placeholder="请输入无匹配重复次数"></Input>
-        </FormItem>
-        <FormItem label="语音合成"  prop="radio">
-            <RadioGroup v-model="formItem.radio" @on-change="radioChange">
-              <Radio label="man">男声</Radio>
-              <Radio label="woman">女声</Radio>
-            </RadioGroup>
-        </FormItem>
-        <FormItem label="问题所属疾病类型" prop="name">
-          <Input v-model="formItem.name" placeholder="icd"></Input>
-        </FormItem>
-        <FormItem label="指标类型" prop="select">
-            <Select v-model="formItem.select">
-              <Option value="01">症状</Option>
-              <Option value="02">体征</Option>
-              <Option value="03">生活方式指导</Option>
-              <Option value="04">辅助检查</Option>
-              <Option value="05">用药反馈</Option>
-              <Option value="06">转诊情况</Option>
-              <Option value="07">通用</Option>
-            </Select>
-        </FormItem>
-        
-         <Steps :current="1">
-        <Step title="已完成" content="这里是该步骤的描述信息"></Step>
-        <Step title="进行中" content="这里是该步骤的描述信息"></Step>
-        <Step title="待进行" content="这里是该步骤的描述信息"></Step>
-        <Step title="待进行" content="这里是该步骤的描述信息"></Step>
-    </Steps>
-        <FormItem label="预警阀值"  v-if="radioText" prop="model10">
-          <Select v-model="formItem.model10" multiple style="width:260px">
-              <Option v-for="item in optionList" :value="item.value" :key="item.value">{{ item.label }}</Option>
-          </Select>
-        </FormItem>
-        <FormItem label="预警阀值"  v-if="radioNumber" >
-          <Input v-model="formItem.top" type="text" placeholder="请输入下限" style="width:20%" number prop="top"></Input>
-          <span>-</span>
-          <Input v-model="formItem.bottom" type="text" placeholder="请输入上限" style="width:20%" number></Input>
-        </FormItem>
-        <FormItem label="备注">
-            <Input v-model="formItem.textarea" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="添加备注"></Input>
-        </FormItem>
-        <FormItem>
-            <Button type="primary" @click="addModel('formValidate')">保存</Button>
-        </FormItem>
-    </Form>
-    </Modal>
   </Row>
 </template>
 
@@ -113,7 +49,7 @@
       return {
         IndexSearch: {
           name: '',
-          select: ''
+          diseaseName: ''
         },
         columns7: [//表格栏
           {
@@ -149,59 +85,7 @@
                   },
                   on: {
                     click: () => {
-                      this.patientText = true
-                      API.follSetting.editList({
-                        id: params.row.id
-                      }).then((res) => {
-                        if(res.code == 0) {
-
-                          this.formItem.id = res.data.id
-                          this.formItem.name = res.data.name
-                          this.formItem.radio = res.data.type
-                          this.formItem.select = res.data.otype
-                          this.formItem.select2 = res.data.status
-                          this.formItem.textarea = res.data.remark
-                          this.formItem.top = res.data.thresholdValueStart
-                          this.formItem.bottom = res.data.thresholdValueEnd
-                          this.formItem.bottom = res.data.thresholdValueEnd
-                          console.log(this.formItem.select2)
-
-
-                          //判断指标类型
-                          if(this.formItem.radio == 'select') {
-                            this.radioText = true
-                            this.radioNumber = false
-                          }else if(this.formItem.radio == 'digit') {
-                            this.radioNumber = true
-                            this.radioText = false
-                          }else {
-                            this.radioText = false
-                            this.radioNumber = false
-                          }
-                          let oplist = res.data.optionValues;
-                          var kk = oplist.split(",");//以逗号作为分隔字符串
-                          class Point {
-                            constructor(value, label) {
-                              this.value = value;
-                              this.label = label;
-                            }
-                          }
-                          let p1;
-                          for(let i=0; i<kk.length;i++ ){
-                            p1 = new Point(kk[i],kk[i])
-                            this.optionList.push(p1)
-                          }
-                          //预警阀值
-                          this.formItem.model10 = kk
-                          //备注
-
-                          
-                        }else {
-                          console.log(res)
-                        }
-                      }).catch((error) => {
-                        console.log(error)
-                      })
+                      this.$router.push({path:`/followSetting/template/template/${params.row.id}`});
                     }
                   }
                 }, '编辑'),
@@ -260,6 +144,7 @@
         optionList: [],
         radioText: false,
         radioNumber: false,
+        options2: [],
       }
     },
     
@@ -274,6 +159,8 @@
         API.followTemplate.list({
           pager: pager,
           limit: '10',
+          name: this.IndexSearch.name,
+          diseaseId: this.IndexSearch.diseaseName
         }).then((res) => {
           if(res.code == 0) {
             this.datalist = res.data
@@ -289,11 +176,11 @@
       *获取分页列表数据
       */
       currentPage: function (page) {
-       API.follSetting.list({
+       API.followTemplate.list({
           pager: page,
           limit: '10',
           name: this.IndexSearch.name,
-          otype: this.IndexSearch.select
+          diseaseId: this.IndexSearch.diseaseName
         }).then((res) => {
           if(res.code == 0) {
             this.datalist = res.data
@@ -309,11 +196,11 @@
       *查询
       */
       handleSearch() {
-        API.follSetting.list({
+        API.followTemplate.list({
           pager: 1,
           limit: '10',
           name: this.IndexSearch.name,
-          otype: this.IndexSearch.select
+          diseaseId: this.IndexSearch.diseaseName
         }).then((res) => {
           if(res.code == 0) {
             this.datalist = res.data
@@ -329,11 +216,11 @@
       *删除
       */
       deleteRow(id){
-        API.follSetting.deleteList({
+        API.followTemplate.deleteList({
          id:id
         }).then((res) => {
           if(res.code == 0) {
-            console.log(res.message)
+            alert(res.message)
             this.list(1)
             this.$Message.success({
               content: '删除成功',
@@ -350,17 +237,7 @@
       *添加指标
       */
       addBtn() {
-        this.patientText = true
-        this.formItem.id = ''
-        this.formItem.name = ''
-        this.formItem.radio = 'string'
-        this.formItem.textarea = ''
-        this.formItem.top = ''
-        this.formItem.bottom = ''
-        this.optionList = []
-        this.radioText = false
-        this.radioNumber = false
-       
+        this.$router.push({path:`/followSetting/template/template/new`});
       },
       /*
       *确定添加
@@ -482,12 +359,48 @@
         this.optionList.push(p1)
         this.formItem.indexName = ''
         console.log(this.optionList)
-      }
+      },
+      /*
+      *疾病类型--远程搜索
+      */
+      remoteMethod2 (query) {
+        API.followProblems.disease({
+          'zjm': query
+        }).then((res) => {
+          // console.log(res)
+          if(res.code == 0) {
+            class Point {
+              constructor(item) {
+                this.value = item.value;
+                this.label = item.label;
+              }
+            }
+            let parr2 = []
+            let more2 = res.data
+            more2.forEach((item) => {
+              parr2.push(new Point({
+                value: item.id,
+                label: item.value
+              }))
+            })
+
+            this.options2 = parr2
+            if (query !== '') {
+              this.options2 = parr2
+            } else {
+              this.options2 = [];
+              this.proSearch.diseaseName = ''
+            }
+          }else {
+            console.log(res)
+          }
+        }).catch((error) => {
+          console.log(error)
+        })
+      },
     },
-    /*
-    *预警阀值
-    */
-  
+    
+      
     
   }
 </script>

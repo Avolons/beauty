@@ -2,12 +2,12 @@
 	<Row class="patientSearch">
 		<!-- 搜索栏 -->
 		<Col span="24" class="patientSearch">
-			<Form ref="proSearch" :model="proSearch" :label-width="80" inline >
+			<Form ref="proSearch" :model="proSearch" :label-width="80" inline class="wayForm">
         <FormItem prop="title" label="问题标题">
           <Input type="text" v-model="proSearch.title" placeholder="请输入问题名称"></Input>
         </FormItem>
         <FormItem prop="diseaseName" label="疾病类型">
-          <Select v-model="proSearch.diseaseName" filterable remote not-found-text="" :remote-method="remoteMethod2" :loading="loading2" >
+          <Select v-model="proSearch.diseaseName" filterable remote not-found-text="" :remote-method="remoteMethod2" clearable placeholder="请输入名称首字母">
             <Option v-for="(option, index) in options2" :value="option.value" :key="index">{{option.label}}</Option>
           </Select>
         </FormItem>
@@ -97,7 +97,7 @@
             align: 'center'
           },
           {
-            title: '疾病标签',
+            title: '疾病类型',
             key: 'diseaseName',
             align: 'center'
           },
@@ -110,6 +110,30 @@
             title: '关联指标',
             key: 'targetName',
             align: 'center'
+          },
+          {
+            title: '指标类型',
+            key: 'otype',
+            align: 'center',
+            render: (h, params) => {
+              if(params.row.otype == '01') {
+                return params.row.type = '症状'
+              }else if(params.row.otype == '02') {
+                return params.row.type = '体征'
+              }else if(params.row.otype == '03') {
+                return params.row.type = '生活方式指导'
+              }else if(params.row.otype == '04') {
+                return params.row.type = '辅助检查'
+              }else if(params.row.otype == '05') {
+                return params.row.type = '用药反馈'
+              }else if(params.row.otype == '06') {
+                return params.row.type = '转诊情况'
+              }else if(params.row.otype == '07') {
+                return params.row.type = '通用'
+              }
+              return h('div', {
+              }, params.row.type);
+            }
           },
           {
             title: '操作',
@@ -128,6 +152,8 @@
                   },
                   on: {
                     click: () => {
+
+
                     	this.patientText = true
                       API.followProblems.editList({
                         "id": params.row.id
@@ -235,6 +261,7 @@
           targetId: '',
           targetName1: '',
           diseaseName: '',
+
           diseaseId: '',
           model10: [],
           playWavOnly: '1',
@@ -275,6 +302,7 @@
         targetTag: '',//指标标签
         tagShow: false,//标签是否展示,
         targetSelectId: '',//选中指标的id
+        selectOtype: ''//模态框选中的指标类型
 			}
 		},
     mounted() {
@@ -291,6 +319,7 @@
           'limit': '10',
         }).then((res) => {
           if(res.code == 0) {
+            // console.log(res)
             this.pardata = res.data
             this.pageTotal = res.total
           }else {
@@ -325,7 +354,8 @@
       *获取选中的指标value
       */
       targetRadio(value) {
-        console.log(value.label)
+        console.log(value)
+
         API.follSetting.list({
           pager: 1,
           limit: '10',
@@ -333,6 +363,7 @@
         }).then((res) => {
           if(res.code == 0) {
             console.log(res)
+             this.selectOtype = res.data[0].otype
             let otypeName
             if(res.data[0].otype == '01') {
               otypeName = '症状'
@@ -404,6 +435,7 @@
       *确定添加
       */
       addModel(name) {
+
         let jbnam = this.tagCount.join(',')
         let addPram = {
           "id": this.formItem.id,
@@ -414,6 +446,7 @@
           "diseaseId": this.tagCountId.join(','),
           "playWavOnly": this.formItem.playWavOnly,
           "status": 0,
+          "otype": this.selectOtype
         }
         this.$refs[name].validate((valid) => {
           if (valid) {
@@ -445,7 +478,7 @@
       *删除
       */
       deleteRow(id){
-        API.follSetting.deleteList({
+        API.followProblems.deleteList({
          id:id
         }).then((res) => {
           if(res.code == 0) {
@@ -771,4 +804,16 @@
 	.mb12 {
 		margin-bottom: 12px;
 	}
+  //搜索框
+  .wayForm {
+    .ivu-form-item {
+      width: 200px;
+    }
+    .ivu-form-item:nth-of-type(3), .ivu-form-item:nth-of-type(4){
+      width: 100px;
+      .ivu-form-item-content {
+          margin-left: 30px!important;
+        }
+      } 
+  }
 </style>

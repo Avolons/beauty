@@ -2,12 +2,13 @@
 	<Row>
 		<!-- 搜索栏 -->
 		<Col span="24" class="searchCol" style="background: #fff;">
-			<Form ref="IndexSearch" :model="IndexSearch" :label-width="90" inline style="padding:20px;">
-				<FormItem label="指标名称">
+			<Form ref="IndexSearch" :model="IndexSearch" :label-width="80" inline style="padding:20px;" class="wayForm">
+				<FormItem label="指标名称" class="width200">
           <Input type="text" v-model="IndexSearch.name" placeholder="请输入指标名称"></Input>
         </FormItem>
         <FormItem label="指标类型">
           <Select v-model="IndexSearch.select">
+            <Option value="">无</Option>
             <Option value="01">症状</Option>
             <Option value="02">体征</Option>
             <Option value="03">生活方式指导</Option>
@@ -17,16 +18,21 @@
             <Option value="07">通用</Option>
           </Select>
         </FormItem>
-        <FormItem>
+        <FormItem prop="diseaseName" label="疾病类型">
+          <Select v-model="IndexSearch.diseaseName" filterable remote not-found-text="" :remote-method="remoteMethod2" :label-in-value=true clearable @on-change="selectChange" placeholder="请输入名称首字母">
+            <Option v-for="(option, index) in options2" :value="option.value" :key="index">{{option.label}}</Option>
+          </Select>
+        </FormItem>
+        <FormItem class="widthPadding">
           <Button type="primary" @click="handleSearch('IndexSearch')">查询</Button>
       	</FormItem>
-      	<FormItem>
+      	<FormItem class="widthPadding">
           <Button type="primary" @click="addBtn">添加指标</Button>
       	</FormItem>
 		  </Form>
 		</Col>
 		<Col span="24" class="fpTable">
-			<Table border :columns="columns7" :data="datalist" class="margin-bottom-10"></Table>
+			<Table border :columns="columns7" :data="datalist" class="margin-bottom-10" style="padding:15px;"></Table>
 			<Row>
 				<Col span="10"></Col>
 		     <Col span="14" class="text-right padding-right-20">
@@ -113,11 +119,6 @@
 				},
 				columns7: [//表格栏
           {
-            title: 'id',
-            key: 'id',
-            align: 'center',
-          },
-          {
             title: '指标名称',
             key: 'name',
             align: 'center',
@@ -165,6 +166,11 @@
             }
           },
           {
+            title: '疾病类型',
+            key: 'diseaseName',
+            align: 'center',
+          },
+          {
             title: '启用状态',
             key: 'status',
             align: 'center',
@@ -184,7 +190,7 @@
             align: 'center',
           },
           {
-            title: 'Action',
+            title: '操作',
             key: 'action',
             width: 250,
             align: 'center',
@@ -306,7 +312,8 @@
           ],
          
         },
-        optionList: [],
+        optionList: [],//指标选项的select
+        optionList1: [],//指标选项select的label
         radioText: false,
         radioNumber: false,
 			}
@@ -323,6 +330,9 @@
         API.follSetting.list({
           pager: pager,
           limit: '10',
+          name: this.IndexSearch.name,
+          otype: this.IndexSearch.select,
+          diseaseId: this.selectValue
         }).then((res) => {
           if(res.code == 0) {
             this.datalist = res.data
@@ -342,7 +352,8 @@
           pager: page,
           limit: '10',
           name: this.IndexSearch.name,
-          otype: this.IndexSearch.select
+          otype: this.IndexSearch.select,
+          diseaseId: this.selectValue
         }).then((res) => {
           if(res.code == 0) {
             this.datalist = res.data
@@ -362,7 +373,8 @@
           pager: 1,
           limit: '10',
           name: this.IndexSearch.name,
-          otype: this.IndexSearch.select
+          otype: this.IndexSearch.select,
+          diseaseId: this.selectValue
         }).then((res) => {
           if(res.code == 0) {
             this.datalist = res.data
@@ -425,7 +437,7 @@
               "status": '0',
               "type": this.formItem.radio,
               "otype": this.formItem.select,
-              "remark": this.formItem.textarea
+              "remark": this.formItem.textarea,
             }
             console.log(this.formItem.model10)
             let strModel = this.formItem.model10.join(",")
@@ -438,6 +450,7 @@
               "otype": this.formItem.select,
               "optionValues": strModel,
               "remark": this.formItem.textarea,
+
             }
             let addPram3 = {
               "id": this.formItem.id,
@@ -446,21 +459,23 @@
               "status": '0',
               "type": this.formItem.radio,
               "otype": this.formItem.select,
+              "optionValues": this.formItem.model10.join(","),
+              "thresholdValue": this.optionList1.join(','),
               "thresholdValueStart": this.formItem.top,
               "thresholdValueEnd": this.formItem.bottom,
               "remark": this.formItem.textarea
             }
             console.log(addPram1)
-            if(this.formItem.radio == 'string') {
-              addPram = addPram1
-            }
-            if(this.formItem.radio == 'digit') {
-              addPram = addPram3
-            }
-            if(this.formItem.radio == 'select') {
-              addPram = addPram2
-            }
-            API.follSetting.addList(addPram).then((res) => {
+            // if(this.formItem.radio == 'string') {
+            //   addPram = addPram1
+            // }
+            // if(this.formItem.radio == 'digit') {
+            //   addPram = addPram3
+            // }
+            // if(this.formItem.radio == 'select') {
+            //   addPram = addPram2
+            // }
+            API.follSetting.addList(addPram3).then((res) => {
               if(res.code == 0) {
                 console.log(res.message)
                 this.formItem.id = ''
@@ -528,16 +543,19 @@
 				}
 				let p1 = new Point(this.formItem.indexName,this.formItem.indexName)
 				this.optionList.push(p1)
-    		this.formItem.indexName = ''
-    		console.log(this.optionList)
+        this.optionList1.push(this.formItem.indexName)
+       
+
+    		console.log(this.optionList1)
+        this.formItem.indexName = ''
     	},
       /*
       *获取选中的疾病标签列value
       */
       selectChange(value) {
-        console.log(value.label)
         this.selectLabel = value.label
         this.selectValue = value.value
+        console.log(value)
       },
       /*
       *疾病类型--远程搜索
@@ -569,7 +587,7 @@
               
             } else {
               this.options2 = [];
-              this.proSearch.diseaseName = ''
+              this.IndexSearch.diseaseName = ''
             }
 
             
@@ -608,6 +626,48 @@
         const index = this.tagCount.indexOf(name);
         this.tagCount.splice(index, 1);
       },
+      /*
+      *疾病类型--远程搜索
+      */
+      remoteMethod2 (query) {
+        API.followProblems.disease({
+          'zjm': query
+        }).then((res) => {
+         
+          console.log(res)
+          if(res.code == 0) {
+            class Point {
+              constructor(item) {
+                this.value = item.value;
+                this.label = item.label;
+              }
+            }
+            let parr2 = []
+            let more2 = res.data
+            more2.forEach((item) => {
+              parr2.push(new Point({
+                value: item.id,
+                label: item.value
+              }))
+            })
+
+            this.options2 = parr2
+            if (query !== '') {
+              this.options2 = parr2
+              
+            } else {
+              this.options2 = [];
+              this.IndexSearch.diseaseName = ''
+            }
+
+            
+          }else {
+            console.log(res)
+          }
+        }).catch((error) => {
+          console.log(error)
+        })
+      },
     },
 		
 	}
@@ -628,4 +688,15 @@
 			display: none;
 		}
 	}
+  .wayForm {
+    .ivu-form-item {
+      width: 240px;
+    }
+    .ivu-form-item:nth-of-type(4), .ivu-form-item:nth-of-type(5){
+      width: 100px;
+      .ivu-form-item-content {
+          margin-left: 30px!important;
+        }
+      } 
+  }
 </style>

@@ -147,7 +147,6 @@
 				
 				//获取当前最近三年
 				class Point {
-
 				  constructor(value, label) {
 				    this.value = value;
 				    this.label = label;

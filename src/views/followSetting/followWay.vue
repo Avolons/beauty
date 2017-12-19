@@ -2,162 +2,120 @@
 	<Row class="patientSearch">
 		<!-- 搜索栏 -->
 		<Col span="24" class="patientSearch">
-			<Form ref="formInline" :model="formInline" :rules="ruleInline" :label-width="80" inline >
-        <FormItem prop="user" label="问题标题">
-          <Input type="text" v-model="formInline.user" placeholder="Username"></Input>
+			<Form ref="waySearch" :model="waySearch" :label-width="80" inline >
+        <FormItem prop="name" label="方案名称">
+          <Input type="text" v-model="waySearch.name" placeholder="请输入方案名称"></Input>
         </FormItem>
-        <FormItem prop="user" label="疾病类型">
-          <Input type="text" v-model="formInline.user" placeholder="Username"></Input>
+         <FormItem prop="departmentId" label="科室类别">
+          <Select v-model="waySearch.departmentId" clearable @on-change="handleDeparment">
+            <Option v-for="(option, index) in deparmentSelect" :value="option.value" :key="index">{{option.label}}</Option>
+          </Select>
+        </FormItem>
+        <FormItem prop="diseaseId" label="疾病类型">
+          <Select v-model="waySearch.diseaseId" filterable remote not-found-text="" :remote-method="remoteMethod2" :loading="loading2" clearable>
+            <Option v-for="(option, index) in options2" :value="option.value" :key="index">{{option.label}}</Option>
+          </Select>
         </FormItem>
         <FormItem>
-          <Button type="primary" @click="handleSubmit('formInline')">查询</Button>
+          <Button type="primary" @click="handleSearch()">查询</Button>
       	</FormItem>
       	<FormItem>
-          <Button type="primary" @click="handleSubmit('formInline')">添加问题</Button>
+          <Button type="primary" @click="addBtn()">增加随访方案</Button>
       	</FormItem>
 		  </Form>
 		</Col>
 		<!-- 表格 -->
 		<Col span="24" class="patientList">
-			<Table border :columns="columns7" :data="data6"></Table>
+			<Table border :columns="columns7" :data="pardata"></Table>
 		</Col>
 		<!-- 分页 -->
 		<Col span="24" class="pages">
-			<Page :total="pageTotal" show-elevator show-total></Page>
+			<Page :total="pageTotal" @on-change="currentPage" show-elevator show-total></Page>
 		</Col>
 		<!-- 详情模态框 -->
-		<Modal v-model="patientDetail" title="患者信息" class-name="patientInfo" @on-ok="ok" @on-cancel="cancel" :styles="{top: '180px'}" width="1000">
-      <Row class="infoRow">
-        <Col span="12" class="infoCol12 mb12">
-        	<div class="info">
-        		<div class="info-row">
-        			<div class="info1 bb1">姓名</div><div class="info2 bdx1">薛卫国</div>
-        		</div>
-        		<div class="info-row">
-        			<div class="info1">性别</div><div class="info2">男</div>
-        		</div>
-        	</div>
-        </Col>
-        <Col span="12" class="infoCol12 mb12">
-        	<div class="info">
-        		<div class="info-row">
-        			<div class="info1 bb1">电话</div><div class="info2 bdx1">15225099945</div>
-        		</div>
-        		<div class="info-row">
-        			<div class="info1">地址</div><div class="info2">杭州市下城区</div>
-        		</div>
-        	</div>
-        </Col>
-        <Col span="12" class="infoCol12 mb12">
-        	<div class="info">
-        		<div class="info-row">
-        			<div class="info1 bb1">年龄</div><div class="info2 bdx1">52</div>
-        		</div>
-        		<div class="info-row">
-        			<div class="info1">民族</div><div class="info2">维吾尔族</div>
-        		</div>
-        	</div>
-        </Col>
-        <Col span="24" class="infoCol24">
-					<Row class="infoRow2">
-						<Col span="4" class="sfCol4">
-							<div class="counts">
-								<p class="suifang">随访</p>
-								<p class="sfCounts">69天</p>
-							</div>
-						</Col>
-						<Col span="20" class="sfCol20">
-							<h3 class="sfName">薛卫国</h3>
-							<p class="sfTime mb12"><span>2017年09月28日18点05分</span>随访</p>
-							<Row>
-								<Col span="12">
-									<p>是否知道全科医生签约服务:<span>是</span></p>
-									<p>对他(她)的服务是否满意:<span>是</span></p>
-									<p>医生意见:<span>是</span></p>
-								</Col>
-								<Col span="12">
-									<p>是否知道自己的签约医生:<span>是</span></p>
-									<p>是否经常在我中心就诊:<span>不太来</span></p>
-								</Col>
-							</Row>
-						</Col>
-					</Row>
-        </Col>
-      </Row>
-	  </Modal>
-	  <!-- 编辑功能模态框 -->
-		<Modal v-model="patientText" title="编辑患者信息" class-name="editInfo" @on-ok="ok" @on-cancel="cancel" :styles="{top: '180px'}" width="800">
-    	<Form ref="formCustom" :model="formCustom" :rules="editRules" :label-width="80">
-        <FormItem label="姓名" prop="ptNa">
-            <span v-model="formCustom.ptNa">{{formCustom.ptNa}}</span>
+	  <Modal v-model="patientText" name="添加问题 / 编辑问题"  @on-ok="ok" @on-cancel="cancel" width="650" class-name="patientInfo">
+      <Form :model="formItem" :label-width="100" ref="proRuleModel" :rules="proRuleModel">
+        <input type="hidden" v-model="formItem.id" placeholder="id">
+        <FormItem label="问题标题" prop="name">
+            <Input v-model="formItem.name" placeholder="请输入问题标题"></Input>
+        </FormItem> 
+        <FormItem label="问题内容" prop="content">
+            <Input v-model="formItem.content" placeholder="请输入随访问题内容"></Input>
         </FormItem>
-        <FormItem label="电话" prop="ptPhone">
-            <Input v-model="formCustom.ptPhone" placeholder="请输入电话号码"></Input>
+        <FormItem label="采集指标">
+            <RadioGroup v-model="formItem.isTarget" @on-change="targetChange">
+              <Radio label="0">是</Radio>
+              <Radio label="1">否</Radio>
+            </RadioGroup>
         </FormItem>
-        <FormItem label="住址" prop="ptAdd">
-            <Input type="text" v-model="formCustom.ptAdd" placeholder="请输入住址"></Input>
+        <FormItem label="关联指标" prop="targetName1" v-if="targetShow">
+            <!-- <Input v-model="formItem.targetName" placeholder="根据首字母进行搜索" @on-keyup="keyupzb($event)"></Input> -->
+            <Select v-model="formItem.targetName1" filterable remote :remote-method="remoteMethod1" :loading="loading1" clearable :label-in-value=true @on-change="targetRadio" not-found-text="">
+                <Option v-for="(option, index) in options1" :value="option.value" :key="index">{{option.label}}</Option>
+            </Select>
         </FormItem>
-        <FormItem label="邮编" prop="ptYb">
-            <Input type="text" v-model="formCustom.ptYb" placeholder="请输入邮编"></Input>
+        <FormItem label="" prop="" label="指标类型" v-if="targetShow">
+          <Tag color="blue" v-if="tagShow">{{targetTag}}</Tag>
         </FormItem>
-        <FormItem label="联系人姓名" prop="ptName">
-            <Input type="text" v-model="formCustom.ptName" placeholder="请输入联系人姓名"></Input>
+        <FormItem label="疾病类型" prop="diseaseName">
+          <Select v-model="formItem.diseaseName" filterable remote :remote-method="remoteMethod2" :loading="loading2" clearable style="width: 70%;float: left;margin-right:20px;" @on-change="selectChange" not-found-text="" :label-in-value=true placeholder="搜索疾病类型添加至疾病标签">
+            <Option v-for="(option, index) in options2" :value="option.value" :key="index">{{option.label}}</Option>
+          </Select>
+          <Button type="primary" @click="addTag" ref="addTagbtn">添加</Button>
         </FormItem>
-        <FormItem label="联系人关系" prop="ptRe">
-            <Input type="text" v-model="formCustom.ptRe" placeholder="请输入联系人关系"></Input>
+        <FormItem label="" prop="" label="疾病标签">
+          <tag v-for="item in tagCount" color="blue" :key="item" :name="item" closable @on-close="tagClose">{{item}}</tag>
         </FormItem>
-        <FormItem label="联系地址" prop="ptDz">
-            <Input type="text" v-model="formCustom.ptDz" placeholder="请输入联系人地址"></Input>
-        </FormItem>
-        <FormItem label="联系电话" prop="ptDh">
-            <Input type="text" v-model="formCustom.ptDh" placeholder="请输入联系人电话号码"></Input>
-        </FormItem>
-        <FormItem label="单位名称" prop="ptDe">
-            <Input type="text" v-model="formCustom.ptDe" placeholder="请输入单位名称"></Input>
+        <FormItem label="纯放音">
+            <RadioGroup v-model="formItem.playWavOnly" @on-change="radioChange">
+              <Radio label="1">是</Radio>
+              <Radio label="0">否</Radio>
+            </RadioGroup>
         </FormItem>
         <FormItem>
-            <Button type="primary" style="margin-left: 110px;" @click="handleEdit('formCustom')">提交</Button>
-            <Button type="ghost" style="margin-left: 8px">重置</Button>
+            <Button type="primary" @click="addModel('proRuleModel')">保存</Button>
         </FormItem>
-	    </Form>
+      </Form>
     </Modal>
+	 
 	</Row>
 </template>
 
 <script>
+  import {API} from '@/services';
 	export default {
 		data() {
 			return {
-				formInline: {//搜索框
-          user: '',
-          password: '',
-          select: '',
+				waySearch: {//搜索框
+          name: '',
+          diseaseId: '',
+          departmentId: '',
         },
-        ruleInline: {//搜索框校验
-          user: [
-            { required: true, message: 'Please fill in the user name', trigger: 'blur' }
-          ],
-          password: [
-            { required: true, message: 'Please fill in the password.', trigger: 'blur' },
-            { type: 'string', min: 6, message: 'The password length cannot be less than 6 bits', trigger: 'blur' }
-          ]
-        },
+        deparmentSelect: [],//科室列表
         columns7: [//表格栏
-          
+           {
+            title: 'id',
+            key: 'id',
+            align: 'center',
+            
+          },
           {
-            title: '问题名称',
-            key: 'name'
+            title: '方案名称',
+            key: 'name',
+            align: 'center',
+          },
+          {
+            title: '科室类别',
+            key: 'departmentName',
+            align: 'center',
           },
           {
             title: '疾病类型',
-            key: 'age'
+            key: 'diseaseName',
+            align: 'center',
           },
           {
-            title: '问题内容',
-            key: 'address'
-          },
-          {
-            title: '操作',
+            name: '操作',
             key: 'action',
             width: 250,
             align: 'center',
@@ -173,75 +131,167 @@
                   },
                   on: {
                     click: () => {
-                    	this.patientDetail = true
+                      this.$router.push({path:`/followSetting/way/way/${params.row.id}`});
                     }
                   }
                 }, '编辑'),
                
                 h('Button', {
-                    props: {
-                        type: 'warning',
-                        size: 'small'
-                    },
-                    style: {
-
-                    },
-                    on: {
-                        click: () => {
-                            
-                            this.$Modal.confirm({
-					                    title: 'Title',
-					                    content: '<p>确定要删除吗?</p>',
-					                    onOk: () => {
-					                        this.remove(params.index)
-					                    },
-					                    onCancel: () => {
-					                        // this.$Message.info('Clicked cancel');
-					                    }
-					                });
-                        }
+                  props: {
+                    type: 'warning',
+                    size: 'small'
+                  },
+                  style: {
+                  	marginRight: '5px'
+                  },
+                  on: {
+                    click: () => {
+                      this.$Modal.confirm({
+		                    name: 'Title',
+		                    content: '<p>确定要删除吗?</p>',
+		                    onOk: () => {
+	                        this.deleteRow(params.row.id)
+		                    },
+		                    onCancel: () => {
+		                        // this.$Message.info('Clicked cancel');
+		                    }
+		                  });
                     }
-                }, '删除')
+                  }
+                }, '删除'),
               ]);
             }
 				}],
-        datalist: [],//表格data,
-        pageTotal: 0,//总数据数
-        patientDetail: false,//详情模态框
+        pardata: [],//表格data
+        pageTotal: 0,//数据总计
         patientText: false,//编辑模态框
-		    formCustom: {//编辑表格data
-		    	ptNa: '薛卫国',
-		    	ptPhone: '',
-		    	ptAdd: '',
-		    	ptYb: '',
-		    	ptName: '',
-		    	ptRe: '',
-		    	ptDz: '',
-		    	ptDh: '',
-		    	ptDe: ''
-		    },
+        diseaseIdInp: '',//疾病id隐藏域
+		    formItem: {
+          id:'',
+          name: '',
+          content: '',
+          targetId: '',
+          targetName1: '',
+          diseaseName: '',
+          diseaseId: '',
+          model10: [],
+          playWavOnly: '1',
+          isTarget: '0'//是否采集指标
+        },
+        proRuleModel: {//模态框校验
+          name: [
+            { required: true, message: '问题标题问题标题不能为空', trigger: 'blur' },
+            { type: 'string', max: 30, message: '最大长度不超过30', trigger: 'blur' }
+          ],
+          content: [
+            { required: true, message: '问题内容不能为空', trigger: 'blur' }
+          ],
+          // targetName1: [
+          //   { required: true, message: '关联指标不能为空', trigger: 'blur' }
+          // ],
+          password: [
+            { required: true, message: 'Please fill in the password.', trigger: 'blur' },
+            { type: 'string', min: 6, message: 'The password length cannot be less than 6 bits', trigger: 'blur' }
+          ]
+        },             
+        tagCount: [],
+        tagCount2: [],
+        tagCountId: [],
 		    editRules: {
-		    	// ptPhone: [
-       //      { required: true, message: '请填写联系电话', trigger: 'blur' },
-       //      { type: 'number', message: 'The password length cannot be less than 6 bits', trigger: 'blur' }
-       //    ],
-		    } 
+		    }, 
+        zjmdata: [],//助记码array
+        loading1: false,
+        options1: [],
+        listdata: [],
+        loading2: false,
+        options2: [],
+        listdata2: [],
+        diseasedata: [],
+        selectLabel: '',
+        selectValue: '',
+        targetShow: true,//判断是否疾病标签是否展示
+        targetTag: '',//指标标签
+        tagShow: false,//标签是否展示,
+        targetSelectId: '',//选中指标的id
 			}
 		},
     mounted() {
       this.list(1)
+      this.departmentList()
     },
-    methods: {
+
+		methods: {
       /*
-      *获取list列表数据
+      *获取prolist列表数据
       */
       list(pager) {
-        API.follSetting.list({
+        API.followWay.list({
           pager: pager,
           limit: '10',
+          name: this.waySearch.name,
+          departmentId: this.waySearch.departmentId,
+          diseaseId: this.waySearch.diseaseId,
         }).then((res) => {
           if(res.code == 0) {
-            this.datalist = res.data
+            this.pardata = res.data
+            this.pageTotal = res.total
+          }else {
+            console.log(res.code)
+          }
+        }).catch((error) => {
+          console.log(error)
+        })
+      },
+      /*
+      *获取科室列表
+      */
+      departmentList() {
+        API.followWay.departmentList({
+          'pager': 1,
+          'limit': '10000',
+          'name': this.waySearch.name,
+        }).then((res) => {
+          if(res.code == 0) {
+            class Deparment {
+						  constructor(item) {
+                this.value = item.value;
+                this.label = item.label;
+              }
+						}
+						res.data.forEach((item) => {
+							this.deparmentSelect.push(new Deparment({
+								value: item.id,
+								label: item.name
+							}))
+						})
+          }else {
+            console.log(res.code)
+          }
+        }).catch((error) => {
+          console.log(error)
+        })
+      },
+      /*
+      *获取选中的部门id
+      */ 
+      handleDeparment(value) {
+      	console.log(value)
+      	console.log(this.waySearch.departmentId)
+      },
+      /*
+      *获取分页列表数据
+      */
+      currentPage: function (page) {
+        console.log(this.waySearch.diseaseName)
+       API.followWay.list({
+          'pager': page,
+          'limit': '10',
+          'name': this.waySearch.name,
+          'diseaseId': this.waySearch.diseaseId,
+          'departmentId': this.waySearch.departmentId
+        }).then((res) => {
+          if(res.code == 0) {
+            this.pardata = res.data
             this.pageTotal = res.total
           }else {
             console.log(res.message)
@@ -250,32 +300,213 @@
           console.log(error)
         })
       },
-			//搜索栏提交按钮
-			handleSubmit(name) {
+      /*
+      *获取选中的指标value
+      */
+      targetRadio(value) {
+        console.log(value.label)
+        API.followWay.list({
+          pager: 1,
+          limit: '10',
+          name: value.label,
+        }).then((res) => {
+          if(res.code == 0) {
+            console.log(res)
+            let otypeName
+            if(res.data[0].otype == '01') {
+              otypeName = '症状'
+            }else if(res.data[0].otype == '02') {
+              otypeName = '体征'
+            }else if(res.data[0].otype == '03') {
+              otypeName = '生活方式指导'
+            }else if(res.data[0].otype == '04') {
+              otypeName = '辅助检查'
+            }else if(res.data[0].otype == '05') {
+              otypeName = '用药反馈'
+            }else if(res.data[0].otype == '06') {
+              otypeName = '转诊情况'
+            }else if(res.data[0].otype == '07') {
+              otypeName = '通用'
+            }
+            if(this.formItem.targetName1 != '') {
+              this.tagShow = true
+              this.targetTag = otypeName
+              this.targetSelectId = res.data[0].id
+            }else {
+              this.tagShow = false
+              this.targetTag = ''
+            }
+            // console.log('this.targetTag='+this.targetTag)
+          }else {
+            console.log(res.message)
+          }
+        }).catch((error) => {
+          console.log(error)
+        })
+      },
+      /*
+      *查询功能
+      */
+      handleSearch() {
+        API.followWay.list({
+          'pager': 1,
+          'limit': '10',
+          'name': this.waySearch.name,
+          'diseaseId': this.waySearch.diseaseId,
+          'departmentId': this.waySearch.departmentId
+        }).then((res) => {
+          if(res.code == 0) {
+            this.pardata = res.data
+            this.pageTotal = res.total
+          }else {
+            console.log(res.message)
+          }
+        }).catch((error) => {
+          console.log(error)
+        })
+      },
+      /*
+      *添加指标
+      */
+      addBtn(name) {
+        this.$router.push({path:`/followSetting/way/way/new`});
+      },
+      /*
+      *获取选中的疾病标签列value
+      */
+      selectChange(value) {
+        console.log(value.label)
+        this.selectLabel = value.label
+        this.selectValue = value.value
+      },
+      /*
+      *确定添加
+      */
+      addModel(name) {
+        let jbnam = this.tagCount.join(',')
+        let addPram = {
+          "id": this.formItem.id,
+          "name": this.formItem.name,
+          "isTarget": this.formItem.isTarget,
+          "content": this.formItem.content,
+          "targetId": this.targetSelectId,
+          "diseaseId": this.tagCountId.join(','),
+          "playWavOnly": this.formItem.playWavOnly,
+          "status": 0,
+        }
         this.$refs[name].validate((valid) => {
           if (valid) {
             this.$Message.success('Success!');
+            API.followWay.addList(addPram).then((res) => {
+              if(res.code == 0) {
+                console.log(res.message)
+                this.formItem.name = ''
+                this.formItem.select2 = ''
+                this.formItem.select = ''
+                this.formItem.radio = 'string'
+                this.formItem.textarea = ''
+                this.patientText = false;
+                this.tagCount = []//清空疾病标签
+                this.list(1)
+                console.log(res)
+              }else {
+                alert('res.message='+res.message)
+              }
+            }).catch((error) => {
+              console.log(error)
+            })
           } else {
             this.$Message.error('Fail!');
           }
         })
-    	},
+      },
+      /*
+      *删除
+      */
+      deleteRow(id){
+        API.followWay.deleteList({
+         id:id
+        }).then((res) => {
+          if(res.code == 0) {
+            console.log(res.message)
+            this.list(1)
+            this.$Message.success({
+              content: '删除成功',
+              top: 500
+            });
+          }else {
+            alert(res.message)
+          }
+        }).catch((error) => {
+          console.log(error)
+        })
+      },
+      /*
+      *添加标签
+      */
+      addTag() {
+        let flag=0;
+        this.tagCount.forEach((item) => {
+          if(this.selectLabel == item || this.selectLabel == '') {
+            flag++; 
+            alert('您添加的为空或者重复添加')
+          }
+        })
+        if(flag>0){
+          this.selectLabel = ''
+          return false;
+        }
+        this.tagCount.push(this.selectLabel)
+        this.tagCount2.push(this.selectValue)
+        this.tagCountId.push(this.selectValue)
+        this.selectLabel = ''
+        this.selectValue = ''
+        this.formItem.diseaseName = ''
+      },
+      /*
+      *删除标签
+      */
+      tagClose(event, name) {
+        console.log(event)
+        console.log(name)
+        const index = this.tagCount.indexOf(name);
+        this.tagCount.splice(index, 1);
+        this.tagCountId.splice(index,1);
+      },
+      /*
+      *监听是否纯放音的单选
+      */
+      radioChange(value) {
+        console.log('是否纯放音='+value)
+      },
+      /*
+      *监听是否采集指标
+      */
+      targetChange(value) {
+        console.log('是否采集指标='+value)
+        if(value == '0') {
+          this.targetShow = true
+        }else {
+          this.targetShow = false
+        }
+      },
     	//详情模态框
     	show (index) {
         this.$Modal.info({
-            title: 'User Info',
-            content: `Name：${this.data6[index].name}<br>Age：${this.data6[index].age}<br>Address：${this.data6[index].address}`
+            name: 'User Info',
+            content: `Name：${this.pardata[index].name}<br>Age：${this.pardata[index].age}<br>Address：${this.pardata[index].address}`
         })
       },
       remove (index) {
-      	this.data6.splice(index, 1);
+      	this.pardata.splice(index, 1);
       },
       //详情关闭确认点击事件
       ok () {
-        this.$Message.info('Clicked ok');
+        this.$Message.info('您打开了弹框');
       },
       cancel () {
-        this.$Message.info('Clicked cancel');
+        this.$Message.info('您关闭了弹框');
+        this.tagCount = []//清空疾病标签
       },
       //编辑模态框提交按钮
       handleEdit(name) {
@@ -287,6 +518,94 @@
           }
         })
     	},
+      /*
+      *知名名称，根据助记码搜索指标类型
+      */
+      keyupzb: function(ev) {
+        console.log(this.formItem.targetName)
+      },
+      /*
+      *指标类型--远程搜索
+      */ 
+      remoteMethod1 (query) {
+        API.follSetting.list({
+          'pager': '1',
+          'limit': '1000',
+          'zjm': query
+        }).then((res) => {
+          if(res.code == 0) {
+            // console.log(res.data)
+            class Point {
+              constructor(item) {
+                this.value = item.value;
+                this.label = item.label;
+              }
+            }
+            let parr = []
+            let more = res.data
+            more.forEach((item) => {
+              parr.push(new Point({
+                value: item.id,
+                label: item.name
+              }))
+            })
+
+            this.options1 = parr
+            if (query !== '') {
+              this.options1 = parr
+              
+            } else {
+              this.options1 = [];
+            }
+          }else {
+            console.log(res)
+          }
+        }).catch((error) => {
+          console.log(error)
+        })
+      },
+      /*
+      *疾病类型--远程搜索
+      */
+      remoteMethod2 (query) {
+        API.followProblems.disease({
+          'zjm': query
+        }).then((res) => {
+         
+          console.log(res)
+          if(res.code == 0) {
+            class Point {
+              constructor(item) {
+                this.value = item.value;
+                this.label = item.label;
+              }
+            }
+            let parr2 = []
+            let more2 = res.data
+            more2.forEach((item) => {
+              parr2.push(new Point({
+                value: item.id,
+                label: item.value
+              }))
+            })
+
+            this.options2 = parr2
+            if (query !== '') {
+              this.options2 = parr2
+              
+            } else {
+              this.options2 = [];
+              this.waySearch.diseaseName = ''
+            }
+
+            
+          }else {
+            console.log(res)
+          }
+        }).catch((error) => {
+          console.log(error)
+        })
+      },
 		}
 	}
 </script>

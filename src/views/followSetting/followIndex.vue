@@ -207,7 +207,6 @@
                   on: {
                     click: () => {
                     	this.patientText = true
-
                       this.formItem.model10 = []
                       this.optionList = []
                       API.follSetting.editList({
@@ -241,6 +240,8 @@
                           let oplist = res.data.optionValues;
                           let oplist2 = res.data.thresholdValue;//指标阀值所有选项
                           var kk = oplist.split(",");//以逗号作为分隔字符串
+                          var kk2 = oplist2.split(",");//以逗号作为分隔字符串
+                         
                           class Point {
                             constructor(value, label) {
                               this.value = value;
@@ -248,17 +249,16 @@
                             }
                           }
                           let p1;
-                          // for(let i=0; i<kk.length;i++ ){
-                          //   p1 = new Point(kk[i],kk[i])
-                          //   this.optionList.push(p1)
-                          // }
-                          let p2;
-                          this.optionList = []
                           for(let i=0; i<kk.length;i++ ){
-                            p2 = new Point(kk[i],kk[i])
+                            p1 = new Point(kk[i],kk[i])
+                          }
+                          let p2;
+                          this.optionList1 = []
+                          for(let i=0; i<kk2.length;i++ ){
+                            p2 = new Point(kk2[i],kk2[i])
                             this.optionList.push(p2)
                           }
-                          console.log(this.optionList)
+                           console.log(this.optionList)
                           //预警阀值
                           this.formItem.model10 = kk
                           //备注

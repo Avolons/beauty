@@ -31,10 +31,9 @@
     			 <Row class="itemli" style="background:#f7f7f7">
     			 	<Col span="4" class="textCenter">处理</Col>
     			 	<Col span="12"></Input>
-							<!-- <span>{{item.switchID==-1?"无匹配":item.switchID==-2?"无声音":item.switchID==-3?"通用处理":item.switchID}}</span> -->
-							<span>{{item.switchID}}</span>
+							<span>{{item.switchID==-1?"无匹配":item.switchID==-2?"无声音":item.switchID==-3?"通用处理":item.switchID}}</span>
     			 </Col>
-    			 	<Col span="2" offset="6" @click.native="removequestion(index)"><Icon type="close-circled" size="22" color="#f70000" style="line-height: 45px;"></Icon></Col>
+    			 	<Col span="2" offset="6" @click.native="removequestion(index)"><Icon type="close-circled" size="22" color="#f70000" style="line-height: 45px;" v-show="index>2"></Icon></Col>
     			 </Row> 
     			 <Row class="itemli">
     			 	<Col span="4" class="textCenter">话述名称</Col>
@@ -62,7 +61,6 @@
 		<Col span="24">
 			<Button type="primary" style="margin: 10px 20px;" @click="addVoice()">添加话述</Button><Button  style="margin: 10px 20px;" type="primary" @click="handleSubmit()">保存</Button>
 		</Col>
-		
 	</Row>
 </template>
 
@@ -88,7 +86,7 @@ import {API} from '@/services';
 		},
 		methods: {
 			/*
-			*获取问题信息
+			*获取问题信息,填充话述列表
 			*/
 			questionInfo() {
 				API.voiceSetting.question({
@@ -96,7 +94,6 @@ import {API} from '@/services';
         }).then((res) => {
           if(res.code == 0) {
             this.saveSwitch = res.data
-
             class Point {
 						  constructor(item) {
 						    this.switchID = item.switchID
@@ -117,11 +114,16 @@ import {API} from '@/services';
 						    keyvalue : item.keyvalue
             	}))
             })
-            
+            if(res.data.length == 0) {
+            	this.switchArr.push({})
+            	this.switchArr.push({})
+            	this.switchArr.push({})
+            	this.switchArr.forEach((item, index) => {
+								item.switchID = index -3
+							})
+            }
             console.log( this.switchArr)
-            this.switchArr.forEach((item, index) => {
-							item.switchID = index -3
-						})
+            
 						
           }
         }).catch((error)=> {
@@ -172,7 +174,11 @@ import {API} from '@/services';
 			addVoice() {
 				this.switchArr.push({})
 				this.switchArr.forEach((item, index) => {
-					item.switchID = index-3
+					if(item.switchID <0) {
+						item.switchID = index-3
+					}else {
+						item.switchID = index-2
+					}
 				})
 				console.log(this.switchArr)
 			},
@@ -181,11 +187,14 @@ import {API} from '@/services';
 			*/
 			removequestion(index) {
 				this.switchArr.splice(index,1)
-				this.switchArr.forEach((item, index) => {
-					console.log('index='+index)
-					console.log('item.switchID='+item.switchID)
-					item.switchID = index-3
+				let pp = []
+				pp = this.switchArr.splice(index,this.switchArr.length)
+				pp.forEach((item)=>{
+					item.switchID = item.switchID-1
 				})
+				console.log(pp)
+				this.switchArr = this.switchArr.concat(pp)
+				console.log(this.switchArr)
 			},
     
 			/*
@@ -198,30 +207,40 @@ import {API} from '@/services';
 			*保存话述
 			*/
 			handleSubmit() {
-				this.switchArr.forEach((item) =>{
-					if(item.switchID>=0) {
-						item.switchID = item.switchID +1
+				console.log(this.switchArr)
+				let tBag = 0
+				this.switchArr.forEach((item) => {
+					if(item.switchText == ''){
+						tBag++
+					}else {
+
 					}
 				})
-				API.voiceSetting.questionDelete({
+				if(tBag == 0) {
+					API.voiceSetting.questionDelete({
           "questionId": this.questionId,
-        }).then((res) => {
-          consoel.log(res)
-        }).catch((error)=> {
+	        }).then((res) => {
+	          consoel.log(res)
+	        }).catch((error)=> {
 
-        })
-        console.log(this.switchArr.length)
-        API.voiceSetting.questionSave({
-          "id": this.questionId,   //问题id
-				  "questionCallScripts": this.switchArr
-        }).then((res) => {
-          if(res.code == 0) {
-            console.log(res)
-            this.$Message.success('添加成功!');
-          }
-        }).catch((error)=> {
+	        })
+	        console.log(this.switchArr.length)
+	        API.voiceSetting.questionSave({
+	          "id": this.questionId,   //问题id
+					  "questionCallScripts": this.switchArr
+	        }).then((res) => {
+	          if(res.code == 0) {
+	            console.log(res)
+	            this.$Message.success('添加成功!');
+	            this.questionInfo()
+	          }
+	        }).catch((error)=> {
 
-        })
+	        })
+				}else {
+					alert('话述名称不能为空')
+				}
+				
 			},
 		},
 		watch:{

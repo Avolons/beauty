@@ -154,8 +154,8 @@
 					</ul>
 				</Col>
 				<Col span="12" class="questionSelect">
-					<Timeline  >
-						 <TimelineItem color="green" v-for="(item, index) in this.templateList1" :key="item.questionIdXml">
+					<Timeline>
+						 <TimelineItem color="green" v-for="(item, index) in this.templateList1" :key="item.questionIdXml"> 
 		        	 <Button type="primary">{{item.questionIdXml}}</Button>
 		        	 <Row>
 		        	 	<Col span="20">
@@ -185,13 +185,11 @@
 										    		</Row>	
 									      	</li>
 									      </ul>
-									      
 							      </Panel> 
 					   		  </Collapse>
 		        	 	</Col>
 		        	 	<Col span="4" @click.native="deleteCol(index)"> <Icon type="close-circled" size="22" color="#f70000" style="line-height: 45px; float:left;"></Icon></Col>
 		        	 </Row>
-		        	
 		        </TimelineItem>
 		        
 		        
@@ -228,15 +226,6 @@ import {API} from '@/services';
             silencetime: [
               { required: true, message: '静默时间不能为空', trigger: 'blur' }
             ],
-            // outrepeattimes: [
-            //   { required: true, message: '重复次数不能为空', trigger: 'change' },
-            // ],
-            // firsttaskid: [
-            //   { required: true, message: '起始问题不能为空', trigger: 'change' },
-            // ],
-            // submoulds: [
-            //   { required: true, type: 'date', message: 'Please select the date', trigger: 'change' }
-            // ],
         },
 				diseName: '',//第一步--选择疾病类型
 				diseaseName: '',
@@ -502,11 +491,16 @@ import {API} from '@/services';
       *点击第二部的问题的操作
       */
       addThirdQuestion(item) {
-      	// console.log('-----------------------------------')
+      
       	console.log(item)
-      	// console.log('-----------------------------------')
-      //	console.log(this.templateList1)
-      	// console.log('-----------------------------------')
+      
+      	console.log(this.templateList1.length)
+      	let questionIdXml = 1000
+      	if(this.templateList1.length ==0){
+      		questionIdXml 
+      	}else{
+      		questionIdXml = questionIdXml + this.templateList1.length
+      	}
       	API.voiceSetting.question({
           "questionId": item.id
         }).then((res) => {
@@ -534,26 +528,21 @@ import {API} from '@/services';
             this.switchArr.push({})
             this.switchArr.push({})
             this.switchArr.push({})
-             // console.log('-------------this.switchArr----------------------')
-            // console.log( this.switchArr)
-            
-
+           
             this.switchArr.forEach((item, index) => {
 							item.switchID = index -3
 							item.switchID>=0?item.switchID = item.switchID+1: item.switchID //除去switchId = 0
 						})
 						let map = {
 	          	questionId: item.id,
-	          	questionIdXml: '1003',
+	          	questionIdXml: questionIdXml,
 	          	questionName: item.title,
 	          	targetId: item.targetId,
 	          	questionTempleQuestionJumps:[]
 	          }
 	          map.questionTempleQuestionJumps=this.switchArr
-	        console.log('--------------111111111111---------------------')
-	      	this.templateList1.push(map)
-	      	console.log(this.templateList1)
-						console.log('--------------222222222222---------------------')
+	       
+	      	  this.templateList1.push(map)
 						this.switchArr.forEach((item) => {
         	
         		if(item.switchID == -1) {
@@ -577,9 +566,6 @@ import {API} from '@/services';
           	questionTempleQuestionJumps:[]
           }
           map.questionTempleQuestionJumps.push(this.switchArr)
-        console.log('--------------this.templateList1---------------------')
-      	console.log(map)
-      	console.log('-----------------------------------')
         }).catch((error)=> {
 
         })
@@ -672,7 +658,7 @@ import {API} from '@/services';
 				let ids
 				if(this.templateId == 'new') {
 					ids = ''
-					alert('新增')
+					//alert('新增')
 				}else{
 					ids = this.templateId
 				}
@@ -688,7 +674,7 @@ import {API} from '@/services';
 			    "firsttaskid": this.templateForm.firsttaskid,                        //起始问题编号      
 			    "questionTempleQuestions": this.templateList1
 				}).then((res)=>{
-					alert("成功")
+					//alert("成功")
 				}).catch((error) => {
 					
 				})

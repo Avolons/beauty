@@ -6,8 +6,8 @@
         <FormItem prop="name" label="方案名称">
           <Input type="text" v-model="waySearch.name" placeholder="请输入方案名称"></Input>
         </FormItem>
-         <FormItem prop="deparmentId" label="科室类别">
-          <Select v-model="waySearch.deparmentId" clearable @on-change="handleDeparment">
+         <FormItem prop="departmentId" label="科室类别">
+          <Select v-model="waySearch.departmentId" clearable @on-change="handleDeparment">
             <Option v-for="(option, index) in deparmentSelect" :value="option.value" :key="index">{{option.label}}</Option>
           </Select>
         </FormItem>
@@ -89,7 +89,7 @@
 				waySearch: {//搜索框
           name: '',
           diseaseId: '',
-          deparmentId: '',
+          departmentId: '',
         },
         deparmentSelect: [],//科室列表
         columns7: [//表格栏
@@ -276,7 +276,7 @@
       */ 
       handleDeparment(value) {
       	console.log(value)
-      	console.log(this.waySearch.deparmentId)
+      	console.log(this.waySearch.departmentId)
       },
       /*
       *获取分页列表数据
@@ -288,7 +288,7 @@
           'limit': '10',
           'name': this.waySearch.name,
           'diseaseId': this.waySearch.diseaseId,
-          'departmentId': this.departmentId
+          'departmentId': this.waySearch.departmentId
         }).then((res) => {
           if(res.code == 0) {
             this.pardata = res.data

@@ -153,14 +153,14 @@
 				</TabPane>
 				<TabPane label="标签二" name="step_two">
 					<Table border :columns="planConfig" :data="planList"></Table>
-					<Form ref="notice" class="creatNotice_main_form" :model="validate" :rules="validate" :label-width="100">
-						<FormItem label="已选计划" prop="noticeName" style="width:450px;">
+					<Form ref="notice" class="creatNotice_main_form" :model="notice" :rules="validate.notice" :label-width="100">
+						<FormItem label="已选计划" prop="name" style="width:450px;">
 							<Input v-model="notice.name" style="width: 435px" placeholder="已选计划名称"></Input>
 						</FormItem>
-						<FormItem label="通知起止时间" prop="noticeTime" style="width:450px;">
+						<FormItem label="通知起止时间" prop="time" style="width:450px;">
 							<DatePicker :value="notice.time" format="yyyy/MM/dd" type="daterange" placement="bottom-end" placeholder="Select date" style="width: 435px"></DatePicker>
 						</FormItem>
-						<FormItem label="公司简介" prop="noticeDesc" style="width:600px;">
+						<FormItem label="公司简介" prop="desc" style="width:600px;">
 							<Input v-model="notice.desc" type="textarea" style="width: 435px" :autosize="{minRows: 2,maxRows: 5}" placeholder="请输入公司简介"></Input>
 						</FormItem>
 						<FormItem>
@@ -186,7 +186,7 @@
 export default {
 	data() {
 		return {
-			step: "step_three",
+			step: "step_two",
 			//搜索选项
 			searchParams: {
 				depart: '',//科室

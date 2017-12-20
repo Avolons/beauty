@@ -34,7 +34,7 @@ axios.interceptors.request.use(function (config) {
 
     return config;
 }, function (error) {
-  // 对请求错误做些什么
+    // 对请求错误做些什么
     return Promise.reject(error);
 });
 
@@ -45,40 +45,40 @@ function fetch (type, url, params) {
             axios.get(url, {
                 params: params
             })
-        .then(response => {
-            resolve(JSON.parse(response.data));
-        }, err => {
-            reject(err);
-        })
-        .catch((error) => {
-            reject(error);
-        });
+                .then(response => {
+                    resolve(JSON.parse(response.data));
+                }, err => {
+                    reject(err);
+                })
+                .catch((error) => {
+                    reject(error);
+                });
         } else {
             axios.post(url, params)
-        .then(response => {
-            resolve(JSON.parse(response.data));
-        }, err => {
-            reject(err);
-        })
-        .catch((error) => {
-            reject(error);
-        });
+                .then(response => {
+                    resolve(JSON.parse(response.data));
+                }, err => {
+                    reject(err);
+                })
+                .catch((error) => {
+                    reject(error);
+                });
         }
     });
 }
 
 /* 通用相关相关接口 *****/
 export const common = {
-  /**
-   * 登录接口
-   * username
-   * password
-   * picCode
-   * @param {any} data
-   * @returns
-   */
+    /**
+     * 登录接口
+     * username
+     * password
+     * picCode
+     * @param {any} data
+     * @returns
+     */
     login (data) {
-        return fetch('post', '/admin/login/check', data);
+        return fetch('post', '/visit/login/check', data);
     }
 };
 
@@ -95,7 +95,7 @@ export const Jurisdiction = {
      * @returns
      */
     addBusiness (data) {
-        return fetch('post', '/admin/organization/add', data);
+        return fetch('post', '/visit/organization/add', data);
     },
     /**
      * 删除企业
@@ -104,7 +104,7 @@ export const Jurisdiction = {
      * @returns
      */
     deletBusiness (data) {
-        return fetch('get', '/admin/organization/del', data);
+        return fetch('get', '/visit/organization/del', data);
     },
     /**
      * 获取企业列表
@@ -114,7 +114,7 @@ export const Jurisdiction = {
      * @returns
      */
     listBusiness (data) {
-        return fetch('get', '/admin/organization/list', data);
+        return fetch('get', '/visit/organization/list', data);
     },
     /**
      * 查看企业详情
@@ -123,7 +123,7 @@ export const Jurisdiction = {
      * @returns
      */
     infoBusiness (data) {
-        return fetch('get', '/admin/organization/view', data);
+        return fetch('get', '/visit/organization/view', data);
     },
     /**
      * 查看企业对应部门分类树
@@ -132,7 +132,7 @@ export const Jurisdiction = {
      * @returns
      */
     infoDepart (data) {
-        return fetch('get', '/admin/adminDepartment/view', data);
+        return fetch('get', '/visit/adminDepartment/view', data);
     },
     /**
      * 新增部门
@@ -143,7 +143,7 @@ export const Jurisdiction = {
      * @returns
      */
     addDepart (data) {
-        return fetch('get', '/admin/adminDepartment/add', data);
+        return fetch('get', '/visit/adminDepartment/add', data);
     },
     /**
      * 删除部门接口
@@ -152,9 +152,9 @@ export const Jurisdiction = {
      * @returns
      */
     delDepart (data) {
-        return fetch('get', '/admin/adminDepartment/del', data);
+        return fetch('get', '/visit/adminDepartment/del', data);
     },
-     /**
+    /**
      * 查看部门对应职位树
      * orId
      * dpId
@@ -162,48 +162,48 @@ export const Jurisdiction = {
      * @returns
      */
     infoPosition (data) {
-        return fetch('get', '/admin/position/view', data);
+        return fetch('get', '/visit/position/view', data);
     },
-  /**
-   * 新增职位
-   * orId
-   * names
-   * dpId
-   * @param {any} data
-   * @returns
-   */
+    /**
+     * 新增职位
+     * orId
+     * names
+     * dpId
+     * @param {any} data
+     * @returns
+     */
     addPosition (data) {
-        return fetch('get', '/admin/position/add', data);
+        return fetch('get', '/visit/position/add', data);
     },
-  /**
-   * 删除职位接口
-   * nId
-   * @param {any} data
-   * @returns
-   */
+    /**
+     * 删除职位接口
+     * nId
+     * @param {any} data
+     * @returns
+     */
     delPosition (data) {
-        return fetch('get', '/admin/position/del', data);
+        return fetch('get', '/visit/position/del', data);
     },
     /**
      * 权限设置-功能树
      * @returns
      */
     listFun (data) {
-        return fetch('get', 'http://192.168.1.52:8080/visit/admin/action/list', data);
+        return fetch('get', 'http://192.168.1.100:8080/visit/admin/action/list', data);
     },
     /**
-     * name:'我的测试11',    //功能名称
-     * url:'/visit/test/11',  //功能对应的URL
-     * isMenu:true,     //菜单为true,功能为false
-     * icon:'fa-home',  //默认为fa-home
-     * menuPosStr:'',  //默认为空
-     * paixu:0,        //排列顺序
-     * pid:341       //父ID
+     * name:'我的测试11', 功能名称
+     * url:'/visit/test/11', 功能对应的URL
+     * isMenu:true, 菜单为true,功能为false
+     * icon:'fa-home',默认为fa-home
+     * menuPosStr:'',默认为空
+     * paixu:0,排列顺序
+     * pid:341 父ID
      * @param {any} data
      * @returns
      */
     editFun (data) {
-        return fetch('post', 'http://192.168.1.52:8080/visit/admin/action/save', data);
+        return fetch('post', 'http://192.168.1.100:8080/visit/admin/action/save', data);
     },
     /**
      * 功能删除
@@ -212,45 +212,209 @@ export const Jurisdiction = {
      * @returns
      */
     delFun (data) {
-        return fetch('post', 'http://192.168.1.52:8080/visit/admin/action/del', data);
+        return fetch('post', 'http://192.168.1.100:8080/visit/admin/action/del', data);
+    },
+    /**
+     * 角色列表
+     * @returns
+     */
+    listRoles (data) {
+        return fetch('get', 'http://192.168.1.100:8080/visit/admin/roles/list', data);
+    },
+    /**
+     * 角色详情
+     * id
+     * @returns
+     */
+    infoRoles (data) {
+        return fetch('get', 'http://192.168.1.100:8080/visit/admin/roles/add', data);
+    },
+    /**
+     * "name": "护工"
+     * "profile": "护工人员"
+     * "actionsIds": [0]
+     * @param {any} data
+     * @returns
+     */
+    editRoles (data) {
+        return fetch('post', 'http://192.168.1.100:8080/visit/admin/roles/save', data);
+    },
+    /**
+     * 角色删除
+     * id 角色id
+     * @param {any} data
+     * @returns
+     */
+    delRoles (data) {
+        return fetch('post', 'http://192.168.1.100:8080/visit/admin/roles/del', data);
     }
 
 };
 
 /* 系统设置与相关接口 *****/
-export const System = {
+export const Systems = {
     /**
-     * 企业添加
-     * name:  //公司名称 String
-     * address:  //公司地址 String
-     * contacts: //联系人 String
-     * phone:  //公司电话 String
+     * 系统列表
+     * page:页码
      * @param {any} data
      * @returns
      */
-    addBusiness (data) {
-        return fetch('get', '/admin/newSysConfig/list', data);
+    listSystem (data) {
+        return fetch('get', '/visit/newSysConfig/list', data);
+    },
+    /**
+     * 系统属性添加
+     * type:0 //参数类型（ 0 文本字符串  1 开关 2 上传文件）
+     * key:aaa //参数编号
+     * value:bbb  //参数值
+     * remark:ccc  //备注
+     * @param {any} data
+     * @returns
+     */
+    addSystem (data) {
+        return fetch('get', '/visit/newSysConfig/add', data);
+    },
+    /**
+     * 系统功能编辑
+     * id:14 //当前数据id
+     * value:gre //参数值
+     * remark:sdfd //备注
+     * @param {any} data
+     * @returns
+     */
+    editSystem (data) {
+        return fetch('post', '/visit/newSysConfig/update', data);
+    },
+    /**
+     * 系统功能删除
+     * id:14 //当前数据id
+     * @param {any} data
+     * @returns
+     */
+    delSystem (data) {
+        return fetch('post', '/visit/newSysConfig/del', data);
+    },
+    /**
+     * 定时任务列表
+     * @param {any} data
+     * @returns
+     */
+    listTime (data) {
+        return fetch('get', '/visit/newSysTaskHandle/list', data);
+    },
+    /**
+     * 定时任务列表
+     * id
+     * @param {any} data
+     * @returns
+     */
+    typeTime (data) {
+        return fetch('get', '/visit/newSysTaskHandle/enable', data);
+    },
+    /**
+     * 定时任务列表
+     * id:
+     * remark
+     * @param {any} data
+     * @returns
+     */
+    remarkTime (data) {
+        return fetch('get', '/visit/newSysTaskHandle/remark', data);
+    },
+    /**
+     * 删除定时任务
+     * id
+     * @param {any} data
+     * @returns
+     */
+    delTime (data) {
+        return fetch('post', '/visit/newSysTaskHandle/del', data);
+    },
+    /**
+     * 定时任务日志列表
+     * id
+     * @param {any} data
+     * @returns
+     */
+    listTimeLog (data) {
+        return fetch('get', '/visit/newSysTaskLog/list', data);
+    },
+    /**
+     * 获取系统日志列表
+     * page:1 //当前页码
+     * uriLike: //链接地址
+     * ipLike: //ip地址
+     * dateAddBegin: //起始时间（yyyy-MM-dd格式）
+     * dateAddEnd: //结束时间 （yyyy-MM-dd格式）
+     * @param {any} data
+     */
+    listSystemLog (data) {
+        return fetch('get', '/visit/newSysLog/list', data);
+    },
+    /**
+     * 科室列表
+     * page:1 //当前页码
+     * name:  //科室名称
+     * types: //类型（0门诊，1住院，全部为null）
+     * mType: //方案匹配（0疾病，1医生，全部为null）
+     * iUse:  //状态（0为正常，1为禁用，全部为null）
+     * @param {any} data
+     * @returns
+     */
+    listDepart (data) {
+        return fetch('get', '/visit/newDepartment/list', data);
+    },
+    /**
+     * 科室添加
+     * name:aaa //科室名字
+     * paixu: 0 //排序
+     * types:0 //类型（0门诊，1住院，全部为null）
+     * mType:0 //方案匹配（0疾病，1医生，全部为null）
+     * state:0  //状态（0为正常，1为禁用，全部为null）
+     * remark:bbb //备注
+     * @param {any} data
+     * @returns
+     */
+    addDepart (data) {
+        return fetch('post', '/visit/newDepartment/add', data);
+    },
+    /**
+     * 科室编辑
+     * id:555  //当前id
+     * name:aaa //科室名字
+     * paixu: 0 //排序
+     * types:0 //类型（0门诊，1住院，全部为null）
+     * mType:0 //方案匹配（0疾病，1医生，全部为null）
+     * state:0  //状态（0为正常，1为禁用，全部为null）
+    remark:bbb //备注
+     * @param {any} data
+     * @returns
+     */
+    editDepart (data) {
+        return fetch('post', '/visit/newDepartment/update', data);
+    },
+    /**
+     * 科室删除
+     * id
+     * @param {any} data
+     * @returns
+     */
+    delDepart (data) {
+        return fetch('post', '/visit/newDepartment/del', data);
     }
-};
-
-export const mine = {
-    result (data) {
-        return fetch('get', '/mine/patient', data);
-    }
-
 };
 
 /* 随访设置--随访指标接口 *****/
 export const follSetting = {
-  /**
-   * 随访指标所有信息展示
-   * page
-   * limit
-   * name
-   * otype
-   * @param {any} data
-   * @returns
-   */
+    /**
+     * 随访指标所有信息展示
+     * page
+     * limit
+     * name
+     * otype
+     * @param {any} data
+     * @returns
+     */
     list (data) {
         return fetch('get', 'visit/questiontarget/list', data);
     },
@@ -266,15 +430,15 @@ export const follSetting = {
 };
 /* 随访设置--随访问题接口 *****/
 export const followProblems = {
-  /**
-   * 随访问题所有信息展示
-   * page//当前页码(必选)
-   * limit//当每页条数,默认是10(必选)
-   * title//指标名称(可选)
-   * diseaseId //指标类型(可选)
-   * @param {any} data
-   * @returns
-   */
+    /**
+     * 随访问题所有信息展示
+     * page//当前页码(必选)
+     * limit//当每页条数,默认是10(必选)
+     * title//指标名称(可选)
+     * diseaseId //指标类型(可选)
+     * @param {any} data
+     * @returns
+     */
     list (data) {
         return fetch('get', 'visit/question/list', data);
     },
@@ -318,15 +482,18 @@ export const voiceSetting = {
 };
 /* 随访设置--随访模板接口 *****/
 export const followTemplate = {
- /*
- * 随访模板所有信息展示
- */
+    /**
+     * 随访问题所有信息展示
+     * page//当前页码(必选)
+     * limit//当每页条数,默认是10(必选)
+     * title//指标名称(可选)
+     * diseaseId //指标类型(可选)
+     * @param {any} data
+     * @returns
+     */
     list (data) {
         return fetch('get', 'visit/questiontemple/list', data);
     },
-  /*
-  *删除
-  */
     deleteList (data) {
         return fetch('get', 'visit/questiontemple/delete', data);
     },

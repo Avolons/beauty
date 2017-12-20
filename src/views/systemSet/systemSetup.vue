@@ -2,9 +2,9 @@
 .sys-sysset {
     &_main {
         &_list {
-			margin-top: 10px;
-		}
-        &_page{
+            margin-top: 10px;
+        }
+        &_page {
             margin-top: 10px;
         }
     }
@@ -15,119 +15,115 @@
 <template>
     <div class="user">
         <div class="sys-sysset_main">
-			<Button @click="modal=true"  type="primary">添加</Button>
+            <Button @click="modal=true" type="primary">添加</Button>
             <div class="sys-sysset_main_list">
-                <Table border :columns="columns7" :data="data6"></Table>
+                <Table border :columns="config" :data="dataList"></Table>
             </div>
+
+
             <Row class="sys-sysset_main_page">
-            <Page :total="100" :current="1" show-elevator style="float:right" @on-change="changePage"></Page>
+                <Page :total="totalPage" :current="page" show-elevator style="float:right" @on-change="changePage"></Page>
             </Row>
         </div>
-		<Modal v-model="modal" title="添加参数" @on-ok="addDepart">
-			<Form ref="formValidate" class="busadd_main_form" :model="formValidate" :rules="ruleValidate" :label-width="80">
-				<FormItem label="类型" prop="type">
-					<Select v-model="formValidate.type" placeholder="请选择类型">
-						<Option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.label }}</Option>
-					</Select>
-				</FormItem>
-				<FormItem label="编码" prop="sequential">
-					<Input v-model="formValidate.sequential" placeholder="请输入序号"></Input>
-				</FormItem>
-				<FormItem label="参数值" prop="desc">
-					<Input v-model="formValidate.desc" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="请填写备注"></Input>
-
-				</FormItem>
-				<FormItem label="备注" prop="desc">
-					<Input v-model="formValidate.desc" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="请填写备注"></Input>
-
-				</FormItem>
-			</Form>
-		</Modal>
+        <Modal v-model="modal" title="添加参数" >
+            <Form ref="addData" class="sys-sysset_main_form" :model="formData" :rules="validate.system" :label-width="80">
+                <FormItem label="类型" prop="type">
+                    <Select v-model="formData.type" placeholder="请选择类型">
+                        <Option v-for="item in typeList" :value="item.id" :key="item.id">{{ item.label }}</Option>
+                    </Select>
+                </FormItem>
+                <FormItem label="编码" prop="key">
+                    <Input v-model="formData.key" placeholder="请输入编码"></Input>
+                </FormItem>
+                <FormItem label="参数值" prop="value">
+                    <Input v-model="formData.value" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="请填写参数值"></Input>
+                </FormItem>
+                <FormItem label="备注" prop="remark">
+                    <Input v-model="formData.remark" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="请填写备注"></Input>
+                </FormItem>
+            </Form>
+            <div slot="footer" class="sys-sysset_main_btnList">
+                <Button type="primary" @click="addSetting">确认</Button>
+            </div>
+        </Modal>
+        <Modal v-model="editmodal" title="编辑参数" >
+            <Form ref="editData" class="sys-sysset_main_form" :model="currentInfo" :rules="validate.system" :label-width="80">
+                <FormItem label="编码" prop="key">
+                    <Input disabled v-model="currentInfo.key" placeholder="请输入编码"></Input>
+                </FormItem>
+                <FormItem label="参数值" prop="value">
+                    <Input v-model="currentInfo.value" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="请填写参数值"></Input>
+                </FormItem>
+                <FormItem label="备注" prop="remark">
+                    <Input v-model="currentInfo.remark" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="请填写备注"></Input>
+                </FormItem>
+            </Form>
+            <div slot="footer" class="sys-sysset_main_btnList">
+                <Button type="primary" @click="submitSetting">确认</Button>
+            </div>
+        </Modal>
     </div>
 </template>
 
 <script>
+import { API } from '../../services/index.js';
 export default {
     data() {
         return {
-			value1: "",
-			formValidate: {
-				name: "",
-				sequential: "",
-				type: "",
-				action: "",
-				status: "",
-				desc: "",//备注
-			},
-			/* 验证规则 */
-			ruleValidate: {
-				name: [
-					{ required: true, message: '请输入科室名称', trigger: 'blur' }
-				],
-				sequential: [
-					{ required: true, message: '请输入序号', trigger: 'blur' }
-				],
-				type: [
-					{ required: true, message: '请选择类型', trigger: 'change' }
-				],
-				action: [
-					{ required: true, message: '请选择匹配方案', trigger: 'change' }
-				],
-				status: [
-					{ required: true, message: '请选择状态', trigger: 'change' }
-				],
-				desc: [
-					{ type: 'string', min: 10, message: '请至少输入10字以上的备注', trigger: 'blur' }
-				]
-			},
-			modal: false,
-             cityList: [
-                    {
-                        value: 'New York',
-                        label: 'New York'
-                    },
-                    {
-                        value: 'London',
-                        label: 'London'
-                    },
-                    {
-                        value: 'Sydney',
-                        label: 'Sydney'
-                    },
-                    {
-                        value: 'Ottawa',
-                        label: 'Ottawa'
-                    },
-                    {
-                        value: 'Paris',
-                        label: 'Paris'
-                    },
-                    {
-                        value: 'Canberra',
-                        label: 'Canberra'
-                    }
-                ],
-                model1: '',
-            columns7: [
+            page: 1,//当前页码
+            totalPage: 10,//总页码
+            //当前被点击触发的数据
+            currentInfo: {
+                type: "",
+                key: "",
+                value: "",
+                remark: "",  
+            },
+            //添加的数据
+            formData: {
+                type: "",
+                key: "",
+                value: "",
+                remark: "",
+            },
+            //类型选项列表
+            typeList: [
+                {
+                    id: 0,
+                    label: "文本字符串",
+                },
+                {
+                    id: 1,
+                    label: "开关",
+                },
+                {
+                    id: 2,
+                    label: "上传文件",
+                },
+            ],
+            //添加的显示隐藏
+            editmodal:false,
+            modal: false,
+            config: [
                 {
                     title: '编号',
-                    key: 'role',
+                    key: 'key',
                 },
                 {
                     title: '值',
-                    key: 'username'
+                    key: 'value'
                 },
                 {
                     title: '备注',
-                    key: 'time'
+                    key: 'remark'
                 },
                 {
                     title: '创建时间',
-                    key: 'name'
+                    key: 'creatAt'
                 },
                 {
                     title: '修改时间',
-                    key: 'mobile'
+                    key: 'updateAt'
                 },
                 {
                     title: '操作',
@@ -146,21 +142,21 @@ export default {
                                 },
                                 on: {
                                     click: () => {
-                                        this.show(params.index)
+                                        this.editSetting(params.row)
                                     }
                                 }
-							}, '编辑'),
+                            }, '编辑'),
                             h('Button', {
                                 props: {
                                     type: 'warning',
                                     size: 'small'
                                 },
-                                 style: {
+                                style: {
                                     marginRight: '5px'
                                 },
                                 on: {
                                     click: () => {
-                                        this.remove(params.index)
+                                        this.delSetting(params.row.id)
                                     }
                                 }
                             }, '删除'),
@@ -168,77 +164,111 @@ export default {
                     }
                 }
             ],
-            data6: [
-                {
-                    role:"医生",
-                    username:"1245786",
-                    time:"2017-11-30 11:08:30",
-                    action:"随访测试",
-                    name:"测试",
-                    mobile:14578884125,
-                    look:1,
-                },
-                {
-                    role:"医生",
-                    username:"1245786",
-                    time:"2017-11-30 11:08:30",
-                    action:"随访测试",
-                    name:"测试",
-                    mobile:14578884125,
-                    look:1,
-                },
-                {
-                    role:"医生",
-                    username:"1245786",
-                    time:"2017-11-30 11:08:30",
-                    action:"随访测试",
-                    name:"测试",
-                    mobile:14578884125,
-                    look:1,
-                },
-                {
-                    role:"医生",
-                    username:"1245786",
-                    time:"2017-11-30 11:08:30",
-                    action:"随访测试",
-                    name:"测试",
-                    mobile:14578884125,
-                    look:1,
-                }
+            dataList: [
+
             ]
         }
     },
     methods: {
-		/** 
-         * 重置所有属性
+        /** 
+         * 获取所有数据
          */
-		handleReset(name) {
-			this.$refs[name].resetFields();
-		},
-		/** 
-		 * 添加新部门
-		 */
-		addDepart(){
+        getData() {
+            API.Systems.listSystem({
+                page: this.page
+            }).then((res) => {
+                this.dataList=res.data;
+            }).catch((err) => {
 
-		},
-        show(index) {
-            this.$Modal.info({
-                title: 'User Info',
-                content: `Name：${this.data6[index].name}<br>Age：${this.data6[index].age}<br>Address：${this.data6[index].address}`
+            });
+        },
+        /** 
+         * 新增系统设置
+         */
+        addSetting() {
+            this.$refs['addData'].validate((valid) => {
+                if (valid) {
+                    API.Systems.addSystem(this.formData).then((res) => {
+                        this.$Message.success("新增成功");
+                        this.modal=false;
+                        this.getData();
+                        this.formData= {
+                            type: "",
+                            key: "",
+                            value: "",
+                            remark: "",
+                        };
+                    }).catch((err) => {
+
+                    });
+                } else {
+                    this.$Message.error('补全信息!');
+                    return false;
+                }
+
             })
         },
-        remove(index) {
-            this.data6.splice(index, 1);
-        },
-        adduser(){
-            this.$router.push('/access/user/sys-sysset_add/0');
-        },
-        changePage(){
+        /** 
+         * 删除系统设置
+         */
+        delSetting(id) {
+            let self = this;
+            this.$Modal.confirm({
+                title: '删除设置',
+                content: '确定删除该系统设置？',
+                onOk: () => {
+                    API.Systems.delSystem({
+                        id: id
+                    }).then((res) => {
+                        self.$Message.success("删除成功");
+                        self.getData();
+                    }).catch((err) => {
+
+                    });
+                }
+            });
 
         },
-        searchuser(){
-            
-        }
+        /** 
+         * 编辑系统设置
+         */
+        editSetting(data) {
+            this.editmodal=true;
+            this.currentInfo = JSON.parse(JSON.stringify(data));
+        },
+        /** 
+         * 提交修改
+         */
+        submitSetting() {
+            this.$refs['editData'].validate((valid) => {
+                if (valid) {
+                    API.Systems.editSystem({
+                        id:this.currentInfo.id,
+                        value:this.currentInfo.value,
+                        remark:this.currentInfo.remark,
+                    }).then((res) => {
+                        this.$Message.success("修改成功");
+                        this.editmodal=false;
+                        this.getData();
+                    }).catch((err) => {
+
+                    });
+                } else {
+                    this.$Message.error('补全信息!');
+                }
+
+            })
+        },
+        /** 
+         * 分页更改
+         */
+        changePage(page) {
+            this.page = page;
+            this.getData();
+        },
+    },
+    mounted() {
+        this.getData();
     }
 }
 </script>

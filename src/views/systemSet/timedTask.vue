@@ -2,7 +2,7 @@
 .sys-task {
     &_main {
         &_list {}
-        &_page{
+        &_page {
             margin-top: 10px;
         }
     }
@@ -14,95 +14,73 @@
     <div class="user">
         <div class="sys-task_main">
             <div class="sys-task_main_list">
-                <Table border :columns="columns7" :data="data6"></Table>
+                <Table border :columns="config" :data="dataList"></Table>
             </div>
-            <Row class="sys-task_main_page">
-            <Page :total="100" :current="1" show-elevator style="float:right" @on-change="changePage"></Page>
-            </Row>
+            <!-- <Row class="sys-task_main_page">
+                    <Page :total="totalPage" :current="page" show-elevator style="float:right" @on-change="changePage"></Page>
+                </Row> -->
         </div>
     </div>
 </template>
 
 <script>
+import { API } from '../../services/index.js';
 export default {
     data() {
         return {
-            value1: "",
-             cityList: [
-                    {
-                        value: 'New York',
-                        label: 'New York'
-                    },
-                    {
-                        value: 'London',
-                        label: 'London'
-                    },
-                    {
-                        value: 'Sydney',
-                        label: 'Sydney'
-                    },
-                    {
-                        value: 'Ottawa',
-                        label: 'Ottawa'
-                    },
-                    {
-                        value: 'Paris',
-                        label: 'Paris'
-                    },
-                    {
-                        value: 'Canberra',
-                        label: 'Canberra'
-                    }
-                ],
-                model1: '',
-            columns7: [
+            value: "",//备注内容
+            currentId: -1,//当前被点击的id
+            page: 1,//当前页码
+            totalPage: 10,//总页码
+            config: [
                 {
                     title: '编号',
-                    key: 'role',
+                    key: 'moduleName',
                 },
                 {
                     title: '说明',
-                    key: 'username'
+                    key: 'remark'
                 },
                 {
                     title: '主机名',
-                    key: 'time'
+                    key: 'hostname'
                 },
-				{
+                {
                     title: '状态',
                     key: 'look',
+                    width: 100,
                     align: 'center',
-                    render:(h, params)=>{
-                        if(params.row.look==1){
-                            return h('Icon',{
-                                props:{
-                                    type:"android-done",
+                    render: (h, params) => {
+                        if (params.row.isEnabled == true) {
+                            return h('Icon', {
+                                props: {
+                                    type: "android-done",
                                 },
-                                style:{
-                                    color:"#2d8cf0",
-                                    fontSize:"20px"
+                                style: {
+                                    color: "#2d8cf0",
+                                    fontSize: "20px"
                                 }
                             });
-                        }else{
-                            return h('Icon',{
-                                props:{
-                                    type:"android-close",
+                        } else {
+                            return h('Icon', {
+                                props: {
+                                    type: "android-close",
                                 },
-                                style:{
-                                    color:"#ed3f14"
+                                style: {
+                                    color: "#ed3f14"
                                 }
                             });
                         }
-                         
+
                     }
                 },
                 {
                     title: '创建时间',
-                    key: 'name'
+                    key: 'createdAt'
                 },
                 {
                     title: '最后执行',
-                    key: 'mobile'
+                    key: 'updatedAt'
                 },
                 {
                     title: '操作',
@@ -121,13 +99,13 @@ export default {
                                 },
                                 on: {
                                     click: () => {
-                                        this.show(params.index)
+                                        this.remarkTime(params.row.id)
                                     }
                                 }
-							}, '备注'),
-							 h('Button', {
+                            }, '备注'),
+                            h('Button', {
                                 props: {
-                                    type: 'info',
+                                    type: params.row.isEnabled ? 'error' : 'info',
                                     size: 'small'
                                 },
                                 style: {
@@ -135,21 +113,21 @@ export default {
                                 },
                                 on: {
                                     click: () => {
-                                        this.show(params.index)
+                                        this.typeTime(params.row.id)
                                     }
                                 }
-                            }, '启用'),
+                            }, params.row.isEnabled ? '禁用' : '启用'),
                             h('Button', {
                                 props: {
                                     type: 'warning',
                                     size: 'small'
                                 },
-                                 style: {
+                                style: {
                                     marginRight: '5px'
                                 },
                                 on: {
                                     click: () => {
-                                        this.remove(params.index)
+                                        this.delTime(params.index)
                                     }
                                 }
                             }, '删除'),
@@ -157,65 +135,103 @@ export default {
                     }
                 }
             ],
-            data6: [
-                {
-                    role:"医生",
-                    username:"1245786",
-                    time:"2017-11-30 11:08:30",
-                    action:"随访测试",
-                    name:"测试",
-                    mobile:14578884125,
-                    look:1,
-                },
-                {
-                    role:"医生",
-                    username:"1245786",
-                    time:"2017-11-30 11:08:30",
-                    action:"随访测试",
-                    name:"测试",
-                    mobile:14578884125,
-                    look:1,
-                },
-                {
-                    role:"医生",
-                    username:"1245786",
-                    time:"2017-11-30 11:08:30",
-                    action:"随访测试",
-                    name:"测试",
-                    mobile:14578884125,
-                    look:1,
-                },
-                {
-                    role:"医生",
-                    username:"1245786",
-                    time:"2017-11-30 11:08:30",
-                    action:"随访测试",
-                    name:"测试",
-                    mobile:14578884125,
-                    look:1,
-                }
-            ]
+            dataList: []
         }
     },
     methods: {
-        show(index) {
-            this.$Modal.info({
-                title: 'User Info',
-                content: `Name：${this.data6[index].name}<br>Age：${this.data6[index].age}<br>Address：${this.data6[index].address}`
+        /** 
+         * 获取所有数据
+         */
+        getData() {
+            API.Systems.listTime().then((res) => {
+                this.dataList = res.data;
+            }).catch((err) => {
+
+            });
+        },
+        /** 
+         * 删除定时任务
+         */
+        delTime(id) {
+            let self = this;
+            this.$Modal.confirm({
+                title: '删除设置',
+                content: '确定删除该系统设置？',
+                loading: true,
+                onOk: () => {
+                    API.Systems.delSystem({
+                        id: id
+                    }).then((res) => {
+                        self.$Message.success("删除成功");
+                        self.getData();
+                    }).catch((err) => {
+
+                    });
+                }
+            });
+        },
+        /** 
+         * 添加备注
+         */
+        remarkTime(id) {
+            let self=this;
+            this.currentId = id;
+            this.$Modal.confirm({
+                render: (h) => {
+                    return h('Input', {
+                        props: {
+                            value: this.value,
+                            autofocus: true,
+                            placeholder: '请填写备注'
+                        },
+                        on: {
+                            input: (val) => {
+                                this.value = val;
+                            }
+                        },
+
+                    })
+                },
+                onOk: () => {
+                    if (self.value.trim()) {
+                        API.Systems.remarkTime({
+                            id: self.currentId,
+                            remark: self.value
+                        }).then((res) => {
+                            self.$Message.success("填写成功");
+                            self.getData();
+                            self.currentId=-1;
+                            self.value="";
+                        }).catch((err) => {
+                                
+                        });
+                    }
+                }
             })
         },
-        remove(index) {
-            this.data6.splice(index, 1);
-        },
-        adduser(){
-            this.$router.push('/access/user/sys-task_add/0');
-        },
-        changePage(){
+        /** 
+         * 切换定时任务状态
+         */
+        typeTime(id) {
+            API.Systems.typeTime({
+                id: id
+            }).then((res) => {
+                this.$Message.success("操作成功");
+                this.getData();
+            }).catch((err) => {
 
+            });
         },
-        searchuser(){
-            
-        }
+        /** 
+         * 分页更改,暂时不需要
+         */
+        changePage(page) {
+            this.page = page;
+            this.getData();
+        },
+    },
+    mounted() {
+        this.getData();
     }
 }
 </script>

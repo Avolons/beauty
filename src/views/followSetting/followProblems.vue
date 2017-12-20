@@ -152,8 +152,6 @@
                   },
                   on: {
                     click: () => {
-
-
                     	this.patientText = true
                       API.followProblems.editList({
                         "id": params.row.id
@@ -178,11 +176,6 @@
                             otypeName = '通用'
                           }
                           
-                          // this.options1.push({
-                          //   value: res.data.targetId,
-                          //   label: res.data.targetName
-                          // })
-                          // this.formItem.targetName1 = res.data.targetId
                           this.formItem.id = res.data.id
                           this.formItem.title = res.data.title
                           this.formItem.content = res.data.content

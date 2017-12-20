@@ -58,8 +58,8 @@
 				<Col span="20"></Col>
 			</Row>
 			<Row class="targetpz margintop20" >
-				<Col span="12" push="2">
-					<Tabs value="name1" style="border: 1px solid #b1b1b1;padding-left:20px;height:200px;" @on-click="tabsClick">
+				<Col span="12" push="2" style="padding-left:60px;">
+					<Tabs value="name1" style="border: 1px solid #b1b1b1;height:200px;" @on-click="tabsClick">
 		        <TabPane label="无" name="">
 		        	<ul>
 		        		<li v-for="item in this.allQuestions">
@@ -139,65 +139,59 @@
 				<Col span="2">
 					<Button type="success" long>第三步</Button>
 				</Col>
-				<Col span="2"><h3 style="line-height:32px;text-align:right;padding-right:20px;">随访选项</h3></Col>
-				<Col span="20"></Col>
+				<Col span="3"><h3 style="line-height:32px;text-align:right;padding-right:20px;">双击问题,添加到右侧</h3></Col>
+				<Col span="19"></Col>
 			</Row>
-			<Row class="border1 setQuestion">
-				<Col span="6" offset="2" class="questionList">
-				 <p>问题</p>
-					<ul>
+			<Row class="setQuestion">
+				<Col span="6" class="questionList">
+				<span></span>
+					<ul style="border: 1px solid #dddee1;width:100%;height:500px;">
 						<li v-for="item in this.stepThirdQuestion">
 							<Poptip trigger="hover" title="" content="双击问题添加到第三步">
 					      <Button type="text" v-on:dblclick.native="addThirdQuestion(item)">{{item.title}}</Button>
 					    </Poptip>
 						</li>
 					</ul>
-				</Col>
-				<Col span="12" class="questionSelect">
-					<Timeline  >
-						 <TimelineItem color="green" v-for="(item, index) in this.templateList1" :key="item.questionIdXml">
-		        	 <Button type="primary">{{item.questionIdXml}}</Button>
-		        	 <Row>
-		        	 	<Col span="20">
-		        	 		<Collapse v-model="collapse">
-							      <Panel :name="index+1+''" >
-							       {{item.questionName}}
-						           <ul slot="content" v-for="item1 in item.questionTempleQuestionJumps">
-									      	<li>
-									    			<Row class="itemli">
-									    			 	<h3>处理: {{item1.switchID}}</h3>
-										    			<Row class="padleft40 mb5" v-show="item1.switchRegexText">
-										    			 <Col span="4" class="lineheight32">判别规则:</Col>
-											    			<Col span="20" class="textCenter lineheight32" ><span>{{item1.switchRegexText}}</span></Col>
-										    			</Row>
-										    			<Row class="padleft40 mb5" v-show="item1.keyname">
-										    			 	<Col span="4" class="lineheight32">指标值:</Col>
-											    			<Col span="20" class="textCenter lineheight32"><span>{{item1.keyname}}</span></Col>
-										    			</Row>
-										    			<Row class="padleft40 mb5">
-										    			 	<Col span="4" class="lineheight32">跳转问题编号:</Col>
-											    			<Col span="20" class="textCenter"><Input placeholder="large size" v-model="item1.nextQuestionId"></Input></Col>
-										    			</Row>
-										    			<Row class="padleft40 mb5">
-										    			 	<Col span="4" class="lineheight32">无匹配超次数跳转:</Col>
-										    			 	<Col span="20" class="textCenter"><Input  placeholder="large size" v-model="item1.outRptSwitchID"></Input></Col>
-										    			</Row>
-										    		</Row>	
-									      	</li>
-									      </ul>
-									      
-							      </Panel> 
-					   		  </Collapse>
-		        	 	</Col>
-		        	 	<Col span="4" @click.native="deleteCol(index)"> <Icon type="close-circled" size="22" color="#f70000" style="line-height: 45px; float:left;"></Icon></Col>
-		        	 </Row>
-		        	
-		        </TimelineItem>
-		        
-		        
-			    </Timeline>
+					<p style="line-height: 30px;">小提示：补充完右侧末班内容后，点击创建即可增肌模板！</p>
 					<Button type="primary" @click="addTemplate">创建随访模板</Button>
-
+				</Col>
+				<Col span="16"offset="2" class="questionSelect">
+					<div  style="background:#f1f1f1;border: 1px solid #dedee1" v-for="(item, index) in this.templateList1" :key="item.questionIdXml"> 
+	        	 <Row>
+	        	 	<Col span="2"><div style="border-radius: 100%; width: 38px; height: 38px; line-height: 38px; text-align: center;background:#dddee1">{{item.questionIdXml}}</div></Col>
+	        	 	<Col span="18">
+	        	 		<Collapse v-model="collapse" class="collapseStyle">
+						      <Panel :name="index+1+''" >
+						       {{item.questionName}}
+					           <ul slot="content" v-for="item1 in item.questionTempleQuestionJumps">
+								      	<li>
+								    			<Row class="itemli">
+								    			 	<h3>处理: {{item1.switchId==-1?"无匹配":item1.switchId==-2?"无声音":item1.switchId==-3?"通用处理":item1.switchId}}</h3>
+									    			<Row class="padleft40 mb5" v-show="item1.switchRegexText">
+									    			 <Col span="4" class="lineheight32">判别规则:</Col>
+										    			<Col span="20" class="textCenter lineheight32"><span>{{item1.switchRegexText}}</span></Col>
+									    			</Row>
+									    			<Row class="padleft40 mb5" v-show="item1.keyname">
+									    			 	<Col span="4" class="lineheight32">指标值:</Col>
+										    			<Col span="20" class="textCenter lineheight32"><span>{{item1.keyname}}</span></Col>
+									    			</Row>
+									    			<Row class="padleft40 mb5">
+									    			 	<Col span="4" class="lineheight32">跳转问题编号:</Col>
+										    			<Col span="20" class="textCenter"><Input placeholder="large size" v-model="item1.nextQuestionId"></Input></Col>
+									    			</Row>
+									    			<Row class="padleft40 mb5">
+									    			 	<Col span="4" class="lineheight32">无匹配超次数跳转:</Col>
+									    			 	<Col span="20" class="textCenter"><Input  placeholder="large size" v-model="item1.outRptSwitchID"></Input></Col>
+									    			</Row>
+									    		</Row>	
+								      	</li>
+								      </ul>
+						      </Panel> 
+				   		  </Collapse>
+	        	 	</Col>
+	        	 	<Col span="4" @click.native="deleteCol(index)" style="background:#f7f7f7"> <Icon type="close-circled" size="22" color="#999;" style="line-height: 38px; float:right;margin-right:10px;"></Icon></Col>
+	        	 </Row>
+	        </div>
 				</Col>
 			</Row>
 		</Col>
@@ -228,15 +222,6 @@ import {API} from '@/services';
             silencetime: [
               { required: true, message: '静默时间不能为空', trigger: 'blur' }
             ],
-            // outrepeattimes: [
-            //   { required: true, message: '重复次数不能为空', trigger: 'change' },
-            // ],
-            // firsttaskid: [
-            //   { required: true, message: '起始问题不能为空', trigger: 'change' },
-            // ],
-            // submoulds: [
-            //   { required: true, type: 'date', message: 'Please select the date', trigger: 'change' }
-            // ],
         },
 				diseName: '',//第一步--选择疾病类型
 				diseaseName: '',
@@ -502,11 +487,16 @@ import {API} from '@/services';
       *点击第二部的问题的操作
       */
       addThirdQuestion(item) {
-      	// console.log('-----------------------------------')
+      
       	console.log(item)
-      	// console.log('-----------------------------------')
-      //	console.log(this.templateList1)
-      	// console.log('-----------------------------------')
+      
+      	console.log(this.templateList1.length)
+      	let questionIdXml = 1000
+      	if(this.templateList1.length ==0){
+      		questionIdXml 
+      	}else{
+      		questionIdXml = questionIdXml + this.templateList1.length
+      	}
       	API.voiceSetting.question({
           "questionId": item.id
         }).then((res) => {
@@ -534,26 +524,21 @@ import {API} from '@/services';
             this.switchArr.push({})
             this.switchArr.push({})
             this.switchArr.push({})
-             // console.log('-------------this.switchArr----------------------')
-            // console.log( this.switchArr)
-            
-
+           
             this.switchArr.forEach((item, index) => {
 							item.switchID = index -3
 							item.switchID>=0?item.switchID = item.switchID+1: item.switchID //除去switchId = 0
 						})
 						let map = {
 	          	questionId: item.id,
-	          	questionIdXml: '1003',
+	          	questionIdXml: questionIdXml,
 	          	questionName: item.title,
 	          	targetId: item.targetId,
 	          	questionTempleQuestionJumps:[]
 	          }
 	          map.questionTempleQuestionJumps=this.switchArr
-	        console.log('--------------111111111111---------------------')
-	      	this.templateList1.push(map)
-	      	console.log(this.templateList1)
-						console.log('--------------222222222222---------------------')
+	       
+	      	  this.templateList1.push(map)
 						this.switchArr.forEach((item) => {
         	
         		if(item.switchID == -1) {
@@ -568,7 +553,6 @@ import {API} from '@/services';
         	
           })
           }
-          
 
           let map = {
           	questionId: item.id,
@@ -577,9 +561,6 @@ import {API} from '@/services';
           	questionTempleQuestionJumps:[]
           }
           map.questionTempleQuestionJumps.push(this.switchArr)
-        console.log('--------------this.templateList1---------------------')
-      	console.log(map)
-      	console.log('-----------------------------------')
         }).catch((error)=> {
 
         })
@@ -592,9 +573,6 @@ import {API} from '@/services';
 				    this.questionTempleQuestionJumps = item.questionTempleQuestionJumps
 				  }
 				}
-			
-    
-      
 			
       	API.followTemplate.questionList({
           id: item.id,
@@ -672,7 +650,7 @@ import {API} from '@/services';
 				let ids
 				if(this.templateId == 'new') {
 					ids = ''
-					alert('新增')
+					//alert('新增')
 				}else{
 					ids = this.templateId
 				}
@@ -688,7 +666,7 @@ import {API} from '@/services';
 			    "firsttaskid": this.templateForm.firsttaskid,                        //起始问题编号      
 			    "questionTempleQuestions": this.templateList1
 				}).then((res)=>{
-					alert("成功")
+					//alert("成功")
 				}).catch((error) => {
 					
 				})
@@ -764,16 +742,9 @@ import {API} from '@/services';
 		.questionTem {
 			background: #fff;
 			.setQuestion {
-				height: 500px;
-				// padding: 0 200px;
+				padding: 0 200px;
 				.questionList {
 					height: 100%;
-					border-right: 1px #b1b1b1 solid;
-					p {
-						line-height: 40px;
-						font-size: 22px;
-						border-bottom: 1px #b1b1b1 solid;
-					}
 				}
 				.questionSelect {
 					height: 100%;
@@ -781,10 +752,18 @@ import {API} from '@/services';
 					p {
 						line-height: 40px;
 						font-size: 22px;
-						border-bottom: 1px #b1b1b1 solid;
 					}
 				}
 			}
 		}
+	}
+	.collapseStyle {
+		border: 0;
+	}
+	.ivu-timeline-item-content {
+		border: 1px solid #dddee1;
+	}
+	.ivu-tabs-bar {
+		padding-left: 20px;
 	}
 </style>

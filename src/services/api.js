@@ -18,11 +18,12 @@ axios.defaults.baseURL = 'http://192.168.1.100:8080/';
 
 // 添加请求拦截器
 axios.interceptors.request.use(function (config) {
-  // 在发送请求之前做些什么
-    config.data = qs.stringify(config.data);
-    if (config.url == '/visit/question/script/save') {
+    // 在发送请求之前做些什么
+    // config.data = qs.stringify(config.data);
+    if (config.url == 'http://192.168.1.100:8080/visit/question/script/save' || config.url == 'http://192.168.1.100:8080/visit/questiontemple/save' || config.url == 'http://192.168.1.100:8080/visit/questiontarget/save') {
+        // config.data = JSON.stringify(config.data);
         config.headers = {
-      // 'Content-Type': 'application/json; charset=utf-8',
+            // 'Content-Type': 'application/json; charset=utf-8',
             'Content-Type': 'application/json;charset=utf-8'
         };
     } else {
@@ -307,7 +308,7 @@ export const Jurisdiction = {
      * @param {any} data
      * @returns
      */
-    delUser  (data) {
+    delUser (data) {
         return fetch('post', '/visit/admin/del', data);
     },
     /**
@@ -316,7 +317,7 @@ export const Jurisdiction = {
      * @param {any} data
      * @returns
      */
-    userInfo  (data) {
+    userInfo (data) {
         return fetch('get', '/visit/admin/findAdmin', data);
     },
     /**
@@ -324,7 +325,7 @@ export const Jurisdiction = {
      * @param {any} data
      * @returns
      */
-    roleList  (data) {
+    roleList (data) {
         return fetch('get', '/visit/admin/roleList', data);
     },
     /**
@@ -332,7 +333,7 @@ export const Jurisdiction = {
      * @param {any} data
      * @returns
      */
-    departList  (data) {
+    departList (data) {
         return fetch('get', '/visit/admin/adList', data);
     },
     /**
@@ -341,7 +342,7 @@ export const Jurisdiction = {
      * @param {any} data
      * @returns
      */
-    positionList  (data) {
+    positionList (data) {
         return fetch('get', '/visit/admin/apList', data);
     },
     /**
@@ -558,7 +559,7 @@ export const Systems = {
      * @param {any} data
      * @returns
      */
-    addDisease  (data) {
+    addDisease (data) {
         return fetch('post', '/visit/newDisease/add', data);
     },
     /**
@@ -572,7 +573,7 @@ export const Systems = {
      * @param {any} data
      * @returns
      */
-    editDisease  (data) {
+    editDisease (data) {
         return fetch('post', '/visit/newDisease/update', data);
     },
     /**
@@ -581,7 +582,7 @@ export const Systems = {
      * @param {any} data
      * @returns
      */
-    delDisease  (data) {
+    delDisease (data) {
         return fetch('post', '/visit/newDisease/del', data);
     },
     /**
@@ -589,7 +590,7 @@ export const Systems = {
      * @param {any} data
      * @returns
      */
-    listDisDepart  (data) {
+    listDisDepart (data) {
         return fetch('post', '/visit/newDisease/findDep', data);
     },
     /**
@@ -609,7 +610,7 @@ export const Systems = {
      * @param {any} data
      * @returns
      */
-    listDisTemp  (data) {
+    listDisTemp (data) {
         return fetch('get', '/visit/newDisease/findTemp', data);
     }
 
@@ -654,7 +655,7 @@ export const followProblems = {
         return fetch('get', 'visit/question/list', data);
     },
     deleteList (data) {
-        return fetch('get', 'visit/questiontarget/delete', data);
+        return fetch('get', 'visit/question/delete', data);
     },
     addList (data) {
         return fetch('post', 'visit/question/save', data);
@@ -668,49 +669,76 @@ export const followProblems = {
 };
 /* 随访设置--随访问题接口 *****/
 export const followTemplate = {
-    /**
-     * 随访问题所有信息展示
-     * page//当前页码(必选)
-     * limit//当每页条数,默认是10(必选)
-     * title//指标名称(可选)
-     * diseaseId //指标类型(可选)
-     * @param {any} data
-     * @returns
+    /*
+     * 随访模板所有信息展示
      */
     list (data) {
         return fetch('get', 'visit/questiontemple/list', data);
     },
+    /*
+     *删除
+     */
     deleteList (data) {
         return fetch('get', 'visit/questiontemple/delete', data);
     },
+    /*
+     *添加/修改
+     *json格式
+     */
     addList (data) {
         return fetch('post', 'visit/questiontemple/save', data);
     },
+    /*
+     *编辑展示
+     */
     editList (data) {
         return fetch('get', 'visit/questiontemple/get', data);
     },
-    disease (data) {
-        return fetch('get', 'visit/disease/autocomplete', data);
+    /*
+     *根据模板id获取模板问题接口
+     */
+    questionList (data) {
+        return fetch('get', 'visit/questiontemple/question/list', data);
+    }
+
+};
+/* 随访设置--随访方案接口 *****/
+export const followWay = {
+    /*
+     * 科室列表
+     */
+    departmentList (data) {
+        return fetch('get', 'visit/department/list', data);
     },
     /*
-    *话述设置
-    *questionId(问题id)
-    */
-    question (data) {
-        return fetch('get', 'visit/question/script/list', data);
+     * 随访方案列表
+     */
+    list (data) {
+        return fetch('get', 'visit/questionscheme/list', data);
     },
     /*
-    *话述设置--删除
-    *questionId(问题id)
-    */
-    questionDelete (data) {
-        return fetch('get', 'visit/question/script/delete', data);
+     *删除
+     */
+    deleteList (data) {
+        return fetch('get', 'visit/questionscheme/delete', data);
     },
     /*
-    *话述设置--保存
-    *questionId(问题id)
-    */
-    questionSave (data) {
-        return fetch('post', 'visit/question/script/save', data);
+     *添加/修改
+     *json格式
+     */
+    addList (data) {
+        return fetch('post', 'visit/questionscheme/save', data);
+    },
+    /*
+     *编辑展示
+     */
+    editList (data) {
+        return fetch('get', 'visit/questionscheme/get', data);
+    },
+    /*
+     *根据模板id获取语音
+     */
+    voiceList (data) {
+        return fetch('get', 'visit/questionscheme/temple/list', data);
     }
 };

@@ -133,6 +133,23 @@ export const otherRouter = {
         component: resolve => {
             require(['@/views/followSetting/voice/voice.vue'], resolve);
         }
+    }, {
+        path: '/followSetting/template/template/:id',
+        access: '/followSetting/template/template/:id', // access已经添加
+        title: '模板编辑',
+        name: 'template',
+        component: resolve => {
+            require(['@/views/followSetting/template/template.vue'], resolve);
+        }
+    },
+    {
+        path: '/followSetting/way/way/:id',
+        access: '/followSetting/way/way/:id', // access已经添加
+        title: '方案编辑',
+        name: 'way',
+        component: resolve => {
+            require(['@/views/followSetting/way/way.vue'], resolve);
+        }
     }
     ]
 };
@@ -447,6 +464,65 @@ export const appRouter = [{
         icon: 'arrow-graph-up-right',
         component: resolve => {
             require(['@/views/systemSet/followType.vue'], resolve);
+        }
+    }
+    ]
+},
+{
+    path: '/access',
+    icon: 'key',
+    name: 'access',
+    title: '用户与权限',
+    access: '/access', // access已经添加
+    component: Main,
+    children: [{
+        path: '/access/control',
+        icon: 'android-send',
+        title: '权限管理',
+        access: '/access/control', // access已经添加
+        name: 'access_control',
+        component: resolve => {
+            require(['@/views/access/access-control/accessControl.vue'], resolve);
+        }
+    },
+    {
+        path: '/access/group',
+        icon: 'wand',
+        title: '混合权限',
+        access: '/access/group', // access已经添加
+        name: 'access_group',
+        component: resolve => {
+            require(['@/views/access/group-manage/groupList.vue'], resolve);
+        }
+    },
+    {
+        path: '/access/business',
+        icon: 'social-buffer',
+        title: '企业管理',
+        access: '/access/business', // access已经添加
+        name: 'access_business',
+        component: resolve => {
+            require(['@/views/access/business-manage/business-manage.vue'], resolve);
+        }
+    },
+    {
+        path: '/access/role',
+        icon: 'android-person',
+        title: '角色管理',
+        access: '/access/role', // access已经添加
+        name: 'role_manage',
+        component: resolve => {
+            require(['@/views/access/role-manage/role-manage.vue'], resolve);
+        }
+    },
+    {
+        path: '/access/user',
+        icon: 'ios-list',
+        title: '用户列表',
+        access: '/access/user', // access已经添加
+        name: 'user_manage',
+        component: resolve => {
+            require(['@/views/access/user-manage/user-manage.vue'], resolve);
         }
     }
     ]

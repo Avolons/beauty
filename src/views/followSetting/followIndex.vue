@@ -32,7 +32,7 @@
 		  </Form>
 		</Col>
 		<Col span="24" class="fpTable">
-			<Table border :columns="columns7" :data="datalist" class="margin-bottom-10" style="padding:15px;"></Table>
+			<Table border :columns="columns7" :data="datalist" class="margin-bottom-10"></Table>
 			<Row>
 				<Col span="10"></Col>
 		     <Col span="14" class="text-right padding-right-20">
@@ -41,8 +41,8 @@
 			</Row>
 		</Col>
 		<!-- 编辑功能模态框 -->
-		<Modal v-model="patientText" title="添加指标 / 编辑指标"  @on-ok="ok" @on-cancel="cancel" width="650" class-name="patientInfo">
-      <Form :model="formItem" :label-width="80" ref="formValidate" :rules="ruleValidate">
+		<Modal v-model="patientText" title="添加指标 / 编辑指标"  @on-ok="ok" @on-cancel="cancel()" width="650" class-name="patientInfo">
+      <Form :model="formItem" :label-width="100" ref="formValidate" :rules="ruleValidate">
         <input type="hidden" v-model="formItem.id" placeholder="id">
         <FormItem label="指标名称" prop="name">
             <Input v-model="formItem.name" placeholder="请输入指标名称"></Input>
@@ -58,13 +58,13 @@
               <Option value="07">通用</Option>
             </Select>
         </FormItem>
-        <FormItem label="疾病标签" prop="diseaseName">
+        <FormItem label="添加疾病类型" prop="diseaseName">
           <Select v-model="formItem.diseaseName" filterable remote :remote-method="remoteMethod2" :loading="loading2" clearable @label-in-value="true"  @on-keyup="keyupSearch($event)" style="width: 70%;float: left;margin-right:20px;" @on-change="selectChange" not-found-text="" :label-in-value=true>
             <Option v-for="(option, index) in options2" :value="option.value" :key="index">{{option.label}}</Option>
           </Select>
           <Button type="primary" @click="addTag" ref="addTagbtn">添加</Button>
         </FormItem>
-        <FormItem label="" prop="">
+        <FormItem label="已选疾病类型" prop="selecttagCount">
           <tag v-for="item in tagCount" color="blue" :key="item" :name="item" closable @on-close="tagClose">{{item}}</tag>
         </FormItem>
         <FormItem label="结果类型"  prop="radio">
@@ -207,7 +207,6 @@
                   on: {
                     click: () => {
                     	this.patientText = true
-
                       this.formItem.model10 = []
                       this.optionList = []
                       API.follSetting.editList({
@@ -239,7 +238,10 @@
                             this.radioNumber = false
                           }
                           let oplist = res.data.optionValues;
+                          let oplist2 = res.data.thresholdValue;//指标阀值所有选项
                           var kk = oplist.split(",");//以逗号作为分隔字符串
+                          var kk2 = oplist2.split(",");//以逗号作为分隔字符串
+                         
                           class Point {
                             constructor(value, label) {
                               this.value = value;
@@ -249,8 +251,14 @@
                           let p1;
                           for(let i=0; i<kk.length;i++ ){
                             p1 = new Point(kk[i],kk[i])
-                            this.optionList.push(p1)
                           }
+                          let p2;
+                          this.optionList1 = []
+                          for(let i=0; i<kk2.length;i++ ){
+                            p2 = new Point(kk2[i],kk2[i])
+                            this.optionList.push(p2)
+                          }
+                           console.log(this.optionList)
                           //预警阀值
                           this.formItem.model10 = kk
                           //备注
@@ -273,8 +281,15 @@
                   },
                   on: {
                     click: () => {
-                      console.log(params.row.id)
-                      this.deleteRow(params.row.id)
+                      this.$Modal.confirm({
+                        title: 'Title',
+                        content: '<p>确定要删除吗?</p>',
+                        onOk: () => {
+                         this.deleteRow(params.row.id)
+                        },
+                        onCancel: () => {
+                        }
+                      })
                     }
                   }
                 }, '删除')
@@ -316,6 +331,7 @@
         optionList1: [],//指标选项select的label
         radioText: false,
         radioNumber: false,
+        defaultData:'',
 			}
 		},
     
@@ -428,30 +444,7 @@
       addModel(name) {
         this.$refs[name].validate((valid) => {
           if (valid) {
-            this.$Message.success('Success!');
             let addPram
-            let addPram1 = {
-              "id": this.formItem.id,
-              "name": this.formItem.name,
-              "diseaseId": this.tagCount2.join(','),
-              "status": '0',
-              "type": this.formItem.radio,
-              "otype": this.formItem.select,
-              "remark": this.formItem.textarea,
-            }
-            console.log(this.formItem.model10)
-            let strModel = this.formItem.model10.join(",")
-            let addPram2 = {
-              "id": this.formItem.id,
-              "name": this.formItem.name,
-              "diseaseId": this.tagCount2.join(','),
-              "status": '0',
-              "type": this.formItem.radio,
-              "otype": this.formItem.select,
-              "optionValues": strModel,
-              "remark": this.formItem.textarea,
-
-            }
             let addPram3 = {
               "id": this.formItem.id,
               "name": this.formItem.name,
@@ -465,19 +458,8 @@
               "thresholdValueEnd": this.formItem.bottom,
               "remark": this.formItem.textarea
             }
-            console.log(addPram1)
-            // if(this.formItem.radio == 'string') {
-            //   addPram = addPram1
-            // }
-            // if(this.formItem.radio == 'digit') {
-            //   addPram = addPram3
-            // }
-            // if(this.formItem.radio == 'select') {
-            //   addPram = addPram2
-            // }
             API.follSetting.addList(addPram3).then((res) => {
               if(res.code == 0) {
-                console.log(res.message)
                 this.formItem.id = ''
                 this.formItem.name = ''
                 this.formItem.select2 = ''
@@ -516,20 +498,17 @@
       *编辑指标
       */
 			ok () {
-        this.$Message.info('Clicked ok');
+        // this.$Message.info('Clicked ok');
       },
-      cancel () {
-        this.$Message.info('Clicked cancel');
+      cancel (name) {
+        // this.$refs[name].resetFields();
+       // this.defaultData = JSON.parse(JSON.stringify(this.$data.formItem));//清空表单
+       // this.$data = Object.assign(this.$data, this.defaultData)
+       this.selectLabel = ''
       },
       //编辑模态框提交按钮
       handleEdit(name) {
-        this.$refs[name].validate((valid) => {
-          if (valid) {
-            this.$Message.success('Success!');
-          } else {
-            this.$Message.error('Fail!');
-          }
-        })
+        this.$refs[name].validate((valid) => {})
     	},
       /*
       *指标选项添加预警阀值

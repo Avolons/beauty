@@ -120,28 +120,7 @@ export default {
                     }
                 ],
                 /* 表格内容 */
-                tableData: [
-                    {
-                        name: '海宁医院',
-                        address: '浙江省杭州市拱墅区',
-                        phone: '1712457845',
-                    },
-                    {
-                        name: '上海东方医院',
-                        address: '上海市黄浦区桂林路',
-                        phone: '1712457845'
-                    },
-                    {
-                        name: '上海华山医院',
-                        address: '上海市徐汇区华山路127号',
-                        phone: '1712457845'
-                    },
-                    {
-                        name: '浙江西溪医院',
-                        address: '浙江省余杭区教工路111号',
-                        phone: '1712457845'
-                    }
-                ],
+                tableData: [],
                 pageNumber:10,//一页的数据
                 page:1,//当前分页
                 totalPage:100//总数据条数

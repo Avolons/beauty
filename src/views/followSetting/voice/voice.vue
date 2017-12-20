@@ -31,8 +31,7 @@
     			 <Row class="itemli" style="background:#f7f7f7">
     			 	<Col span="4" class="textCenter">处理</Col>
     			 	<Col span="12"></Input>
-							<!-- <span>{{item.switchID==-1?"无匹配":item.switchID==-2?"无声音":item.switchID==-3?"通用处理":item.switchID}}</span> -->
-							<span>{{item.switchID}}</span>
+							<span>{{item.switchID==-1?"无匹配":item.switchID==-2?"无声音":item.switchID==-3?"通用处理":item.switchID}}</span>
     			 </Col>
     			 	<Col span="2" offset="6" @click.native="removequestion(index)"><Icon type="close-circled" size="22" color="#f70000" style="line-height: 45px;"></Icon></Col>
     			 </Row> 
@@ -62,7 +61,6 @@
 		<Col span="24">
 			<Button type="primary" style="margin: 10px 20px;" @click="addVoice()">添加话述</Button><Button  style="margin: 10px 20px;" type="primary" @click="handleSubmit()">保存</Button>
 		</Col>
-		
 	</Row>
 </template>
 
@@ -75,9 +73,11 @@ import {API} from '@/services';
 				questionName: '',//随访问题，
 				questionTargetName: '',//随访指标
 				questionTargetStyle: '',//指标类型，
-				questionTargetfz: '',//指标阀值
+				questionTargetfz: '',//指标阀值字符串
+				fzArray: [],//指标阀值数组
         switchArr: [],
         saveSwitch: [],
+        switchInfo: '',
 			}
 		},
 		created(){
@@ -88,57 +88,38 @@ import {API} from '@/services';
 		},
 		methods: {
 			/*
-			*获取问题信息
+			*根据问题id，获取switch信息
 			*/
 			questionInfo() {
 				API.voiceSetting.question({
           "questionId": this.questionId
         }).then((res) => {
           if(res.code == 0) {
-            this.saveSwitch = res.data
-
-            class Point {
-						  constructor(item) {
-						    this.switchID = item.switchID
-						    this.switchText = item.switchText
-						    this.switchRegexText = item.switchRegexText
-						    this.keyname = item.keyname
-						    this.outRptSwitchID = item.outRptSwitchID
-						    this.keyvalue = item.keyvalue
-						  }
-						}
-						this.saveSwitch.forEach((item) => {
-            	this.switchArr.push(new Point({
-            		switchID : item.switchID,
-            		switchText : item.switchText,
-						    switchRegexText : item.switchRegexText,
-						    keyname : item.keyname,
-						    outRptSwitchID : item.outRptSwitchID,
-						    keyvalue : item.keyvalue
-            	}))
-            })
-            
-            console.log( this.switchArr)
-            this.switchArr.forEach((item, index) => {
-							item.switchID = index -3
+          	res.data.forEach((item, index) => {
+							item.switchID = index+1
 						})
-						
+            if(res.data.length){
+            	this.switchArr = res.data
+            }
           }
         }).catch((error)=> {
         })
-        //根据问题id获取指标id
+	      /*
+				*根据问题id，获取指标id
+				*/
         API.followProblems.editList({
           "id": this.questionId
         }).then((res) => {
           if(res.code == 0) {
-          	 this.questionName = res.data.title
-            let getTargetIDVoice = res.data.targetId
-            /*************/
+          	this.questionName = res.data.title
+          	/*
+						*根据指标id，获取指标阀值等信息
+						*/
+            let getTargetIDVoice = res.data.targetId//问题名称
             API.follSetting.editList({
               id: getTargetIDVoice
             }).then((res) => {
               if(res.code == 0) {
-              	//alert('刷新成功')
               	this.questionTargetName = res.data.name
               	//获取指标类型，阀值
               	if(res.data.type == 'digit') {
@@ -150,9 +131,42 @@ import {API} from '@/services';
 		            }
 		            //获取指标阀值
 		            this.questionTargetfz = res.data.optionValues
+		            this.fzArray = this.questionTargetfz.split(',')
+
+		            /*switch信息*/ 
+		             class Point {
+								  constructor(item) {
+								    this.switchID = item.switchID
+								    this.switchText = item.switchText
+								    this.switchRegexText = item.switchRegexText
+								    this.keyname = item.keyname
+								    this.outRptSwitchID = item.outRptSwitchID
+								    this.keyvalue = item.keyvalue
+								  }
+								}
+								if(this.switchArr.length==0) {
+									this.fzArray.forEach((item,index) => {
+		            	this.switchArr.push(new Point({
+		            		switchID : index+1,
+		            		// switchText : '',
+								    switchRegexText : '',
+								    keyname : '',
+								    outRptSwitchID : '',
+								    keyvalue : item
+		            	}))
+		            })
+								this.switchArr.forEach((item,index) => {
+									item.keyname = this.questionTargetName
+								})
+							}
+								
+		            console.log(this.switchArr)
+              }else{
+              	console.log('指标id='+res.code)
               }
             }).catch((error)=>{
-            	alert(error.data)
+            	//alert('error')
+            	console.log(error)
             })
           }
         }).catch((error)=> {
@@ -172,7 +186,7 @@ import {API} from '@/services';
 			addVoice() {
 				this.switchArr.push({})
 				this.switchArr.forEach((item, index) => {
-					item.switchID = index-3
+					item.switchID = index+1
 				})
 				console.log(this.switchArr)
 			},
@@ -181,11 +195,13 @@ import {API} from '@/services';
 			*/
 			removequestion(index) {
 				this.switchArr.splice(index,1)
-				this.switchArr.forEach((item, index) => {
-					console.log('index='+index)
-					console.log('item.switchID='+item.switchID)
-					item.switchID = index-3
+				let pp = []
+				pp = this.switchArr.splice(index,this.switchArr.length)
+				pp.forEach((item)=>{
+					item.switchID = item.switchID-1
 				})
+				this.switchArr = this.switchArr.concat(pp)
+				console.log(this.switchArr)
 			},
     
 			/*
@@ -198,30 +214,40 @@ import {API} from '@/services';
 			*保存话述
 			*/
 			handleSubmit() {
-				this.switchArr.forEach((item) =>{
-					if(item.switchID>=0) {
-						item.switchID = item.switchID +1
+				console.log(this.switchArr)
+				let tBag = 0
+				this.switchArr.forEach((item) => {
+					if(item.switchText == ''){
+						tBag++
+					}else {
+
 					}
 				})
-				API.voiceSetting.questionDelete({
+				if(tBag == 0) {
+					API.voiceSetting.questionDelete({
           "questionId": this.questionId,
-        }).then((res) => {
-          consoel.log(res)
-        }).catch((error)=> {
+	        }).then((res) => {
+	          consoel.log(res)
+	        }).catch((error)=> {
 
-        })
-        console.log(this.switchArr.length)
-        API.voiceSetting.questionSave({
-          "id": this.questionId,   //问题id
-				  "questionCallScripts": this.switchArr
-        }).then((res) => {
-          if(res.code == 0) {
-            console.log(res)
-            this.$Message.success('添加成功!');
-          }
-        }).catch((error)=> {
+	        })
+	        console.log(this.switchArr.length)
+	        API.voiceSetting.questionSave({
+	          "id": this.questionId,   //问题id
+					  "questionCallScripts": this.switchArr
+	        }).then((res) => {
+	          if(res.code == 0) {
+	            console.log(res)
+	            this.$Message.success('添加成功!');
+	            this.questionInfo()
+	          }
+	        }).catch((error)=> {
 
-        })
+	        })
+				}else {
+					alert('话述名称不能为空')
+				}
+				
 			},
 		},
 		watch:{

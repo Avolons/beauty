@@ -71,14 +71,14 @@
         <div class="busadd_main">
             <h3 class="busadd_main_title">用户信息</h3>
             <h4>请完善以下信息,方便我们更好的为您服务</h4>
-            <Form ref="formData" class="busadd_main_form" :model="formData" :rules="validate.user" :label-width="80">
+            <Form ref="formData" class="busadd_main_form" :model="formData" :rules="validate.users" :label-width="80">
                 <h5>基本信息</h5>
                 <FormItem label="用户名" prop="uName" style="width:450px;">
                     <Input v-model="formData.uName" placeholder="请输入用户名"></Input>
                 </FormItem>
-               <!--  <FormItem label="密码" prop="password" style="width:450px;">
+                <FormItem v-show="id==-1" label="密码" prop="password" style="width:450px;">
                     <Input v-model="formData.password" type="password" placeholder="请输入密码"></Input>
-                </FormItem> -->
+                </FormItem>
                 <FormItem label="真实姓名" prop="reName" style="width:450px;">
                     <Input v-model="formData.reName" placeholder="请输入真实姓名"></Input>
                 </FormItem>

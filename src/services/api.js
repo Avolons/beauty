@@ -14,7 +14,7 @@ Vue.prototype.$http = axios;
 /* 默认最长响应时间 */
 axios.defaults.timeout = 500;
 /* 默认的接口地址 */
-axios.defaults.baseURL = 'http://192.168.1.40:8080/';
+axios.defaults.baseURL = 'http://192.168.1.100:8080/';
 
 // 添加请求拦截器
 axios.interceptors.request.use(function (config) {

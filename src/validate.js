@@ -137,7 +137,7 @@ export default {
             { required: false, message: '请输入手机号码', trigger: 'blur' }
         ],
         rIds: [
-            { required: true, message: '请选择用户角色', trigger: 'blur' }
+            { required: true, type: 'array', message: '请选择用户角色', trigger: 'blur' }
         ],
         adId: [
             { required: true, message: '请选择所属部门', trigger: 'blur' }

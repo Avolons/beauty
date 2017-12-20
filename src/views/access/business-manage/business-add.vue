@@ -278,9 +278,10 @@ export default {
                         address:this.formValidate.address,
                         contacts:this.formValidate.contacts,
                         phone:this.formValidate.phone,
-
                     }).then((res)=>{
                         this.modal=true;
+                        //绑定返回后的id
+                        this.id=res.data.id;
                     }).catch((err)=>{
 
                     });

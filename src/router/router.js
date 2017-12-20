@@ -133,6 +133,23 @@ export const otherRouter = {
         component: resolve => {
             require(['@/views/followSetting/voice/voice.vue'], resolve);
         }
+    }, {
+        path: '/followSetting/template/template/:id',
+        access: '/followSetting/template/template/:id', // access已经添加
+        title: '模板编辑',
+        name: 'template',
+        component: resolve => {
+            require(['@/views/followSetting/template/template.vue'], resolve);
+        }
+    },
+    {
+        path: '/followSetting/way/way/:id',
+        access: '/followSetting/way/way/:id', // access已经添加
+        title: '方案编辑',
+        name: 'way',
+        component: resolve => {
+            require(['@/views/followSetting/way/way.vue'], resolve);
+        }
     }
     ]
 };

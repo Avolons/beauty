@@ -148,6 +148,20 @@ export default {
         dpId: [
             { required: true, message: '请选择所属科室', trigger: 'blur' }
         ]
+    },
+    followAction: {
+        name: [
+            { required: true, message: '请输入方案名称', trigger: 'blur' }
+        ],
+        departmentId: [
+            { required: true, message: '请选择科室类别', trigger: 'change' }
+        ],
+        wayTem: [
+            { required: true, type: 'array', message: '请选择模板', trigger: 'change' }
+        ],
+        switchWav: [
+            { required: true, message: '请输入ai语音', trigger: 'change' }
+        ]
     }
 
 };

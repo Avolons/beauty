@@ -72,7 +72,7 @@ export default {
                                     },
                                     on: {
                                         click: () => {
-                                            this.edit(1,params.row.id)
+                                            this.edit(1,params.row.id,params.row.name)
                                         }
                                     }
                                 }, '编辑'),
@@ -86,7 +86,7 @@ export default {
                                     },
                                     on: {
                                         click: () => {
-                                            this.manage(params.row.id)
+                                            this.manage(params.row.id,params.row.name)
                                         }
                                     }
                                 }, '管理部门'),
@@ -132,23 +132,24 @@ export default {
              * type 0添加企业 1编辑企业
              * id 
              */
-            edit(type,id=-1) {
+            edit(type,id=-1,name="") {
                 this.$router.push({
                     path:"/access/business/add",
                     query:{
                         type:type,
-                        business_id:id
+                        business_id:id,
                     }
                 });
             }, 
             /** 
              * 管理部门
              */
-            manage(id){
+            manage(id,name){
                 this.$router.push({
                     path:"/access/business/depart",
                     query:{
-                        business_id:id
+                        business_id:id,
+                        name:name
                     }
                 });
             },

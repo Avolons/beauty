@@ -281,7 +281,7 @@ export default {
                     }).then((res)=>{
                         this.modal=true;
                         //绑定返回后的id
-                        this.id=res.data.id;
+                        this.id=res.data;
                     }).catch((err)=>{
 
                     });
@@ -297,9 +297,10 @@ export default {
         editDepart(){
             this.modal=false;
             this.$router.push({
-                path:"/access/business/business_depart",
+                path:"/access/business/depart",
                 query:{
                     business_id:this.id,
+                    name:this.formValidate.name
                 }
             })
         },

@@ -9,7 +9,7 @@
     &_main {
         height: 100%;
         .ivu-tree ul{
-            font-size: 15px;
+            font-size: 13px;
         }
         .ivu-col {
             height: 100%;
@@ -96,7 +96,7 @@
                     <Icon type="ios-copy-outline"></Icon>下级部门编辑
                 </h3>
                 <Breadcrumb separator="/">
-                    <BreadcrumbItem>认识医生</BreadcrumbItem>
+                    <BreadcrumbItem>{{name}}</BreadcrumbItem>
                     <!-- 循环数据展示面包屑 -->
                     <template v-for="item in crumList">
                         <BreadcrumbItem>{{item}}</BreadcrumbItem>
@@ -121,7 +121,7 @@
                     <Icon type="ios-copy-outline"></Icon>部门职位编辑
                 </h3>
                 <Breadcrumb separator="/">
-                    <BreadcrumbItem>认识医生</BreadcrumbItem>
+                    <BreadcrumbItem>{{name}}</BreadcrumbItem>
                     <template v-for="item in crumList">
                         <BreadcrumbItem>{{item}}</BreadcrumbItem>
                     </template>
@@ -149,6 +149,7 @@ import { API } from '../../../services'
 export default {
     data() {
         return {
+            name:"",
             id: -1,
             /* 面包屑列表 */
             crumList: [],
@@ -195,7 +196,7 @@ export default {
             ],
             depart: [
                 {
-                    name: '认识医生',
+                    name: "",
                     expand: true,
                     id: -1,
                     render: (h, { root, node, data }) => {
@@ -569,6 +570,8 @@ export default {
     },
     mounted() {
         this.id = this.$route.query.business_id;
+        this.name = this.$route.query.name;
+        this.depart[0].name=this.name;
         this.treeInit();
     }
 }

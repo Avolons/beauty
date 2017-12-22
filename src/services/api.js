@@ -29,7 +29,13 @@ axios.interceptors.request.use(function (config) {
             'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
         };
     }
-
+    /**
+     * 设置cookie
+     */
+    if (!config.params) {
+        config.params = {};
+    }
+    config.params.randomId = localStorage.getItem('randomId');
     return config;
 }, function (error) {
     // 对请求错误做些什么
@@ -782,6 +788,12 @@ export const FollowBussiness = {
         return fetch('post', 'visit/sufferer/save', data);
     },
     /*
+     * 患者详细信息
+     */
+    detailPat (data) {
+        return fetch('get', '/visit/sufferer/get', data);
+    },
+    /*
      * 随访计划列表
      *  pager:1, //当前页码
     limit:3,//每页条数
@@ -812,6 +824,63 @@ export const FollowBussiness = {
      */
     startPlan (data) {
         return fetch('post', '/visit/ordertask/visit', data);
+    },
+    /*
+    随访记录列表
+     * pager:1, //当前页码
+    limit:3,//每页条数
+    schemeName:测试,//方案名称（可选）
+    orderNo:1712180593098406,//编码（可选）
+    brxm:许建月 //患者姓名（可选）
+     */
+    listLog (data) {
+        return fetch('get', 'visit/order/list', data);
+    },
+    /*
+     * 删除随访记录
+     * id:34259
+     */
+    delLog (data) {
+        return fetch('post', 'visit/order/delete', data);
+    },
+    /*
+     * 随访记录详情
+     * id:34259
+     */
+    detailLog (data) {
+        return fetch('get', 'visit/order/view', data);
+    }
+};
+
+/* 通知相关接口 *****/
+export const Notice = {
+    /*
+     * 通知列表
+     * pager:1, //当前页码
+        limit:3,//每页条数
+        activeName:通知计划名称,//通知计划名称（可选）
+        status:1, //状态（可选）
+        dateBegin:30, //通知计划（可选）
+        dateEnd:50    //通知计划（可选）
+     */
+    listNotice (data) {
+        return fetch('get', '/visit/order/notice/list', data);
+    },
+    /**
+     * activeId:11111  通知计划id
+     * @param {any} data
+     * @returns
+     */
+    delNotice (data) {
+        return fetch('post', 'visit/order/notice/delete', data);
+    },
+    /**
+     * activeId:11111  通知计划id
+     * @param {any} data
+     * @returns
+     */
+    cancelNotice (data) {
+        return fetch('post', 'visit/order/notice/cancel', data);
     }
 
 };

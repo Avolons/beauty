@@ -1,4 +1,7 @@
 <style lang="less">
+.noshow{
+    display: none;
+}
 .inter-down {
     &_main {
         &_list {}
@@ -7,29 +10,29 @@
             margin-bottom: 10px;
             .ivu-col {
                 display: flex;
-				margin-bottom: 10px;
-                >span{
+                margin-bottom: 10px;
+                >span {
                     background-color: #dadada;
                     text-align: center;
                     line-height: 32px;
                     display: block;
-					width: 80px;
-					flex-shrink: 0;
+                    width: 80px;
+                    flex-shrink: 0;
                     border-top-left-radius: 4px;
                     border-bottom-left-radius: 4px;
                 }
-                .ivu-input{
+                .ivu-input {
                     border-top-left-radius: 0;
                     border-bottom-left-radius: 0;
-				}
-				.ivu-date-picker{
-					width: 100%;
-				}
-                .ivu-select{
+                }
+                .ivu-date-picker {
+                    width: 100%;
+                }
+                .ivu-select {
                     flex-grow: 1;
                     flex-shrink: 1;
                 }
-                .ivu-select-selection{
+                .ivu-select-selection {
                     border-top-left-radius: 0;
                     border-bottom-left-radius: 0;
                 }
@@ -49,145 +52,122 @@
             <Row class="inter-down_main_search" :gutter="15">
                 <Col span="6">
                 <span>
-                    科室：
-                </span>
-                <Select v-model="model1" style="width:200px">
-                    <Option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.label }}</Option>
-                </Select>
-                </Col>
-                <Col span="6">
-                <span>
-                    医生：
-                </span>
-                <Select v-model="model1" style="width:200px">
-                    <Option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.label }}</Option>
-                </Select>
-                </Col>
-                <Col span="6">
-                <span>
                     计划名称：
                 </span>
-                <Select v-model="model1" style="width:200px">
-                    <Option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.label }}</Option>
-                </Select>
+                <input type="text" v-model="searchParams.activeName" placeholder="请输入计划名称">
                 </Col>
                 <Col span="6">
                 <span>
                     状态：
                 </span>
-                <Select v-model="model1" style="width:200px">
-                    <Option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                <Select v-model="searchParams.status" style="width:200px">
+                    <Option value=""></Option>
+                    <Option value="0">待审核</Option>
+                    <Option value="1">不通过</Option>
+                    <Option value="2">审核通过</Option>
+                    <Option value="3">已排期</Option>
+                    <Option value="4">已取消</Option>
                 </Select>
                 </Col>
                 <Col span="6">
                 <span>
                     计划时间：
                 </span>
-                <DatePicker type="daterange" placement="bottom-end" placeholder="Select date" ></DatePicker>
+                <DatePicker @on-change="timeChange" type="daterange" placement="bottom-end" placeholder="请选择时间范围"></DatePicker>
                 </Col>
                 <Col span="6">
-                <Button @click="searchuser" type="primary">查询</Button>
+                    <Button @click="getData" type="primary">查询</Button>
                 </Col>
-
             </Row>
             <div class="inter-down_main_list">
-                <Table border ref="selection" :columns="columns7" :data="data6"></Table>
-
+                <Table border :columns="config" :data="dataList"></Table>
             </div>
             <Row class="inter-down_main_page">
-                <Button @click="handleSelectAll(true)">全选</Button>
-                <Button @click="handleSelectAll(false)">取消</Button>
-                <Button @click="handleSelectAll(false)" type="warning">删除</Button>
-                <Page :total="100" :current="1" show-elevator style="float:right" @on-change="changePage"></Page>
+                <Page style="float:right" :total="totalPage" @on-change="changePage" show-elevator show-total></Page>
             </Row>
         </div>
     </div>
 </template>
 
 <script>
+import { API } from '@/services/index.js';
 export default {
     data() {
         return {
-            value1: "",
-            model1: '',
-            cityList: [
-                {
-                    value: 'New York',
-                    label: 'New York'
-                },
-                {
-                    value: 'London',
-                    label: 'London'
-                },
-                {
-                    value: 'Sydney',
-                    label: 'Sydney'
-                },
-                {
-                    value: 'Ottawa',
-                    label: 'Ottawa'
-                },
-                {
-                    value: 'Paris',
-                    label: 'Paris'
-                },
-                {
-                    value: 'Canberra',
-                    label: 'Canberra'
-                }
-            ],
-            columns7: [
-                {
-                    type: 'selection',
-                    width: 60,
-                    align: 'center'
-                },
+            //搜索选项
+            searchParams: {
+                pager: 1, //当前页码
+                limit: 10,//每页条数
+                activeName: "",//通知计划名称（可选）
+                status: "0", //状态（可选）
+                dateBegin: "", //通知计划（可选）
+                dateEnd: ""    //通知计划（可选）
+
+            },
+            totalPage: 100,//总页数
+            config: [
                 {
                     title: '通知计划名称',
-                    key: 'username'
+                    key: 'activeName'
                 },
                 {
                     title: '通知方案',
-                    key: 'time'
+                    key: 'schemeName'
                 },
                 {
                     title: '创建时间',
-                    key: 'username'
+                    key: 'dateAdd'
                 },
                 {
                     title: '状态',
-                    key: 'time'
+                    key: 'vetStatusStr'
                 },
                 {
                     title: '通知总人数',
-                    key: 'username'
+                    key: 'totalNum'
                 },
                 {
                     title: '通知完毕人数',
-                    key: 'time'
+                    key: 'doNum'
                 },
                 {
                     title: '通知中人数',
-                    key: 'username'
+                    key: 'noDoNum'
                 },
                 {
                     title: '操作',
                     key: 'action',
-                    width: 100,
+                    width: 150,
                     align: 'center',
                     render: (h, params) => {
                         return h('div', [
-                            h('Button', {
+                           h('Button', {
                                 props: {
-                                    type: 'warning',
-                                    size: 'small'
+                                    type: 'primary',
+                                    size: 'small',
+                                },
+                                'class':{
+                                  "noshow":params.row.vetStatusStr=="已取消"||params.row.vetStatusStr=="未开始"
                                 },
                                 style: {
                                     marginRight: '5px'
                                 },
                                 on: {
                                     click: () => {
-                                        this.show(params.index)
+                                        this.stopNotice(params.row.id)
+                                    }
+                                }
+                            }, '停止计划'),
+                            h('Button', {
+                                props: {
+                                    type: 'warning',
+                                    size: 'small'
+                                },
+                                style: {
+                                },
+                                on: {
+                                    click: () => {
+                                        this.deletNotice(params.row.id);
                                     }
                                 }
                             }, '删除'),
@@ -195,68 +175,73 @@ export default {
                     }
                 }
             ],
-            data6: [
-                {
-                    role: "医生",
-                    username: "1245786",
-                    time: "2017-11-30 11:08:30",
-                    action: "随访测试",
-                    name: "测试",
-                    mobile: 14578884125,
-                    look: 1,
-                },
-                {
-                    role: "医生",
-                    username: "1245786",
-                    time: "2017-11-30 11:08:30",
-                    action: "随访测试",
-                    name: "测试",
-                    mobile: 14578884125,
-                    look: 1,
-                },
-                {
-                    role: "医生",
-                    username: "1245786",
-                    time: "2017-11-30 11:08:30",
-                    action: "随访测试",
-                    name: "测试",
-                    mobile: 14578884125,
-                    look: 1,
-                },
-                {
-                    role: "医生",
-                    username: "1245786",
-                    time: "2017-11-30 11:08:30",
-                    action: "随访测试",
-                    name: "测试",
-                    mobile: 14578884125,
-                    look: 1,
-                }
-            ]
+            dataList: []
         }
     },
     methods: {
-        show(index) {
-            this.$Modal.info({
-                title: 'User Info',
-                content: `Name：${this.data6[index].name}<br>Age：${this.data6[index].age}<br>Address：${this.data6[index].address}`
-            })
+        /** 
+         * 时间更改
+         */
+        timeChange(time){
+            this.dateBegin=time[0];
+            this.dateEnd=time[1];
         },
-        handleSelectAll(status) {
-            this.$refs.selection.selectAll(status);
-        },
-        remove(index) {
-            this.data6.splice(index, 1);
-        },
-        adduser() {
-            this.$router.push('/access/user/inter-down_add/0');
-        },
-        changePage() {
+        /** 
+		 * 获取列表数据,搜索接口
+		 */
+        getData() {
+            API.Notice.listNotice(this.searchParams).then((res) => {
+                this.dataList = res.data;
+                this.totalPage = res.total;
+            }).catch((err) => {
 
+            });
         },
-        searchuser() {
+		/** 
+		 * 页码改变
+		 */
+        changePage(index) {
+            this.searchParams.pager = index;
+            this.getData();
+        },
+        stopNotice(id) {
+            this.$Modal.confirm({
+                title: '停止计划',
+                content: '确定要停止计划？',
+                onOk: () => {
+                    API.Notice.cancelNotice({
+                        id: id
+                    }).then((res) => {
+                        this.$Message.success("暂停成功");
+                        this.getData();
+                    }).catch((err) => {
 
+                    });
+                }
+            });
+        },
+		/** 
+		 * 删除通知进度
+		 */
+        deletNotice(id) {
+            this.$Modal.confirm({
+                title: '删除记录',
+                content: '确定删除该条记录？',
+                onOk: () => {
+                    API.Notice.delNotice({
+                        id: id
+                    }).then((res) => {
+                        this.$Message.success("删除成功");
+                        this.getData();
+                    }).catch((err) => {
+
+                    });
+                }
+            });
         }
+    },
+    mounted() {
+        this.getData();
     }
 }
 </script>

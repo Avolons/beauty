@@ -1,7 +1,11 @@
 import Vue from 'vue';
 import iView from 'iview';
-import {router} from './router/index';
-import {appRouter} from './router/router';
+import {
+    router
+} from './router/index';
+import {
+    appRouter
+} from './router/router';
 import store from './store';
 import App from './app.vue';
 import '@/locale';
@@ -18,6 +22,11 @@ Vue.use(iView);
 
 Vue.prototype.validate = validate;
 /* 全局设置API */
+
+/** 设置cookie */
+if (!localStorage.getItem('randomId')) {
+    localStorage.setItem('randomId', '');
+}
 
 window.RSYS = new Vue({
     el: '#app',

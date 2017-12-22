@@ -28,12 +28,12 @@
         </Col>
         <!-- 随访模态框 -->
         <Modal v-model="followShow" title="随访电话" class-name="patientInfo" :styles="{top: '180px'}">
-            <Form :model="AIform" :rules="validate" inline :label="80" class="AIform">
-                <FormItem prop="phone" label="电话">
+            <Form ref="AIform" :model="AIform" :rules="validate.followPlan" inline :label="80" class="AIform">
+                <FormItem prop="AIphone" label="电话">
                     <Input v-model="AIform.AIphone" placeholder="请输入号码" type="text"></Input>
                 </FormItem>
                 <FormItem>
-                    <Button type="primary" @click="submitData">提交AI</Button>
+                    <Button type="primary" @click="submitData('AIform')">提交AI</Button>
                 </FormItem>
             </Form>
         </Modal>
@@ -49,7 +49,7 @@ export default {
             searchParams: {
                 brxm: '',//患者姓名
                 schemeName: '',//随访方案
-                /* status: '',//审核状态 */
+                status: '',//审核状态
                 pager: 1,//
                 limit:10,//每页条数
             },
@@ -111,19 +111,6 @@ export default {
                             }, '随访'),
                             h('Button', {
                                 props: {
-                                    type: 'primary',
-                                    size: 'small'
-                                },
-                                style: {
-                                    marginRight: '5px'
-                                },
-                                on: {
-                                    click: () => {
-                                    }
-                                }
-                            }, '停止计划'),
-                            h('Button', {
-                                props: {
                                     type: 'warning',
                                     size: 'small'
                                 },
@@ -144,7 +131,25 @@ export default {
                 }],
             //列表数据
             dataList: [],
-            statusList: [],//审核状态选项列表
+            statusList: [{
+                name:"全部",
+                id:""
+            },{
+                name:"待审核",
+                id:0
+            },{
+                name:"不通过",
+                id:1
+            },{
+                name:"审核通过",
+                id:2
+            },{
+                name:"已排期",
+                id:3
+            },{
+                name:"已取消",
+                id:4
+            },],//审核状态选项列表
             id: -1,//当前被选中的数据id
             totalPage: 100,//总页数
             followShow: false,//编辑模态框
@@ -180,7 +185,15 @@ export default {
                     /** 
 					 * 此处填写具体的ajax请求
 					 */
-                    this.$Message.success('保存成功!');
+                    API.FollowBussiness.startPlan({
+                        id:this.id,
+                        phone:this.AIform.AIphone
+                    }).then((res)=>{
+                        this.$Message.success('保存成功!');
+                        this.followShow = false;
+                    }).catch((err)=>{
+
+                    });
                 } else {
                     this.$Message.error('请正确填写信息');
                 }
@@ -190,14 +203,21 @@ export default {
          * 删除随访计划
          */
         deletPlan(id) {
-            /* 删除后在回调中刷新当前数据 */
-            API.FollowBussiness.listPat(this.searchParams).then((res)=>{
-				this.dataList=res.data;
-				this.totalPage=res.total;
-			}).catch((err)=>{
+            this.$Modal.confirm({
+				title: '删除设置',
+				content: '确定删除该系统设置？',
+				onOk: () => {
+					API.FollowBussiness.delPlan({
+						id: id
+					}).then((res) => {
+						this.$Message.success("删除成功");
+						this.getData();
+					}).catch((err) => {
 
+					});
+				}
 			});
-            this.getData();
+            
         },
         /** 
          * 开始随访

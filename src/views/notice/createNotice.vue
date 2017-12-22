@@ -147,7 +147,7 @@
 					<Row class="creatNotice_main_page">
 						<Button @click="handleSelectAll(true)">全选当前页</Button>
 						<Button @click="handleSelectAll(false)">取消</Button>
-						<Button @click="handleSelectAll(false)" type="primary">下一步</Button>
+						<Button @click="handleSelectAll(false)" type="primary">下一步选择方案</Button>
 						<Page :total="totalPage" :current="page" show-elevator style="float:right" @on-change="changePage"></Page>
 					</Row>
 				</TabPane>
@@ -186,7 +186,7 @@
 export default {
 	data() {
 		return {
-			step: "step_two",
+			step: "step_one",
 			//搜索选项
 			searchParams: {
 				depart: '',//科室
@@ -200,8 +200,6 @@ export default {
 			page:1,//当前页码
 			totalPage:10,//总页数
 			modal: false,
-			value1: "",
-			model1: '',
 			//通知内容
 			notice:{
 				name:"",
@@ -307,44 +305,7 @@ export default {
 				
 			],
 			//列表数据,必须使用缓存数据方式
-			dataList: [
-				{
-					role: "医生",
-					username: "1245786",
-					time: "2017-11-30 11:08:30",
-					action: "随访测试",
-					name: "测试",
-					mobile: 14578884125,
-					look: 1,
-				},
-				{
-					role: "医生",
-					username: "1245786",
-					time: "2017-11-30 11:08:30",
-					action: "随访测试",
-					name: "测试",
-					mobile: 14578884125,
-					look: 1,
-				},
-				{
-					role: "医生",
-					username: "1245786",
-					time: "2017-11-30 11:08:30",
-					action: "随访测试",
-					name: "测试",
-					mobile: 14578884125,
-					look: 1,
-				},
-				{
-					role: "医生",
-					username: "1245786",
-					time: "2017-11-30 11:08:30",
-					action: "随访测试",
-					name: "测试",
-					mobile: 14578884125,
-					look: 1,
-				}
-			]
+			dataList: []
 		}
 	},
 	methods: {

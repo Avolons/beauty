@@ -1,6 +1,7 @@
 <style lang="less">
 .patientSearch {
 	background: #fff;
+	border-radius: 5px;
 	form {
 		.ivu-form-item {
 			margin-bottom: 0;
@@ -171,11 +172,11 @@
 				<div class="info">
 					<div class="info-row">
 						<div class="info1 bb1">姓名</div>
-						<div class="info2 bdx1">薛卫国</div>
+						<div class="info2 bdx1">{{currentData.brxm}}</div>
 					</div>
 					<div class="info-row">
 						<div class="info1">性别</div>
-						<div class="info2">男</div>
+						<div class="info2">{{currentData.brxb}}</div>
 					</div>
 				</div>
 				</Col>
@@ -183,11 +184,11 @@
 				<div class="info">
 					<div class="info-row">
 						<div class="info1 bb1">电话</div>
-						<div class="info2 bdx1">15225099945</div>
+						<div class="info2 bdx1">{{currentData.lxdh}}</div>
 					</div>
 					<div class="info-row">
 						<div class="info1">地址</div>
-						<div class="info2">杭州市下城区</div>
+						<div class="info2">{{currentData.xzzQtdz}}</div>
 					</div>
 				</div>
 				</Col>
@@ -195,44 +196,29 @@
 				<div class="info">
 					<div class="info-row">
 						<div class="info1 bb1">年龄</div>
-						<div class="info2 bdx1">52</div>
+						<div class="info2 bdx1">{{currentData.age}}</div>
 					</div>
 					<div class="info-row">
 						<div class="info1">民族</div>
-						<div class="info2">维吾尔族</div>
+						<div class="info2">{{currentData.mz}}</div>
 					</div>
 				</div>
 				</Col>
 				<Col span="24" class="infoCol24">
-				<Row class="infoRow2">
+				<Row class="infoRow2" v-for="item in currentData.logs" :key="item.id">
 					<Col span="4" class="sfCol4">
 					<div class="counts">
-						<p class="suifang">随访</p>
-						<p class="sfCounts">69天</p>
+						<p class="suifang">{{item.type}}</p>
 					</div>
 					</Col>
 					<Col span="20" class="sfCol20">
-					<h3 class="sfName">薛卫国</h3>
+					<h3 class="sfName">{{currentData.brxm}}</h3>
 					<p class="sfTime mb12">
-						<span>2017年09月28日18点05分</span>随访</p>
+						<span>{{item.dateAdd}}</span>      {{item.title}}</p>
 					<Row>
-						<Col span="12">
-						<p>是否知道全科医生签约服务:
-							<span>是</span>
-						</p>
-						<p>对他(她)的服务是否满意:
-							<span>是</span>
-						</p>
-						<p>医生意见:
-							<span>是</span>
-						</p>
-						</Col>
-						<Col span="12">
-						<p>是否知道自己的签约医生:
-							<span>是</span>
-						</p>
-						<p>是否经常在我中心就诊:
-							<span>不太来</span>
+						<Col v-for="ite,index in item.jsonData" span="12" :key="index">
+						<p>
+							{{ite}}
 						</p>
 						</Col>
 					</Row>
@@ -273,7 +259,7 @@
 				</FormItem>
 				<FormItem>
 					<Button type="primary" style="margin-left: 110px;" @click="submitData('formCustom')">提交</Button>
-					<Button type="ghost" style="margin-left: 8px" @click="handleReset('formCustom')" >重置</Button>
+					<Button type="ghost" style="margin-left: 8px" @click="handleReset('formCustom')">重置</Button>
 				</FormItem>
 			</Form>
 		</Modal>
@@ -287,14 +273,16 @@ export default {
 		return {
 			//搜索条件对象
 			searchParams: {
-				brid:'',//患者编号
+				brid: '',//患者编号
 				brxm: '',//患者姓名
-				pager:1,//当前页码
-				limit:10,//每页条数
+				pager: 1,//当前页码
+				limit: 10,//每页条数
 			},
-			totalPage:100,//总页数
+			totalPage: 100,//总页数
 			//当前被点击患者，编辑和详情按钮触发时更换数据
-			currentData:{},
+			currentData: {
+
+			},
 			//详情模态框
 			patientDetail: false,
 			//编辑模态框
@@ -313,7 +301,7 @@ export default {
 			},
 			//表格数据
 			dataList: [
-				
+
 			],
 			//表格配置
 			config: [
@@ -381,27 +369,39 @@ export default {
 								},
 								on: {
 									click: () => {
-										this.getInfo(params.row);
+										this.getInfo(params.row.id);
 									}
 								}
 							}, '详情')
 						]);
 					}
 				}],
-			
-			
+
+
 		}
 	},
 	methods: {
-		editPat(data){
-			this.formCustom=data;
+		editPat(data) {
+			this.formCustom = data;
 			this.patientText = true;
 		},
 		/** 
 		 * 查看患者详情
 		 */
-		getInfo(data){
-			this.currentData=data;
+		getInfo(id) {
+			API.FollowBussiness.detailPat({
+				id: id
+			}).then((res) => {
+				for (let item of res.data.logs) {
+					item.jsonData=item.jsonData.replace(/"/g, '');
+					item.jsonData=item.jsonData.replace("{", '');
+					item.jsonData=item.jsonData.replace("}", '');
+					item.jsonData=item.jsonData.split(",");
+				}
+				this.currentData=res.data;
+			}).catch((err) => {
+
+			});
 			this.patientDetail = true;
 		},
 		/** 
@@ -413,10 +413,10 @@ export default {
 					/** 
 					 * 此处填写具体的ajax请求
 					 */
-					API.FollowBussiness.savePat(this.formCustom).then((res)=>{
+					API.FollowBussiness.savePat(this.formCustom).then((res) => {
 						this.$Message.success("编辑成功");
 						this.getData();
-					}).catch((err)=>{
+					}).catch((err) => {
 
 					});
 					this.$Message.success('保存成功!');
@@ -428,44 +428,44 @@ export default {
 		/** 
 		 * 获取列表数据,搜索接口
 		 */
-		getData(){
-			API.FollowBussiness.listPat(this.searchParams).then((res)=>{
-				this.dataList=res.data;
-				this.totalPage=res.total;
-			}).catch((err)=>{
+		getData() {
+			API.FollowBussiness.listPat(this.searchParams).then((res) => {
+				this.dataList = res.data;
+				this.totalPage = res.total;
+			}).catch((err) => {
 
 			});
 		},
 		/** 
 		 * 页码改变
 		 */
-		changePage(index){
-			this.searchParams.pager=index;
+		changePage(index) {
+			this.searchParams.pager = index;
 			this.getData();
 		},
 		/** 
 		 * 增加随访
 		 */
-		addFollow(data){
-			const id=data.id;
+		addFollow(data) {
+			const id = data.id;
 			/** 
 			 * 此处填写具体页面跳转，携带id
 			 */
 			this.$route.push({
-				path:"/",//替换成具体的地址
-				query:{
-					id:id,
+				path: "/",//替换成具体的地址
+				query: {
+					id: id,
 				}
 			})
 		},
 		/** 
          * 重置所有属性
          */
-        handleReset(name) {
-            this.$refs[name].resetFields();
-        },
+		handleReset(name) {
+			this.$refs[name].resetFields();
+		},
 	},
-	mounted () {
+	mounted() {
 		this.getData();
 	}
 }

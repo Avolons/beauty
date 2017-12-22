@@ -97,6 +97,7 @@ export default {
                         password: this.form.password,
                         /* picCode: this.form.code */
                     }).then((res) => {
+                           localStorage.setItem('randomId', res.randomId);
                             /** 
                              * 菜单权限和功能权限
                              */

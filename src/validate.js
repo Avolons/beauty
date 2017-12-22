@@ -162,6 +162,11 @@ export default {
         switchWav: [
             { required: true, message: '请输入ai语音', trigger: 'change' }
         ]
+    },
+    followPlan: {
+        AIphone: [
+            { required: true, message: '请填写电话', trigger: 'change' }
+        ]
     }
 
 };

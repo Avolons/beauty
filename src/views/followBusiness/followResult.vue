@@ -1,21 +1,30 @@
 <template>
 	<Row>
 		<!-- 搜索栏 -->
-		<Col span="24" class="followPlan">
-		<Form ref="searchParams" :model="searchParams" :rules="validate" :label-width="90" inline>
-			<FormItem label="编号">
-				<Input type="text" v-model="searchParams.orderNo" placeholder="请输入患者编号"></Input>
-			</FormItem>
-			<FormItem label="患者姓名">
-				<Input type="text" v-model="searchParams.brxm" placeholder="请输入患者姓名"></Input>
-			</FormItem>
-			<FormItem label="随访方案">
-				<Input type="text" v-model="searchParams.schemeName" placeholder="请输入随访方案"></Input>
-			</FormItem>
-			<FormItem>
-				<Button type="primary" @click="getData">查询</Button>
-			</FormItem>
-		</Form>
+		<Col span="24" class="followResult">
+		<Row class="inter-down_main_search" :gutter="15">
+			<Col span="6">
+			<span>
+				编号
+			</span>
+			<Input type="text" v-model="searchParams.orderNo" placeholder="请输入患者编号"></Input>
+			</Col>
+			<Col span="6">
+			<span>
+				患者姓名
+			</span>
+			<Input type="text" v-model="searchParams.brxm" placeholder="请输入患者姓名"></Input>
+			</Col>
+			<Col span="6">
+			<span>
+				随访方案
+			</span>
+			<Input type="text" v-model="searchParams.schemeName" placeholder="请输入随访方案"></Input>
+			</Col>
+			<Col span="6">
+			<Button @click="getData" type="primary">查询</Button>
+			</Col>
+		</Row>
 		</Col>
 		<!-- 表格 -->
 		<Col span="24" class="fpTable">
@@ -29,7 +38,7 @@
 			<Collapse>
 				<Panel name="1">
 					随访结果
-					<div slot="content" class="followPlan_table">
+					<div slot="content" class="followResult_table">
 						<table border="1">
 							<tr>
 								<td>患者姓名</td>
@@ -56,8 +65,10 @@
 							<tr>
 								<td>随访结果</td>
 								<td colspan=3>
-									<template v-if="item.fieldName&&item.fieldValue"  v-for="item in planInfo.orderReplyQuestions">
-										<span style="display:block">{{item.fieldName}}:<b>{{item.fieldValue}}</b></span>
+									<template v-if="item.fieldName&&item.fieldValue" v-for="item in planInfo.orderReplyQuestions">
+										<span style="display:block">{{item.fieldName}}:
+											<b>{{item.fieldValue}}</b>
+										</span>
 									</template>
 								</td>
 							</tr>
@@ -70,15 +81,15 @@
 				</Panel>
 				<Panel name="2">
 					记录详情
-					<ul slot="content" class="followPlan_message">
+					<ul slot="content" class="followResult_message">
 						<template v-for="item in planInfo.orderReplyQuestions">
-							<li class="followPlan_single_ai">
+							<li class="followResult_single_ai">
 								<Icon type="android-call"></Icon>
 								<span>
 									{{item.question}}
 								</span>
 							</li>
-							<li class="followPlan_single_pat">
+							<li class="followResult_single_pat">
 								<span>
 									<audio controls :src="item.audio"></audio>
 								</span>
@@ -251,7 +262,7 @@ export default {
 <style lang="less">
 @import "../../styles/common.less";
 
-.followPlan {
+.followResult {
 	&_single {
 		&_ai {
 			padding-right: calc(50% + 10px);
@@ -325,8 +336,6 @@ export default {
 			width: 25%
 		}
 	}
-	padding: 20px 0;
-	background: #fff;
 	form {
 		.ivu-form-item {
 			margin-bottom: 10px;
@@ -367,5 +376,46 @@ export default {
 
 .mb12 {
 	margin-bottom: 12px;
+}
+
+.inter-down {
+	&_main {
+		&_list {}
+		&_search {
+			box-sizing: border-box;
+			margin-bottom: 10px;
+			.ivu-col {
+				display: flex;
+				>span {
+					background-color: #dadada;
+					text-align: center;
+					line-height: 32px;
+					display: block;
+					width: 80px;
+					flex-shrink: 0;
+					border-top-left-radius: 4px;
+					border-bottom-left-radius: 4px;
+				}
+				.ivu-input {
+					border-top-left-radius: 0;
+					border-bottom-left-radius: 0;
+				}
+				.ivu-date-picker {
+					width: 100%;
+				}
+				.ivu-select {
+					flex-grow: 1;
+					flex-shrink: 1;
+				}
+				.ivu-select-selection {
+					border-top-left-radius: 0;
+					border-bottom-left-radius: 0;
+				}
+			}
+		}
+		&_page {
+			margin-top: 10px;
+		}
+	}
 }
 </style>

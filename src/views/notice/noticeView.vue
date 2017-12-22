@@ -61,7 +61,7 @@
                     状态：
                 </span>
                 <Select v-model="searchParams.status" style="width:200px">
-                    <Option value=""></Option>
+                    <Option value="">全选</Option>
                     <Option value="0">待审核</Option>
                     <Option value="1">不通过</Option>
                     <Option value="2">审核通过</Option>
@@ -147,14 +147,14 @@ export default {
                                     size: 'small',
                                 },
                                 'class':{
-                                  "noshow":params.row.vetStatusStr=="已取消"||params.row.vetStatusStr=="未开始"
+                                  noshow:params.row.vetStatusStr.trim()=="已取消"||params.row.vetStatusStr.trim()=="未开始"
                                 },
                                 style: {
                                     marginRight: '5px'
                                 },
                                 on: {
                                     click: () => {
-                                        this.stopNotice(params.row.id)
+                                        this.stopNotice(params.row.activeId)
                                     }
                                 }
                             }, '停止计划'),
@@ -167,7 +167,7 @@ export default {
                                 },
                                 on: {
                                     click: () => {
-                                        this.deletNotice(params.row.id);
+                                        this.deletNotice(params.row.activeId);
                                     }
                                 }
                             }, '删除'),
@@ -183,8 +183,9 @@ export default {
          * 时间更改
          */
         timeChange(time){
-            this.dateBegin=time[0];
-            this.dateEnd=time[1];
+            console.log(time);
+            this.searchParams.dateBegin=time[0];
+            this.searchParams.dateEnd=time[1];
         },
         /** 
 		 * 获取列表数据,搜索接口
@@ -210,7 +211,7 @@ export default {
                 content: '确定要停止计划？',
                 onOk: () => {
                     API.Notice.cancelNotice({
-                        id: id
+                        activeId: id
                     }).then((res) => {
                         this.$Message.success("暂停成功");
                         this.getData();
@@ -229,7 +230,7 @@ export default {
                 content: '确定删除该条记录？',
                 onOk: () => {
                     API.Notice.delNotice({
-                        id: id
+                        activeId: id
                     }).then((res) => {
                         this.$Message.success("删除成功");
                         this.getData();

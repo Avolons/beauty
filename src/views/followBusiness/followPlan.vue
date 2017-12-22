@@ -2,22 +2,31 @@
     <Row>
         <!-- 搜索栏 -->
         <Col span="24" class="followPlan">
-        <Form :label-width="90" inline>
-            <FormItem label="患者姓名">
+        <Row class="inter-down_main_search" :gutter="15">
+                <Col span="6">
+                <span>
+                    患者姓名
+                </span>
                 <Input type="text" v-model="searchParams.brxm" placeholder="请输入患者姓名"></Input>
-            </FormItem>
-            <FormItem label="随访方案">
+                </Col>
+                <Col span="6">
+                <span>
+                    随访方案
+                </span>
                 <Input type="text" v-model="searchParams.schemeName" placeholder="请输入随访方案"></Input>
-            </FormItem>
-            <FormItem label="审核状态">
+                </Col>
+                <Col span="6">
+                <span>
+                    审核状态
+                </span>
                 <Select v-model="searchParams.status">
                     <Option v-for="item in statusList" :value="item.id" :key="item.id">{{item.name}}</Option>
                 </Select>
-            </FormItem>
-            <FormItem>
-                <Button type="primary" @click="getData">查询</Button>
-            </FormItem>
-        </Form>
+                </Col>
+                <Col span="6">
+                   <Button type="primary" @click="getData">查询</Button>
+                </Col>
+            </Row>
         </Col>
         <!-- 表格 -->
         <Col span="24" class="fpTable">
@@ -248,9 +257,47 @@ export default {
 
 <style lang="less">
 @import "../../styles/common.less";
-
+.inter-down {
+    &_main {
+        &_list {}
+        &_search {
+            box-sizing: border-box;
+            margin-bottom: 10px;
+            .ivu-col {
+                display: flex;
+                >span {
+                    background-color: #dadada;
+                    text-align: center;
+                    line-height: 32px;
+                    display: block;
+                    width: 80px;
+                    flex-shrink: 0;
+                    border-top-left-radius: 4px;
+                    border-bottom-left-radius: 4px;
+                }
+                .ivu-input {
+                    border-top-left-radius: 0;
+                    border-bottom-left-radius: 0;
+                }
+                .ivu-date-picker {
+                    width: 100%;
+                }
+                .ivu-select {
+                    flex-grow: 1;
+                    flex-shrink: 1;
+                }
+                .ivu-select-selection {
+                    border-top-left-radius: 0;
+                    border-bottom-left-radius: 0;
+                }
+            }
+        }
+        &_page {
+            margin-top: 10px;
+        }
+    }
+}
 .followPlan {
-    background: #fff;
     form {
         .ivu-form-item {
             margin-bottom: 0;

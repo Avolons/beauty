@@ -1,6 +1,6 @@
 <style lang="less">
 .patientSearch {
-	background: #fff;
+
 	border-radius: 5px;
 	form {
 		.ivu-form-item {
@@ -140,25 +140,69 @@
 .mb12 {
 	margin-bottom: 12px;
 }
+.inter-down {
+    &_main {
+        &_list {}
+        &_search {
+            box-sizing: border-box;
+            margin-bottom: 10px;
+            .ivu-col {
+                display: flex;
+                >span {
+                    background-color: #dadada;
+                    text-align: center;
+                    line-height: 32px;
+                    display: block;
+                    width: 80px;
+                    flex-shrink: 0;
+                    border-top-left-radius: 4px;
+                    border-bottom-left-radius: 4px;
+                }
+                .ivu-input {
+                    border-top-left-radius: 0;
+                    border-bottom-left-radius: 0;
+                }
+                .ivu-date-picker {
+                    width: 100%;
+                }
+                .ivu-select {
+                    flex-grow: 1;
+                    flex-shrink: 1;
+                }
+                .ivu-select-selection {
+                    border-top-left-radius: 0;
+                    border-bottom-left-radius: 0;
+                }
+            }
+        }
+        &_page {
+            margin-top: 10px;
+        }
+    }
+}
 </style>
 <template>
 	<Row class="patientSearch">
 		<!-- 搜索栏 -->
-		<Col span="24" class="patientSearch">
-		<Form :label-width="80" inline>
-			<FormItem label="患者编号">
-				<Input type="text" v-model="searchParams.brid" placeholder="请输入患者编号"></Input>
-			</FormItem>
-			<FormItem label="患者姓名">
-				<Input type="text" v-model="searchParams.brxm" placeholder="请输入患者姓名"></Input>
-			</FormItem>
-			<FormItem>
-				<Button type="primary" @click="getData">查询</Button>
-			</FormItem>
-		</Form>
-		</Col>
+		<Row class="inter-down_main_search" :gutter="15">
+			<Col span="6">
+			<span>
+				患者编号
+			</span>
+			<Input type="text" v-model="searchParams.brid" placeholder="请输入患者编号"></Input>
+			</Col>
+			<Col span="6">
+			<span>
+				患者姓名
+			</span>
+			<Input type="text" v-model="searchParams.brxm" placeholder="请输入患者姓名"></Input>
+			</Col>
+			<Col span="6">
+			<Button type="primary" @click="getData">查询</Button>
+			</Col>
+		</Row>
 		<!-- 表格 -->
-		<Col span="24" class="patientList">
+		<Col span="24" >
 		<Table border :columns="config" :data="dataList"></Table>
 		</Col>
 		<!-- 分页 -->
@@ -214,7 +258,7 @@
 					<Col span="20" class="sfCol20">
 					<h3 class="sfName">{{currentData.brxm}}</h3>
 					<p class="sfTime mb12">
-						<span>{{item.dateAdd}}</span>      {{item.title}}</p>
+						<span>{{item.dateAdd}}</span> {{item.title}}</p>
 					<Row>
 						<Col v-for="ite,index in item.jsonData" span="12" :key="index">
 						<p>
@@ -393,12 +437,12 @@ export default {
 				id: id
 			}).then((res) => {
 				for (let item of res.data.logs) {
-					item.jsonData=item.jsonData.replace(/"/g, '');
-					item.jsonData=item.jsonData.replace("{", '');
-					item.jsonData=item.jsonData.replace("}", '');
-					item.jsonData=item.jsonData.split(",");
+					item.jsonData = item.jsonData.replace(/"/g, '');
+					item.jsonData = item.jsonData.replace("{", '');
+					item.jsonData = item.jsonData.replace("}", '');
+					item.jsonData = item.jsonData.split(",");
 				}
-				this.currentData=res.data;
+				this.currentData = res.data;
 			}).catch((err) => {
 
 			});

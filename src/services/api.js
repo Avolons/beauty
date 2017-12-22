@@ -12,9 +12,9 @@ import qs from 'qs';
 Vue.prototype.$http = axios;
 
 /* 默认最长响应时间 */
-axios.defaults.timeout = 500;
+axios.defaults.timeout = 5000;
 /* 默认的接口地址 */
-/* axios.defaults.baseURL = 'http://192.168.1.100:8080'; */
+axios.defaults.baseURL = 'http://192.168.1.100:8080';
 
 // 添加请求拦截器
 axios.interceptors.request.use(function (config) {
@@ -638,7 +638,7 @@ export const follSetting = {
         return fetch('get', 'visit/questiontarget/get', data);
     }
 };
-  /* 随访设置--随访问题接口 *****/
+/* 随访设置--随访问题接口 *****/
 export const followProblems = {
     /**
      * 随访问题所有信息展示
@@ -665,104 +665,153 @@ export const followProblems = {
         return fetch('get', 'visit/disease/autocomplete', data);
     }
 };
-  /* 随访设置--话述信息  *****/
+/* 随访设置--话述信息  *****/
 export const voiceSetting = {
-   /*
-    *话述信息
-    *questionId(问题id)
-    */
+    /*
+     *话述信息
+     *questionId(问题id)
+     */
     question (data) {
         return fetch('get', 'visit/question/script/list', data);
     },
     /*
-    *话述设置--删除
-    *questionId(问题id)
-    */
+     *话述设置--删除
+     *questionId(问题id)
+     */
     questionDelete (data) {
         return fetch('get', 'visit/question/script/delete', data);
     },
     /*
-    *话述设置--保存
-    *questionId(问题id)
-    */
+     *话述设置--保存
+     *questionId(问题id)
+     */
     questionSave (data) {
         return fetch('post', 'visit/question/script/save', data);
     }
 
 };
-  /* 随访设置--随访模板接口 *****/
+/* 随访设置--随访模板接口 *****/
 export const followTemplate = {
-   /*
-   * 随访模板所有信息展示
-   */
+    /*
+     * 随访模板所有信息展示
+     */
     list (data) {
         return fetch('get', 'visit/questiontemple/list', data);
     },
     /*
-    *删除
-    */
+     *删除
+     */
     deleteList (data) {
         return fetch('get', 'visit/questiontemple/delete', data);
     },
     /*
-    *添加/修改
-    *json格式
-    */
+     *添加/修改
+     *json格式
+     */
     addList (data) {
         return fetch('post', 'visit/questiontemple/save', data);
     },
     /*
-    *获取模板基本信息
-    */
+     *获取模板基本信息
+     */
     editList (data) {
         return fetch('get', 'visit/questiontemple/get', data);
     },
     /*
-    *根据模板id获取模板问题接口
-    */
+     *根据模板id获取模板问题接口
+     */
     questionList (data) {
         return fetch('get', 'visit/questiontemple/question/list', data);
     }
 
 };
-  /* 随访设置--随访方案接口 *****/
+/* 随访设置--随访方案接口 *****/
 export const followWay = {
-   /*
-   * 科室列表
-   */
+    /*
+     * 科室列表
+     */
     departmentList (data) {
         return fetch('get', 'visit/department/list', data);
     },
     /*
-    * 随访方案列表
-    */
+     * 随访方案列表
+     */
     list (data) {
         return fetch('get', 'visit/questionscheme/list', data);
     },
     /*
-    *删除
-    */
+     *删除
+     */
     deleteList (data) {
         return fetch('get', 'visit/questionscheme/delete', data);
     },
     /*
-    *添加/修改
-    *json格式
-    */
+     *添加/修改
+     *json格式
+     */
     addList (data) {
         return fetch('post', 'visit/questionscheme/save', data);
     },
     /*
-    *编辑展示
-    */
+     *编辑展示
+     */
     editList (data) {
         return fetch('get', 'visit/questionscheme/get', data);
     },
     /*
-    *根据模板id获取语音
-    */
+     *根据模板id获取语音
+     */
     voiceList (data) {
         return fetch('get', 'visit/questionscheme/temple/list', data);
+    }
+
+};
+
+/* 随访业务相关接口 *****/
+export const FollowBussiness = {
+    /*
+     * 患者列表
+     */
+    listPat (data) {
+        return fetch('get', '/visit/sufferer/list', data);
+    },
+    /*
+     * 编辑患者信息
+     */
+    savePat (data) {
+        return fetch('post', 'visit/sufferer/save', data);
+    },
+    /*
+     * 随访计划列表
+     *  pager:1, //当前页码
+    limit:3,//每页条数
+    schemeName:测试,//方案名称（可选）
+    brxm:朱兆庆 //患者姓名（可选）
+     */
+    listPlan (data) {
+        return fetch('get', '/visit/ordertask/list', data);
+    },
+    /*
+     * 删除随访
+     * id:34259
+     */
+    delPlan (data) {
+        return fetch('post', '/visit/ordertask/delete', data);
+    },
+    /*
+     * 取消随访
+     * id:34259
+     */
+    cancelPlan (data) {
+        return fetch('get', '/visit/ordertask/cancel', data);
+    },
+    /*
+     * 发起随访计划
+     * id:34259,  //id
+    phone:158888888 //手机号
+     */
+    startPlan (data) {
+        return fetch('post', '/visit/ordertask/visit', data);
     }
 
 };

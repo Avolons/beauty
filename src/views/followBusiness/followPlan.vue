@@ -3,27 +3,15 @@
         <!-- 搜索栏 -->
         <Col span="24" class="followPlan">
         <Form :label-width="90" inline>
-            <FormItem label="科室">
-                <Select v-model="searchParams.depart">
-                    <Option v-for="item in departList" :value="item.val" :key="item.id">{{item.title}}</Option>
-                </Select>
-            </FormItem>
-            <FormItem label="医生">
-                <Select v-model="searchParams.doctor">
-                    <Option v-for="item in doctorList" :value="item.val" :key="item.id">{{item.title}}</Option>
-                </Select>
-            </FormItem>
             <FormItem label="患者姓名">
-                <Input type="text" v-model="searchParams.patient" placeholder="请输入患者姓名"></Input>
+                <Input type="text" v-model="searchParams.brxm" placeholder="请输入患者姓名"></Input>
             </FormItem>
             <FormItem label="随访方案">
-                <Select v-model="searchParams.action">
-                    <Option v-for="item in actionList" :value="item.val" :key="item.id">{{item.title}}</Option>
-                </Select>
+                <Input type="text" v-model="searchParams.schemeName" placeholder="请输入随访方案"></Input>
             </FormItem>
             <FormItem label="审核状态">
                 <Select v-model="searchParams.status">
-                    <Option v-for="item in statusList" :value="item.val" :key="item.id">{{item.title}}</Option>
+                    <Option v-for="item in statusList" :value="item.id" :key="item.id">{{item.name}}</Option>
                 </Select>
             </FormItem>
             <FormItem>
@@ -53,43 +41,44 @@
 </template>
 
 <script>
+import { API } from '@/services/index.js';
 export default {
     data() {
         return {
             //搜索选项
             searchParams: {
-                depart: '',//科室
-                doctor: '',//医生
-                patient: '',//患者姓名
-                action: '',//随访方案
-                status: '',//审核状态
+                brxm: '',//患者姓名
+                schemeName: '',//随访方案
+                /* status: '',//审核状态 */
+                pager: 1,//
+                limit:10,//每页条数
             },
             //列表配置
             config: [
                 {
                     title: '患者姓名',
-                    key: 'name',
+                    key: 'brxm',
                     align: 'center'
                 },
                 {
                     title: '随访方案',
-                    key: 'age',
+                    key: 'schemeName',
                     align: 'center'
                 },
 
                 {
                     title: '状态',
-                    key: 'age',
+                    key: 'statusStr',
                     align: 'center'
                 },
                 {
                     title: '生成时间',
-                    key: 'address',
+                    key: 'dateAdd',
                     align: 'center'
                 },
                 {
                     title: '审核时间',
-                    key: 'address',
+                    key: 'dateVet',
                     align: 'center'
                 },
                 {
@@ -154,67 +143,11 @@ export default {
                     }
                 }],
             //列表数据
-            dataList: [
-                {
-                    name: 'John Brown',
-                    age: 18,
-                    address: 'New York No. 1 Lake Park'
-                },
-                {
-                    name: 'Jim Green',
-                    age: 24,
-                    address: 'London No. 1 Lake Park'
-                },
-                {
-                    name: 'Joe Black',
-                    age: 30,
-                    address: 'Sydney No. 1 Lake Park'
-                },
-                {
-                    name: 'Jon Snow',
-                    age: 26,
-                    address: 'Ottawa No. 2 Lake Park'
-                },
-                {
-                    name: 'John Brown',
-                    age: 18,
-                    address: 'New York No. 1 Lake Park'
-                },
-                {
-                    name: 'Jim Green',
-                    age: 24,
-                    address: 'London No. 1 Lake Park'
-                },
-                {
-                    name: 'Joe Black',
-                    age: 30,
-                    address: 'Sydney No. 1 Lake Park'
-                },
-                {
-                    name: 'Jon Snow',
-                    age: 26,
-                    address: 'Ottawa No. 2 Lake Park'
-                },],
-
-            departList: [],//科室选项列表
-            actionList: [],//随访方案列表
-            doctorList: [],//医生选项列表
+            dataList: [],
             statusList: [],//审核状态选项列表
             id: -1,//当前被选中的数据id
-            page: 1,//当前页码
             totalPage: 100,//总页数
             followShow: false,//编辑模态框
-            formCustom: {//编辑表格data
-                ptNa: '薛卫国',
-                ptPhone: '',
-                ptAdd: '',
-                ptYb: '',
-                ptName: '',
-                ptRe: '',
-                ptDz: '',
-                ptDh: '',
-                ptDe: ''
-            },
             //随访数据
             AIform: {
                 AIphone: '',
@@ -226,13 +159,18 @@ export default {
 		 * 获取列表数据,搜索接口
 		 */
         getData() {
+            API.FollowBussiness.listPlan(this.searchParams).then((res)=>{
+				this.dataList=res.data;
+				this.totalPage=res.total;
+			}).catch((err)=>{
 
+			});
         },
 		/** 
 		 * 页码改变
 		 */
         changePage(index) {
-            this.page = index;
+            this.searchParams.pager = index;
             this.getData();
         },
         //随访提交
@@ -253,6 +191,12 @@ export default {
          */
         deletPlan(id) {
             /* 删除后在回调中刷新当前数据 */
+            API.FollowBussiness.listPat(this.searchParams).then((res)=>{
+				this.dataList=res.data;
+				this.totalPage=res.total;
+			}).catch((err)=>{
+
+			});
             this.getData();
         },
         /** 
@@ -266,6 +210,12 @@ export default {
          * 停止计划
          */
         stopPlan(id) {
+            API.FollowBussiness.listPat(this.searchParams).then((res)=>{
+				this.dataList=res.data;
+				this.totalPage=res.total;
+			}).catch((err)=>{
+
+			});
             /* 暂停后在回调中刷新当前数据 */
             this.getData();
         }

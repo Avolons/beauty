@@ -146,10 +146,10 @@
 		<Col span="24" class="patientSearch">
 		<Form :label-width="80" inline>
 			<FormItem label="患者编号">
-				<Input type="text" v-model="searchParams.code" placeholder="请输入患者编号"></Input>
+				<Input type="text" v-model="searchParams.brid" placeholder="请输入患者编号"></Input>
 			</FormItem>
 			<FormItem label="患者姓名">
-				<Input type="text" v-model="searchParams.user" placeholder="请输入患者姓名"></Input>
+				<Input type="text" v-model="searchParams.brxm" placeholder="请输入患者姓名"></Input>
 			</FormItem>
 			<FormItem>
 				<Button type="primary" @click="getData">查询</Button>
@@ -245,34 +245,34 @@
 		<Modal v-model="patientText" title="编辑患者信息" class-name="editInfo" :styles="{top: '180px'}" width="800">
 			<Form ref="formCustom" :model="formCustom" :rules="validate" :label-width="80">
 				<FormItem label="姓名">
-					<span v-model="formCustom.ptNa">{{formCustom.ptNa}}</span>
+					<span v-model="formCustom.ptNa">{{formCustom.brxm}}</span>
 				</FormItem>
-				<FormItem label="电话" prop="ptPhone">
-					<Input v-model="formCustom.ptPhone" placeholder="请输入电话号码"></Input>
+				<FormItem label="电话" prop="jtdh">
+					<Input v-model="formCustom.jtdh" placeholder="请输入电话号码"></Input>
 				</FormItem>
-				<FormItem label="住址" prop="ptAdd">
-					<Input type="text" v-model="formCustom.ptAdd" placeholder="请输入住址"></Input>
+				<FormItem label="住址" prop="xzzQtdz">
+					<Input type="text" v-model="formCustom.xzzQtdz" placeholder="请输入住址"></Input>
 				</FormItem>
-				<FormItem label="邮编" prop="ptYb">
-					<Input type="text" v-model="formCustom.ptYb" placeholder="请输入邮编"></Input>
+				<FormItem label="邮编" prop="xzzYb">
+					<Input type="text" v-model="formCustom.xzzYb" placeholder="请输入邮编"></Input>
 				</FormItem>
-				<FormItem label="联系人姓名" prop="ptName">
-					<Input type="text" v-model="formCustom.ptName" placeholder="请输入联系人姓名"></Input>
+				<FormItem label="联系人姓名" prop="lxrm">
+					<Input type="text" v-model="formCustom.lxrm" placeholder="请输入联系人姓名"></Input>
 				</FormItem>
-				<FormItem label="联系人关系" prop="ptRe">
-					<Input type="text" v-model="formCustom.ptRe" placeholder="请输入联系人关系"></Input>
+				<FormItem label="联系人关系" prop="lxgx">
+					<Input type="text" v-model="formCustom.lxgx" placeholder="请输入联系人关系"></Input>
 				</FormItem>
-				<FormItem label="联系地址" prop="ptDz">
-					<Input type="text" v-model="formCustom.ptDz" placeholder="请输入联系人地址"></Input>
+				<FormItem label="联系人地址" prop="lxdz">
+					<Input type="text" v-model="formCustom.lxdz" placeholder="请输入联系人地址"></Input>
 				</FormItem>
-				<FormItem label="联系电话" prop="ptDh">
-					<Input type="text" v-model="formCustom.ptDh" placeholder="请输入联系人电话号码"></Input>
+				<FormItem label="联系人电话" prop="lxdh">
+					<Input type="text" v-model="formCustom.lxdh" placeholder="请输入联系人电话号码"></Input>
 				</FormItem>
-				<FormItem label="单位名称" prop="ptDe">
-					<Input type="text" v-model="formCustom.ptDe" placeholder="请输入单位名称"></Input>
+				<FormItem label="单位名称" prop="dwmc">
+					<Input type="text" v-model="formCustom.dwmc" placeholder="请输入单位名称"></Input>
 				</FormItem>
 				<FormItem>
-					<Button type="primary" style="margin-left: 110px;" @click="submitData">提交</Button>
+					<Button type="primary" style="margin-left: 110px;" @click="submitData('formCustom')">提交</Button>
 					<Button type="ghost" style="margin-left: 8px" @click="handleReset('formCustom')" >重置</Button>
 				</FormItem>
 			</Form>
@@ -281,15 +281,17 @@
 </template>
 
 <script>
+import { API } from '@/services';
 export default {
 	data() {
 		return {
 			//搜索条件对象
 			searchParams: {
-				code:'',//患者编号
-				user: '',//患者姓名
+				brid:'',//患者编号
+				brxm: '',//患者姓名
+				pager:1,//当前页码
+				limit:10,//每页条数
 			},
-			page:1,//当前页码
 			totalPage:100,//总页数
 			//当前被点击患者，编辑和详情按钮触发时更换数据
 			currentData:{},
@@ -299,77 +301,58 @@ export default {
 			patientText: false,
 			//编辑功能form数据,暂时未知必填信息，字段未知
 			formCustom: {
-				ptNa: '薛卫国',//姓名
-				ptPhone: '',//电话
-				ptAdd: '',//地址
-				ptYb: '',//邮编
-				ptName: '',//联系人名
-				ptRe: '',//联系人关系
-				ptDz: '',//联系地址
-				ptDh: '',//联系电话
-				ptDe: ''//单位名称
+				brxm: '',//姓名
+				jtdh: '',//电话
+				xzzQtdz: '',//地址
+				xzzYb: '',//邮编
+				lxrm: '',//联系人名
+				lxgx: '',//联系人关系
+				lxdz: '',//联系地址
+				lxdh: '',//联系电话
+				dwmc: ''//单位名称
 			},
 			//表格数据
 			dataList: [
-				{
-					name: 'John Brown',
-					age: 18,
-					address: 'New York No. 1 Lake Park'
-				},
-				{
-					name: 'Jim Green',
-					age: 24,
-					address: 'London No. 1 Lake Park'
-				},
-				{
-					name: 'Joe Black',
-					age: 30,
-					address: 'Sydney No. 1 Lake Park'
-				},
-				{
-					name: 'Jon Snow',
-					age: 26,
-					address: 'Ottawa No. 2 Lake Park'
-				}
+				
 			],
 			//表格配置
 			config: [
 				{
 					title: '编号',
-					key: 'age'
+					key: 'brid'
 				},
 				{
 					title: '姓名',
-					key: 'age'
+					key: 'brxm'
 				},
 				{
 					title: '民族',
-					key: 'age'
+					key: 'mz'
 				},
 				{
 					title: '出生年月',
-					key: 'age'
+					key: 'csny'
 				},
 				{
 					title: '性别',
-					key: 'age'
+					key: 'brxb'
 				},
 				{
 					title: '家庭电话',
-					key: 'age'
+					key: 'jtdh'
 				},
 				{
 					title: '居住地址',
-					key: 'age'
+					key: 'xzzQtdz'
 				},
 				{
 					title: '单位名称',
-					key: 'address'
+					key: 'dwmc'
 				},
 				{
-					title: 'Action',
+					title: '操作',
 					key: 'action',
-					width: 250,
+					width: 150,
 					align: 'center',
 					render: (h, params) => {
 						return h('div', [
@@ -401,21 +384,7 @@ export default {
 										this.getInfo(params.row);
 									}
 								}
-							}, '详情'),
-							h('Button', {
-								props: {
-									type: 'warning',
-									size: 'small'
-								},
-								style: {
-
-								},
-								on: {
-									click: () => {
-										this.addFollow(params.row);
-									}
-								}
-							}, '增加随访')
+							}, '详情')
 						]);
 					}
 				}],
@@ -425,7 +394,7 @@ export default {
 	},
 	methods: {
 		editPat(data){
-			this.currentData=data;
+			this.formCustom=data;
 			this.patientText = true;
 		},
 		/** 
@@ -438,12 +407,18 @@ export default {
 		/** 
 		 * 修改患者信息
 		 */
-		submitData() {
+		submitData(name) {
 			this.$refs[name].validate((valid) => {
 				if (valid) {
 					/** 
 					 * 此处填写具体的ajax请求
 					 */
+					API.FollowBussiness.savePat(this.formCustom).then((res)=>{
+						this.$Message.success("编辑成功");
+						this.getData();
+					}).catch((err)=>{
+
+					});
 					this.$Message.success('保存成功!');
 				} else {
 					this.$Message.error('请正确填写信息');
@@ -454,13 +429,18 @@ export default {
 		 * 获取列表数据,搜索接口
 		 */
 		getData(){
+			API.FollowBussiness.listPat(this.searchParams).then((res)=>{
+				this.dataList=res.data;
+				this.totalPage=res.total;
+			}).catch((err)=>{
 
+			});
 		},
 		/** 
 		 * 页码改变
 		 */
 		changePage(index){
-			this.page=index;
+			this.searchParams.pager=index;
 			this.getData();
 		},
 		/** 

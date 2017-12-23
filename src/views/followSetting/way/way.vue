@@ -434,10 +434,10 @@ export default {
 			for (let item of this.showList) {
 				for (let ite of item.questionTemples.questionSchemeWavs) {
 					for (let it of ite.questionTempleQuestionJumps) {
-						console.log(1);
-						if((it.switchWav).trim()==""){
+						if(it.switchWav!=undefined && (it.switchWav).trim()==""){
 							this.$Message.error('请输入ai语音!');
 							flag++;
+							return false;
 						}
 					}
 				}
@@ -449,7 +449,6 @@ export default {
 				this.$Message.error('请选择疾病类型!');
 				return false;
 			}
-			
 			let sendData=JSON.parse(JSON.stringify(this.wayForm));
 			delete sendData.wayTem;
 			sendData.diseaseId="";

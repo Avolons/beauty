@@ -102,7 +102,8 @@
 			<div class="creatNotice_main_box">
 				<Tabs v-model="step" class="creatNotice_main_table">
 				<TabPane label="标签一" name="step_one">
-					<Row class="creatNotice_main_search" :gutter="15">
+					
+					<Row>
 						<Col span="6">
 						<span>
 							科室名称：
@@ -119,6 +120,9 @@
 							<Option v-for="item in doctorList" :value="item.val" :key="item.id">{{item.title}}</Option>
 						</Select>
 						</Col>
+					</Row>
+					<Row class="creatNotice_main_search" :gutter="15">
+						
 						<Col span="6">
 						<span>
 							患者姓名：

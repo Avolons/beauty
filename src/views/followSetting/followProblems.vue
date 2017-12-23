@@ -324,7 +324,7 @@ export default {
         {
           title: '操作',
           key: 'action',
-          width: 200,
+          width: 180,
           align: 'center',
           render: (h, params) => {
             return h('div', [
@@ -401,7 +401,7 @@ export default {
                   }
                 }
               }, '编辑话述'),
-              h('Button', {
+              /* h('Button', {
                 props: {
                   type: 'warning',
                   size: 'small'
@@ -419,7 +419,7 @@ export default {
                     });
                   }
                 }
-              }, '删除'),
+              }, '删除'), */
             ]);
           }
         }],

@@ -122,7 +122,7 @@ export default {
         {
           title: '操作',
           key: 'action',
-          width: 150,
+          width: 100,
           align: 'center',
           render: (h, params) => {
             return h('div', [
@@ -140,7 +140,7 @@ export default {
                   }
                 }
               }, '编辑'),
-              h('Button', {
+             /*  h('Button', {
                 props: {
                   type: 'warning',
                   size: 'small'
@@ -153,7 +153,7 @@ export default {
                     this.deleteRow(params.row.id)
                   }
                 }
-              }, '删除')
+              }, '删除') */
             ]);
           }
         }

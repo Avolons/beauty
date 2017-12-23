@@ -168,6 +168,7 @@ import { API } from '@/services';
 export default {
 	data() {
 		return {
+			type: 1,//1为编辑
 			questionId: '',//话述id(从路由获取)
 			questionName: '',//随访问题，
 			questionTargetName: '',//随访指标
@@ -193,13 +194,14 @@ export default {
 			API.voiceSetting.question({
 				"questionId": this.questionId
 			}).then((res) => {
-				if (res.code == 0) {
-					res.data.forEach((item, index) => {
-						item.switchID = index + 1
-					})
-					if (res.data.length) {
-						this.switchArr = res.data
-					}
+				if (res.data.length == 0) {
+					this.type = 0;
+				}
+				res.data.forEach((item, index) => {
+					item.switchID = index + 1
+				})
+				if (res.data.length) {
+					this.switchArr = res.data
 				}
 			}).catch((error) => {
 			})
@@ -214,64 +216,64 @@ export default {
 					/*
 					*根据指标id，获取指标阀值等信息
 					*/
-					let getTargetIDVoice = res.data.targetId//问题名称
-					API.follSetting.editList({
-						id: getTargetIDVoice
-					}).then((res) => {
-						if (res.code == 0) {
-							this.questionTargetName = res.data.name
-							//获取指标类型，阀值
-							if (res.data.type == 'digit') {
-								this.questionTargetStyle = '数值'
-							} else if (res.data.type == 'select') {
-								this.questionTargetStyle = '选项'
-							} else if (res.data.type == 'string') {
-								this.questionTargetStyle = '文本'
-							}
-							//获取指标阀值
-							this.questionTargetfz = res.data.optionValues
-							this.fzArray = this.questionTargetfz.split(',')
-
-							/*switch信息*/
-							class Point {
-								constructor(item) {
-									this.switchID = item.switchID
-									this.switchText = item.switchText
-									this.switchRegexText = item.switchRegexText
-									this.keyname = item.keyname
-									this.outRptSwitchID = item.outRptSwitchID
-									this.keyvalue = item.keyvalue
+					let getTargetIDVoice = res.data.targetId//指标id
+					if (getTargetIDVoice) {
+						API.follSetting.editList({
+							id: getTargetIDVoice
+						}).then((res) => {
+							if (res.code == 0) {
+								this.questionTargetName = res.data.name
+								//获取指标类型，阀值
+								if (res.data.type == 'digit') {
+									this.questionTargetStyle = '数值'
+								} else if (res.data.type == 'select') {
+									this.questionTargetStyle = '选项'
+								} else if (res.data.type == 'string') {
+									this.questionTargetStyle = '文本'
 								}
-							}
-							if (this.switchArr.length == 0) {
-								this.fzArray.forEach((item, index) => {
-									this.switchArr.push(new Point({
-										switchID: index + 1,
-										// switchText : '',
-										switchRegexText: '',
-										keyname: '',
-										outRptSwitchID: '',
-										keyvalue: item
-									}))
-								})
-								this.switchArr.forEach((item, index) => {
-									item.keyname = this.questionTargetName
-								})
-							}
+								//获取指标阀值
+								this.questionTargetfz = res.data.optionValues
+								this.fzArray = this.questionTargetfz.split(',')
+								/*switch信息*/
+								class Point {
+									constructor(item) {
+										this.switchID = item.switchID
+										this.switchText = item.switchText
+										this.switchRegexText = item.switchRegexText
+										this.keyname = item.keyname
+										this.outRptSwitchID = item.outRptSwitchID
+										this.keyvalue = item.keyvalue
+									}
+								}
+								if (this.switchArr.length == 0) {
+									this.fzArray.forEach((item, index) => {
+										this.switchArr.push(new Point({
+											switchID: index + 1,
+											// switchText : '',
+											switchRegexText: '',
+											keyname: '',
+											outRptSwitchID: '',
+											keyvalue: item
+										}))
+									})
+									this.switchArr.forEach((item, index) => {
+										item.keyname = this.questionTargetName
+									})
+								}
 
-							console.log(this.switchArr)
-						} else {
-							console.log('指标id=' + res.code)
-						}
-					}).catch((error) => {
-						//alert('error')
-						console.log(error)
-					})
+								console.log(this.switchArr)
+							} else {
+								console.log('指标id=' + res.code)
+							}
+						}).catch((error) => {
+							//alert('error')
+							console.log(error)
+						})
+					}
 				}
 			}).catch((error) => {
 
 			})
-
 		},
 		/*
 		*获取问题id
@@ -328,13 +330,6 @@ export default {
 
 			/* 此处的操作必须先删除后添加 */
 			let dataPromise = async () => {
-				await API.voiceSetting.questionDelete({
-					"questionId": this.questionId,
-				}).then((res) => {
-					consoel.log(res)
-				}).catch((error) => {
-
-				});
 				await API.voiceSetting.questionSave({
 					"id": this.questionId,   //问题id
 					"questionCallScripts": this.switchArr

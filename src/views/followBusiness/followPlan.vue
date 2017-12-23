@@ -198,7 +198,7 @@ export default {
                         id:this.id,
                         phone:this.AIform.AIphone
                     }).then((res)=>{
-                        this.$Message.success('保存成功!');
+                        this.$Message.success('提交成功!');
                         this.followShow = false;
                     }).catch((err)=>{
 

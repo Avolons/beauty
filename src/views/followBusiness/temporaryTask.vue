@@ -1,421 +1,365 @@
-<template>
-	<Row>
-		<!-- 搜索栏 -->
-		<Col span="24" class="followPlan">
-			<Form ref="formInline" :model="formInline" :rules="ruleInline" :label-width="90" inline >
-        <FormItem prop="user" label="患者姓名">
-          <Input type="text" v-model="formInline.user" placeholder="Username"></Input>
-        </FormItem>
-        <FormItem prop="user" label="疾病类型">
-          <Input type="text" v-model="formInline.user" placeholder="Username"></Input>
-        </FormItem>
-       	<FormItem label="开始时间">
-          <DatePicker type="date" placeholder="Select date" v-model="formInline.date"></DatePicker>
-        </FormItem>
-        <FormItem label="结束时间">
-          <DatePicker type="date" placeholder="Select date" v-model="formInline.date"></DatePicker>
-        </FormItem>
-        <FormItem>
-          <Button type="primary" @click="handleSubmit('formInline')">查询</Button>
-      	</FormItem>
-		  </Form>
-		</Col>
-		<!-- 表格 -->
-		<Col span="24" class="fpTable">
-			<Table border :columns="columns7" :data="data6" class="margin-bottom-10" ref="selection"></Table>
-			<Row>
-				<Col span="10">
-					<Button type="error" @click="handleSelectAll(true)" class="margin-left-20">全选</Button>
-		      <Button type="warning" @click="testBtn" class="margin-left-20">发起临时随访</Button>
-		    </Col>
-		     <Col span="14" class="text-right padding-right-20">
-		      <Page :total="100" show-elevator show-total></Page>
-				</Col>
-			</Row>
-		</Col>
-		<!-- 随访模态框 -->
-		<Modal v-model="patientDetail" title="发起临时随访" class-name="patientInfo" @on-ok="ok" @on-cancel="cancel" :styles="{top: '180px'}" width="800px;">
-			
-        	<Table border :columns="temTask" :data="temTaskData" class="margin-bottom-10" ref="temTask" @on-select-all="onlySelectOne"></Table>
-        	<Row>
-        		<Col span="24" class="text-center margin-top-10">
-        			<span style="font-size:14px;font-weight:bold;margin:2px 20px 0 0;">随访起始时间</span>
-        			<DatePicker type="date" placeholder="Select date" v-model="formInline.date"></DatePicker>
-        		</Col>
-        		<Col span="24" class="text-center margin-top-10">
-        			<Button type="primary" @click="testBtn">提交AI</Button>
-        		</Col>
-        	</Row>
-      </Form>
-	  </Modal>
-	</Row>
-</template>
-
-<script>
-	export default {
-		data() {
-			return {
-				formInline: {//搜索框
-          user: '',
-          password: '',
-          select: '',
-          date: '',
-        },
-        ruleInline: {//搜索框校验
-          user: [
-            { required: true, message: 'Please fill in the user name', trigger: 'blur' }
-          ],
-          password: [
-            { required: true, message: 'Please fill in the password.', trigger: 'blur' },
-            { type: 'string', min: 6, message: 'The password length cannot be less than 6 bits', trigger: 'blur' }
-          ]
-        },
-        columns7: [//表格栏
-        	{
-                type: 'selection',
-                width: 60,
-                align: 'center'
-            },
-            {
-              title: '姓名',
-              key: 'name',
-              align: 'center'
-          },
-          {
-              title: '性别',
-              key: 'age',
-              align: 'center'
-          },
-          
-          {
-              title: '上次就诊时间',
-              key: 'age',
-              align: 'center'
-          },
-          {
-              title: '疾病类型',
-              key: 'address',
-              align: 'center'
-          },
-          {
-              title: '单位名称',
-              key: 'address',
-              align: 'center'
-          },
-          {
-              title: '民族',
-              key: 'address',
-              align: 'center'
-          },
-          {
-              title: 'Action',
-              key: 'action',
-              width: 250,
-              align: 'center',
-              render: (h, params) => {
-                  return h('div', [
-                      h('Button', {
-                          props: {
-                              type: 'primary',
-                              size: 'small'
-                          },
-                          style: {
-                              marginRight: '5px'
-                          },
-                          on: {
-                            click: () => {
-                            	this.patientDetail = true
-                            }
-                          }
-                      }, '发起临时随访'),
-                  ]);
-              }
-				}],
-        data6: [//表格data
-            {
-                name: 'John Brown',
-                age: 18,
-                address: 'New York No. 1 Lake Park'
-            },
-            {
-                name: 'Jim Green',
-                age: 24,
-                address: 'London No. 1 Lake Park'
-            },
-            {
-                name: 'Joe Black',
-                age: 30,
-                address: 'Sydney No. 1 Lake Park'
-            },
-            {
-                name: 'Jon Snow',
-                age: 26,
-                address: 'Ottawa No. 2 Lake Park'
-            },
-            {
-                name: 'John Brown',
-                age: 18,
-                address: 'New York No. 1 Lake Park'
-            },
-            {
-                name: 'Jim Green',
-                age: 24,
-                address: 'London No. 1 Lake Park'
-            },
-            {
-                name: 'Joe Black',
-                age: 30,
-                address: 'Sydney No. 1 Lake Park'
-            },
-            {
-                name: 'Jon Snow',
-                age: 26,
-                address: 'Ottawa No. 2 Lake Park'
-            },
-            {
-                name: 'John Brown',
-                age: 18,
-                address: 'New York No. 1 Lake Park'
-            },
-            {
-                name: 'Jim Green',
-                age: 24,
-                address: 'London No. 1 Lake Park'
-            },
-            {
-                name: 'Joe Black',
-                age: 30,
-                address: 'Sydney No. 1 Lake Park'
-            },
-            {
-                name: 'Jon Snow',
-                age: 26,
-                address: 'Ottawa No. 2 Lake Park'
-            }
-        ],
-
-        patientDetail: false,//详情模态框
-        patientText: false,//编辑模态框
-		    formCustom: {//编辑表格data
-		    	ptNa: '薛卫国',
-		    	ptPhone: '',
-		    	ptAdd: '',
-		    	ptYb: '',
-		    	ptName: '',
-		    	ptRe: '',
-		    	ptDz: '',
-		    	ptDh: '',
-		    	ptDe: ''
-		    },
-		    AIform: {
-		    	AIphone: '',
-		    },
-		    editRules: {
-		    	// ptPhone: [
-       //      { required: true, message: '请填写联系电话', trigger: 'blur' },
-       //      { type: 'number', message: 'The password length cannot be less than 6 bits', trigger: 'blur' }
-       //    ],
-		    },
-		    temTask: [
-		    	{
-                type: 'selection',
-                width: 60,
-                align: 'center'
-            },
-            {
-              title: '方案名称',
-              key: 'name',
-              align: 'center'
-          },
-          {
-              title: '疾病类型',
-              key: 'age',
-              align: 'center'
-          },
-          {
-              title: '操作',
-              key: 'action',
-              width: 250,
-              align: 'center',
-              render: (h, params) => {
-                  return h('div', [
-                      h('Button', {
-                          props: {
-                              type: 'primary',
-                              size: 'small'
-                          },
-                          style: {
-                              marginRight: '5px'
-                          },
-                          on: {
-                            click: () => {
-                            	this.$router.push({path:'/followBusiness/page/page'});
-                            }
-                          }
-                      }, '查看方案详情'),
-                  ]);
-              }
-					}
-		    ], 
-		    temTaskData: [
-		    	{
-		    		name: '糖尿病方案',
-		    		age: '糖尿病'
-		    	},
-		    	{
-		    		name: '高血压方案',
-		    		age: '高血压'
-		    	},
-		    ],
-			}
-		},
-		methods: {
-			//搜索栏提交按钮
-			handleSubmit(name) {
-	        this.$refs[name].validate((valid) => {
-	          if (valid) {
-	            this.$Message.success('Success!');
-	          } else {
-	            this.$Message.error('Fail!');
-	          }
-	        })
-	    	},
-	    	handleSelectAll (status) {//全选
-          this.$refs.selection.selectAll(status);
-        },
-	    	//详情模态框
-	    	show (index) {
-		        this.$Modal.info({
-		            title: 'User Info',
-		            content: `Name：${this.data6[index].name}<br>Age：${this.data6[index].age}<br>Address：${this.data6[index].address}`
-		        })
-	        },
-		      remove (index) {
-		      	this.data6.splice(index, 1);
-		      },
-		      //详情关闭确认点击事件
-		      ok () {
-		        this.$Message.info('Clicked ok');
-		      },
-		      cancel () {
-		        this.$Message.info('Clicked cancel');
-		      },
-		      //编辑模态框提交按钮
-		      handleEdit(name) {
-		        this.$refs[name].validate((valid) => {
-		          if (valid) {
-		            this.$Message.success('Success!');
-		          } else {
-		            this.$Message.error('Fail!');
-		          }
-		        })
-		    },
-		    examineBtn() {
-		    	alert('审核')
-		    },
-		    testBtn() {
-		    	alert('测试')
-		    },
-		    onlySelectOne() {
-		    	alert('只能选择一种方案')
-		    	 this.$refs.temTask.selectAll(false);
-		    }
-		},
-	}
-</script>
-
 <style lang="less">
-
-@import "../../styles/common.less";
-
-	.followPlan {
-		background: #fff;
-			form {
-				.ivu-form-item {
-					margin-bottom: 0;
-					padding: 20px 0;
-					width: 250px;
-					.ivu-form-item-label:before {
-						content: ''
-					}
-			}
+.creatNotice {
+	height: 100%;
+	padding: 5px;
+	box-sizing: border-box;
+	border-radius: 5px;
+	&_main {
+		height: 100%;
+		&_form{
+			width: 520px;
+			height: 600px;
+			margin-left: 50px;
+			margin-top: 40px;
 		}
-		.fpTable {
-			padding: 10px;
-		}
-	}
-		.pages{
-			.ivu-page {
-				float: right;
-				padding: 10px 20px 10px 0;
-			}
-		}
-	//模态框垂直居中
-	.vertical-center-modal{
-	    display: flex;
-	    align-items: center;
-	    justify-content: center;
-
-	    .ivu-modal{
-	        top: 0;
-	    }
-	}
-	
-	//详情
-	.patientInfo .ivu-modal .ivu-modal-content {
-		.ivu-modal-header {
-			.ivu-modal-header-inner, .ivu-modal-header p {
-				font-size: 16px;
-		    	color: #1c2432;
-		    	font-weight: normal;
-			}
-		}
-		.ivu-modal-body {
-			.AIform {
+		&_success{
+			width: 500px;
+			margin: 0 auto;
+			.ivu-icon{
+				color: #2d8cf0;
+				font-size: 100px;
+				margin: 0 auto;
+				display: block;
 				text-align: center;
-				.ivu-form-item {
-					padding: 10px 0;
-					width: 250px;
-					margin-bottom: 0;
-					.ivu-form-item-label:before {
-						content: ''
-					}
-					.ivu-form-item-content .ivu-input-wrapper {
-						width: 80%;
-					}
+				margin-bottom: 10px;
+			}
+			button{
+			}
+		}
+		&_add {
+			margin-bottom: 10px;
+		}
+		&_list {}
+		&_search {
+			box-sizing: border-box;
+			margin-bottom: 15px;
+			.ivu-col {
+				display: flex;
+				>span {
+					background-color: #dadada;
+					text-align: center;
+					line-height: 32px;
+					display: block;
+					width: 80px;
+					flex-shrink: 0;
+					border-top-left-radius: 4px;
+					border-bottom-left-radius: 4px;
+				}
+				.ivu-input {
+					border-top-left-radius: 0;
+					border-bottom-left-radius: 0;
+				}
+				.ivu-select {
+					flex-grow: 1;
+					flex-shrink: 1;
+				}
+				.ivu-select-selection {
+					border-top-left-radius: 0;
+					border-bottom-left-radius: 0;
 				}
 			}
 		}
-		.ivu-modal-footer {
-			display: none;
+		&_step {
+			background-color: #fff;
+			margin-bottom: 15px;
+			padding: 25px 15px;
+			box-sizing: border-box;
+			border-radius: 5px;
 		}
-	}
-	
-	//编辑
-	.editInfo .ivu-modal .ivu-modal-content {
-		.ivu-modal-header {
-			.ivu-modal-header-inner, .ivu-modal-header p {
-				font-size: 16px;
-		    	color: #1c2432;
-		    	font-weight: normal;
+		&_box{
+			background-color: #fff;
+			border-radius: 5px;
+			padding: 15px;
+			box-sizing: border-box;
+		}
+		&_table {
+			
+			.ivu-tabs-nav-scroll {
+				display: none;
+			}
+			.ivu-tabs-bar {
+				display: none;
 			}
 		}
-		.ivu-modal-body {
-			padding: 32px 132px;
-
-		}
-		.ivu-modal-footer {
-			display: none;
+		&_page {
+			margin-top: 10px;
 		}
 	}
-	.bb1 {
-		border-bottom: 1px solid #fff; 
-	}
-	.bdx1 {
-		border-bottom: 1px dotted #EDF3F4;
-	}
-	.mb12 {
-		margin-bottom: 12px;
-	}
-
+}
 </style>
+
+
+<template>
+	<div class="creatNotice">
+		<div class="creatNotice_main">
+			<div class="creatNotice_main_step">
+				<Steps :current="step=='step_one'?0:step=='step_two'?1:2">
+					<Step title="选择发起人和随访患者"></Step>
+					<Step title="选择方案"></Step>
+					<Step title="发起随访"></Step>
+				</Steps>
+			</div>
+			<div class="creatNotice_main_box">
+				<Tabs v-model="step" class="creatNotice_main_table">
+				<TabPane label="标签一" name="step_one">
+					<Row class="creatNotice_main_search" :gutter="15">
+						<Col span="6">
+						<span>
+							科室名称：
+						</span>
+						<Select v-model="searchParams.depart">
+							<Option v-for="item in departList" :value="item.val" :key="item.id">{{item.title}}</Option>
+						</Select>
+						</Col>
+						<Col span="6">
+						<span>
+							医生：
+						</span>
+						<Select v-model="searchParams.doctor">
+							<Option v-for="item in doctorList" :value="item.val" :key="item.id">{{item.title}}</Option>
+						</Select>
+						</Col>
+						<Col span="6">
+						<span>
+							患者姓名：
+						</span>
+						<Input type="text" v-model="searchParams.patient" placeholder="请输入患者姓名"></Input>
+						</Col>
+						<Col span="6">
+							<Button @click="getData" type="primary">查询</Button>
+						</Col>
+					</Row>
+					<div class="creatNotice_main_add">
+						
+						<!-- <Badge :count="addList.length">
+							<Button @click="patList" type="info">已添加患者</Button>
+						</Badge> -->
+					</div>
+					<Alert type="warning">如果不选择具体患者则视为默认选中您的所有患者</Alert>
+					<div class="creatNotice_main_list">
+						<Table border @on-selection-change="patChange" ref="selection" :columns="config" :data="dataList"></Table>
+					</div>
+					<Row class="creatNotice_main_page">
+						<Button @click="handleSelectAll(true)">全选当前页</Button>
+						<Button @click="handleSelectAll(false)">取消</Button>
+						<Button @click="handleSelectAll(false)" type="primary">下一步选择方案</Button>
+						<Page :total="totalPage" :current="page" show-elevator style="float:right" @on-change="changePage"></Page>
+					</Row>
+				</TabPane>
+				<TabPane label="标签二" name="step_two">
+					<Table border :columns="planConfig" :data="planList"></Table>
+					<Form ref="notice" class="creatNotice_main_form" :model="notice" :rules="validate.notice" :label-width="100">
+						<FormItem label="已选计划" prop="name" style="width:450px;">
+							<Input v-model="notice.name" style="width: 435px" placeholder="已选计划名称"></Input>
+						</FormItem>
+						<FormItem label="通知起止时间" prop="time" style="width:450px;">
+							<DatePicker :value="notice.time" format="yyyy/MM/dd" type="daterange" placement="bottom-end" placeholder="Select date" style="width: 435px"></DatePicker>
+						</FormItem>
+						<FormItem label="公司简介" prop="desc" style="width:600px;">
+							<Input v-model="notice.desc" type="textarea" style="width: 435px" :autosize="{minRows: 2,maxRows: 5}" placeholder="请输入公司简介"></Input>
+						</FormItem>
+						<FormItem>
+							<Button @click="returnStep" style="margin-right:10px">返回上一步</Button>
+							<Button type="primary" @click="handleSave()">通知</Button>
+						</FormItem>
+					</Form>
+				</TabPane>
+				<TabPane label="标签三" name="step_three">
+					<div class="creatNotice_main_success">
+						<Icon type="checkmark-circled"></Icon>
+						<Alert type="success">恭喜你，发起通知成功</Alert>
+						<Button type="success">查看通知进度</Button>
+					</div>
+				</TabPane>
+			</Tabs>
+			</div>
+		</div>
+	</div>
+</template>
+
+<script>
+export default {
+	data() {
+		return {
+			step: "step_one",
+			//搜索选项
+			searchParams: {
+				depart: '',//科室
+				doctor: '',//医生
+				patient: '',//患者姓名
+				type: '',//疾病类型
+			},
+			departList: [],//科室选项列表
+			doctorList: [],//医生选项列表
+			addList: [],//已经添加的用户
+			page:1,//当前页码
+			totalPage:10,//总页数
+			modal: false,
+			//通知内容
+			notice:{
+				name:"",
+				time:"",
+				desc:"",
+			},
+			planConfig: [
+				{
+					title: '方案名称',
+					key: 'username'
+				},
+				{
+					title: '方案类型',
+					key: 'time'
+				},
+				{
+					title: '操作',
+					key: 'action',
+					width: 150,
+					align: 'center',
+					render: (h, params) => {
+						return h('div', [
+							h('Button', {
+								props: {
+									type: 'primary',
+									size: 'small'
+								},
+								on: {
+									click: () => {
+										this.selectAction(params.row);
+									}
+								}
+							}, '选则该方案'),
+						]);
+					}
+				}
+			],
+			planList: [
+				{
+					role: "医生",
+					username: "1245786",
+					time: "2017-11-30 11:08:30",
+					action: "随访测试",
+					name: "测试",
+					mobile: 14578884125,
+					look: 1,
+				},
+				{
+					role: "医生",
+					username: "1245786",
+					time: "2017-11-30 11:08:30",
+					action: "随访测试",
+					name: "测试",
+					mobile: 14578884125,
+					look: 1,
+				},
+				{
+					role: "医生",
+					username: "1245786",
+					time: "2017-11-30 11:08:30",
+					action: "随访测试",
+					name: "测试",
+					mobile: 14578884125,
+					look: 1,
+				},
+				{
+					role: "医生",
+					username: "1245786",
+					time: "2017-11-30 11:08:30",
+					action: "随访测试",
+					name: "测试",
+					mobile: 14578884125,
+					look: 1,
+				}
+			],
+			//数据列表配置
+			config: [
+				{
+					type: 'selection',
+					width: 60,
+					align: 'center'
+				},
+				{
+					title: '姓名',
+					key: 'username'
+				},
+				{
+					title: '性别',
+					key: 'time'
+				},
+				{
+					title: '上次就诊时间',
+					key: 'time'
+				},
+				{
+					title: '单位名称',
+					key: 'time'
+				},
+				{
+					title: '民族',
+					key: 'time'
+				},
+				
+			],
+			//列表数据,必须使用缓存数据方式
+			dataList: []
+		}
+	},
+	methods: {
+		patChange(selection){
+			this.copyAction=selection;
+		},
+		/** 
+		 * 全选或者全部取消
+		 */
+		handleSelectAll(status) {
+			this.$refs.selection.selectAll(status);
+		},
+		/** 
+		 * 添加患者
+		 */
+		addpat() {
+
+		},
+		show(index) {
+			this.$Modal.info({
+				title: 'User Info',
+				content: `Name：${this.dataList[index].name}<br>Age：${this.dataList[index].age}<br>Address：${this.dataList[index].address}`
+			})
+		},
+		remove(index) {
+			this.dataList.splice(index, 1);
+		},
+		/** 
+		 * 获取列表数据,搜索接口
+		 */
+		getData() {
+
+		},
+		/** 
+		 * 页码改变
+		 */
+		changePage(index) {
+			this.page = index;
+			this.getData();
+		},
+		/** 
+		 * 查看已添加的患者
+		 */
+		patList() {
+
+		},
+		/** 
+		 * 选择具体方案
+		 */
+		selectAction(data) {
+
+		},
+		/** 
+		 * 返回上一步
+		 */
+		returnStep(){
+			this.step="step_one";
+		}
+	}
+}
+</script>
+

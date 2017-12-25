@@ -611,6 +611,9 @@ export default {
     *疾病类型--远程搜索
     */
     remoteMethod2(query) {
+      if(query.trim()==""){
+        return false;
+      }
       API.followProblems.disease({
         'zjm': query
       }).then((res) => {

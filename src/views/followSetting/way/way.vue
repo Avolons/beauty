@@ -273,16 +273,16 @@
 							</Form>
 							<Form   :model="it"  :rules="validate.followAction"   :label-width="110"  v-for="it,index in ite.questionTempleQuestionJumps" :key="index" v-if="it.switchId!=''">
 								<FormItem class="way_main_questTitle"  label="处理">
-									<span>{{(it.switchId=="无匹配"||it.switchId=="无声音"||it.switchId=="通用处理")?it.switchId:it.switchId==""?"人工ai":"自定义处理"}}</span>
+									<span>{{it.switchId==-1?"无匹配":it.switchId==-2?"无声音":it.switchId==-3?"通用处理":it.switchId==""?"人工ai":"自定义处理"}}</span>
 								</FormItem>
 								<!-- <FormItem v-if="it.switchId!='无匹配'&&it.switchId!='无声音'&&it.switchId!='通用处理'" label="名称">
 									<Input v-model="it.switchText" placeholder="请输入名称"></Input>
 									<span>{{it.switchText}}</span>
 								</FormItem> -->
-								<FormItem v-if="it.switchId!='无匹配'&&it.switchId!='无声音'&&it.switchId!='通用处理'" label="判别规则">
+								<FormItem v-if="it.switchId!=-1&&it.switchId!=-2&&it.switchId!=-3" label="判别规则">
 									<span>{{it.switchRegexText}}</span>
 								</FormItem>
-								<FormItem v-if="it.switchId!='无匹配'&&it.switchId!='无声音'&&it.switchId!='通用处理'" label="指标值">
+								<FormItem v-if="it.switchId!=-1&&it.switchId!=-2&&it.switchId!=-3" label="指标值">
 									<span>{{it.keyname}} ：{{it.keyvalue}}</span>
 								</FormItem>
 								<FormItem prop="switchWav" label="AI语音">

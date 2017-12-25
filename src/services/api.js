@@ -16,10 +16,18 @@ axios.defaults.timeout = 5000;
 /* 默认的接口地址 */
 /* axios.defaults.baseURL = 'http://192.168.1.100:8080'; */
 
+let JsonData = ['/order/temp/visit', '/question/script/save', '/questionscheme/save', '/questiontemple/save', '/questiontarget/save'];
 // 添加请求拦截器
 axios.interceptors.request.use(function (config) {
+    let flag = 0;
+    for (let item of JsonData) {
+        if (config.url.indexOf(item) !== -1) {
+            flag++;
+            break;
+        }
+    }
     // 在发送请求之前做些什么
-    if (config.url.indexOf('/question/script/save') != -1 || config.url.indexOf('/questionscheme/save') != -1 || config.url.indexOf('/questiontemple/save') != -1 || config.url.indexOf('/questiontarget/save') != -1) {
+    if (flag > 0) {
         config.headers = {
             'Content-Type': 'application/json;charset=utf-8'
         };
@@ -849,6 +857,40 @@ export const FollowBussiness = {
      */
     detailLog (data) {
         return fetch('get', 'visit/order/view', data);
+    },
+    /**
+     * 获取医生列表
+     * pager:1, //当前页码
+    limit:3,//每页条数
+    departmentId:821,//医生id（必选）
+    type:1 //默认为1 :1,表示医生；0，表示管理员（必选）
+     * @param {any} data
+     * @returns
+     */
+    listDoctor (data) {
+        return fetch('get', 'visit/admin/list', data);
+    },
+    /**
+     * 获取医生的患者列表
+     * pager:1, //当前页码
+        limit:3,//每页条数
+        admin:288,//医生id（必选）
+        brxm:陈金浩 //病人姓名（可选）
+     * @returns
+     */
+    patList (data) {
+        return fetch('get', 'visit/sufferer/select', data);
+    },
+    /**
+     * 获取医生的患者列表
+     * pager:1, //当前页码
+        limit:3,//每页条数
+        admin:288,//医生id（必选）
+        brxm:陈金浩 //病人姓名（可选）
+     * @returns
+     */
+    patSubmit (data) {
+        return fetch('post', '/visit/order/temp/visit', data);
     }
 };
 

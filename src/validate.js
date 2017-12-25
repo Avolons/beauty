@@ -165,7 +165,12 @@ export default {
     },
     followPlan: {
         AIphone: [
-            { required: true, message: '请填写电话', trigger: 'change' }
+            { required: true, message: '请填写电话', trigger: 'blur' }
+        ]
+    },
+    sendData: {
+        mobile: [
+            { required: true, message: '请填写电话', trigger: 'blur' }
         ]
     }
 

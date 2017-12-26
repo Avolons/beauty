@@ -452,7 +452,7 @@ export default {
         diseaseName: [],
         diseaseId: [],
         model10: [],
-        playWavOnly: '1',
+        playWavOnly: '0',
         isTarget: '0'//是否采集指标
       },
       proRuleModel: {//模态框校验
@@ -631,7 +631,7 @@ export default {
         "isTarget": this.formItem.isTarget,
         "content": this.formItem.content,
         "targetId": this.targetSelectId,
-        "diseaseId": this.formItem.diseaseId.join(','),
+        "diseaseId": JSON.parse(JSON.stringify(this.formItem.diseaseId)).join(','),
         "playWavOnly": this.formItem.playWavOnly,
         "status": 0,
         "otype": this.selectOtype

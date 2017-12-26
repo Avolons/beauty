@@ -123,9 +123,9 @@
 				</Row>
 				<div class="followVoice_main_content">
 					<Row class="itemli">
-						<Col span="4" class="textCenter">话述名称</Col>
+						<Col span="4" class="textCenter">话术名称</Col>
 						<Col span="20">
-						<Input v-model="item.switchText" placeholder="请输入话述名称"></Input>
+						<Input v-model="item.switchText" placeholder="请输入话术名称"></Input>
 						</Col>
 					</Row>
 					<Row class="itemli">
@@ -134,16 +134,19 @@
 						<Input v-model="item.switchRegexText" placeholder="请填写判别规则"></Input>
 						</Col>
 					</Row>
-					<Row class="itemli">
+					<Row class="itemli" v-show="false">
 						<Col span="4" class="textCenter">超时跳转</Col>
 						<Col span="20">
 						<Input v-model="item.outRptSwitchID" placeholder="请填写超时跳转问题编号"></Input>
 						</Col>
 					</Row>
-					<Row class="itemli">
+					<Row class="itemli" v-show="false">
 						<Col span="4" class="textCenter">指标名称</Col>
 						<Col span="20">
-						<Input v-model="item.keyname" placeholder="请填写指标名称"></Input>
+						<span>
+								{{item.keyname}}
+						</span>
+						
 						</Col>
 					</Row>
 					<Row class="itemli">
@@ -157,7 +160,7 @@
 		</ul>
 		</Col>
 		<Col span="24">
-		<Button type="primary" style="margin: 10px 20px;" @click="addVoice()">添加话述</Button>
+		<Button type="primary" style="margin: 10px 20px;" @click="addVoice()">添加话术</Button>
 		<Button style="margin: 10px 20px;" type="primary" @click="handleSubmit()">保存</Button>
 		</Col>
 	</Row>
@@ -169,7 +172,7 @@ export default {
 	data() {
 		return {
 			type: 1,//1为编辑
-			questionId: '',//话述id(从路由获取)
+			questionId: '',//话术id(从路由获取)
 			questionName: '',//随访问题，
 			questionTargetName: '',//随访指标
 			questionTargetStyle: '',//指标类型，
@@ -282,7 +285,7 @@ export default {
 			this.questionId = this.$route.params.id
 		},
 		/*
-		*添加话述
+		*添加话术
 		*/
 		addVoice() {
 			this.switchArr.push({})
@@ -292,7 +295,7 @@ export default {
 			console.log(this.switchArr)
 		},
 		/*
-		*删除话述
+		*删除话术
 		*/
 		removequestion(index) {
 			this.switchArr.splice(index, 1)
@@ -312,7 +315,7 @@ export default {
 			console.log(index)
 		},
 		/*
-		*保存话述
+		*保存话术
 		*/
 		handleSubmit() {
 			let tBag = 0;
@@ -324,7 +327,7 @@ export default {
 				}
 			})
 			if (tBag > 0) {
-				this.$Message.warning("话述名称不能为空");
+				this.$Message.warning("话术名称不能为空");
 				return false;
 			}
 

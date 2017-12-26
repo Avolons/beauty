@@ -201,9 +201,9 @@
 			<FormItem label="模板名称" prop="name">
 				<Input v-model="templateForm.name" placeholder="请填写模板名称"></Input>
 			</FormItem>
-			<FormItem label="疾病类型" prop="diseaseId">
+			<FormItem label="疾病类型" >
 				<Select :label="labelobj" v-model="templateForm.diseaseId"  multiple filterable remote not-found-text="" :remote-method="remoteMethod" >
-					<Option v-for="(item, index) in diseaseList" :value="item.value" :key="index">{{item.label}}</Option>
+					<Option v-for="(item, index) in diseaseList" :value="item.value" :key="item.value">{{item.label}}</Option>
 				</Select>
 				<!-- <AutoComplete
 						v-model="templateForm.diseaseId"
@@ -214,16 +214,16 @@
    		 </AutoComplete> -->
 			</FormItem>
 			<FormItem label="静默时间" prop="silencetime">
-				<InputNumber v-model="templateForm.silencetime" :min="0" style="width:100%;" placeholder="请输入静默时间,类型为数字,单位默认为秒"></InputNumber>
+				<InputNumber v-model="templateForm.silencetime" :min="5" style="width:100%;" placeholder="请输入静默时间,类型为数字,单位默认为秒"></InputNumber>
 				<!-- <Input v-model="templateForm.silencetime" placeholder="Enter your name"></Input> -->
 			</FormItem>
 			<FormItem label="重复次数" prop="outrepeattimes">
-				<InputNumber v-model="templateForm.outrepeattimes" :min="0" style="width:100%;" placeholder="请输入重复次数,类型为数字,单位默认为次数"></InputNumber>
+				<InputNumber v-model="templateForm.outrepeattimes" :min="3" style="width:100%;" placeholder="请输入重复次数,类型为数字,单位默认为次数"></InputNumber>
 				<!-- <Input v-model="templateForm.outrepeattimes" placeholder="Enter your name"></Input> -->
 			</FormItem>
 			<FormItem label="起始问题" prop="firsttaskid">
-				<!-- <InputNumber v-model="templateForm.firsttaskid" :min="0" style="width:100%;" placeholder="Enter your name"></InputNumber> -->
-				<Input v-model="templateForm.firsttaskid" placeholder="Enter your name"></Input>
+				<InputNumber v-model="templateForm.firsttaskid" :min="1000" style="width:100%;" placeholder="请输入重复次数,类型为数字,单位默认为次数"></InputNumber>
+				<!-- <Input v-model="templateForm.firsttaskid" placeholder="Enter your name"></Input> -->
 			</FormItem>
 			<FormItem label="合成声音" prop="person">
 				<RadioGroup v-model="templateForm.person" @on-change="radioChange">
@@ -254,7 +254,7 @@
 			</Alert>
 			<div class="template_main_disAdd">
 				<Select placeholder="选择疾病类型获取对应的指标" v-model="listDisID" filterable remote not-found-text="" :remote-method="remoteMethod2" clearable @on-change="selectChange">
-					<Option v-for="(option, index) in diseaseListQues" :value="option.value" :key="index">{{option.label}}</Option>
+					<Option v-for="option in diseaseListQues" :value="option.value" :key="option.value">{{option.label}}</Option>
 				</Select>
 			</div>
 		</div>
@@ -375,7 +375,7 @@
 							<ul slot="content" v-for="item1 in item.questionTempleQuestionJumps">
 								<li>
 									<Row class="itemli">
-										<h3 class="">处理: {{item1.switchId==-1?"无匹配":item1.switchId==-2?"无声音":item1.switchId==-3?"通用处理":"自定义处理"}}</h3>
+										<h3 class="">处理: {{item1.switchId==-1?"无匹配":item1.switchId==-2?"无声音":item1.switchId==-3?"通用处理":item1.switchText}}</h3>
 										<Row class="padleft40 mb5" v-show="item1.switchRegexText">
 											<Col span="4" style="width:105px" class="lineheight32">判别规则:</Col>
 											<Col span="20" style="width:calc(100% - 105px)" class="textCenter lineheight32">
@@ -429,11 +429,11 @@ export default {
 			templateForm: {
 				name: '',//模板名称
 				diseaseId: [],//疾病类型
-				silencetime: 0,//静默时间
-				outrepeattimes: 0,//重复次数
-				firsttaskid: 0,//起始问题
+				silencetime: 5,//静默时间
+				outrepeattimes: 3,//重复次数
+				firsttaskid: 1000,//起始问题
 				person: '0',//合成声音
-				addSubmoulds: ''//添加的通用库
+				addSubmoulds: ""//添加的通用库
 			},
 			listDisID:"",//第二部被选中的疾病的id
 			tagCount: [],//通用库
@@ -494,15 +494,6 @@ export default {
 				 */
 				res.data.diseaseId=res.data.diseaseId.split(",");
 				res.data.diseaseName=res.data.diseaseName.split(",");
-				this.templateForm = {
-					name: res.data.name,
-					silencetime: res.data.silencetime,
-					outrepeattimes: res.data.outrepeattimes,
-					firsttaskid: res.data.firsttaskid,
-					person: res.data.person,
-					diseaseId:  res.data.diseaseId,
-					addSubmoulds: ''//添加的通用库
-				}
 				this.diseaseList=[];
 				this.labelobj=[];
 				res.data.diseaseName.forEach((item,index)=>{
@@ -512,6 +503,16 @@ export default {
 					})
 					this.labelobj.push(item);
 				})
+				this.templateForm = {
+					name: res.data.name,
+					silencetime: res.data.silencetime-0,
+					outrepeattimes: res.data.outrepeattimes-0,
+					firsttaskid: res.data.firsttaskid-0,
+					person: res.data.person,
+					diseaseId:  res.data.diseaseId,
+					addSubmoulds:''//添加的通用库
+				}
+				
 				/** 
 				 * 通用库赋值
 				 */
@@ -528,6 +529,7 @@ export default {
 			API.followTemplate.questionList({
 				id: this.templateId,
 			}).then((res) => {
+				console.log(res);
 				let maps = {
 					questionId: '',
 					questionIdXml: '',
@@ -547,6 +549,7 @@ export default {
 						questionTempleQuestionJumps: item.questionTempleQuestionJumps
 					})
 				})
+				
 			}).catch((error) => {
 				console.log(error)
 			})
@@ -595,6 +598,7 @@ export default {
 		 * 自动完成
 		 */
 		remoteMethod(query){
+			console.log(query);
 				if (query == '') {
 					return false;
 				}
@@ -658,17 +662,11 @@ export default {
 					'title': '',
 					'diseaseId': value
 				}).then((res) => {
-					if (res.code == 0) {
-						// console.log(res)
 						this.allQuestions = res.data
-					} else {
-						console.log(res.code)
-					}
 				}).catch((error) => {
 					console.log(error)
 				})
 			} else {
-				console.log('value是空')
 				this.allQuestions.length = 0
 				this.question1.length = 0
 				this.question2.length = 0
@@ -718,7 +716,8 @@ export default {
 				 */
 				saveSwitch.forEach((item) => {
 					this.switchArr.push({
-							switchId: item.switchId,
+						  	switchText:item.switchText,
+							switchId: item.switchId || item.switchID,
 							switchRegexText: item.switchRegexText,
 							keyname: item.keyname,
 							outRptSwitchID: item.outRptSwitchID,
@@ -753,7 +752,6 @@ export default {
 			if (name == 0) {
 				name = ''
 			}
-			console.log(this.selecetDiseId)
 			API.followProblems.list({
 				pager: 1,
 				limit: '1000',
@@ -803,7 +801,7 @@ export default {
 
 			API.followTemplate.addList({
 				"id": ids, //不传表示新增 
-				"diseaseId": this.templateForm.diseaseId.join(","),//疾病id      
+				"diseaseId":(JSON.parse(JSON.stringify(this.templateForm.diseaseId))).join(','),//疾病id      
 				"name": this.templateForm.name, //模板名称      
 				"silencetime": this.templateForm.silencetime,//静默时间      
 				"outrepeattimes": this.templateForm.outrepeattimes,//重复次数      

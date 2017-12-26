@@ -93,20 +93,20 @@
 		&_page {
 			margin-top: 10px;
 		}
-		&_listBox{
+		&_listBox {
 			box-sizing: border-box;
 			padding: 15px;
 			border-radius: 3px;
 			background-color: #f1f1f1;
 			margin-bottom: 15px;
-			&:after{
+			&:after {
 				content: "";
 				display: block;
 				clear: both;
 			}
 		}
-		&_modal{
-			.ivu-modal-body{
+		&_modal {
+			.ivu-modal-body {
 				height: 300px;
 				overflow-y: auto;
 			}
@@ -118,9 +118,9 @@
 
 <template>
 	<div class="creatNotice">
-		<Modal width="700" class="creatNotice_main_modal" :styles="{height:'500px', overflowY:'auto'}" v-model="patModal" title="已选患者列表" >
-			<Table border  :columns="patConfig" :data="addList"></Table>
-        </Modal>
+		<Modal width="700" class="creatNotice_main_modal" :styles="{height:'500px', overflowY:'auto'}" v-model="patModal" title="已选患者列表">
+			<Table border :columns="patConfig" :data="addList"></Table>
+		</Modal>
 		<div class="creatNotice_main">
 			<div class="creatNotice_main_step">
 				<Steps :current="step=='step_one'?0:step=='step_two'?1:2">
@@ -148,8 +148,8 @@
 							<span>
 								医生：
 							</span>
-							<!-- <Select @on-change="getData" v-model="searchParams.admin"> -->
-							<Select @on-change="getData" v-model="doctorobj">
+							<Select @on-change="getData" v-model="searchParams.admin">
+							<!-- <Select @on-change="getData" v-model="doctorobj"> -->
 								<Option v-for="item in doctorList" :value="item.realname+','+item.id" :key="item.id">{{item.realname}}</Option>
 							</Select>
 							</Col>
@@ -177,7 +177,7 @@
 						</div>
 						<Alert show-icon>已添加过的患者无法重复添加，您可在已添加患者列表里进行删除操作</Alert>
 						<div class="creatNotice_main_list">
-							<Table border  ref="selection" :columns="config" :data="dataList"></Table>
+							<Table border ref="selection" :columns="config" :data="dataList"></Table>
 						</div>
 						<Row class="creatNotice_main_page">
 							<Button @click="addAll">添加当前页</Button>
@@ -218,15 +218,15 @@
 							<FormItem label="医生" style="width:450px;">
 								<Input disabled v-model="sendData.admin" style="width: 435px"></Input>
 							</FormItem>
-							<FormItem label="已选计划"  style="width:450px;">
+							<FormItem label="已选计划" style="width:450px;">
 								<Input disabled v-model="sendData.schemeName" style="width: 435px" placeholder="请选择计划"></Input>
 							</FormItem>
 							<FormItem label="发起人服务号码" prop="mobile" style="width:450px;">
-								<Input  v-model="sendData.mobile" style="width: 435px" placeholder="请填写发起人号码"></Input>
+								<Input v-model="sendData.mobile" style="width: 435px" placeholder="请填写发起人号码"></Input>
 							</FormItem>
-							<FormItem label="随访开始时间"  style="width:450px;">
-								<DatePicker @on-change="dateChange"   format="yyyy-MM-dd"  placement="bottom-end" placeholder="请选择随访发起时间" style="width:50%"></DatePicker>
-								 <TimePicker  @on-change="timeChange"  format="HH:mm:ss" placeholder="请选择时间" style="width: 112px"></TimePicker>
+							<FormItem label="随访开始时间" style="width:450px;">
+								<DatePicker @on-change="dateChange" format="yyyy-MM-dd" placement="bottom-end" placeholder="请选择随访发起时间" style="width:50%"></DatePicker>
+								<TimePicker @on-change="timeChange" format="HH:mm:ss" placeholder="请选择时间" style="width: 112px"></TimePicker>
 							</FormItem>
 							<FormItem>
 								<Button @click="returnStep(2)" style="margin-right:10px">返回上一步</Button>
@@ -234,10 +234,10 @@
 							</FormItem>
 						</Form>
 						<!-- <div class="creatNotice_main_success">
-							<Icon type="checkmark-circled"></Icon>
-							<Alert type="success">恭喜你，发起通知成功</Alert>
-							<Button type="success">查看通知进度</Button>
-						</div> -->
+								<Icon type="checkmark-circled"></Icon>
+								<Alert type="success">恭喜你，发起通知成功</Alert>
+								<Button type="success">查看通知进度</Button>
+							</div> -->
 					</TabPane>
 				</Tabs>
 			</div>
@@ -250,19 +250,19 @@ import { API } from '@/services';
 export default {
 	data() {
 		return {
-			timeobj:{
-				date:"",
-				time:"",
+			timeobj: {
+				date: "",
+				time: "",
 			},
 			step: "step_one",
 			departId: "",//科室id
-			doctorobj:"",//医生数据
+			doctorobj: "",//医生数据
 			//搜索选项
 			searchParams: {
 				pager: 1,//当前页码
 				/* brxm: '',//患者姓名 */
 				limit: 10,//每页条数
-				adminId: "288",
+				adminId: "",
 			},
 			/** 
 			 * 方案请求数据
@@ -274,14 +274,14 @@ export default {
 				diseaseId: "", //疾病类型（可选）
 				activeType: 0 //方案类型：0，表示随访方案；1，表示通知方案（可选）
 			},
-			sendData:{
-				schemeId:"", //方案id
-				schemeName:"", //方案名称
-				adminId:"", //医生id
-				admin:"",
-				mobile:"",  //发起人专属服务号码
-				visitStartTime:"",//随访起始时间
-				hzxxIds:[]  //患者id
+			sendData: {
+				schemeId: "", //方案id
+				schemeName: "", //方案名称
+				adminId: "", //医生id
+				admin: "",
+				mobile: "",  //发起人专属服务号码
+				visitStartTime: "",//随访起始时间
+				hzxxIds: []  //患者id
 			},
 			departList: [],//科室选项列表
 			doctorList: [],//医生选项列表
@@ -289,7 +289,7 @@ export default {
 			addList: [],//已经添加的用户
 			totalPage: 10,//总页数
 			patTotalPage: 10,
-			patModal:false,//已选患者列表显示
+			patModal: false,//已选患者列表显示
 			planConfig: [
 				{
 					title: '方案名称',
@@ -328,7 +328,7 @@ export default {
 			planList: [
 
 			],
-			patConfig:[
+			patConfig: [
 				{
 					title: '姓名',
 					key: 'brxm'
@@ -363,10 +363,10 @@ export default {
 								},
 								on: {
 									click: () => {
-											this.removePat(params.index);
+										this.removePat(params.index);
 									}
 								}
-							},"移除"),
+							}, "移除"),
 						]);
 					}
 				}
@@ -402,17 +402,17 @@ export default {
 						return h('div', [
 							h('Button', {
 								props: {
-									type: params.row.isAdd==1?'dashed':'primary',
+									type: params.row.isAdd == 1 ? 'dashed' : 'primary',
 									size: 'small'
 								},
 								on: {
 									click: () => {
-										if(params.row.isAdd!=1){
-											this.addPat(params.row,params.index);
+										if (params.row.isAdd != 1) {
+											this.addPat(params.row, params.index);
 										}
 									}
 								}
-							},params.row.isAdd==1?"已添加":'添加'),
+							}, params.row.isAdd == 1 ? "已添加" : '添加'),
 						]);
 					}
 				}
@@ -427,28 +427,28 @@ export default {
 		/** 
 		 * 发起随访
 		 */
-		handleSave(){
+		handleSave() {
 			this.$refs["sendData"].validate((valid) => {
-				if(this.timeobj.date==""||this.timeobj.time==""){
+				if (this.timeobj.date == "" || this.timeobj.time == "") {
 					this.$Message.warning("请填写具体随访发起时间");
 					return false;
 				}
 				this.$Modal.confirm({
-				title: '发起随访',
-				content: '确定要发起随访吗?',
-				onOk: () => {
-					for (let item of this.addList) {
+					title: '发起随访',
+					content: '确定要发起随访吗?',
+					onOk: () => {
+						for (let item of this.addList) {
 							this.sendData.hzxxIds.push(item.id);
-					}
-					this.sendData.visitStartTime=this.timeobj.date+" "+this.timeobj.time;
-					API.FollowBussiness.patSubmit(this.sendData).then((res) => {
-						this.$Message.success("发起成功");
-					}).catch((err) => {
+						}
+						this.sendData.visitStartTime = this.timeobj.date + " " + this.timeobj.time;
+						API.FollowBussiness.patSubmit(this.sendData).then((res) => {
+							this.$Message.success("发起成功");
+						}).catch((err) => {
 
-					});
+						});
 
-				},
-			})
+					},
+				})
 			});
 		},
 		/** 
@@ -494,27 +494,33 @@ export default {
 			/** 
 			 * id 赋值
 			 */
-			this.sendData.admin=this.doctorobj.split(",")[0];
-			this.sendData.adminId=this.doctorobj.split(",")[1];
+			this.sendData.admin = this.doctorobj.split(",")[0];
+			this.sendData.adminId = this.doctorobj.split(",")[1];
 			API.FollowBussiness.patList(this.searchParams).then((res) => {
 				this.dataList = this.formData(res.data);
-				this.totalPage=res.total;
+				this.totalPage = res.total;
 			}).catch((err) => {
 
 			});
 		},
-		formData(data){
+		/** 
+		 * 数据格式化
+		 */
+		formData(data) {
 			for (let item of data) {
 				for (let ite of this.addList) {
-					if(item.id==ite.id){
-						item.isAdd=1;
-					}	
+					if (item.id == ite.id) {
+						item.isAdd = 1;
+					}
 				}
 			}
 			return data;
 		},
+		/** 
+		 * 下一步
+		 */
 		nextStep() {
-			if(this.addList.length==0){
+			if (this.addList.length == 0) {
 				this.$Message.warning("您尚未添加任何患者");
 				return false;
 			}
@@ -525,47 +531,56 @@ export default {
 		 */
 		addAll() {
 			for (let index = 0; index < this.dataList.length; index++) {
-				if(this.dataList[index].isAdd!=1){
-					this.addPat(this.dataList[index],index);
+				if (this.dataList[index].isAdd != 1) {
+					this.addPat(this.dataList[index], index);
 				}
 			}
 		},
-		dateChange(date){
-			this.timeobj.date=date;
+		/** 
+		 * 日期改变
+		 */
+		dateChange(date) {
+			this.timeobj.date = date;
 		},
-		timeChange(date){
-			this.timeobj.time=date;
+		/** 
+		 * 时间改变
+		 */
+		timeChange(date) {
+			this.timeobj.time = date;
 		},
 		/** 
 		 * 添加患者
 		 */
-		addPat(data,index) {
+		addPat(data, index) {
 			/* for (let item of addList) {
 				if(item.id==data.id){
 					this.$Message
 					return false;
 				}		
 			} */
-			let copyData=JSON.parse(JSON.stringify(data));
-			copyData.isAdd=1;
-			this.dataList.splice(index,1,copyData);
+			let copyData = JSON.parse(JSON.stringify(data));
+			copyData.isAdd = 1;
+			this.dataList.splice(index, 1, copyData);
 			this.addList.push(copyData);
 		},
-		removePat(index){
-			this.addList.splice(index,1);
+		/** 
+		 * 移除已选患者
+		 */
+		removePat(index) {
+			this.addList.splice(index, 1);
 			for (let item of this.dataList) {
-				let flag=0;
+				let flag = 0;
 				for (let ite of this.addList) {
-					if(item.id==ite.id){
+					if (item.id == ite.id) {
 						flag++;
-						item.isAdd=1;
-					}	
+						item.isAdd = 1;
+					}
 				}
-				if(flag==0){
-					item.isAdd=0;
+				if (flag == 0) {
+					item.isAdd = 0;
 				}
 			}
-			this.dataList=JSON.parse(JSON.stringify(this.dataList));
+			this.dataList = JSON.parse(JSON.stringify(this.dataList));
 		},
 		/** 
 		 * 页码改变
@@ -574,6 +589,9 @@ export default {
 			this.searchParams.pager = index;
 			this.getData();
 		},
+		/** 
+		 * 患者列表页码更改
+		 */
 		patChangePage(index) {
 			this.patParams.pager = index;
 			this.getPlanList();
@@ -582,17 +600,17 @@ export default {
 		 * 选择具体方案
 		 */
 		selectAction(data) {
-			this.step="step_three";
-			this.sendData.schemeId=data.id;
-			this.sendData.schemeName=data.name;
+			this.step = "step_three";
+			this.sendData.schemeId = data.id;
+			this.sendData.schemeName = data.name;
 		},
 		/** 
 		 * 返回上一步
 		 */
 		returnStep(index) {
-			if(index==1){
+			if (index == 1) {
 				this.step = "step_one";
-			}else{
+			} else {
 				this.step = "step_two";
 			}
 		},

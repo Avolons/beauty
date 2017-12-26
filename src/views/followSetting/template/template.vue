@@ -128,7 +128,6 @@
 				border-radius: 5px;
 				padding: 1px 10px;
 				cursor: pointer;
-				display: inline-block;
 				background-color: #f3f3f3;
 			}
 		}
@@ -203,16 +202,16 @@
 				<Input v-model="templateForm.name" placeholder="请填写模板名称"></Input>
 			</FormItem>
 			<FormItem label="疾病类型" prop="diseaseId">
-				<!-- <Select v-model="templateForm.diseaseId" filterable remote not-found-text="" :remote-method="remoteMethod" clearable>
-					<Option v-for="(option, index) in diseaseList" :value="option.value" :key="index">{{option.label}}</Option>
-				</Select> -->
-				<AutoComplete
+				<Select :label="labelobj" v-model="templateForm.diseaseId"  multiple filterable remote not-found-text="" :remote-method="remoteMethod" >
+					<Option v-for="(item, index) in diseaseList" :value="item.value" :key="index">{{item.label}}</Option>
+				</Select>
+				<!-- <AutoComplete
 						v-model="templateForm.diseaseId"
 						@on-search="remoteMethod"
 						placeholder="请输入疾病类型"
 						>
 						<Option v-for="item in diseaseList" :value="item.label+'('+item.value+')'" :key="item.value">{{ item.label }}</Option>
-   		 </AutoComplete>
+   		 </AutoComplete> -->
 			</FormItem>
 			<FormItem label="静默时间" prop="silencetime">
 				<InputNumber v-model="templateForm.silencetime" :min="0" style="width:100%;" placeholder="请输入静默时间,类型为数字,单位默认为秒"></InputNumber>
@@ -386,7 +385,7 @@
 										<Row class="padleft40 mb5" v-show="item1.keyname">
 											<Col span="4" style="width:105px" class="lineheight32">指标值:</Col>
 											<Col span="20" style="width:calc(100% - 105px)" class="textCenter lineheight32">
-											<span>{{item1.keyname}}</span>
+											<span>{{item1.keyname}}{{item1.keyvalue}}</span>
 											</Col>
 										</Row>
 										<Row class="padleft40 mb5">
@@ -395,7 +394,7 @@
 											<Input placeholder="请填写跳转问题编号" v-model="item1.nextQuestionId"></Input>
 											</Col>
 										</Row>
-										<Row class="padleft40 mb5">
+										<Row class="padleft40 mb5" v-if="item1.switchId==-1">
 											<Col span="4" style="width:105px" class="lineheight32">无匹配超次数跳转:</Col>
 											<Col span="18" style="width:calc(100% - 105px)" class="textCenter">
 											<Input placeholder="请填写无匹配超次数跳转" v-model="item1.outRptSwitchID"></Input>
@@ -424,11 +423,12 @@ export default {
 
 	data() {
 		return {
+			labelobj:[],
 			templateId: '',//模板id
 			/* 模板默认信息 */
 			templateForm: {
 				name: '',//模板名称
-				diseaseId: '',//疾病类型
+				diseaseId: [],//疾病类型
 				silencetime: 0,//静默时间
 				outrepeattimes: 0,//重复次数
 				firsttaskid: 0,//起始问题
@@ -492,15 +492,26 @@ export default {
 				/** 
 				 * 基本信息赋值
 				 */
+				res.data.diseaseId=res.data.diseaseId.split(",");
+				res.data.diseaseName=res.data.diseaseName.split(",");
 				this.templateForm = {
 					name: res.data.name,
 					silencetime: res.data.silencetime,
 					outrepeattimes: res.data.outrepeattimes,
 					firsttaskid: res.data.firsttaskid,
 					person: res.data.person,
-					diseaseId: res.data.diseaseName+"("+res.data.diseaseId+")",
+					diseaseId:  res.data.diseaseId,
 					addSubmoulds: ''//添加的通用库
 				}
+				this.diseaseList=[];
+				this.labelobj=[];
+				res.data.diseaseName.forEach((item,index)=>{
+					this.diseaseList.push({
+						label:item,
+						value:res.data.diseaseId[index]
+					})
+					this.labelobj.push(item);
+				})
 				/** 
 				 * 通用库赋值
 				 */
@@ -517,7 +528,6 @@ export default {
 			API.followTemplate.questionList({
 				id: this.templateId,
 			}).then((res) => {
-				console.log(res);
 				let maps = {
 					questionId: '',
 					questionIdXml: '',
@@ -588,6 +598,7 @@ export default {
 				if (query == '') {
 					return false;
 				}
+				this.diseaseList=[];
 			API.followProblems.disease({
 				'zjm': query
 			}).then((res) => {
@@ -607,7 +618,7 @@ export default {
 		*疾病类型--远程搜索
 		*/
 		remoteMethod2(query) {
-			if (query == '') {
+			if (query.trim() == '') {
 				this.allQuestions.length = 0;
 				this.question1.length = 0;
 				this.question2.length = 0;
@@ -618,6 +629,8 @@ export default {
 				this.question7.length = 0;
 				return false;
 			}
+			this.listDisID = '';
+			this.diseaseListQues=[];
 			API.followProblems.disease({
 				'zjm': query
 			}).then((res) => {
@@ -628,13 +641,7 @@ export default {
 							label: item.value
 						})
 					})
-					if (query !== '') {
-						this.diseaseListQues = parr
-					} else {
-						this.diseaseListQues = [];
-						this.listDisID = '';
-					}
-			
+					this.diseaseListQues = parr;
 			}).catch((error) => {
 				console.log(error)
 			})
@@ -649,7 +656,7 @@ export default {
 					'pager': 1,
 					'limit': '1000',
 					'title': '',
-					'listDisID': value
+					'diseaseId': value
 				}).then((res) => {
 					if (res.code == 0) {
 						// console.log(res)
@@ -751,7 +758,7 @@ export default {
 				pager: 1,
 				limit: '1000',
 				otype: name,
-				listDisID: this.selecetDiseId
+				diseaseId: this.selecetDiseId
 			}).then((res) => {
 				if (res.code == 0) {
 
@@ -784,18 +791,6 @@ export default {
 			})
 		},
 		/*
-		*删除模板配置
-		*/
-		removequestion(index) {
-			this.switchArr.splice(index, 1)
-			this.switchArr.forEach((item, index) => {
-				//item.switchId = index
-				console.log('index=' + index)
-				console.log('item.switchId=' + item.switchId)
-				item.switchId = index + 1
-			})
-		},
-		/*
 		*增加模板配置
 		*/
 		addTemplate() {
@@ -808,7 +803,7 @@ export default {
 
 			API.followTemplate.addList({
 				"id": ids, //不传表示新增 
-				"diseaseId": this.templateForm.diseaseId.split("(")[1].split(")")[0],//疾病id      
+				"diseaseId": this.templateForm.diseaseId.join(","),//疾病id      
 				"name": this.templateForm.name, //模板名称      
 				"silencetime": this.templateForm.silencetime,//静默时间      
 				"outrepeattimes": this.templateForm.outrepeattimes,//重复次数      
@@ -830,9 +825,12 @@ export default {
 		*删除一条模板
 		*/
 		deleteCol(index) {
-			console.log(index)
-			this.templateList.splice(index, 1)
-			console.log(this.templateList)
+			this.templateList.splice(index, 1);
+			let code=1000;
+			for (let item of this.templateList) {
+					item.questionIdXml=code;
+					code++;
+			}
 		}
 	},
 }

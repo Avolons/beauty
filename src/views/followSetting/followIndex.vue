@@ -144,13 +144,10 @@
           </Select>
         </FormItem>
         <FormItem label="添加疾病类型" prop="diseaseName">
-          <Select v-model="formItem.diseaseName" filterable remote :remote-method="remoteMethod2" :loading="loading2" clearable @label-in-value="true" @on-keyup="keyupSearch($event)" style="width: 70%;float: left;margin-right:20px;" @on-change="selectChange" not-found-text="" :label-in-value="true">
+          <Select :label="labelobj" v-model="formItem.diseaseName" multiple filterable remote :remote-method="remoteMethod2"   style="width: 70%;float: left;margin-right:20px;"  not-found-text="" >
             <Option v-for="(option, index) in options2" :value="option.value" :key="index">{{option.label}}</Option>
           </Select>
           <Button type="primary" @click="addTag" ref="addTagbtn">添加</Button>
-        </FormItem>
-        <FormItem label="已选疾病类型" prop="selecttagCount">
-          <tag v-for="item in tagCount" color="blue" :key="item" :name="item" closable @on-close="tagClose">{{item}}</tag>
         </FormItem>
         <FormItem label="结果类型" prop="radio">
           <RadioGroup v-model="formItem.radio" @on-change="radioChange">
@@ -206,6 +203,7 @@ export default {
       }
     };
     return {
+      labelobj:[],
       IndexSearch: {
         name: '',
         select: ''
@@ -306,7 +304,23 @@ export default {
                       id: params.row.id
                     }).then((res) => {
                       if (res.code == 0) {
-
+                        let arr=[];
+                        res.data.diseaseId=res.data.diseaseId.split(",");
+                        res.data.diseaseName=res.data.diseaseName.split(",");
+                        res.data.diseaseId.forEach((item,index)=>{
+                          arr.push({
+                            value:item,
+                            label:res.data.diseaseName[index]
+                          })
+                        })
+                        this.options2=arr;
+                        let result=[];
+                        this.labelobj=[];
+                        for (const item of arr) {
+                            result.push(item.value);
+                            this.labelobj.push(item.label);
+                        }
+                        this.formItem.diseaseName=result;
                         this.formItem.id = res.data.id
                         this.formItem.name = res.data.name
                         this.formItem.radio = res.data.type
@@ -402,7 +416,7 @@ export default {
         model10: [],
         top: '',
         bottom: '',
-        diseaseName: '',//疾病标签 
+        diseaseName: [],//疾病标签 
       },
       options2: [],//疾病标签下拉框数组
       tagCount: [],
@@ -432,6 +446,15 @@ export default {
     this.list(1)
   },
   methods: {
+    disChange(){
+      
+    },
+    /**
+    疾病类型变化是触发 
+     */
+    selectChange(){
+
+    },
     deletIndex(index){
       this.optionList.splice(index,1);
     },
@@ -526,11 +549,12 @@ export default {
       /** 
        * 数据清空处理
        */
-
       this.patientText = true
       this.formItem.id = ''
       this.formItem.name = ''
-      this.formItem.diseaseName=""
+      this.formItem.diseaseName=[];
+      this.labelobj=[];
+      this.options2=[];
       this.formItem.radio = 'string'
       this.formItem.select=""
       this.formItem.textarea = ''
@@ -551,7 +575,7 @@ export default {
           let addPram3 = {
             "id": this.formItem.id,
             "name": this.formItem.name,
-            "diseaseId": this.tagCount2.join(','),
+            "diseaseId": this.formItem.diseaseName.join(','),
             "status": '0',
             "type": this.formItem.radio,
             "otype": this.formItem.select,
@@ -614,18 +638,21 @@ export default {
     *指标选项添加预警阀值
     */
     addItem() {
-      class Point {
-        constructor(value, label) {
-          this.value = value;
-          this.label = label;
+      if(this.formItem.indexName.trim()==""){
+        this.$Message.warning('您添加的为空');
+          return false;
+      }
+      for (let item of this.optionList1) {
+        if(item==this.formItem.indexName){
+          this.$Message.warning('不可重复添加');
+          return false;
         }
       }
-      let p1 = new Point(this.formItem.indexName, this.formItem.indexName)
-      this.optionList.push(p1)
+      this.optionList.push({
+        value:this.formItem.indexName,
+        label:this.formItem.indexName,
+      });
       this.optionList1.push(this.formItem.indexName)
-
-
-      console.log(this.optionList1)
       this.formItem.indexName = ''
     },
     /*
@@ -640,7 +667,6 @@ export default {
     *疾病类型--远程搜索
     */
     remoteMethod2(query) {
-      console.log(query);
       if (query == "") {
         return false;
       }
@@ -648,7 +674,6 @@ export default {
         'zjm': query
       }).then((res) => {
         console.log(res)
-        if (res.code == 0) {
           class Point {
             constructor(item) {
               this.value = item.value;
@@ -664,19 +689,14 @@ export default {
             }))
           })
 
-          this.options2 = parr2
+          this.options2 = parr2;
           if (query !== '') {
             this.options2 = parr2
-
           } else {
             this.options2 = [];
-            this.IndexSearch.diseaseName = ''
+            this.IndexSearch.diseaseName = [];
           }
 
-
-        } else {
-          console.log(res)
-        }
       }).catch((error) => {
         console.log(error)
       })
@@ -687,9 +707,9 @@ export default {
     addTag() {
       let flag = 0;
       this.tagCount.forEach((item) => {
-        if (this.selectLabel == item || this.selectLabel == '') {
+        if (this.selectLabel == item || this.selectLabel.trim() == '') {
           flag++;
-          alert('您添加的为空或者重复添加')
+          this.$Message.warning('您添加的为空或者重复添加');
         }
       })
       if (flag > 0) {
@@ -700,7 +720,7 @@ export default {
       this.tagCount2.push(this.selectValue)
       this.selectLabel = ''
       this.selectValue = ''
-      this.formItem.diseaseName = ''
+      this.formItem.diseaseName = [];
     },
     /*
     *删除标签

@@ -120,7 +120,6 @@
   .ivu-modal-body {
     padding: 32px 132px;
   }
-
 }
 
 .bb1 {
@@ -215,7 +214,7 @@
     <Page style="float:right" :total="pageTotal" @on-change="currentPage" show-elevator show-total></Page>
     </Col>
     <!-- 详情模态框 -->
-    <Modal v-model="patientText" title="添加问题 / 编辑问题"  width="650" >
+    <Modal v-model="patientText" title="添加问题 / 编辑问题" width="650">
       <Form :model="formItem" :label-width="100" ref="proRuleModel" :rules="proRuleModel">
         <input type="hidden" v-model="formItem.id" placeholder="id">
         <FormItem label="问题标题" prop="title">
@@ -224,29 +223,37 @@
         <FormItem label="问题内容" prop="content">
           <Input v-model="formItem.content" placeholder="请输入随访问题内容"></Input>
         </FormItem>
+        <FormItem  label="疾病类型" prop="diseaseId">
+          <Select :label="labelobj" v-model="formItem.diseaseId" multiple filterable remote :remote-method="remoteMethod2"   not-found-text=""  placeholder="搜索疾病类型添加至疾病标签">
+            <Option v-for="(option, index) in options2" :value="option.value" :key="index">{{option.label}}</Option>
+          </Select>
+        </FormItem>
         <FormItem label="采集指标">
-          <RadioGroup v-model="formItem.isTarget" @on-change="targetChange">
+          <RadioGroup v-model="formItem.isTarget" @on-change="targetChange" >
             <Radio label="0">是</Radio>
             <Radio label="1">否</Radio>
           </RadioGroup>
         </FormItem>
-        <FormItem label="关联指标" prop="targetName1" v-if="targetShow">
-          <!-- <Input v-model="formItem.targetName" placeholder="根据首字母进行搜索" @on-keyup="keyupzb($event)"></Input> -->
-          <Select v-model="formItem.targetName1" filterable remote :remote-method="remoteMethod1" :loading="loading1" clearable :label-in-value=true @on-change="targetRadio" not-found-text="">
+        <FormItem   label="指标类型" v-show="targetShow">
+          <Select @on-change="remoteMethod1()" v-model="search.otype" >
+            <Option value="01">症状</Option>
+            <Option value="02">体征</Option>
+            <Option value="03">生活方式指导</Option>
+            <Option value="04">辅助检查</Option>
+            <Option value="05">用药反馈</Option>
+            <Option value="06">转诊情况</Option>
+            <Option value="07">通用</Option>
+          </Select>
+        </FormItem>
+        <FormItem label="疾病类型" v-show="targetShow">
+          <Select @on-change="remoteMethod1()" clearable v-model="search.diseaseId"  filterable remote :remote-method="remoteMethod"   not-found-text=""  placeholder="搜索疾病类型添加至疾病标签">
+            <Option v-for="(option, index) in options3" :value="option.value" :key="index">{{option.label}}</Option>
+          </Select>
+        </FormItem>
+        <FormItem label="关联指标" prop="targetName1" v-show="targetShow">
+          <Select v-model="formItem.targetName1" filterable remote :remote-method="remoteMethod1" :loading="loading1" clearable :label-in-value="true" @on-change="targetRadio" not-found-text="">
             <Option v-for="(option, index) in options1" :value="option.value" :key="index">{{option.label}}</Option>
           </Select>
-        </FormItem>
-        <FormItem label="" prop="" label="指标类型" v-if="targetShow">
-          <Tag color="blue" v-if="tagShow">{{targetTag}}</Tag>
-        </FormItem>
-        <FormItem label="疾病类型" prop="diseaseName">
-          <Select v-model="formItem.diseaseName" filterable remote :remote-method="remoteMethod2" :loading="loading2" clearable style="width: 70%;float: left;margin-right:20px;" @on-change="selectChange" not-found-text="" :label-in-value=true placeholder="搜索疾病类型添加至疾病标签">
-            <Option v-for="(option, index) in options2" :value="option.value" :key="index">{{option.label}}</Option>
-          </Select>
-          <Button type="primary" @click="addTag" ref="addTagbtn">添加</Button>
-        </FormItem>
-        <FormItem label="" prop="" label="疾病标签">
-          <tag v-for="item in tagCount" color="blue" :key="item" :name="item" closable @on-close="tagClose">{{item}}</tag>
         </FormItem>
         <FormItem label="纯放音">
           <RadioGroup v-model="formItem.playWavOnly" @on-change="radioChange">
@@ -256,7 +263,7 @@
         </FormItem>
       </Form>
       <div slot="footer">
-         <Button type="primary" @click="addModel('proRuleModel')">保存</Button>
+        <Button type="primary" @click="addModel('proRuleModel')">保存</Button>
       </div>
     </Modal>
   </Row>
@@ -267,6 +274,16 @@ import { API } from '@/services';
 export default {
   data() {
     return {
+      //指标筛选
+      search:{
+        pager:1,
+        limit:999999,
+        otype:"",
+        diseaseId:"",
+        zjm:""
+      },
+      labelobj:[],
+      options3:[],
       proSearch: {//搜索框
         title: '',
         diseaseName: '',
@@ -342,41 +359,40 @@ export default {
                     API.followProblems.editList({
                       "id": params.row.id
                     }).then((res) => {
+                      console.log(res);
                       if (res.code == 0) {
-                        console.log(res)
-                        let otypeName
-                        if (res.data.otype == '01') {
-                          otypeName = '症状'
-                        } else if (res.data.otype == '02') {
-                          otypeName = '体征'
-                        } else if (res.data.otype == '03') {
-                          otypeName = '生活方式指导'
-                        } else if (res.data.otype == '04') {
-                          otypeName = '辅助检查'
-                        } else if (res.data.otype == '05') {
-                          otypeName = '用药反馈'
-                        } else if (res.data.otype == '06') {
-                          otypeName = '转诊情况'
-                        } else if (res.data.otype == '07') {
-                          otypeName = '通用'
-                        }
                         this.formItem.id = res.data.id
                         this.formItem.title = res.data.title
                         this.formItem.content = res.data.content
                         this.formItem.playWavOnly = res.data.playWavOnly
                         this.formItem.isTarget = res.data.isTarget
-                        this.formItem.diseaseId = res.data.diseaseId
+                        let arr=[];
+                        res.data.diseaseId=res.data.diseaseId.split(",");
+                        res.data.diseaseName=res.data.diseaseName.split(",");
+                        res.data.diseaseId.forEach((item,index)=>{
+                          arr.push({
+                            value:item,
+                            label:res.data.diseaseName[index]
+                          })
+                        })
+                        this.options2=arr;
+                        let result=[];
+                        this.labelobj=[];
+                        for (const item of arr) {
+                            result.push(item.value);
+                            this.labelobj.push(item.label);
+                        }
+                        this.formItem.diseaseId=result;
                         if (res.data.isTarget == '0') {
                           this.targetShow = true
                           this.tagShow = true
-                          this.targetTag = otypeName
                         } else {
                           this.targetShow = false
                           this.tagShow = false
                           this.targetTag = ''
                         }
-                        this.tagCount = res.data.diseaseName.split(",")
-                        this.tagCountId = res.data.diseaseId.split(",")
+                       
+
                       } else {
                         console.log(res)
                       }
@@ -433,9 +449,8 @@ export default {
         content: '',
         targetId: '',
         targetName1: '',
-        diseaseName: '',
-
-        diseaseId: '',
+        diseaseName: [],
+        diseaseId: [],
         model10: [],
         playWavOnly: '1',
         isTarget: '0'//是否采集指标
@@ -448,9 +463,9 @@ export default {
         content: [
           { required: true, message: '问题内容不能为空', trigger: 'blur' }
         ],
-        // targetName1: [
-        //   { required: true, message: '关联指标不能为空', trigger: 'blur' }
-        // ],
+        diseaseId: [
+         { required: true,type:"array" ,message: '疾病类型不能为空', trigger: 'blur' }
+        ],
         password: [
           { required: true, message: 'Please fill in the password.', trigger: 'blur' },
           { type: 'string', min: 6, message: 'The password length cannot be less than 6 bits', trigger: 'blur' }
@@ -616,7 +631,7 @@ export default {
         "isTarget": this.formItem.isTarget,
         "content": this.formItem.content,
         "targetId": this.targetSelectId,
-        "diseaseId": this.tagCountId.join(','),
+        "diseaseId": this.formItem.diseaseId.join(','),
         "playWavOnly": this.formItem.playWavOnly,
         "status": 0,
         "otype": this.selectOtype
@@ -624,15 +639,15 @@ export default {
       this.$refs[name].validate((valid) => {
         if (valid) {
           API.followProblems.addList(addPram).then((res) => {
-              this.formItem.name = ''
-              this.formItem.select2 = ''
-              this.formItem.select = ''
-              this.formItem.radio = 'string'
-              this.formItem.textarea = ''
-              this.patientText = false;
-              this.tagCount = []//清空疾病标签
-              this.list(1)
-              this.$Message.success("提交成功");          
+            this.formItem.name = ''
+            this.formItem.select2 = ''
+            this.formItem.select = ''
+            this.formItem.radio = 'string'
+            this.formItem.textarea = ''
+            this.patientText = false;
+            this.tagCount = []//清空疾病标签
+            this.list(1)
+            this.$Message.success("提交成功");
           }).catch((error) => {
             console.log(error)
           })
@@ -663,38 +678,6 @@ export default {
       })
     },
     /*
-    *添加标签
-    */
-    addTag() {
-      let flag = 0;
-      this.tagCount.forEach((item) => {
-        if (this.selectLabel == item || this.selectLabel == '') {
-          flag++;
-          alert('您添加的为空或者重复添加')
-        }
-      })
-      if (flag > 0) {
-        this.selectLabel = ''
-        return false;
-      }
-      this.tagCount.push(this.selectLabel)
-      this.tagCount2.push(this.selectValue)
-      this.tagCountId.push(this.selectValue)
-      this.selectLabel = ''
-      this.selectValue = ''
-      this.formItem.diseaseName = ''
-    },
-    /*
-    *删除标签
-    */
-    tagClose(event, name) {
-      console.log(event)
-      console.log(name)
-      const index = this.tagCount.indexOf(name);
-      this.tagCount.splice(index, 1);
-      this.tagCountId.splice(index, 1);
-    },
-    /*
     *监听是否纯放音的单选
     */
     radioChange(value) {
@@ -710,13 +693,6 @@ export default {
       } else {
         this.targetShow = false
       }
-    },
-    //详情模态框
-    show(index) {
-      this.$Modal.info({
-        title: 'User Info',
-        content: `Name：${this.pardata[index].name}<br>Age：${this.pardata[index].age}<br>Address：${this.pardata[index].address}`
-      })
     },
     remove(index) {
       this.pardata.splice(index, 1);
@@ -741,11 +717,12 @@ export default {
     *指标类型--远程搜索
     */
     remoteMethod1(query) {
-      API.follSetting.list({
-        'pager': '1',
-        'limit': '1000',
-        'zjm': query
-      }).then((res) => {
+      if (query == "") {
+        return false;
+      }
+      this.options1 = [];
+      this.search.zjm=query;
+      API.follSetting.list(this.search).then((res) => {
         if (res.code == 0) {
           // console.log(res.data)
           class Point {
@@ -777,19 +754,44 @@ export default {
         console.log(error)
       })
     },
+    remoteMethod(query){
+      if (query == "") {
+        return false;
+      }
+      this.options3=[];
+      API.followProblems.disease({
+        'zjm': query
+      }).then((res) => {
+          class Point {
+            constructor(item) {
+              this.value = item.value;
+              this.label = item.label;
+            }
+          }
+          let parr2 = [];
+          let more2 = res.data
+          more2.forEach((item) => {
+            parr2.push(new Point({
+               value: item.id,
+              label: item.value
+            }))
+          })
+          this.options3 = parr2;
+      }).catch((error) => {
+        console.log(error)
+      })
+    },
     /*
     *疾病类型--远程搜索
     */
     remoteMethod2(query) {
-      if(query==""){
+      if (query == "") {
         return false;
       }
+      this.options2 = [];
       API.followProblems.disease({
         'zjm': query
       }).then((res) => {
-
-        console.log(res)
-        if (res.code == 0) {
           class Point {
             constructor(item) {
               this.value = item.value;
@@ -804,20 +806,7 @@ export default {
               label: item.value
             }))
           })
-
           this.options2 = parr2
-          if (query !== '') {
-            this.options2 = parr2
-
-          } else {
-            this.options2 = [];
-            this.proSearch.diseaseName = ''
-          }
-
-
-        } else {
-          console.log(res)
-        }
       }).catch((error) => {
         console.log(error)
       })

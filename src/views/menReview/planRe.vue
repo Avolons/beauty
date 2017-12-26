@@ -1,163 +1,107 @@
-<style lang="less">
-.sys-dis {
-    &_main {
-        &_list {}
-        &_search {
-            box-sizing: border-box;
-            margin-bottom: 10px;
-            .ivu-col {
-                display: flex;
-                >span {
-                    background-color: #dadada;
-                    text-align: center;
-                    line-height: 32px;
-                    display: block;
-                    width: 80px;
-                    flex-shrink: 0;
-                    border-top-left-radius: 4px;
-                    border-bottom-left-radius: 4px;
-                }
-                .ivu-input {
-                    border-top-left-radius: 0;
-                    border-bottom-left-radius: 0;
-                }
-                .ivu-select {
-                    flex-grow: 1;
-                    flex-shrink: 1;
-                }
-                .ivu-select-selection {
-                    border-top-left-radius: 0;
-                    border-bottom-left-radius: 0;
-                }
-            }
-        }
-        &_page {
-            margin-top: 10px;
-        }
-    }
-}
-</style>
-
-
 <template>
-    <div class="user">
-        <div class="sys-dis_main">
-            <Row class="sys-dis_main_search" :gutter="15">
+    <Row>
+        <!-- 搜索栏 -->
+        <Col span="24" class="followPlan">
+        <Row class="inter-down_main_search" :gutter="15">
                 <Col span="6">
                 <span>
-                    疾病名称：
+                    患者姓名
                 </span>
-                <Input v-model="searchParam.dsName" placeholder="请输入疾病名称"></Input>
+                <Input type="text" v-model="searchParams.brxm" placeholder="请输入患者姓名"></Input>
                 </Col>
                 <Col span="6">
                 <span>
-                    助记码：
+                    随访方案
                 </span>
-                <Input v-model="searchParam.zName" placeholder="请输入助记码"></Input>
+                <Input type="text" v-model="searchParams.schemeName" placeholder="请输入随访方案"></Input>
                 </Col>
                 <Col span="6">
                 <span>
-                    ICD编码：
+                    审核状态
                 </span>
-                <Input v-model="searchParam.iName" placeholder="请输入ICD编码"></Input>
+                <Select v-model="searchParams.status">
+                    <Option v-for="item in statusList" :value="item.id" :key="item.id">{{item.name}}</Option>
+                </Select>
                 </Col>
                 <Col span="6">
-                <Button @click="searchData" type="primary" style="margin-left:15px">查询</Button>
-                <Button @click="modal=true" type="info" style="margin-left:15px">新增</Button>
+                   <Button type="primary" @click="getData">查询</Button>
                 </Col>
             </Row>
-            <div class="sys-dis_main_list">
-                <Table border :columns="config" :data="dataList"></Table>
-            </div>
-            <Row class="sys-dis_main_page">
-                <Page :page-size="pageSize" :total="totalPage" :current="searchParam.page" show-elevator style="float:right" @on-change="changePage"></Page>
-            </Row>
-        </div>
-    </div>
+        </Col>
+        <!-- 表格 -->
+        <Col span="24" class="fpTable">
+        <Table border :columns="config" :data="dataList" class="margin-bottom-10"></Table>
+        <Row>
+            <Page style="float:right" :total="totalPage" @on-change="changePage" show-elevator show-total></Page>
+        </Row>
+        </Col>
+        <!-- 随访模态框 -->
+        <Modal v-model="followShow" title="随访电话" class-name="patientInfo" :styles="{top: '180px'}">
+            <Form ref="AIform" :model="AIform" :rules="validate.followPlan" inline :label="80" class="AIform">
+                <FormItem prop="AIphone" label="电话">
+                    <Input v-model="AIform.AIphone" placeholder="请输入号码" type="text"></Input>
+                </FormItem>
+                <FormItem>
+                    <Button type="primary" @click="submitData('AIform')">提交AI</Button>
+                </FormItem>
+            </Form>
+        </Modal>
+    </Row>
 </template>
 
 <script>
-import { API } from '../../services';
+import { API } from '@/services/index.js';
 export default {
     data() {
         return {
-            totalPage: 10,//总页码
-            pageSize: 10,
-            diseaseId:11,//被选中的疾病id
-            actionList: {
-                departmentId: -1,//部门ID 
-                diseaseId: -1 //疾病ID
+            //搜索选项
+            searchParams: {
+                brxm: '',//患者姓名
+                schemeName: '',//随访方案
+                status: '',//审核状态
+                pager: 1,//
+                limit:10,//每页条数
             },
-            //搜索参数
-            searchParam: {
-                page: 1,//当前页码
-                dsName: "",//疾病名称
-                zName: "",//助记码
-                iName: "", //ICD编码
-            },
-            //当前被点击触发的数据
-            currentInfo: {
-                id: "11",
-                name: "", //疾病名称
-                zjmName: "",//助记码
-                icdName: "", //ICD编码
-                state: "0",//状态（0正常，1禁用）
-                remark: "" //备注
-            },
-            //添加的数据
-            formData: {
-                name: "", //疾病名称
-                zjmName: "",//助记码
-                icdName: "", //ICD编码
-                state: "0",//状态（0正常，1禁用）
-                remark: "" //备注
-            },
-            departList: [],//部门列表接口
-            tempList: [{
-                name:"所有疾病",
-                id:-1,
-            },{
-                name:"公共模板",
-                id:0,
-            }],//模板方案列表
-            actionmodal: false,
-            editmodal: false,
-            modal: false,
             //列表配置
             config: [
                 {
-                    title: '助记码',
-                    key: 'zjm',
-                    render: (h, params) => {
-                        return params.row.disease.zjm
-                    }
+                    title: '患者姓名',
+                    key: 'brxm',
+                    align: 'center'
                 },
                 {
-                    title: 'ICD编码',
-                    key: 'icd',
-                    render: (h, params) => {
-                        return params.row.disease.icd
-                    }
+                    title: '随访方案',
+                    key: 'schemeName',
+                    align: 'center'
+                },
+
+                {
+                    title: '状态',
+                    key: 'statusStr',
+                    align: 'center'
                 },
                 {
-                    title: '名称',
-                    key: 'name',
-                    render: (h, params) => {
-                        return params.row.disease.name
-                    }
+                    title: '生成时间',
+                    key: 'dateAdd',
+                    align: 'center'
                 },
                 {
-                    title: '默认方案',
-                    key: 'qtName',
-                    /*  render:(h,params)=>{
-                         return params.row.disease.pid
-                     } */
+                    title: '审核时间',
+                    key: 'dateVet',
+                    align: 'center'
                 },
                 {
                     title: '操作',
                     key: 'action',
-                    width: 200,
+                    width: 250,
                     align: 'center',
+                    /** 
+                     * 按钮状态
+                     * 随访中  停止随访  删除
+                     * 未开始  随访     删除
+                     * 已暂停  恢复随访  删除
+                     * 完成    删除
+                     */
                     render: (h, params) => {
                         return h('div', [
                             h('Button', {
@@ -170,218 +114,193 @@ export default {
                                 },
                                 on: {
                                     click: () => {
-                                        this.editDisease(params.row);
+                                        this.startPlan(params.row.id);
                                     }
                                 }
-                            }, '编辑'),
-                            h('Button', {
-                                props: {
-                                    type: 'info',
-                                    size: 'small'
-                                },
-                                style: {
-                                    marginRight: '5px'
-                                },
-                                on: {
-                                    click: () => {
-                                        this.actionDisease(params.row.disease.id);
-                                    }
-                                }
-                            }, '默认方案'),
+                            }, '随访'),
                             h('Button', {
                                 props: {
                                     type: 'warning',
                                     size: 'small'
                                 },
                                 style: {
-                                    marginRight: '5px'
+
                                 },
                                 on: {
                                     click: () => {
-                                        this.delDisease(params.row.disease.id);
+                                        /** 
+                                         * 删除计划
+                                         */
+                                        this.deletPlan(params.row.id);
                                     }
                                 }
-                            }, '删除'),
+                            }, '删除')
                         ]);
                     }
-                }
-            ],
+                }],
+            //列表数据
             dataList: [],
-            actionTree: [],//方案列表
+            statusList: [{
+                name:"全部",
+                id:""
+            },{
+                name:"待审核",
+                id:0
+            },{
+                name:"不通过",
+                id:1
+            },{
+                name:"审核通过",
+                id:2
+            },{
+                name:"已排期",
+                id:3
+            },{
+                name:"已取消",
+                id:4
+            },],//审核状态选项列表
+            id: -1,//当前被选中的数据id
+            totalPage: 100,//总页数
+            followShow: false,//编辑模态框
+            //随访数据
+            AIform: {
+                AIphone: '',
+            },
         }
     },
     methods: {
         /** 
-         * 获取所有数据
-         */
+		 * 获取列表数据,搜索接口
+		 */
         getData() {
-            API.Systems.listDisease(this.searchParam).then((res) => {
-                this.dataList = res.data;
-                this.totalPage = res.totalRow;
-                this.pageSize = res.pageSize;
-            }).catch((err) => {
+            API.FollowBussiness.listPlan(this.searchParams).then((res)=>{
+				this.dataList=res.data;
+				this.totalPage=res.total;
+			}).catch((err)=>{
 
-            });
+			});
         },
-        /** 
-         * 搜索数据
-         */
-        searchData() {
-            this.searchParam.page = 1;
+		/** 
+		 * 页码改变
+		 */
+        changePage(index) {
+            this.searchParams.pager = index;
             this.getData();
         },
-        /** 
-         * 设置默认模板
-         */
-        actionDisease(id) {
-            console.log(id);
-            this.actionmodal = true;
-            this.diseaseId=id;
-            this.actionList= {
-                departmentId: -1,//部门ID 
-                diseaseId: -1 //疾病ID
-            };
-            this.listDisTemp();
-        },
-       
-        /** 
-         * 新增系统设置
-         */
-        addDisease() {
-            this.$refs["formData"].validate((valid) => {
+        //随访提交
+        submitData(name) {
+            this.$refs[name].validate((valid) => {
                 if (valid) {
-                    API.Systems.addDisease(this.formData).then((res) => {
-                        this.$Message.success("新增成功");
-                        this.modal = false;
-                        this.getData();
-                        this.formData = {
-                            name: "", //疾病名称
-                            zjmName: "",//助记码
-                            icdName: "", //ICD编码
-                            state: "0",//状态（0正常，1禁用）
-                            remark: "" //备注
-                        };
-                    }).catch((err) => {
+                    /** 
+					 * 此处填写具体的ajax请求
+					 */
+                    API.FollowBussiness.startPlan({
+                        id:this.id,
+                        phone:this.AIform.AIphone
+                    }).then((res)=>{
+                        this.$Message.success('提交成功!');
+                        this.followShow = false;
+                    }).catch((err)=>{
 
                     });
                 } else {
-                    this.$Message.error('补全信息!');
-                    return false;
+                    this.$Message.error('请正确填写信息');
                 }
-
             })
         },
         /** 
-         * 删除疾病
+         * 删除随访计划
          */
-        delDisease(id) {
-            let self = this;
+        deletPlan(id) {
             this.$Modal.confirm({
-                title: '删除疾病',
-                content: '确定删除该疾病？',
-                onOk: () => {
-                    API.Systems.delDisease({
-                        id: id
-                    }).then((res) => {
-                        self.$Message.success("删除成功");
-                        self.getData();
-                    }).catch((err) => {
+				title: '删除设置',
+				content: '确定删除该系统设置？',
+				onOk: () => {
+					API.FollowBussiness.delPlan({
+						id: id
+					}).then((res) => {
+						this.$Message.success("删除成功");
+						this.getData();
+					}).catch((err) => {
 
-                    });
-                }
-            });
-
+					});
+				}
+			});
+            
         },
         /** 
-         * 编辑疾病设置
+         * 开始随访
          */
-        editDisease(data) {
-            this.editmodal = true;
-            let copyData = JSON.parse(JSON.stringify(data.disease));
-            this.currentInfo = {
-                id: copyData.id,
-                name: copyData.name, //疾病名称
-                zjmName: copyData.zjm,//助记码
-                icdName: copyData.icd, //ICD编码
-                state: copyData.isUse ? "0" : "1",//状态（0正常，1禁用）
-                remark: copyData.remark //备注
-            }
+        startPlan(id) {
+            this.id = id;
+            this.followShow = true;
         },
         /** 
-         * 查询所有部门接口
+         * 停止计划
          */
-        listDisDepart() {
-            API.Systems.listDisDepart().then((res) => {
-                this.departList = [{
-                   name:"所有科室",
-                   id:-1 
-                },{
-                   name:"公共科室",
-                   id:0
-                }].concat(res.data);
-            }).catch((err) => {
+        stopPlan(id) {
+            API.FollowBussiness.listPat(this.searchParams).then((res)=>{
+				this.dataList=res.data;
+				this.totalPage=res.total;
+			}).catch((err)=>{
 
-            });
-        },
-        /** 
-         * 查询对应的模板
-         */
-        listDisTemp() {
-            API.Systems.listDisTemp({
-                departmentId:this.actionList.departmentId==-1?null:this.actionList.departmentId,
-                diseaseId:this.actionList.diseaseId==-1?null:this.actionList.diseaseId
-            }).then((res) => {
-                this.actionTree = res.data;
-            }).catch((err) => {
-
-            });
-        },
-        /** 
-         * 保存方案
-         */
-        saveDisAction(id) {
-            API.Systems.saveDisAction({
-               id:this.diseaseId,
-               qtId:id
-            }).then((res) => {
-                this.$Message.success("选择成功");
-                this.actionmodal=false;
-                this.getData();
-            }).catch((err) => {
-
-            });
-        },
-        /** 
-         * 提交修改
-         */
-        submitDisease() {
-            this.$refs['currentInfo'].validate((valid) => {
-                if (valid) {
-                    API.Systems.editDisease(this.currentInfo).then((res) => {
-                        this.$Message.success("修改成功");
-                        this.editmodal = false;
-                        this.getData();
-                    }).catch((err) => {
-
-                    });
-                } else {
-                    this.$Message.error('补全信息!');
-                }
-
-            })
-        },
-        /** 
-         * 分页更改
-         */
-        changePage(page) {
-            this.searchParam.page = page;
+			});
+            /* 暂停后在回调中刷新当前数据 */
             this.getData();
         }
-
-    }, mounted() {
+    },
+    mounted () {
         this.getData();
-        this.listDisDepart();
     }
 }
 </script>
 
+<style lang="less">
+@import "../../styles/common.less";
+.followPlan {
+    form {
+        .ivu-form-item {
+            margin-bottom: 0;
+            padding: 20px 0;
+            width: 250px;
+            .ivu-form-item-label:before {
+                content: ''
+            }
+        }
+    }
+    .fpTable {
+        padding: 10px;
+    }
+}
+
+.patientInfo .ivu-modal .ivu-modal-content {
+    .ivu-modal-header {
+        .ivu-modal-header-inner,
+        .ivu-modal-header p {
+            font-size: 16px;
+            color: #1c2432;
+            font-weight: normal;
+        }
+    }
+    .ivu-modal-body {
+        .AIform {
+            text-align: center;
+            .ivu-form-item {
+                padding: 10px 0;
+                width: 250px;
+                margin-bottom: 0;
+                .ivu-form-item-label:before {
+                    content: ''
+                }
+                .ivu-form-item-content .ivu-input-wrapper {
+                    width: 80%;
+                }
+            }
+        }
+    }
+    .ivu-modal-footer {
+        display: none;
+    }
+} //编辑
+
+</style>

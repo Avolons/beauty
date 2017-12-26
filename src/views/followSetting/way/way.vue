@@ -455,7 +455,7 @@ export default {
 			if (flag > 0) {
 				return false;
 			}
-			if (this.wayForm.tagCount.length == 0) {
+			if (this.wayForm.diseaseId.length == 0) {
 				this.$Message.error('请选择疾病类型!');
 				return false;
 			}
@@ -467,7 +467,7 @@ export default {
 			 * 模板列表
 			 */
 			sendData.questionTemples = [];
-			for (let item of this.temList) {
+			for (let item of this.showList) {
 				let copyItem = JSON.parse(JSON.stringify(item.questionTemples));
 				copyItem.questionSchemeWavs = [];
 				for (let ite of item.questionTemples.questionSchemeWavs) {
@@ -479,6 +479,9 @@ export default {
 			}
 			API.followWay.addList(sendData).then((res) => {
 				this.$Message.success("保存成功");
+				setTimeout(()=>{
+					this.$router.push("/followSetting/followWay");
+				},1500);
 			}).catch((error) => {
 				console.log(error)
 			})
@@ -503,45 +506,43 @@ export default {
 			API.followWay.editList({
 				id: this.templateId,
 			}).then((res) => {
-				console.log(res);
 				res.data.diseaseId = res.data.diseaseId.split(',');
 				res.data.diseaseName = res.data.diseaseName.split(',');
-				this.wayForm = {
-					id: this.templateId,
-					name: res.data.name,//方案名称
-					diseaseId: res.data.diseaseId,//疾病类型id
-					departmentId: res.data.departmentId, //科室类型id
-					activeType: res.data.activeType,//方案类型：0代表随访，1代表通知
-					status: res.data.status,//状态：0，启用；1，禁用
-					wayTem: [],
-					tagCount: []
-				}
 				let idList = res.data.diseaseId;
 				let nameList = res.data.diseaseName;
-				let diseaseArray = [];
-
-
-				/** 
-				 * 数据重组
-				 */
 				for (let index = 0; index < idList.length; index++) {
 					this.diseaseList.push({
 						label: nameList[index],
 						value: idList[index]
 					});
 					this.labelobj.push(nameList[index]);
-					diseaseArray.push({
-						label: nameList[index],
-						value: idList[index]
-					})
-				}
-				this.actionTime = diseaseArray.length;
-				this.diseaseLength = diseaseArray.length;
-				/* for (let item of diseaseArray) {
 					
+				}
+				/** 
+				 * 数据重组
+				 */
+				
+				this.wayForm = {
+					id: this.templateId,
+					name: res.data.name,//方案名称
+					diseaseId:res.data.diseaseId  ,//疾病类型id
+					departmentId: res.data.departmentId, //科室类型id
+					activeType: res.data.activeType,//方案类型：0代表随访，1代表通知
+					status: res.data.status,//状态：0，启用；1，禁用
+					wayTem:[],
+					tagCount: []
+				}
+				this.$Spin.show();
+				setTimeout(()=>{
+					for (let item of this.editList) {
+						this.wayForm.wayTem.push(item.id)
+					}
+					this.$Spin.hide();
+				},5000);
+				for (let item of this.diseaseList) {
 					this.selectItem = item;
 					this.addTag();
-				} */
+				}
 			}).catch((error) => {
 				console.log(error)
 			})
@@ -554,6 +555,9 @@ export default {
 				id: this.templateId,
 			}).then((res) => {
 				this.editList = res.data;
+				this.actionTime = this.editList.length;
+				this.diseaseLength = this.editList.length;
+				this.templateInfo();
 			}).catch((error) => {
 			})
 		},
@@ -591,8 +595,7 @@ export default {
 			 * 根据item的id获取对应的模板
 			 * 根据模板id获取获取问题模板
 			 */
-			
-			if (item.length > this.diseaseLength || this.actionTime > 0) {
+			if (item.length > this.diseaseLength && this.actionTime == 0) {
 				this.selectItem = item[item.length - 1];
 				this.addTag();
 				this.diseaseLength = item.length;
@@ -614,13 +617,17 @@ export default {
 					 */
 					for (let item of this.editList) {
 						if (item.id == data.id) {
+							
 							data.questionTemples.questionTempleFrequency = item.questionTempleFrequency;
 							data.questionTemples.questionTempleTimeRanges = item.questionTempleTimeRanges;
 							data.questionTemples.questionSchemeWavs = this.editFormData(JSON.parse(JSON.stringify(data.questionTemples.questionSchemeWavs)), item);
-							this.wayForm.wayTem.push(data.id);
+							this.actionTime--;
+							break;
+							
+							
 						}
 					}
-					this.actionTime--;
+					
 				}
 
 			}).catch((error) => {
@@ -678,7 +685,7 @@ export default {
 			 * 获取具体模板
 			 */
 			this.temDisease(this.selectItem.value);
-			this.wayForm.tagCount.push(this.selectItem);
+			/* this.wayForm.tagCount.push(this.selectItem); */
 			this.selectItem = {};
 
 		},
@@ -726,7 +733,7 @@ export default {
 			/** 
 			 * 获取大体信息
 			 */
-			await this.templateInfo();
+			
 		}
 
 	},

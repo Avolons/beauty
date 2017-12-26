@@ -670,6 +670,7 @@ export default {
       if (query == "") {
         return false;
       }
+      this.options2 = [];
       API.followProblems.disease({
         'zjm': query
       }).then((res) => {
@@ -690,12 +691,6 @@ export default {
           })
 
           this.options2 = parr2;
-          if (query !== '') {
-            this.options2 = parr2
-          } else {
-            this.options2 = [];
-            this.IndexSearch.diseaseName = [];
-          }
 
       }).catch((error) => {
         console.log(error)

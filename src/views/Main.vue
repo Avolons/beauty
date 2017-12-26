@@ -103,6 +103,7 @@
                 return this.$store.state.app.pageOpenedList;  // 打开的页面的页面对象
             },
             currentPath () {
+                console.log(this.$store.state.app.currentPath);
                 return this.$store.state.app.currentPath;  // 当前面包屑数组
             },
             avatorPath () {

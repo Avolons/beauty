@@ -274,7 +274,7 @@ export const appRouter = [{
         path: '/menReview/planRe',
         icon: 'podium',
         name: 'planRe',
-        title: '计划审核',
+        title: '随访计划审核',
         access: '/menReview/planRe', // access已经添加
         component: resolve => {
             require(['@/views/menReview/planRe.vue'], resolve);

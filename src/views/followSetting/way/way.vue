@@ -591,7 +591,7 @@ export default {
 			 * 根据item的id获取对应的模板
 			 * 根据模板id获取获取问题模板
 			 */
-
+			
 			if (item.length > this.diseaseLength || this.actionTime > 0) {
 				this.selectItem = item[item.length - 1];
 				this.addTag();
@@ -648,9 +648,11 @@ export default {
 			API.followTemplate.list({
 				diseaseId: id,
 				pager: 1, //当前页码
-				limit: 3, //每页条数
+				limit: 999999, //每页条数
 			}).then((res) => {
-				this.dataForm(res.data[0]);
+				for (const item of res.data) {
+					this.dataForm(item);
+				}
 			}, err => {
 				console.log(err);
 			}).catch((error) => {

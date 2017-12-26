@@ -264,8 +264,8 @@
 						<span class="way_main_nowarp">问题:{{ite.questionName}}</span>
 						<Icon type="chevron-right" size="14" color="#999" style="line-height: 35px; float:right; margin-right:10px"></Icon>
 						<div slot="content">
-							<Form :rules="validate.followAction" :label-width="110" v-for="it,index in ite.questionTempleQuestionJumps" :key="index" v-if="it.switchId==''">
-								<FormItem prop="switchWav" label="问题AI语音">
+							<Form  :label-width="110" v-for="it,index in ite.questionTempleQuestionJumps" :key="index" v-if="it.switchId==''">
+								<FormItem  label="问题AI语音">
 									<Input v-model="it.switchWav" placeholder="请输入问题ai语音"></Input>
 								</FormItem>
 							</Form>

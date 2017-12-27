@@ -116,7 +116,7 @@ export default {
         },
         {
           title: '疾病类型',
-          key: 'name',
+          key: 'diseaseName',
           align: 'center',
         },
         {

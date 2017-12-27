@@ -164,6 +164,9 @@
 			overflow-y: auto;
 			box-sizing: border-box;
 			padding: 10px;
+			.isClick{
+				background-color: #dadada;
+			}
 			>li {
 				height: 30px;
 				line-height: 30px;
@@ -353,7 +356,7 @@
 		<Row class="setQuestion">
 			<Col span="6" class="questionList">
 			<ul class="template_main_questList">
-				<li v-for="item in this.stepThirdQuestion">
+				<li :class="{'isClick':item.isClick==1}" v-for="item in this.stepThirdQuestion">
 					<Poptip trigger="hover" title="" content="双击问题开始编辑">
 						<Button type="text" v-on:dblclick.native="addThirdQuestion(item)">{{item.title}}</Button>
 					</Poptip>
@@ -406,7 +409,7 @@
 						</Panel>
 					</Collapse>
 					</Col>
-					<Col span="4" @click.native="deleteCol(index)" style="background:#f7f7f7">
+					<Col span="4" @click.native="deleteCol(index,item.questionId)" style="background:#f7f7f7">
 					<Icon type="close-circled" size="22" color="#999;" style="line-height: 38px; float:right;margin-right:10px;"></Icon>
 					</Col>
 				</Row>
@@ -423,6 +426,7 @@ export default {
 
 	data() {
 		return {
+			playWavOnly:0,//是否是纯放音
 			labelobj:[],
 			templateId: '',//模板id
 			/* 模板默认信息 */
@@ -689,6 +693,9 @@ export default {
 		*第三步点击问题开始编辑
 		*/
 		addThirdQuestion(item) {
+			if(item.isClick==1){
+				return false;
+			}
 			/** 
 			 * 获取问题列表编号
 			 */
@@ -700,17 +707,20 @@ export default {
 			API.voiceSetting.question({
 				"questionId": item.id
 			}).then((res) => {
+				item.isClick=1;
 				let saveSwitch = res.data;//临时数据
 				/** 
 				 * 临时数据初始化三种问题
 				 */
-				this.switchArr.push({
-					switchId:-1
-				},{
-					switchId:-2
-				},{
-					switchId:-3
-				});
+				if(item.playWavOnly==0){
+					this.switchArr.push({
+						switchId:-1
+					},{
+						switchId:-2
+					},{
+						switchId:-3
+					});
+				}
 				/** 
 				 * 遍历生成新的问题模板
 				 */
@@ -822,13 +832,18 @@ export default {
 		/*
 		*删除一条模板
 		*/
-		deleteCol(index) {
+		deleteCol(index,id) {
 			this.templateList.splice(index, 1);
 			let code=1000;
 			for (let item of this.templateList) {
-					item.questionIdXml=code;
-					code++;
+				item.questionIdXml=code;
+				code++;
 			}
+			for (let item of this.stepThirdQuestion) {
+				if(item.id==id){
+					item.isClick=0;
+				}
+			}	
 		}
 	},
 }

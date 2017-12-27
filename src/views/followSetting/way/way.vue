@@ -374,6 +374,9 @@ export default {
 				for (let ite of item.questionTemples.questionSchemeWavs) {
 					if (ite.questionTempleQuestionJumps[0].switchId != "") {
 						ite.questionTempleQuestionJumps.splice(0, 0, {
+							questionId:ite.questionTempleQuestionJumps[1].questionId,
+							templeId:ite.questionTempleQuestionJumps[1].templeId,
+							schemeId:ite.questionTempleQuestionJumps[1].schemeId,
 							switchId: "",
 							switchWav: "",
 						})
@@ -441,7 +444,7 @@ export default {
 					flag++;
 				}
 			});
-			for (let item of this.showList) {
+			/* for (let item of this.showList) {
 				for (let ite of item.questionTemples.questionSchemeWavs) {
 					for (let it of ite.questionTempleQuestionJumps) {
 						if (it.switchWav != undefined && (it.switchWav).trim() == "") {
@@ -454,7 +457,7 @@ export default {
 			}
 			if (flag > 0) {
 				return false;
-			}
+			} */
 			if (this.wayForm.diseaseId.length == 0) {
 				this.$Message.error('请选择疾病类型!');
 				return false;
@@ -472,6 +475,7 @@ export default {
 				copyItem.questionSchemeWavs = [];
 				for (let ite of item.questionTemples.questionSchemeWavs) {
 					for (let it of ite.questionTempleQuestionJumps) {
+						it.questionIdXml=ite.questionIdXml;
 						copyItem.questionSchemeWavs.push(JSON.parse(JSON.stringify(it)));
 					}
 				}
@@ -538,7 +542,7 @@ export default {
 						this.wayForm.wayTem.push(item.id)
 					}
 					this.$Spin.hide();
-				},5000);
+				},2000);
 				for (let item of this.diseaseList) {
 					this.selectItem = item;
 					this.addTag();

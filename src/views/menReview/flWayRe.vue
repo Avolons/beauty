@@ -7,9 +7,9 @@
 		&_list {}
 		&_search {
 			box-sizing: border-box;
-			margin-bottom: 10px;
 			.ivu-col {
 				display: flex;
+				margin-bottom: 10px;
 				>span {
 					background-color: #dadada;
 					text-align: center;
@@ -48,16 +48,30 @@
 			<Row class="sys-depart_main_search" :gutter="15">
 				<Col span="6">
 				<span>
-					科室名称：
+					随访编号
 				</span>
-				<Input v-model="searchParam.dpname" placeholder="请选择科室"></Input>
+				<Input type="text" v-model="searchParam.brxm" placeholder="请输入随访编号"></Input>
 				</Col>
 				<Col span="6">
 				<span>
-					类型：
+					患者姓名
 				</span>
-				<Select v-model="searchParam.types" placeholder="请选择类型" style="width:200px">
-					<Option v-for="item in typeList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+				<Input type="text" v-model="searchParam.brxm" placeholder="请输入患者姓名"></Input>
+				</Col>
+				<Col span="6">
+				<span>
+					科室名称：
+				</span>
+				<Select @on-change="getDoctorList" v-model="searchParam.departId">
+					<Option v-for="item in departList" :value="item.id" :key="item.id">{{item.name}}</Option>
+				</Select>
+				</Col>
+				<Col span="6">
+				<span>
+					医生：
+				</span>
+				<Select @on-change="getData" v-model="searchParam.admin">
+					<Option v-for="item in doctorList" :value="item.realname+','+item.id" :key="item.id">{{item.realname}}</Option>
 				</Select>
 				</Col>
 				<Col span="6">
@@ -68,94 +82,73 @@
 					<Option v-for="item in actionList" :value="item.value" :key="item.value">{{ item.label }}</Option>
 				</Select>
 				</Col>
+				
 				<Col span="6">
-				<span>
-					状态：
-				</span>
-				<Select v-model="searchParam.iUse" placeholder="请选择状态" style="width:200px">
-					<Option v-for="item in statusList" :value="item.value" :key="item.value">{{ item.label }}</Option>
-				</Select>
+					<Button @click="getData" type="primary">查询</Button>
 				</Col>
 			</Row>
-			<div class="sys-depart_main_add">
-				<Button @click="getData" type="primary">查询</Button>
-				<Button @click="addData" type="info">新增科室</Button>
-			</div>
 			<div class="sys-depart_main_list">
 				<Table border :columns="config" :data="dataList"></Table>
 			</div>
 			<Row class="sys-depart_main_page">
 				<Page :page-size="pageSize" :total="totalPage" :current="searchParam.page" show-elevator style="float:right" @on-change="changePage"></Page>
 			</Row>
+			<!-- 随访模态框 -->
+		<Modal v-model="modal" title="随访详情" width="950" class-name="patientInfo" :styles="{top: '180px'}">
+			<Collapse>
+				<Panel name="1">
+					随访结果
+					<div slot="content" class="followResult_table">
+						<table border="1">
+							<tr>
+								<td>患者姓名</td>
+								<td>{{planInfo.brxm}}</td>
+								<td>采用随访方案</td>
+								<td>{{planInfo.schemeName}}</td>
+							</tr>
+							<tr>
+								<td>随访状态</td>
+								<td>{{planInfo.statusStr}}</td>
+								<td>呼叫状态</td>
+								<td>{{planInfo.remark}}</td>
+							</tr>
+							<tr>
+								<td>完成时间</td>
+								<td>{{planInfo.dateEnd}}</td>
+								<td>被叫号码</td>
+								<td>{{planInfo.mobile}}</td>
+							</tr>
+							<tr>
+								<td>审核意见</td>
+								<td colspan=3>
+									<Input v-model="planInfo.vetRemark" type="textarea"  placeholder="请输入您的审核意见"></Input>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</Panel>
+				<Panel name="2">
+					记录详情
+					<ul slot="content" class="followResult_message">
+						<template v-for="item in planInfo.orderReplyQuestions">
+							<li class="followResult_single_ai">
+								<Icon type="android-call"></Icon>
+								<span>
+									{{item.question}}
+								</span>
+							</li>
+							<li class="followResult_single_pat">
+								<span>
+									<audio controls :src="item.audio"></audio>
+								</span>
+								<Icon type="person"></Icon>
+							</li>
+						</template>
+					</ul>
+				</Panel>
+			</Collapse>
+		</Modal>
 		</div>
-		<Modal v-model="modal" :title="title">
-			<Form ref="formData" class="sys-depart_main_form" :model="formData" :rules="validate.depart" :label-width="80">
-				<FormItem label="科室名称" prop="name">
-					<Input v-model="formData.name" placeholder="请输入科室名称"></Input>
-				</FormItem>
-				<FormItem label="排序" prop="paixu">
-					<Input v-model="formData.paixu" placeholder="请输入序号"></Input>
-				</FormItem>
-				<FormItem label="类型" prop="types">
-					<Select v-model="formData.types" placeholder="请选择类型">
-						<Option value=0>门诊</Option>
-						<Option value=1>住院</Option>
-					</Select>
-				</FormItem>
-				<FormItem label="方案匹配" prop="mType">
-					<Select v-model="formData.mType" placeholder="请选择方案">
-						<Option value=0>疾病</Option>
-						<Option value=1>医生</Option>
-					</Select>
-				</FormItem>
-				<FormItem label="状态" prop="state">
-					<Select v-model="formData.state" placeholder="请选择状态">
-						<Option value=0>正常</Option>
-						<Option value=1>禁用</Option>
-					</Select>
-				</FormItem>
-				<FormItem label="备注" prop="remark">
-					<Input v-model="formData.remark" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="请填写备注"></Input>
-				</FormItem>
-			</Form>
-			<div slot="footer" class="sys-depart_main_btnList">
-				<Button type="primary" @click="submitDepart">确认</Button>
-			</div>
-		</Modal>
-		<Modal v-model="modalexit" title="编辑科室">
-			<Form ref="currentData" class="sys-depart_main_form" :model="currentData" :rules="validate.depart" :label-width="80">
-				<FormItem label="科室名称" prop="name">
-					<Input v-model="currentData.name" placeholder="请输入科室名称"></Input>
-				</FormItem>
-				<FormItem label="排序" prop="paixu">
-					<Input v-model="currentData.paixu" placeholder="请输入序号"></Input>
-				</FormItem>
-				<FormItem label="类型" prop="type">
-					<Select v-model="currentData.type" placeholder="请选择类型">
-						<Option value=0 >门诊</Option>
-						<Option value=1 >住院</Option>
-					</Select>
-				</FormItem>
-				<FormItem label="方案匹配" prop="matchType">
-					<Select v-model="currentData.matchType" placeholder="请选择方案">
-						<Option value=0 >疾病</Option>
-						<Option value=1 >医生</Option>
-					</Select>
-				</FormItem>
-				<FormItem label="状态" prop="isUse">
-					<Select v-model="currentData.isUse" placeholder="请选择状态">
-						<Option value=0 >正常</Option>
-						<Option value=1 >禁用</Option>
-					</Select>
-				</FormItem>
-				<FormItem label="备注" prop="remark">
-					<Input v-model="currentData.remark" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="请填写备注"></Input>
-				</FormItem>
-			</Form>
-			<div slot="footer" class="sys-depart_main_btnList">
-				<Button type="primary" @click="changeDepart">确认</Button>
-			</div>
-		</Modal>
 	</div>
 </template>
 
@@ -172,8 +165,14 @@ export default {
 				types: null,
 				mType: null,
 			},
-			pageSize:10,
+			//随访结果详情
+			planInfo: {
+				orderReplyQuestions: []
+			},
+			pageSize: 10,
 			totalPage: 10,//总页码
+			departList: [],//科室选项列表
+			doctorList: [],//医生选项列表
 			actionList: [{
 				value: "",
 				label: "全部"
@@ -194,16 +193,6 @@ export default {
 				value: 1,
 				label: "住院"
 			},],//随访类型
-			statusList: [{
-				value: "",
-				label: "全部"
-			}, {
-				value: 0,
-				label: "正常"
-			}, {
-				value: 1,
-				label: "禁用"
-			},],//状态选项列表
 			formData: {
 				name: "",
 				paixu: 0,
@@ -212,13 +201,11 @@ export default {
 				state: "0",
 				remark: "",//备注
 			},
-			currentData:{
+			currentData: {
 
 			},
 			//模态窗title
-			title: "新增科室",
 			modal: false,
-			modalexit:false,
 			//表格配置
 			config: [
 				{
@@ -272,7 +259,7 @@ export default {
 					}
 				},
 				{
-					title: '添加时间',
+					title: '生成时间',
 					key: 'dateAdd'
 				},
 				{
@@ -299,7 +286,7 @@ export default {
 										this.editDepart(params.row)
 									}
 								}
-							}, '编辑'),
+							}, '审核'),
 							h('Button', {
 								props: {
 									type: 'warning',
@@ -324,10 +311,29 @@ export default {
 	},
 	methods: {
 		/** 
-		 * 添加新科室第一步
+		 * 获取科室列表
 		 */
-		addData() {
-			this.modal = true;
+		getDepartList() {
+			API.Systems.listDisDepart().then((res) => {
+				this.departList = res.data;
+			}).catch((err) => {
+
+			});
+		},
+		/** 
+		 * 获取医生列表
+		 */
+		getDoctorList() {
+			API.FollowBussiness.listDoctor({
+				pager: 1,
+				limit: 100000,
+				departmentId: this.departId,
+				type: 1
+			}).then((res) => {
+				this.doctorList = res.data;
+			}).catch((err) => {
+
+			});
 		},
 		/** 
          * 获取所有数据
@@ -335,18 +341,11 @@ export default {
 		getData() {
 			API.Systems.listDepart(this.searchParam).then((res) => {
 				this.totalPage = res.data.totalRow;
-				this.pageSize=res.data.pageSize;
+				this.pageSize = res.data.pageSize;
 				this.dataList = res.data.result;
 			}).catch((err) => {
 
 			});
-		},
-		/** 
-		 * 科室搜索
-		 */
-		searchResult() {
-			this.searchParam.page = 1;
-			this.getData();
 		},
 		/** 
          * 重置所有属性
@@ -354,86 +353,9 @@ export default {
 		handleReset(name) {
 			this.$refs[name].resetFields();
 		},
-        /** 
-         * 删除科室
-         */
-		delDepart(id) {
-			let self = this;
-			this.$Modal.confirm({
-				title: '删除设置',
-				content: '确定删除该系统设置？',
-				onOk: () => {
-					API.Systems.delDepart({
-						id: id
-					}).then((res) => {
-						self.$Message.success("删除成功");
-						self.getData();
-					}).catch((err) => {
-
-					});
-				}
-			});
-
-		},
-        /** 
-         * 编辑科室
-         */
-		editDepart(data) {
-			this.modalexit = true;
-			this.currentData = JSON.parse(JSON.stringify(data));
-			this.currentData.isUse=this.currentData.isUse?"0":"1";
-			this.currentData.matchType=this.currentData.matchType+"";
-			this.currentData.type=this.currentData.type+"";
-
-		},
-        /** 
-         * 提交添加
-         */
-		submitDepart() {
-			this.$refs['formData'].validate((valid) => {
-				if (valid) {
-					API.Systems.addDepart(this.formData).then((res) => {
-						this.$Message.success("添加成功");
-						this.modal = false;
-						this.getData();
-					}).catch((err) => {
-
-					});
-				} else {
-					this.$Message.error('补全信息!');
-				}
-
-			})
-		},
 		/** 
-		 * 提交修改
+		 * 分页改变
 		 */
-		changeDepart(){
-			this.$refs['currentData'].validate((valid) => {
-				if (valid) {
-					API.Systems.editDepart({
-						id: this.currentData.id,
-						name:this.currentData.name,
-						paixu:this.currentData.paixu-0,
-						types:this.currentData.type-0,
-						mType:this.currentData.matchType-0,
-						state:this.currentData.isUse-0,
-					}).then((res) => {
-						this.$Message.success("修改成功");
-						this.modalexit = false;
-						this.getData();
-					}).catch((err) => {
-
-					});
-				} else {
-					this.$Message.error('补全信息!');
-				}
-
-			})
-		},
-        /** 
-         * 分页更改
-         */
 		changePage(page) {
 			this.searchParam.page = page;
 			this.getData();

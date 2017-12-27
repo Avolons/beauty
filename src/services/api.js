@@ -16,7 +16,7 @@ axios.defaults.timeout = 5000;
 /* 默认的接口地址 */
 /* axios.defaults.baseURL = 'http://192.168.1.100:8080'; */
 
-let JsonData = ['/order/temp/visit', '/question/script/save', '/questionscheme/save', '/questiontemple/save', '/questiontarget/save'];
+let JsonData = ['/order/temp/visit', '/ordertask/vet', '/question/script/save', '/questionscheme/save', '/questiontemple/save', '/questiontarget/save'];
 // 添加请求拦截器
 axios.interceptors.request.use(function (config) {
     let flag = 0;
@@ -923,6 +923,34 @@ export const Notice = {
      */
     cancelNotice (data) {
         return fetch('post', 'visit/order/notice/cancel', data);
+    }
+
+};
+
+/* 随访计划相关接口 *****/
+export const Dataaudit = {
+    /*
+     * 随访计划列表
+     * pager:1, //当前页码
+    limit:3, //每页条数
+    schemeName:测试,//方案名称（可选）
+    adminName:雷洋清,//医生
+    brxm:李安, //患者姓名（可选）
+    status:2, //状态 :0 待审核 1 不通过 2 审核通过 3 已排期 4 已取消
+    operator:操作者,//操作者
+    type:1  //必须传，且为1
+     */
+    listPlan (data) {
+        return fetch('get', '/visit/ordertask/list', data);
+    },
+    /**
+     * "status":2,//状态:只有待审核的才能审核（0 待审核 1 不通过 2 审核通过）
+     * "ids":["fd47c338-e621-11e7-a153-6cae8b369de4","f08f92ff-e6bf-11e7-a153-6cae8b369de4"]
+     * @param {any} data
+     * @returns
+     */
+    passPlan (data) {
+        return fetch('post', '/visit/ordertask/vet', data);
     }
 
 };

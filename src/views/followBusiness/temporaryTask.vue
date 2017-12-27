@@ -260,7 +260,7 @@ export default {
 			//搜索选项
 			searchParams: {
 				pager: 1,//当前页码
-				/* brxm: '',//患者姓名 */
+				brxm: '',//患者姓名
 				limit: 10,//每页条数
 				adminId: "",
 			},

@@ -66,6 +66,15 @@
 					border-top-left-radius: 0;
 					border-bottom-left-radius: 0;
 				}
+				.ivu-input-number{
+					&:last-of-type{
+						
+					}
+					border-radius: 0;
+					.ivu-input-number-input{
+						border-radius: 0;
+					}
+				}
 			}
 		}
 		&_step {
@@ -180,8 +189,8 @@
 							<span>
 								年龄范围
 							</span>
-							<InputNumber :max="10" :min="1" v-model="value1"></InputNumber>岁 至
-							<InputNumber :max="10" :min="1" v-model="value1"></InputNumber>岁
+							<InputNumber :max="searchParams.ageEnd" :min="0" v-model="searchParams.ageBegin"></InputNumber>
+							<InputNumber :max="100" :min="searchParams.ageBegin" v-model="searchParams.ageEnd"></InputNumber>
 							</Col>
 							<Col span="6">
 								<span>
@@ -290,8 +299,8 @@ export default {
 				adminId: "",
 				diseaseId:[],//疾病id，多个用英文逗号分开（可选）
 				brxb:"",     //性别：男,女
-				ageBegin:30, //年龄开始（可选）
-    			ageEnd:50    //年龄结束（可选）
+				ageBegin:0, //年龄开始（可选）
+    			ageEnd:100   //年龄结束（可选）
 			},
 			/** 
 			 * 方案请求数据

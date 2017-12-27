@@ -374,9 +374,7 @@ export default {
 				for (let ite of item.questionTemples.questionSchemeWavs) {
 					if (ite.questionTempleQuestionJumps[0].switchId != "") {
 						ite.questionTempleQuestionJumps.splice(0, 0, {
-							questionId:ite.questionTempleQuestionJumps[1].questionId,
-							templeId:ite.questionTempleQuestionJumps[1].templeId,
-							schemeId:ite.questionTempleQuestionJumps[1].schemeId,
+							
 							switchId: "",
 							switchWav: "",
 						})
@@ -476,6 +474,8 @@ export default {
 				for (let ite of item.questionTemples.questionSchemeWavs) {
 					for (let it of ite.questionTempleQuestionJumps) {
 						it.questionIdXml=ite.questionIdXml;
+						it.questionId=ite.questionId,
+						it.templeId=ite.templeId,
 						copyItem.questionSchemeWavs.push(JSON.parse(JSON.stringify(it)));
 					}
 				}
@@ -614,6 +614,16 @@ export default {
 				id: data.id,
 			}).then((res) => {
 				data.questionTemples.questionSchemeWavs = res.data;
+				let flag=0;
+				for (const item of this.temList) {
+					if(item.id==data.id){
+						flag++;
+						break;
+					}
+				}
+				if(flag>0){
+					return false;
+				}
 				this.temList.push(data);
 				if (this.actionTime > 0) {
 					/** 

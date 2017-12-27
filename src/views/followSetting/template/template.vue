@@ -731,7 +731,8 @@ export default {
 							switchRegexText: item.switchRegexText,
 							keyname: item.keyname,
 							outRptSwitchID: item.outRptSwitchID,
-							keyvalue: item.keyvalue
+							keyvalue: item.keyvalue,
+							questionIdXml: questionIdXml,
 				  	}
 					)
 				})

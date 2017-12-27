@@ -366,7 +366,7 @@ export default {
                         }
                         console.log(this.optionList)
                         //预警阀值
-                        this.formItem.model10 = kk
+                        this.formItem.model10 = kk2
                         //备注
                       } else {
                         console.log(res)
@@ -578,8 +578,8 @@ export default {
             "status": '0',
             "type": this.formItem.radio,
             "otype": this.formItem.select,
-            "optionValues": this.formItem.model10.join(","),
-            "thresholdValue": this.optionList1.join(','),
+            "optionValues": this.optionList1.join(','),
+            "thresholdValue": this.formItem.model10.join(","),
             "thresholdValueStart": this.formItem.top,
             "thresholdValueEnd": this.formItem.bottom,
             "remark": this.formItem.textarea

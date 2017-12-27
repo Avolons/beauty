@@ -154,7 +154,7 @@
 							</Select>
 							</Col>
 						</Row>
-						<Alert show-icon>选择具体医生作为随访发起人后，患者列表将只展示该医生所服务的患者</Alert>
+						<Alert show-icon>选择具体医生仅表示发起人，不作为筛选患者的条件之一</Alert>
 						<h3 class="creatNotice_main_sendDataTitle">
 							选择接收随访患者
 						</h3>
@@ -171,16 +171,17 @@
 								性别
 							</span>
 							<Select v-model="searchParams.brxb">
-								<Option  value="" >全部</Option>
-								<Option  value="男" >男</Option>
-								<Option  value="女" >女</Option>
+								<Option value="" >全部</Option>
+								<Option value="男" >男</Option>
+								<Option value="女" >女</Option>
 							</Select>
 							</Col>
 							<Col span="6">
 							<span>
 								年龄范围
 							</span>
-							<Input type="text" v-model="searchParams.brxm" placeholder="请输入患者姓名"></Input>
+							<InputNumber :max="10" :min="1" v-model="value1"></InputNumber>岁 至
+							<InputNumber :max="10" :min="1" v-model="value1"></InputNumber>岁
 							</Col>
 							<Col span="6">
 								<span>

@@ -170,18 +170,26 @@
 							<span>
 								性别
 							</span>
-							<Select  v-model="searchParams.brxb">
+							<Select v-model="searchParams.brxb">
 								<Option  value="" >全部</Option>
-								<Option  value="" >男</Option>
-								<Option  value="" >女</Option>
+								<Option  value="男" >男</Option>
+								<Option  value="女" >女</Option>
 							</Select>
 							</Col>
 							<Col span="6">
 							<span>
-								患者姓名：
+								年龄范围
 							</span>
 							<Input type="text" v-model="searchParams.brxm" placeholder="请输入患者姓名"></Input>
 							</Col>
+							<Col span="6">
+								<span>
+									疾病类型
+								</span>
+								<Select v-model="patParams.diseaseId" filterable remote not-found-text="" :remote-method="remoteMethod" clearable>
+									<Option v-for="(item, index) in diseaseList" :value="item.id" :key="index">{{item.name}}</Option>
+								</Select>
+								</Col>
 							<Col span="6">
 							<Button @click="getData" type="primary">搜索</Button>
 							</Col>
@@ -276,9 +284,13 @@ export default {
 			//搜索选项
 			searchParams: {
 				pager: 1,//当前页码
-				/* brxm: '',//患者姓名 */
+				brxm: '',//患者姓名
 				limit: 10,//每页条数
 				adminId: "",
+				diseaseId:[],//疾病id，多个用英文逗号分开（可选）
+				brxb:"",     //性别：男,女
+				ageBegin:30, //年龄开始（可选）
+    			ageEnd:50    //年龄结束（可选）
 			},
 			/** 
 			 * 方案请求数据
@@ -293,11 +305,12 @@ export default {
 			sendData: {
 				schemeId: "", //方案id
 				schemeName: "", //方案名称
-				adminId: "", //医生id
-				admin: "",
 				mobile: "",  //发起人专属服务号码
-				visitStartTime: "",//随访起始时间
-				hzxxIds: []  //患者id
+				visitStartTime: "",//通知开始时间
+				visitEndTime:"",//通知结束时间
+				taskName:"", //通知计划名称 
+				hzxxIds: [],  //患者id
+				remark:""    
 			},
 			departList: [],//科室选项列表
 			doctorList: [],//医生选项列表
@@ -441,7 +454,7 @@ export default {
 	},
 	methods: {
 		/** 
-		 * 发起随访
+		 * 发起通知
 		 */
 		handleSave() {
 			this.$refs["sendData"].validate((valid) => {
@@ -457,7 +470,7 @@ export default {
 							this.sendData.hzxxIds.push(item.id);
 						}
 						this.sendData.visitStartTime = this.timeobj.date + " " + this.timeobj.time;
-						API.FollowBussiness.patSubmit(this.sendData).then((res) => {
+						API.Notice.createNotice(this.sendData).then((res) => {
 							this.$Message.success("发起成功");
 						}).catch((err) => {
 
@@ -512,7 +525,7 @@ export default {
 			 */
 			this.sendData.admin = this.doctorobj.split(",")[0];
 			this.sendData.adminId = this.doctorobj.split(",")[1];
-			API.FollowBussiness.patList(this.searchParams).then((res) => {
+			API.Notice.listPlan(this.searchParams).then((res) => {
 				this.dataList = this.formData(res.data);
 				this.totalPage = res.total;
 			}).catch((err) => {
@@ -647,6 +660,9 @@ export default {
 		},
 	},
 	mounted() {
+		/** 
+		 * 获取科室列表
+		 */
 		this.getDepartList();
 		this.getPlanList();
 	}

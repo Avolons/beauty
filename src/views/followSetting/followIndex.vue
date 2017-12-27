@@ -144,10 +144,9 @@
           </Select>
         </FormItem>
         <FormItem label="添加疾病类型" prop="diseaseName">
-          <Select :label="labelobj" v-model="formItem.diseaseName" multiple filterable remote :remote-method="remoteMethod2"   style="width: 70%;float: left;margin-right:20px;"  not-found-text="" >
+          <Select :label="labelobj" v-model="formItem.diseaseName" multiple filterable remote :remote-method="remoteMethod2"    not-found-text="" >
             <Option v-for="(option, index) in options2" :value="option.value" :key="index">{{option.label}}</Option>
           </Select>
-          <Button type="primary" @click="addTag" ref="addTagbtn">添加</Button>
         </FormItem>
         <FormItem label="结果类型" prop="radio">
           <RadioGroup v-model="formItem.radio" @on-change="radioChange">

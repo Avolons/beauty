@@ -16,7 +16,7 @@ axios.defaults.timeout = 5000;
 /* 默认的接口地址 */
 /* axios.defaults.baseURL = 'http://192.168.1.100:8080'; */
 
-let JsonData = ['/order/temp/visit', '/ordertask/vet', '/question/script/save', '/questionscheme/save', '/questiontemple/save', '/questiontarget/save'];
+let JsonData = ['/order/temp/visit', '/visit/order/notice', '/ordertask/vet', '/question/script/save', '/questionscheme/save', '/questiontemple/save', '/questiontarget/save'];
 // 添加请求拦截器
 axios.interceptors.request.use(function (config) {
     let flag = 0;
@@ -923,6 +923,26 @@ export const Notice = {
      */
     cancelNotice (data) {
         return fetch('post', 'visit/order/notice/cancel', data);
+    },
+     /*
+     * 通知列表
+     * pager:1, //当前页码
+        limit:3,//每页条数
+        activeName:通知计划名称,//通知计划名称（可选）
+        status:1, //状态（可选）
+        dateBegin:30, //通知计划（可选）
+        dateEnd:50    //通知计划（可选）
+     */
+    listPlan (data) {
+        return fetch('get', '/visit/sufferer/select', data);
+    },
+    /**
+     * activeId:11111  通知计划id
+     * @param {any} data
+     * @returns
+     */
+    createNotice (data) {
+        return fetch('post', '/visit/order/notice', data);
     }
 
 };

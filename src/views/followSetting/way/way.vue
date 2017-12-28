@@ -397,7 +397,7 @@ export default {
 			/** 
 			 * 说明删除了
 			 */
-			if(value.length>this.copyIndex.length){
+			if(value.length<this.copyIndex.length){
 				 for (const item of this.copyIndex) {
 					 let flag=0;
 					 for (let ite of value) {
@@ -406,13 +406,23 @@ export default {
 							break;
 						} 
 					 }
-					 if(flag==0){
+					 if(flag==0 || this.copyIndex.length==1){
 						  /* 获取到item */
+						for (let ite of this.temList) {
+							if(ite.id==item){
+								for (let it of this.copyList) {
+									if(it[0].templeId==item){
+										ite.questionTemples.questionSchemeWavs=it;
+									}
+								}
+							}
+						}
 					 }
 				 }
 			}else{
 
 			}
+			this.copyIndex=JSON.parse(JSON.stringify(value));
 		},
 		/** 
 		 * 删除时间段
@@ -662,6 +672,7 @@ export default {
 						if (item.id == data.id) {
 							data.questionTemples.questionTempleFrequency = item.questionTempleFrequency;
 							data.questionTemples.questionTempleTimeRanges = item.questionTempleTimeRanges;
+							this.copyList.push(JSON.parse(JSON.stringify(data.questionTemples.questionSchemeWavs)));
 							data.questionTemples.questionSchemeWavs = this.editFormData(JSON.parse(JSON.stringify(data.questionTemples.questionSchemeWavs)), item);
 							this.actionTime--;
 							break;
@@ -678,9 +689,7 @@ export default {
 		 */
 		editFormData(data, all) {
 			for (let item of data) {
-				this.copyList.push(JSON.parse(JSON.stringify(item.questionTempleQuestionJumps)));
 				item.questionTempleQuestionJumps = [];
-				item.questionTempleQuestionJumps
 				for (let ite of all.questionSchemeWavs) {
 					if (item.questionId == ite.questionId) {
 						item.questionTempleQuestionJumps.push(ite);

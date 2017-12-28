@@ -363,7 +363,7 @@
 				</li>
 			</ul>
 			<p style="line-height: 30px;">小提示：补充完右侧末班内容后，点击创建即可新增模板！</p>
-			<Button type="primary" @click="addTemplate">创建随访模板</Button>
+			<Button type="primary" @click="addTemplate">保存随访模板</Button>
 			</Col>
 			<Col span="16" offset="2" class="template_main_questionSelect">
 			<div class="template_main_questionItem" v-for="(item, index) in this.templateList" :key="item.questionIdXml">

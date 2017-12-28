@@ -157,8 +157,7 @@
 							<span>
 								医生：
 							</span>
-							<Select @on-change="getData" v-model="searchParams.admin">
-							<!-- <Select @on-change="getData" v-model="doctorobj"> -->
+							<Select @on-change="doctorChange" v-model="doctorobj">
 								<Option v-for="item in doctorList" :value="item.realname+','+item.id" :key="item.id">{{item.realname}}</Option>
 							</Select>
 							</Col>
@@ -200,11 +199,9 @@
 									<Option v-for="(item, index) in diseaseList" :value="item.id" :key="index">{{item.name}}</Option>
 								</Select>
 								</Col>
-							<Col span="6">
-							<Button @click="getData" style="margin-top:10px" type="primary">搜索</Button>
-							</Col>
 						</Row>
 						<div class="creatNotice_main_add">
+							<Button @click="getData" style="margin-right:10px" type="primary">搜索</Button>
 							<Badge :count="addList.length">
 								<Button @click="patModal=true" type="info">已添加患者</Button>
 							</Badge>
@@ -249,22 +246,27 @@
 					</TabPane>
 					<TabPane label="标签三" name="step_three">
 						<Form ref="sendData" class="creatNotice_main_form" :model="sendData" :rules="validate.sendData" :label-width="100">
-							<FormItem label="医生" style="width:450px;">
+							<FormItem label="通知计划名称" prop="taskName" style="width:450px;">
+								<Input v-model="sendData.taskName" placeholder="请填写计划名称" style="width: 435px"></Input>
+							</FormItem>
+							<FormItem label="发起人"  style="width:450px;">
 								<Input disabled v-model="sendData.admin" style="width: 435px"></Input>
 							</FormItem>
-							<FormItem label="已选计划" style="width:450px;">
-								<Input disabled v-model="sendData.schemeName" style="width: 435px" placeholder="请选择计划"></Input>
-							</FormItem>
-							<FormItem label="发起人服务号码" prop="mobile" style="width:450px;">
+							<FormItem label="发起人号码" prop="mobile" style="width:450px;">
 								<Input v-model="sendData.mobile" style="width: 435px" placeholder="请填写发起人号码"></Input>
 							</FormItem>
-							<FormItem label="随访开始时间" style="width:450px;">
-								<DatePicker @on-change="dateChange" format="yyyy-MM-dd" placement="bottom-end" placeholder="请选择随访发起时间" style="width:50%"></DatePicker>
-								<TimePicker @on-change="timeChange" format="HH:mm:ss" placeholder="请选择时间" style="width: 112px"></TimePicker>
+							<FormItem label="已选方案" style="width:450px;">
+								<Input disabled v-model="sendData.schemeName" style="width: 435px" placeholder="请选择计划"></Input>
+							</FormItem>
+							<FormItem label="通知起止时间"  style="width:450px;">
+								<DatePicker @on-change="dateChange" type="datetimerange" format="yyyy-MM-dd HH:mm" placeholder="请选择通知起止时间" style="width: 435px"></DatePicker>
+							</FormItem>
+							<FormItem label="通知简介" prop="remark" style="width:450px;">
+								<Input type="textarea" v-model="sendData.remark" style="width: 435px" placeholder="请填写通知简介"></Input>
 							</FormItem>
 							<FormItem>
 								<Button @click="returnStep(2)" style="margin-right:10px">返回上一步</Button>
-								<Button type="primary" @click="handleSave()">发起随访</Button>
+								<Button type="primary" @click="handleSave()">发起通知</Button>
 							</FormItem>
 						</Form>
 						<!-- <div class="creatNotice_main_success">
@@ -300,7 +302,7 @@ export default {
 				diseaseId:[],//疾病id，多个用英文逗号分开（可选）
 				brxb:"",     //性别：男,女
 				ageBegin:0, //年龄开始（可选）
-    			ageEnd:100   //年龄结束（可选）
+    			ageEnd:200   //年龄结束（可选）
 			},
 			/** 
 			 * 方案请求数据
@@ -310,7 +312,7 @@ export default {
 				limit: 10,//每页条数
 				departmentId: "",
 				diseaseId: "", //疾病类型（可选）
-				activeType: 0 //方案类型：0，表示随访方案；1，表示通知方案（可选）
+				activeType: 1 //方案类型：0，表示随访方案；1，表示通知方案（可选）
 			},
 			sendData: {
 				schemeId: "", //方案id
@@ -429,6 +431,10 @@ export default {
 					key: 'xzzQtdz'
 				},
 				{
+					title: '年龄',
+					key: 'age'
+				},
+				{
 					title: '民族',
 					key: 'mz'
 				},
@@ -472,7 +478,7 @@ export default {
 		 */
 		handleSave() {
 			this.$refs["sendData"].validate((valid) => {
-				if (this.timeobj.date == "" || this.timeobj.time == "") {
+				if (this.sendData.visitEndTime == "" || this.sendData.visitStartTime == "") {
 					this.$Message.warning("请填写具体随访发起时间");
 					return false;
 				}
@@ -483,8 +489,10 @@ export default {
 						for (let item of this.addList) {
 							this.sendData.hzxxIds.push(item.id);
 						}
-						this.sendData.visitStartTime = this.timeobj.date + " " + this.timeobj.time;
-						API.Notice.createNotice(this.sendData).then((res) => {
+						let ajaxData=JSON.parse(JSON.stringify(this.sendData));
+						delete ajaxData.admin;
+						delete ajaxData.adminId;
+						API.Notice.createNotice(ajaxData).then((res) => {
 							this.$Message.success("发起成功");
 						}).catch((err) => {
 
@@ -530,6 +538,10 @@ export default {
 
 			});
 		},
+		doctorChange(){
+			this.sendData.admin = this.doctorobj.split(",")[0];
+			this.sendData.adminId = this.doctorobj.split(",")[1];
+		},
 		/** 
 		 * 获取列表数据,搜索接口
 		 */
@@ -537,8 +549,6 @@ export default {
 			/** 
 			 * id 赋值
 			 */
-			this.sendData.admin = this.doctorobj.split(",")[0];
-			this.sendData.adminId = this.doctorobj.split(",")[1];
 			API.Notice.listPlan(this.searchParams).then((res) => {
 				this.dataList = this.formData(res.data);
 				this.totalPage = res.total;
@@ -567,6 +577,11 @@ export default {
 				this.$Message.warning("您尚未添加任何患者");
 				return false;
 			}
+			if (this.sendData.admin == "") {
+				this.$Message.warning("您未选择默认发起人");
+				return false;
+			}
+			
 			this.step = "step_two";
 		},
 		/** 
@@ -583,13 +598,8 @@ export default {
 		 * 日期改变
 		 */
 		dateChange(date) {
-			this.timeobj.date = date;
-		},
-		/** 
-		 * 时间改变
-		 */
-		timeChange(date) {
-			this.timeobj.time = date;
+			this.sendData.visitStartTime=date[0];
+			this.sendData.visitEndTime=date[1];
 		},
 		/** 
 		 * 添加患者
@@ -679,6 +689,7 @@ export default {
 		 */
 		this.getDepartList();
 		this.getPlanList();
+		this.getData();
 	}
 }
 </script>

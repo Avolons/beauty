@@ -31,6 +31,7 @@
 			}
 		}
 		&_patInner{
+				width: 100%;
 				float: left;
 				background-color: #d9edf7;
 				border-radius: 4px;
@@ -39,6 +40,14 @@
 				box-sizing: border-box;
 				margin-top: 10px;
 				clear: both;
+				>h3{
+					font-size: 14px;
+					font-weight: 400;
+				}
+				>h4{
+					font-weight: 400;
+					margin: 5px 0;
+				}
 		}
 		&_pat {
 			padding-left: calc(50% + 10px);
@@ -258,7 +267,11 @@
 										<h3>指标：{{item.fieldName}}</h3>
 										<h4>
 											采集指标：
-											<Input style="display:inline-block;width:auto" v-model="item.fieldValue" placeholder="采集指标"></Input>
+											<RadioGroup v-model="item.fieldValue" @on-change="labeChange(item)">
+												<Radio v-for="ite,index in item.optionValues" :key="index" :label="ite">
+													<span>{{ite}}</span>
+												</Radio>
+											</RadioGroup>
 										</h4>
 										<h4>
 											指标是否正常：
@@ -277,6 +290,9 @@
 						</ul>
 					</Panel>
 				</Collapse>
+				<div slot="footer" class="sys-sysset_main_btnList">
+					<Button type="primary">提交审核</Button>
+                </div>
 			</Modal>
 		</div>
 	</div>
@@ -402,6 +418,9 @@ export default {
 		}
 	},
 	methods: {
+		labeChange(item){
+
+		},
 		/** 
 		 * 获取科室列表
 		 */
@@ -439,14 +458,25 @@ export default {
 			});
 		},
 		/** 
+		 * 数据格式化
+		 */
+		dataForm(data){
+			for (const item of data.orderReplyQuestions) {
+					item.isNormal=item.isNormal==false?"0":"1";
+					item.thresholdValue=item.thresholdValue.split(",");
+					item.optionValues=item.optionValues.split(",");
+			}
+			return data;
+		},
+		/** 
 		 * 审核结果
 		 */
 		editDepart(id) {
 			this.modal = true;
 			API.Dataaudit.infoResult({
-				id: 20163
+				id: "7a093412-ebc4-11e7-94fe-6cae8b369de4"
 			}).then((res) => {
-				this.planInfo = res.data;
+				this.planInfo = this.dataForm(res.data);
 			}).catch((err) => {
 
 			});
@@ -469,6 +499,9 @@ export default {
 					});
 				}
 			});
+		},
+		submitData(){
+			let ajaxDa
 		},
 		/** 
          * 重置所有属性

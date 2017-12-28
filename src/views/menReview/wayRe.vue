@@ -36,7 +36,7 @@
 		</Col>
 		<!-- 表格 -->
 		<Col span="24" class="fpTable">
-		<Table @on-selection-change="selectChange" ref="selection" border :columns="config" :data="dataList" class="margin-bottom-10"></Table>
+		<Table @on-selection-change="selectChange" ref="selection"  :columns="config" :data="dataList" class="margin-bottom-10"></Table>
 		<Row class="planRe_main_page">
 			<Button @click="handleSelectAll(true)">全选</Button>
 			<Button type="primary" @click="passPlan(haveSelect,2)">通过</Button>
@@ -104,50 +104,8 @@ export default {
 				{
 					title: '操作者',
 					key: 'operator',
-				},
-				{
-					title: '审核操作',
-					key: 'action',
-					width: 150,
-					align: 'center',
-					render: (h, params) => {
-						return h('div', [
-							h('Button', {
-								props: {
-									type: 'primary',
-									size: 'small'
-								},
-								style: {
-									marginRight: '5px',
-								},
-								on: {
-									click: () => {
-										this.passPlan([params.row.id], 2);
-									}
-								}
-							}, '通过'),
-							h('Button', {
-								props: {
-									type: 'warning',
-									size: 'small'
-								},
-								style: {
-
-								},
-								on: {
-									click: () => {
-										/** 
-										 * 删除计划
-										 */
-										this.passPlan([params.row.id], 1);
-									}
-								}
-							}, '不通过')
-						]);
-
-
-					}
-				}],
+				}
+				],
 
 
 			//列表数据
@@ -209,12 +167,31 @@ export default {
 		 * 数据格式化
 		 */
 		dataForm(data) {
-			for (const item of data) {
-				if (item.status != 0) {
-					item._disabled = true;
+			let Arrays={
+
+			};
+			for (let item of data) {
+				if(Arrays[item.brxm]){
+					Arrays[item.brxm].child.push(item);
+				}else{
+				   Arrays[item.brxm]={
+					   brxm:item.brxm,
+					   schemeName:item.schemeName,
+					   statusStr:item.statusStr,
+					   dateAdd:item.dateAdd,
+					   dateVet:item.dateVet,
+					   adminName:item.adminName,
+					   operator:item.operator,
+					   child:[]
+				   };
+				   Arrays[item.brxm].child.push(item);	
 				}
 			}
-			return data;
+			let newArray=[];
+			for (let key in Arrays) {
+				newArray.push(Arrays[key]);
+			}
+			console.log(newArray);
 		},
 		/** 
 		 * 通过审核

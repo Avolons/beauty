@@ -356,7 +356,9 @@ export default {
                 },
                 on: {
                   click: () => {
-                    this.patientText = true
+                    this.patientText = true;
+                    this.search.otype="";
+                    this.search.diseaseId="";
                     API.followProblems.editList({
                       "id": params.row.id
                     }).then((res) => {
@@ -367,6 +369,7 @@ export default {
                         this.formItem.content = res.data.content
                         this.formItem.playWavOnly = res.data.playWavOnly
                         this.formItem.isTarget = res.data.isTarget
+                        this.targetSelectId=res.data.targetId
                         let arr=[];
                         res.data.diseaseId=res.data.diseaseId.split(",");
                         res.data.diseaseName=res.data.diseaseName.split(",");
@@ -504,6 +507,12 @@ export default {
   },
 
   methods: {
+    /** 
+     * 清空所有数据
+     */
+    clearAllData(){
+
+    },
     /*
    *获取prolist列表数据
    */
@@ -645,6 +654,8 @@ export default {
       this.$refs[name].validate((valid) => {
         if (valid) {
           API.followProblems.addList(addPram).then((res) => {
+            this.search.otype="";
+            this.search.diseaseId="";
             this.formItem.name = ''
             this.formItem.select2 = ''
             this.formItem.select = ''

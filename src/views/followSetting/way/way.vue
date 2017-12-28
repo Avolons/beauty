@@ -282,7 +282,7 @@
 								<FormItem v-if="it.switchId!=-1&&it.switchId!=-2&&it.switchId!=-3" label="指标值">
 									<span>{{it.keyname}} ：{{it.keyvalue}}</span>
 								</FormItem>
-								<FormItem v-if="it.switchId=='-1'||it.switchId=='-2'||it.switchId=='-3'" prop="switchWav" label="AI语音">
+								<FormItem   label="AI语音">
 									<!-- <Upload action="//jsonplaceholder.typicode.com/posts/" :before-upload="handleUpload">
 											<Button type="ghost" icon="ios-cloud-upload-outline">请输入ai语音地址</Button>
 										</Upload> -->

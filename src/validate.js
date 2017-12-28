@@ -171,6 +171,12 @@ export default {
     sendData: {
         mobile: [
             { required: true, message: '请填写电话', trigger: 'blur' }
+        ],
+        taskName: [
+            { required: true, message: '请填写计划名称', trigger: 'blur' }
+        ],
+        remark: [
+            { required: true, message: '请填写通知简介', trigger: 'change' }
         ]
     }
 

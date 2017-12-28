@@ -1,7 +1,9 @@
 <style lang="less">
 .sys-dis {
     &_main {
-        &_list {}
+        &_list {
+            
+        }
         &_search {
             box-sizing: border-box;
             margin-bottom: 10px;
@@ -337,7 +339,6 @@ export default {
          * 设置默认模板
          */
         actionDisease(id) {
-            console.log(id);
             this.actionmodal = true;
             this.diseaseId=id;
             this.actionList= {

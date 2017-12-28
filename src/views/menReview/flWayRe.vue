@@ -50,7 +50,7 @@
 				<span>
 					随访编号
 				</span>
-				<Input type="text" v-model="searchParam.brxm" placeholder="请输入随访编号"></Input>
+				<Input type="text" v-model="searchParam.orderNo" placeholder="请输入随访编号"></Input>
 				</Col>
 				<Col span="6">
 				<span>
@@ -62,7 +62,7 @@
 				<span>
 					科室名称：
 				</span>
-				<Select @on-change="getDoctorList" v-model="searchParam.departId">
+				<Select @on-change="getDoctorList" v-model="departId">
 					<Option v-for="item in departList" :value="item.id" :key="item.id">{{item.name}}</Option>
 				</Select>
 				</Col>
@@ -78,7 +78,7 @@
 				<span>
 					方案匹配：
 				</span>
-				<Select v-model="searchParam.mType" placeholder="请选择方案" style="width:200px">
+				<Select v-model="searchParam.schemeId" placeholder="请选择方案" style="width:200px">
 					<Option v-for="item in actionList" :value="item.value" :key="item.value">{{ item.label }}</Option>
 				</Select>
 				</Col>
@@ -91,7 +91,7 @@
 				<Table border :columns="config" :data="dataList"></Table>
 			</div>
 			<Row class="sys-depart_main_page">
-				<Page :page-size="pageSize" :total="totalPage" :current="searchParam.page" show-elevator style="float:right" @on-change="changePage"></Page>
+				<Page :page-size="pageSize" :total="totalPage" :current="searchParam.pager" show-elevator style="float:right" @on-change="changePage"></Page>
 			</Row>
 			<!-- 随访模态框 -->
 		<Modal v-model="modal" title="随访详情" width="950" class-name="patientInfo" :styles="{top: '180px'}">
@@ -159,11 +159,13 @@ export default {
 		return {
 			//搜索参数
 			searchParam: {
-				page: 1,//当前页码
-				dpname: "",
-				iUse: null,
-				types: null,
-				mType: null,
+				pager:1, //当前页码
+				limit:3,//每页条数
+				schemeId:"",//方案id（可选）
+				orderNo:"",//编码（可选）
+				brxm:"", //患者姓名（可选）
+				adminId:288,  //医生id
+				status:2   //状态为2（必传）
 			},
 			//随访结果详情
 			planInfo: {
@@ -172,6 +174,7 @@ export default {
 			pageSize: 10,
 			totalPage: 10,//总页码
 			departList: [],//科室选项列表
+			departId:"",//科室id
 			doctorList: [],//医生选项列表
 			actionList: [{
 				value: "",
@@ -209,67 +212,29 @@ export default {
 			//表格配置
 			config: [
 				{
-					title: '科室编号',
-					key: 'id',
+					title: '编号',
+					key: 'orderNo',
 				},
 				{
-					title: '类型',
-					key: 'type',
-					render: (h, params) => {
-						return params.row.type == 0 ? "门诊" : "住院"
-					}
+					title: '随访方案',
+					key: 'schemeName',
 				},
 				{
-					title: '方案匹配模式',
-					key: 'matchType',
-					render: (h, params) => {
-						return params.row.matchType == 0 ? "疾病" : "医生"
-					}
-				},
-				{
-					title: '名称',
-					key: 'name',
+					title: '患者',
+					key: 'brxm',
 				},
 				{
 					title: '状态',
-					key: 'look',
-					align: 'center',
-					render: (h, params) => {
-						if (params.row.isUse) {
-							return h('Icon', {
-								props: {
-									type: "android-done",
-								},
-								style: {
-									color: "#2d8cf0",
-									fontSize: "20px"
-								}
-							});
-						} else {
-							return h('Icon', {
-								props: {
-									type: "android-close",
-								},
-								style: {
-									color: "#ed3f14"
-								}
-							});
-						}
-
-					}
+					key: 'statusStr',
 				},
 				{
 					title: '生成时间',
 					key: 'dateAdd'
 				},
 				{
-					title: '更新时间',
-					key: 'dateUpdate'
-				},
-				{
 					title: '操作',
 					key: 'action',
-					width: 150,
+					width: 200,
 					align: 'center',
 					render: (h, params) => {
 						return h('div', [
@@ -283,10 +248,10 @@ export default {
 								},
 								on: {
 									click: () => {
-										this.editDepart(params.row)
+										this.editDepart(params.row.id)
 									}
 								}
-							}, '审核'),
+							}, params.row.vetStatus==0?'审核':'重新审核'),
 							h('Button', {
 								props: {
 									type: 'warning',
@@ -339,12 +304,42 @@ export default {
          * 获取所有数据
          */
 		getData() {
-			API.Systems.listDepart(this.searchParam).then((res) => {
-				this.totalPage = res.data.totalRow;
-				this.pageSize = res.data.pageSize;
-				this.dataList = res.data.result;
+			API.Dataaudit.listResult(this.searchParam).then((res) => {
+				this.totalPage = res.data.total;
+				this.dataList = res.data;
 			}).catch((err) => {
 
+			});
+		},
+		/** 
+		 * 审核结果
+		 */
+		editDepart(id){
+			API.Dataaudit.infoResult({
+				id: 20163
+			}).then((res) => {
+				this.currentData=res.data;
+			}).catch((err) => {
+
+			});
+		},
+		/** 
+		 * 删除结果
+		 */
+		delDepart(id){
+			this.$Modal.confirm({
+				title: '删除结果',
+				content: '确定删除该结果？',
+				onOk: () => {
+					API.Dataaudit.delResult({
+						id: id
+					}).then((res) => {
+						this.$Message.success("删除成功");
+						this.getData();
+					}).catch((err) => {
+
+					});
+				}
 			});
 		},
 		/** 
@@ -357,7 +352,7 @@ export default {
 		 * 分页改变
 		 */
 		changePage(page) {
-			this.searchParam.page = page;
+			this.searchParam.pager = page;
 			this.getData();
 		},
 	}, mounted() {

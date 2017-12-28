@@ -16,7 +16,7 @@ axios.defaults.timeout = 5000;
 /* 默认的接口地址 */
 /* axios.defaults.baseURL = 'http://192.168.1.100:8080'; */
 
-let JsonData = ['/order/temp/visit', '/visit/order/notice', '/ordertask/vet', '/question/script/save', '/questionscheme/save', '/questiontemple/save', '/questiontarget/save'];
+let JsonData = ['/order/temp/visit', '/visit/order/vet/save', '/visit/order/notice', '/ordertask/vet', '/question/script/save', '/questionscheme/save', '/questiontemple/save', '/questiontarget/save'];
 // 添加请求拦截器
 axios.interceptors.request.use(function (config) {
     let flag = 0;
@@ -971,6 +971,45 @@ export const Dataaudit = {
      */
     passPlan (data) {
         return fetch('post', '/visit/ordertask/vet', data);
+    },
+    /*
+     * 随访结果列表
+     *pager:1, //当前页码
+    limit:3,//每页条数
+    schemeId:bf0aebbd-e3c0-11e7-a153-6cae8b369de4,//方案id（可选）
+    orderNo:1712180593098406,//编码（可选）
+    brxm:许建月, //患者姓名（可选）
+    adminId:288,  //医生id
+    status:2   //状态为2（必传）
+     */
+    listResult (data) {
+        return fetch('get', '/visit/order/list', data);
+    },
+    /**
+     * 随访记录详情
+     * "id": //记录id
+     * @param {any} data
+     * @returns
+     */
+    infoResult (data) {
+        return fetch('get', '/visit/order/view', data);
+    },
+    /**
+     * 随访结果审核
+     * @param {any} data
+     * @returns
+     */
+    saveResult (data) {
+        return fetch('post', '/visit/order/vet/save', data);
+    },
+    /**
+     * 删除随访记录接口
+     * "ids": //记录id
+     * @param {any} data
+     * @returns
+     */
+    delResult (data) {
+        return fetch('post', '/visit/order/delete', data);
     }
 
 };

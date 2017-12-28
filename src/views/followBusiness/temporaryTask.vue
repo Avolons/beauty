@@ -494,8 +494,8 @@ export default {
 			/** 
 			 * id 赋值
 			 */
-			this.sendData.admin = this.doctorobj.split(",")[0];
-			this.sendData.adminId = this.doctorobj.split(",")[1];
+			this.sendData.admin = this.searchParams.admin.split(",")[0];
+			this.sendData.adminId = this.searchParams.admin.split(",")[1];
 			API.FollowBussiness.patList(this.searchParams).then((res) => {
 				this.dataList = this.formData(res.data);
 				this.totalPage = res.total;

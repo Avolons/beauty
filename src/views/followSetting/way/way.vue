@@ -231,7 +231,7 @@
 				<span>时间段:</span>
 				</Col>
 				<template v-for="ite,i in item.questionTemples.questionTempleTimeRanges">
-					<Col span="3" class="way_main_timeSection">
+					<Col span="4" class="way_main_timeSection">
 					<span>{{ite.beginTime}}</span>
 					<span>-</span>
 					<span>{{ite.endTime}}</span>
@@ -273,17 +273,16 @@
 								<FormItem class="way_main_questTitle" label="处理">
 									<span>{{it.switchId==-1?"无匹配":it.switchId==-2?"无声音":it.switchId==-3?"通用处理":it.switchId==""?"人工ai":it.switchId}}</span>
 								</FormItem>
-								<!-- <FormItem v-if="it.switchId!='无匹配'&&it.switchId!='无声音'&&it.switchId!='通用处理'" label="名称">
-										<Input v-model="it.switchText" placeholder="请输入名称"></Input>
+								<FormItem v-if="it.switchId!='-1'&&it.switchId!='-2'&&it.switchId!='-3'&&it.switchId!=''" label="话术名称">
 										<span>{{it.switchText}}</span>
-									</FormItem> -->
+								</FormItem>
 								<FormItem v-if="it.switchId!=-1&&it.switchId!=-2&&it.switchId!=-3" label="判别规则">
 									<span>{{it.switchRegexText}}</span>
 								</FormItem>
 								<FormItem v-if="it.switchId!=-1&&it.switchId!=-2&&it.switchId!=-3" label="指标值">
 									<span>{{it.keyname}} ：{{it.keyvalue}}</span>
 								</FormItem>
-								<FormItem prop="switchWav" label="AI语音">
+								<FormItem v-if="it.switchId=='-1'||it.switchId=='-2'||it.switchId=='-3'" prop="switchWav" label="AI语音">
 									<!-- <Upload action="//jsonplaceholder.typicode.com/posts/" :before-upload="handleUpload">
 											<Button type="ghost" icon="ios-cloud-upload-outline">请输入ai语音地址</Button>
 										</Upload> -->
@@ -309,7 +308,7 @@
 		<Button class="way_main_saveButton" type="primary" @click="saveChange">保存</Button>
 		</Col>
 		<Modal v-model="timemodal" title="新增随访时间段">
-			<TimePicker @on-change="timeChange" class="way_main_timePicker" format="HH:mm" type="timerange" placement="bottom-end" placeholder="请选择随访时间段" style="width: 168px"></TimePicker>
+			<TimePicker @on-change="timeChange" class="way_main_timePicker" format="HH:mm:ss" type="timerange" placement="bottom-end" placeholder="请选择随访时间段" style="width: 168px"></TimePicker>
 			<div slot="footer" class="sys-sysset_main_btnList">
 				<Button @click="timerangeSave" type="primary">确认</Button>
 			</div>
@@ -749,14 +748,14 @@ export default {
 					{
 						templeId: data.id, // 模板id
 						type: '0',          // 默认0
-						beginTime: '7:00',  // 随访区间，时间段1
-						endTime: '11:00'   // 随访区间，时间段2
+						beginTime: '07:00:00',  // 随访区间，时间段1
+						endTime: '11:00:00'   // 随访区间，时间段2
 					},
 					{
 						templeId: data.id,
 						type: '0',
-						beginTime: '14:00',
-						endTime: '23:00'
+						beginTime: '14:00:00',
+						endTime: '23:00:00'
 					}
 				],
 				questionTempleFrequency: {

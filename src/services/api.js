@@ -1010,6 +1010,14 @@ export const Dataaudit = {
      */
     delResult (data) {
         return fetch('post', '/visit/order/delete', data);
+    },
+    /**
+     *
+     * @param {any} data
+     * @returns
+     */
+    listSame (data) {
+        return fetch('get', '/visit/ordertask/list', data);
     }
 
 };

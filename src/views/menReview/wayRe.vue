@@ -30,12 +30,6 @@
 			<Input type="text" v-model="searchParams.adminName" placeholder="请输入医生姓名"></Input>
 			</Col>
 			<Col span="6">
-			<span>
-				操作者
-			</span>
-			<Input type="text" v-model="searchParams.operator" placeholder="请输入操作者姓名"></Input>
-			</Col>
-			<Col span="6">
 			<Button type="primary" @click="getData">查询</Button>
 			</Col>
 		</Row>
@@ -55,42 +49,36 @@
 
 <script>
 import { API } from '@/services/index.js';
-   import expandRow from './table-expand.vue';
-    export default {
-        components: { expandRow },
-		data(){ return {
+import expandRow from './table-expand.vue';
+export default {
+	components: { expandRow },
+	data() {
+		return {
 			//搜索选项
 			searchParams: {
-				brxm: '',//患者姓名
-				schemeName: '',//随访方案
-				brxm: "",
-				adminName: "",
-				operator: "",
-				type: 1,
-				status: '',//审核状态
-				pager: 1,//
-				limit: 10,//每页条数
+				pager: 1,      //当前页码
+				limit: 10,     //每页条数
+				schemeName: "",//方案名称（可选）
+				adminName: "", //医生
+				brxm: "",      //患者姓名（可选）
+				status: "",    //状态 :0 待审核 1 不通过 2 审核通过 3 已排期 4 已取消
+				type: 2        //必须传，且为2
 			},
 			//列表配置
 			config: [
-				 {
-                        type: 'expand',
-                        width: 50,
-                        render: (h, params) => {
-                            return h(expandRow, {
-                                props: {
-                                    row: params.row
-                                }
-                            })
-                        }
-                    },
 				{
-					type: 'selection',
-					width: 60,
-					align: 'center'
+					type: 'expand',
+					width: 50,
+					render: (h, params) => {
+						return h(expandRow, {
+							props: {
+								row: params.row
+							}
+						})
+					}
 				},
 				{
-					title: '患者姓名',
+					title: '姓名',
 					key: 'brxm',
 				},
 				{
@@ -123,61 +111,45 @@ import { API } from '@/services/index.js';
 					width: 150,
 					align: 'center',
 					render: (h, params) => {
-						if (params.row.status == 0) {
-							return h('div', [
-								h('Button', {
-									props: {
-										type: 'primary',
-										size: 'small'
-									},
-									style: {
-										marginRight: '5px',
-									},
-									on: {
-										click: () => {
-											this.passPlan([params.row.id], 2);
-										}
+						return h('div', [
+							h('Button', {
+								props: {
+									type: 'primary',
+									size: 'small'
+								},
+								style: {
+									marginRight: '5px',
+								},
+								on: {
+									click: () => {
+										this.passPlan([params.row.id], 2);
 									}
-								}, '通过'),
-								h('Button', {
-									props: {
-										type: 'warning',
-										size: 'small'
-									},
-									style: {
+								}
+							}, '通过'),
+							h('Button', {
+								props: {
+									type: 'warning',
+									size: 'small'
+								},
+								style: {
 
-									},
-									on: {
-										click: () => {
-											/** 
-											 * 删除计划
-											 */
-											this.passPlan([params.row.id], 1);
-										}
+								},
+								on: {
+									click: () => {
+										/** 
+										 * 删除计划
+										 */
+										this.passPlan([params.row.id], 1);
 									}
-								}, '不通过')
-							]);
-						} else {
-							return h('div', [
-								h('Button', {
-									props: {
-										type: 'dashed',
-										size: 'small'
-									},
-									style: {
-										marginRight: '5px',
-									},
-									on: {
+								}
+							}, '不通过')
+						]);
 
-									}
-								}, params.row.statusStr)
-							]);
-						}
 
 					}
 				}],
-			
-			
+
+
 			//列表数据
 			dataList: [],
 			statusList: [{
@@ -209,7 +181,7 @@ import { API } from '@/services/index.js';
 		 * 获取列表数据,搜索接口
 		 */
 		getData() {
-			API.Dataaudit.listPlan(this.searchParams).then((res) => {
+			API.Dataaudit.listSame(this.searchParams).then((res) => {
 				this.dataList = this.dataForm(res.data);
 				this.totalPage = res.total;
 			}).catch((err) => {

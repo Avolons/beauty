@@ -339,6 +339,10 @@ export default {
 				}).then((res) => {
 					this.$Message.success('添加成功!');
 					this.questionInfo();
+					setTimeout(()=> {
+						this.$router.push('/followSetting/followProblems');
+					}, 1500);
+					
 				}).catch((error) => {
 
 				});

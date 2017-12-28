@@ -201,7 +201,7 @@
 								</Select>
 								</Col>
 							<Col span="6">
-							<Button @click="getData" type="primary">搜索</Button>
+							<Button @click="getData" style="margin-top:10px" type="primary">搜索</Button>
 							</Col>
 						</Row>
 						<div class="creatNotice_main_add">
@@ -379,6 +379,10 @@ export default {
 				{
 					title: '居住地址',
 					key: 'xzzQtdz'
+				},
+				{
+					title: '年龄',
+					key: 'age'
 				},
 				{
 					title: '民族',

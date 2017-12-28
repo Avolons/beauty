@@ -456,6 +456,7 @@ export default {
     },
     deletIndex(index){
       this.optionList.splice(index,1);
+      this.optionList1.splice(index,1);
     },
     /*
     *获取list列表数据
@@ -568,6 +569,10 @@ export default {
     *确定添加
     */
     addModel(name) {
+      if(this.formItem.radio=="select" && this.optionList1.length==0){
+        this.$Message.warning("指标选项不可为空");
+        return false;
+      }
       this.$refs[name].validate((valid) => {
         if (valid) {
           let addPram

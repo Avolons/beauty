@@ -1,4 +1,112 @@
 <style lang="less">
+.followResult {
+	&_message_vemark {
+		text-indent: 0;
+		display: block;
+		textarea {
+			border: none;
+			outline: none;
+		}
+	}
+	&_single {
+		&_ai {
+			padding-right: calc(50% + 10px);
+			box-sizing: border-box;
+			font-size: 0;
+			.ivu-icon {
+				font-size: 20px;
+				margin-right: 10px;
+				width: 20px;
+				margin-top: 10px;
+			}
+			span {
+				display: inline-block;
+				background-color: #d9edf7;
+				border-radius: 4px;
+				padding: 10px;
+				font-size: 13px;
+				box-sizing: border-box;
+				vertical-align: top;
+				width: calc(~"100% - 30px");
+			}
+		}
+		&_patInner{
+				float: left;
+				background-color: #d9edf7;
+				border-radius: 4px;
+				padding: 10px;
+				font-size: 13px;
+				box-sizing: border-box;
+				margin-top: 10px;
+				clear: both;
+		}
+		&_pat {
+			padding-left: calc(50% + 10px);
+			box-sizing: border-box;
+			.ivu-icon {
+				font-size: 20px;
+				margin-left: 10px;
+				width: 20px;
+				margin-top: 10px;
+				float: right;
+			}
+
+			>span {
+				display: block;
+				float: left;
+				background-color: #d9edf7;
+				border-radius: 4px;
+				padding: 10px;
+				font-size: 13px;
+				box-sizing: border-box;
+
+				width: calc(~"100% - 30px");
+				audio {
+					display: inline-block;
+				}
+			}
+			&:after {
+				content: "";
+				display: block;
+				clear: both;
+			}
+		}
+	}
+	&_table {
+		width: 100%;
+		table {
+			width: 100%;
+			border: 1px solid #dadada;
+			border-collapse: collapse;
+		}
+		tr {
+			height: 35px;
+			line-height: 35px;
+			font-size: 13px;
+			&:nth-of-type(odd) {
+				background-color: #f7f7f7;
+			}
+		}
+		td {
+			text-indent: 5px;
+			width: 25%
+		}
+	}
+	form {
+		.ivu-form-item {
+			margin-bottom: 10px;
+			padding: 0;
+			width: 200px;
+			.ivu-form-item-label:before {
+				content: ''
+			}
+		}
+	}
+	.fpTable {
+		padding: 10px;
+	}
+}
+
 .sys-depart {
 	&_main {
 		&_add {
@@ -82,9 +190,9 @@
 					<Option v-for="item in actionList" :value="item.value" :key="item.value">{{ item.label }}</Option>
 				</Select>
 				</Col>
-				
+
 				<Col span="6">
-					<Button @click="getData" type="primary">查询</Button>
+				<Button @click="getData" type="primary">查询</Button>
 				</Col>
 			</Row>
 			<div class="sys-depart_main_list">
@@ -94,60 +202,82 @@
 				<Page :page-size="pageSize" :total="totalPage" :current="searchParam.pager" show-elevator style="float:right" @on-change="changePage"></Page>
 			</Row>
 			<!-- 随访模态框 -->
-		<Modal v-model="modal" title="随访详情" width="950" class-name="patientInfo" :styles="{top: '180px'}">
-			<Collapse>
-				<Panel name="1">
-					随访结果
-					<div slot="content" class="followResult_table">
-						<table border="1">
-							<tr>
-								<td>患者姓名</td>
-								<td>{{planInfo.brxm}}</td>
-								<td>采用随访方案</td>
-								<td>{{planInfo.schemeName}}</td>
-							</tr>
-							<tr>
-								<td>随访状态</td>
-								<td>{{planInfo.statusStr}}</td>
-								<td>呼叫状态</td>
-								<td>{{planInfo.remark}}</td>
-							</tr>
-							<tr>
-								<td>完成时间</td>
-								<td>{{planInfo.dateEnd}}</td>
-								<td>被叫号码</td>
-								<td>{{planInfo.mobile}}</td>
-							</tr>
-							<tr>
-								<td>审核意见</td>
-								<td colspan=3>
-									<Input v-model="planInfo.vetRemark" type="textarea"  placeholder="请输入您的审核意见"></Input>
-								</td>
-							</tr>
-						</table>
-					</div>
-				</Panel>
-				<Panel name="2">
-					记录详情
-					<ul slot="content" class="followResult_message">
-						<template v-for="item in planInfo.orderReplyQuestions">
-							<li class="followResult_single_ai">
-								<Icon type="android-call"></Icon>
-								<span>
-									{{item.question}}
-								</span>
-							</li>
-							<li class="followResult_single_pat">
-								<span>
-									<audio controls :src="item.audio"></audio>
-								</span>
-								<Icon type="person"></Icon>
-							</li>
-						</template>
-					</ul>
-				</Panel>
-			</Collapse>
-		</Modal>
+			<Modal v-model="modal" title="随访详情" width="950" class-name="patientInfo" :styles="{top:'100px',height:'700px',overflowY:'auto'}">
+				<Collapse>
+					<Panel name="1">
+						随访结果
+						<div slot="content" class="followResult_table">
+							<table border="1">
+								<tr>
+									<td>患者姓名</td>
+									<td>{{planInfo.brxm}}</td>
+									<td>采用随访方案</td>
+									<td>{{planInfo.schemeName}}</td>
+								</tr>
+								<tr>
+									<td>随访状态</td>
+									<td>{{planInfo.statusStr}}</td>
+									<td>呼叫状态</td>
+									<td>{{planInfo.remark}}</td>
+								</tr>
+								<tr>
+									<td>完成时间</td>
+									<td>{{planInfo.dateEnd}}</td>
+									<td>被叫号码</td>
+									<td>{{planInfo.mobile}}</td>
+								</tr>
+								<tr>
+									<td>审核意见</td>
+									<td colspan=3>
+										<Input type="textarea" class="followResult_message_vemark" v-model="planInfo.vetRemark" placeholder="请输入您的审核意见"></Input>
+									</td>
+								</tr>
+							</table>
+						</div>
+					</Panel>
+					<Panel name="2">
+						记录详情
+						<ul slot="content" class="followResult_message">
+							<template v-for="item in planInfo.orderReplyQuestions">
+								<li class="followResult_single_ai">
+									<Icon type="android-call"></Icon>
+									<span>
+										{{item.question}}
+									</span>
+								</li>
+								<li class="followResult_single_pat">
+									<span>
+										<audio controls :src="item.audio"></audio>
+									</span>
+									<Icon type="person"></Icon>
+
+									<div class="followResult_single_patInner">
+										<Input v-model="item.asr" placeholder="患者回复"></Input>
+									</div>
+									<div class="followResult_single_patInner">
+										<h3>指标：{{item.fieldName}}</h3>
+										<h4>
+											采集指标：
+											<Input style="display:inline-block;width:auto" v-model="item.fieldValue" placeholder="采集指标"></Input>
+										</h4>
+										<h4>
+											指标是否正常：
+											<RadioGroup v-model="item.isNormal">
+												<Radio label="1">
+													<span>正常</span>
+												</Radio>
+												<Radio label="0">
+													<span>不正常</span>
+												</Radio>
+											</RadioGroup>
+										</h4>
+									</div>
+								</li>
+							</template>
+						</ul>
+					</Panel>
+				</Collapse>
+			</Modal>
 		</div>
 	</div>
 </template>
@@ -159,13 +289,13 @@ export default {
 		return {
 			//搜索参数
 			searchParam: {
-				pager:1, //当前页码
-				limit:3,//每页条数
-				schemeId:"",//方案id（可选）
-				orderNo:"",//编码（可选）
-				brxm:"", //患者姓名（可选）
-				adminId:288,  //医生id
-				status:2   //状态为2（必传）
+				pager: 1, //当前页码
+				limit: 3,//每页条数
+				schemeId: "",//方案id（可选）
+				orderNo: "",//编码（可选）
+				brxm: "", //患者姓名（可选）
+				adminId: 288,  //医生id
+				status: 2   //状态为2（必传）
 			},
 			//随访结果详情
 			planInfo: {
@@ -174,7 +304,7 @@ export default {
 			pageSize: 10,
 			totalPage: 10,//总页码
 			departList: [],//科室选项列表
-			departId:"",//科室id
+			departId: "",//科室id
 			doctorList: [],//医生选项列表
 			actionList: [{
 				value: "",
@@ -203,9 +333,6 @@ export default {
 				mType: "0",
 				state: "0",
 				remark: "",//备注
-			},
-			currentData: {
-
 			},
 			//模态窗title
 			modal: false,
@@ -251,7 +378,7 @@ export default {
 										this.editDepart(params.row.id)
 									}
 								}
-							}, params.row.vetStatus==0?'审核':'重新审核'),
+							}, params.row.vetStatus == 0 ? '审核' : '重新审核'),
 							h('Button', {
 								props: {
 									type: 'warning',
@@ -314,11 +441,12 @@ export default {
 		/** 
 		 * 审核结果
 		 */
-		editDepart(id){
+		editDepart(id) {
+			this.modal = true;
 			API.Dataaudit.infoResult({
 				id: 20163
 			}).then((res) => {
-				this.currentData=res.data;
+				this.planInfo = res.data;
 			}).catch((err) => {
 
 			});
@@ -326,7 +454,7 @@ export default {
 		/** 
 		 * 删除结果
 		 */
-		delDepart(id){
+		delDepart(id) {
 			this.$Modal.confirm({
 				title: '删除结果',
 				content: '确定删除该结果？',

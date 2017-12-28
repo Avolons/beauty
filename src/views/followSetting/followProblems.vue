@@ -251,7 +251,7 @@
           </Select>
         </FormItem>
         <FormItem label="关联指标" prop="targetName1" v-show="targetShow">
-          <Select v-model="formItem.targetName1" filterable remote :remote-method="remoteMethod1" :loading="loading1" clearable :label-in-value="true" @on-change="targetRadio" not-found-text="">
+          <Select :label="taglabel" v-model="formItem.targetName1" filterable remote :remote-method="remoteMethod1" :loading="loading1" clearable :label-in-value="true" @on-change="targetRadio" not-found-text="">
             <Option v-for="(option, index) in options1" :value="option.value" :key="index">{{option.label}}</Option>
           </Select>
         </FormItem>
@@ -274,6 +274,7 @@ import { API } from '@/services';
 export default {
   data() {
     return {
+      taglabel:"",
       //指标筛选
       search:{
         pager:1,
@@ -391,8 +392,13 @@ export default {
                           this.tagShow = false
                           this.targetTag = ''
                         }
-                       
-
+                        this.options1=[];
+                          this.options1.push({
+                            label:res.data.targetName,
+                            value:res.data.targetId,
+                          })
+                          this.taglabel=res.data.targetName;
+                        this.formItem.targetName1=res.data.targetId
                       } else {
                         console.log(res)
                       }

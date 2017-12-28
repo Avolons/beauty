@@ -184,7 +184,7 @@
 						<tag v-for="item in wayForm.tagCount" color="blue" :key="item.value" :name="item.label" closable @on-close="tagClose">{{item.label}}</tag>
 					</FormItem> -->
 			<FormItem label="选择模板" prop="wayTem">
-				<Select v-model="wayForm.wayTem" multiple style="width:260px">
+				<Select v-model="wayForm.wayTem" multiple  @on-change="temChange" style="width:260px">
 					<Option v-for="item in temList" :value="item.id" :key="item.id">{{ item.name }}</Option>
 				</Select>
 			</FormItem>
@@ -324,6 +324,8 @@ import { aa } from '@/views/followSetting/template/aa.js'
 export default {
 	data() {
 		return {
+			copyList:[],
+			copyIndex:[],//已选模板id
 			labelobj: [],
 			diseaseLength: 0,
 			//最终需要提交的数据
@@ -372,12 +374,18 @@ export default {
 			}
 			for (const item of arr) {
 				for (let ite of item.questionTemples.questionSchemeWavs) {
-					if (ite.questionTempleQuestionJumps[0].switchId != "") {
+					if (!ite.questionTempleQuestionJumps[0]  ) {
 						ite.questionTempleQuestionJumps.splice(0, 0, {
-							
 							switchId: "",
 							switchWav: "",
 						})
+					}else{
+						if(ite.questionTempleQuestionJumps[0].switchId != ""){
+							ite.questionTempleQuestionJumps.splice(0, 0, {
+							switchId: "",
+							switchWav: "",
+						})
+						}
 					}
 				}
 			}
@@ -385,6 +393,27 @@ export default {
 		}
 	},
 	methods: {
+		temChange(value){
+			/** 
+			 * 说明删除了
+			 */
+			if(value.length>this.copyIndex.length){
+				 for (const item of this.copyIndex) {
+					 let flag=0;
+					 for (let ite of value) {
+						if(item==ite){
+							flag++;
+							break;
+						} 
+					 }
+					 if(flag==0){
+						  /* 获取到item */
+					 }
+				 }
+			}else{
+
+			}
+		},
 		/** 
 		 * 删除时间段
 		 */
@@ -473,9 +502,9 @@ export default {
 				copyItem.questionSchemeWavs = [];
 				for (let ite of item.questionTemples.questionSchemeWavs) {
 					for (let it of ite.questionTempleQuestionJumps) {
-						it.questionIdXml=ite.questionIdXml;
-						it.questionId=ite.questionId,
-						it.templeId=ite.templeId,
+						it.questionIdXml=JSON.parse(JSON.stringify(ite.questionIdXml));
+						it.questionId= JSON.parse(JSON.stringify(ite.questionId))[0];
+						it.templeId=ite.templeId;
 						copyItem.questionSchemeWavs.push(JSON.parse(JSON.stringify(it)));
 					}
 				}
@@ -631,14 +660,11 @@ export default {
 					 */
 					for (let item of this.editList) {
 						if (item.id == data.id) {
-							
 							data.questionTemples.questionTempleFrequency = item.questionTempleFrequency;
 							data.questionTemples.questionTempleTimeRanges = item.questionTempleTimeRanges;
 							data.questionTemples.questionSchemeWavs = this.editFormData(JSON.parse(JSON.stringify(data.questionTemples.questionSchemeWavs)), item);
 							this.actionTime--;
 							break;
-							
-							
 						}
 					}
 					
@@ -652,7 +678,9 @@ export default {
 		 */
 		editFormData(data, all) {
 			for (let item of data) {
+				this.copyList.push(JSON.parse(JSON.stringify(item.questionTempleQuestionJumps)));
 				item.questionTempleQuestionJumps = [];
+				item.questionTempleQuestionJumps
 				for (let ite of all.questionSchemeWavs) {
 					if (item.questionId == ite.questionId) {
 						item.questionTempleQuestionJumps.push(ite);

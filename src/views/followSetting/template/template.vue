@@ -217,11 +217,11 @@
    		 </AutoComplete> -->
 			</FormItem>
 			<FormItem label="静默时间" prop="silencetime">
-				<InputNumber v-model="templateForm.silencetime" :min="5" style="width:100%;" placeholder="请输入静默时间,类型为数字,单位默认为秒"></InputNumber>
+				<InputNumber v-model="templateForm.silencetime" :min="0" style="width:100%;" placeholder="请输入静默时间,类型为数字,单位默认为秒"></InputNumber>
 				<!-- <Input v-model="templateForm.silencetime" placeholder="Enter your name"></Input> -->
 			</FormItem>
 			<FormItem label="重复次数" prop="outrepeattimes">
-				<InputNumber v-model="templateForm.outrepeattimes" :min="3" style="width:100%;" placeholder="请输入重复次数,类型为数字,单位默认为次数"></InputNumber>
+				<InputNumber v-model="templateForm.outrepeattimes" :min="0" style="width:100%;" placeholder="请输入重复次数,类型为数字,单位默认为次数"></InputNumber>
 				<!-- <Input v-model="templateForm.outrepeattimes" placeholder="Enter your name"></Input> -->
 			</FormItem>
 			<FormItem label="起始问题" prop="firsttaskid">

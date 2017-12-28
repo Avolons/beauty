@@ -346,9 +346,6 @@ export default {
 			dataPromise();
 		},
 	},
-	watch: {
-		'$route': 'fetchData'
-	}
 }
 </script>
 

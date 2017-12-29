@@ -273,11 +273,11 @@
 		</Modal>
 		<!-- 编辑功能模态框 -->
 		<Modal v-model="patientText" title="编辑患者信息" class-name="editInfo" :styles="{top: '180px'}" width="800">
-			<Form ref="formCustom" :model="formCustom" :rules="validate" :label-width="80">
+			<Form ref="formCustom" :model="formCustom" :rules="validate.formCustom" :label-width="80">
 				<FormItem label="姓名">
 					<span v-model="formCustom.ptNa">{{formCustom.brxm}}</span>
 				</FormItem>
-				<FormItem label="电话" prop="jtdh">
+				<FormItem label="手机号码" prop="jtdh">
 					<Input v-model="formCustom.jtdh" placeholder="请输入电话号码"></Input>
 				</FormItem>
 				<FormItem label="住址" prop="xzzQtdz">
@@ -295,7 +295,7 @@
 				<FormItem label="联系人地址" prop="lxdz">
 					<Input type="text" v-model="formCustom.lxdz" placeholder="请输入联系人地址"></Input>
 				</FormItem>
-				<FormItem label="联系人电话" prop="lxdh">
+				<FormItem label="联系人手机" prop="lxdh">
 					<Input type="text" v-model="formCustom.lxdh" placeholder="请输入联系人电话号码"></Input>
 				</FormItem>
 				<FormItem label="单位名称" prop="dwmc">
@@ -426,7 +426,7 @@ export default {
 	},
 	methods: {
 		editPat(data) {
-			this.formCustom = data;
+			this.formCustom = JSON.parse(JSON.stringify(data));
 			this.patientText = true;
 		},
 		/** 
@@ -460,10 +460,10 @@ export default {
 					API.FollowBussiness.savePat(this.formCustom).then((res) => {
 						this.$Message.success("编辑成功");
 						this.getData();
+						this.patientText = false;
 					}).catch((err) => {
 
 					});
-					this.$Message.success('保存成功!');
 				} else {
 					this.$Message.error('请正确填写信息');
 				}

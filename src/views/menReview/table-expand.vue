@@ -1,30 +1,80 @@
-<style scoped>
-    .expand-row{
-        margin-bottom: 16px;
-    }
+<style>
 </style>
 <template>
     <div>
         <Row class="expand-row">
-            <Col span="8">
-                <span class="expand-key">Job: </span>
-                <span class="expand-value">{{ row.job }}</span>
-            </Col>
-            <Col span="8">
-                <span class="expand-key">Interest: </span>
-                <span class="expand-value">{{ row.interest }}</span>
-            </Col>
-            <Col span="8">
-                <span class="expand-key">Birthday: </span>
-                <span class="expand-value">{{ row.birthday }}</span>
-            </Col>
+            <table style="width:100%">
+                <tr class="ivu-table-row" v-for="item in data" :key="item.id">
+                    <td class="">
+                        <div class="ivu-table-cell">
+                            <span>{{item.brxm}}</span>
+                        </div>
+                    </td>
+                    <td class="">
+                        <div class="ivu-table-cell">
+                            <span>{{item.schemeName}}</span>
+                        </div>
+                    </td>
+                    <td class="">
+                        <div class="ivu-table-cell">
+                            <span>{{item.statusStr}}</span>
+                        </div>
+                    </td>
+                    <td class="">
+                        <div class="ivu-table-cell">
+                            <span>{{item.dateAdd}}</span>
+                        </div>
+                    </td>
+                    <td class="">
+                        <div class="ivu-table-cell">
+                            <span>{{item.dateVet}}</span>
+                        </div>
+                    </td>
+                    <td class="">
+                        <div class="ivu-table-cell">
+                            <span>{{item.adminName}}</span>
+                        </div>
+                    </td>
+                    <td class="">
+                        <div class="ivu-table-cell">
+                            <span>{{item.operator}}</span>
+                        </div>
+                    </td>
+                    <td class="ivu-table-column-center" style="width:200px">
+                        <div class="ivu-table-cell">
+                            <Button @click="pass(item.id,2)" type="primary">通过</Button>
+                            <Button @click="pass(item.id,1)" type="info">不通过</Button>
+                        </div>
+                    </td>
+                </tr>
+            </table>
         </Row>
     </div>
 </template>
 <script>
-    export default {
-        props: {
-            row: Object
+import { API } from '@/services/index.js';
+export default {
+    props: {
+        data: Array,
+    },
+    methods: {
+        pass(id,type){
+            this.$Modal.confirm({
+				title: '审核确认',
+				content: '是否确定执行该操作？',
+				onOk: () => {
+					API.Dataaudit.passPlan({
+						status: type,
+						ids: [id]
+					}).then((res) => {
+						this.$Message.success("操作成功");
+						this.$emit('getData')
+					}).catch((err) => {
+
+					});
+				}
+			});
         }
-    };
+    }
+};
 </script>

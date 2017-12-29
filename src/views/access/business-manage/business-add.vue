@@ -111,7 +111,7 @@
                     <Input v-model="formValidate.contacts" placeholder="请输入企业联系人姓名"></Input>
                 </FormItem>
                 <FormItem label="联系电话" prop="phone" style="width:450px;">
-                    <Input v-model="formValidate.phone" placeholder="请输入联系电话"></Input>
+                    <Input v-model="formValidate.phone" placeholder="请输入企业联系电话（座机号码,例如 0515-88888888）"></Input>
                 </FormItem>
                 <FormItem label="企业邮箱" prop="mail" style="width:450px;">
                     <Input v-model="formValidate.mail" placeholder="请输入企业邮箱"></Input>

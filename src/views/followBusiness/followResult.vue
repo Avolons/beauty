@@ -67,7 +67,7 @@
 								<td colspan=3>
 									<template v-if="item.fieldName&&item.fieldValue" v-for="item in planInfo.orderReplyQuestions">
 										<span style="display:block">{{item.fieldName}}:
-											<b>{{item.fieldValue}}</b>
+											<b :class="{'redColor':!item.isNormal}">{{item.fieldValue}}</b>
 										</span>
 									</template>
 								</td>
@@ -378,6 +378,9 @@ export default {
 	margin-bottom: 12px;
 }
 
+.redColor{
+	color: red;
+}
 .inter-down {
 	&_main {
 		&_list {}

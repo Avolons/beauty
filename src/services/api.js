@@ -376,6 +376,18 @@ export const Jurisdiction = {
         return fetch('post', '/visit/admin/unstop', data);
     },
     /**
+     * 默认默认随访方案接口
+     * page:1, //当前页码
+        limit:3,//每页条数
+        diseaseId:0, //疾病类型（可选）
+        departmentId:899 //指标类型（可选）
+     * @param {any} data
+     * @returns
+      */
+    listUserPlan (data) {
+        return fetch('get', '/visit/questionscheme/list', data);
+    },
+    /**
      * 重置密码
      * id: //当前用户ID
      * pwd: //新密码
@@ -986,6 +998,15 @@ export const Dataaudit = {
         return fetch('get', '/visit/order/list', data);
     },
     /**
+     * 根据医生id获取方案列表接口
+     * id
+     * @param {any} data
+     * @returns
+     */
+    listDoctorPlan (data) {
+        return fetch('get', '/visit/questionscheme/getlistbyadminid', data);
+    },
+    /**
      * 随访记录详情
      * "id": //记录id
      * @param {any} data
@@ -1012,7 +1033,7 @@ export const Dataaudit = {
         return fetch('post', '/visit/order/delete', data);
     },
     /**
-     *
+     * 重复匹配列表
      * @param {any} data
      * @returns
      */

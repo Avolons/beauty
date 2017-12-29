@@ -531,7 +531,9 @@ export default {
          * 查询对应的模板
          */
         listDisTemp() {
-            API.Systems.listDisTemp({
+            API.Jurisdiction.listUserPlan({
+                page:1,
+                limit:99999,
                 departmentId: this.actionList.departmentId == -1 ? null : this.actionList.departmentId,
                 UserId: this.actionList.UserId == -1 ? null : this.actionList.UserId
             }).then((res) => {

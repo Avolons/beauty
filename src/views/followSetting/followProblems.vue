@@ -623,6 +623,7 @@ export default {
     *添加指标
     */
     addBtn(name) {
+      this.this.formItem.id="";
       this.patientText = true;//打开模态框
       this.$refs[name].resetFields();//清空表单
     },

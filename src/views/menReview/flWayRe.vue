@@ -1,5 +1,5 @@
 <style lang="less">
-.followResult {
+.follPass {
 	&_message_vemark {
 		text-indent: 0;
 		display: block;
@@ -30,24 +30,24 @@
 				width: calc(~"100% - 30px");
 			}
 		}
-		&_patInner{
-				width: 100%;
-				float: left;
-				background-color: #d9edf7;
-				border-radius: 4px;
-				padding: 10px;
-				font-size: 13px;
-				box-sizing: border-box;
-				margin-top: 10px;
-				clear: both;
-				>h3{
-					font-size: 14px;
-					font-weight: 400;
-				}
-				>h4{
-					font-weight: 400;
-					margin: 5px 0;
-				}
+		&_patInner {
+			width: 100%;
+			float: left;
+			background-color: #d9edf7;
+			border-radius: 4px;
+			padding: 10px;
+			font-size: 13px;
+			box-sizing: border-box;
+			margin-top: 10px;
+			clear: both;
+			>h3 {
+				font-size: 14px;
+				font-weight: 400;
+			}
+			>h4 {
+				font-weight: 400;
+				margin: 5px 0;
+			}
 		}
 		&_pat {
 			padding-left: calc(50% + 10px);
@@ -78,6 +78,14 @@
 				content: "";
 				display: block;
 				clear: both;
+			}
+		}
+		&_abnormal{
+			>span{
+				background-color: #f80000;
+			}
+			.follPass_main_patInner{
+				background-color: #f80000;
 			}
 		}
 	}
@@ -187,8 +195,8 @@
 				<span>
 					医生：
 				</span>
-				<Select @on-change="getData" v-model="searchParam.admin">
-					<Option v-for="item in doctorList" :value="item.realname+','+item.id" :key="item.id">{{item.realname}}</Option>
+				<Select @on-change="getPlan" v-model="searchParam.adminId">
+					<Option v-for="item in doctorList" :value="item.id" :key="item.id">{{item.realname}}</Option>
 				</Select>
 				</Col>
 				<Col span="6">
@@ -196,7 +204,7 @@
 					方案匹配：
 				</span>
 				<Select v-model="searchParam.schemeId" placeholder="请选择方案" style="width:200px">
-					<Option v-for="item in actionList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+					<Option v-for="item in actionList" :value="item.id" :key="item.id">{{ item.name }}</Option>
 				</Select>
 				</Col>
 
@@ -211,11 +219,11 @@
 				<Page :page-size="pageSize" :total="totalPage" :current="searchParam.pager" show-elevator style="float:right" @on-change="changePage"></Page>
 			</Row>
 			<!-- 随访模态框 -->
-			<Modal v-model="modal" title="随访详情" width="950" class-name="patientInfo" :styles="{top:'100px',height:'700px',overflowY:'auto'}">
-				<Collapse>
+			<Modal v-model="modal" title="随访详情" width="950" class-name="patientInfo" :styles="{top:'100px'}">
+				<Collapse v-model="showAll">
 					<Panel name="1">
 						随访结果
-						<div slot="content" class="followResult_table">
+						<div slot="content" class="follPass_table">
 							<table border="1">
 								<tr>
 									<td>患者姓名</td>
@@ -238,7 +246,7 @@
 								<tr>
 									<td>审核意见</td>
 									<td colspan=3>
-										<Input type="textarea" class="followResult_message_vemark" v-model="planInfo.vetRemark" placeholder="请输入您的审核意见"></Input>
+										<Input type="textarea" class="follPass_message_vemark" v-model="planInfo.vetRemark" placeholder="请输入您的审核意见"></Input>
 									</td>
 								</tr>
 							</table>
@@ -246,32 +254,38 @@
 					</Panel>
 					<Panel name="2">
 						记录详情
-						<ul slot="content" class="followResult_message">
+						<ul slot="content" class="follPass_message">
 							<template v-for="item in planInfo.orderReplyQuestions">
-								<li class="followResult_single_ai">
+								<li class="follPass_single_ai">
 									<Icon type="android-call"></Icon>
 									<span>
 										{{item.question}}
 									</span>
 								</li>
-								<li class="followResult_single_pat">
+								<li class="follPass_single_pat" :class="{'follPass_single_abnormal':item.abnormal}">
 									<span>
 										<audio controls :src="item.audio"></audio>
 									</span>
 									<Icon type="person"></Icon>
 
-									<div class="followResult_single_patInner">
+									<div class="follPass_single_patInner">
 										<Input v-model="item.asr" placeholder="患者回复"></Input>
 									</div>
-									<div class="followResult_single_patInner">
+									<div class="follPass_single_patInner">
 										<h3>指标：{{item.fieldName}}</h3>
 										<h4>
 											采集指标：
-											<RadioGroup v-model="item.fieldValue" @on-change="labeChange(item)">
+											<!-- <RadioGroup v-if="item.optionValues" v-model="item.fieldValue" @on-change="labeChange(item)">
 												<Radio v-for="ite,index in item.optionValues" :key="index" :label="ite">
-													<span>{{ite}}</span>
+													<span></span>
 												</Radio>
-											</RadioGroup>
+											</RadioGroup> -->
+											<CheckboxGroup style="display: inline-block;" v-if="item.optionValues" v-model="item.fieldValue" @on-change="labeChange(item)">
+												<Checkbox v-for="ite,index in item.optionValues" :key="index" :label="ite">
+													<span>{{ite}}</span>
+												</Checkbox>
+											</CheckboxGroup>
+											<Input v-else v-model="item.fieldValue" placeholder="采集指标"></Input>
 										</h4>
 										<h4>
 											指标是否正常：
@@ -291,8 +305,8 @@
 					</Panel>
 				</Collapse>
 				<div slot="footer" class="sys-sysset_main_btnList">
-					<Button type="primary">提交审核</Button>
-                </div>
+					<Button @click="submitData" type="primary">提交审核</Button>
+				</div>
 			</Modal>
 		</div>
 	</div>
@@ -303,14 +317,16 @@ import { API } from '../../services/index.js';
 export default {
 	data() {
 		return {
+			showAll:["1","2"],
+			hzxxId:"",//患者id
 			//搜索参数
 			searchParam: {
 				pager: 1, //当前页码
-				limit: 3,//每页条数
+				limit: 10,//每页条数
 				schemeId: "",//方案id（可选）
 				orderNo: "",//编码（可选）
 				brxm: "", //患者姓名（可选）
-				adminId: 288,  //医生id
+				adminId: "",  //医生id
 				status: 2   //状态为2（必传）
 			},
 			//随访结果详情
@@ -322,6 +338,7 @@ export default {
 			departList: [],//科室选项列表
 			departId: "",//科室id
 			doctorList: [],//医生选项列表
+			planList:[],
 			actionList: [{
 				value: "",
 				label: "全部"
@@ -418,8 +435,33 @@ export default {
 		}
 	},
 	methods: {
-		labeChange(item){
+		/** 
+		 * 获取方案
+		 */
+		getPlan(){
+			API.Dataaudit.listDoctorPlan({
+				id:this.searchParam.adminId
+			}).then((res) => {
+				this.actionList = res.data;
+			}).catch((err) => {
 
+			});		
+		},
+		labeChange(item) {
+			/* 获取预警阈值 */
+			let flag=0;
+			for (let ite of item.thresholdValue) {
+					for (let it of item.fieldValue) {
+						if(it==ite){
+							flag++;
+						}
+					}
+			}
+			if(flag>0){
+				item.isNormal=0;
+			}else{
+				item.isNormal=1;
+			}
 		},
 		/** 
 		 * 获取科室列表
@@ -460,11 +502,26 @@ export default {
 		/** 
 		 * 数据格式化
 		 */
-		dataForm(data){
+		dataForm(data) {
 			for (const item of data.orderReplyQuestions) {
-					item.isNormal=item.isNormal==false?"0":"1";
-					item.thresholdValue=item.thresholdValue.split(",");
-					item.optionValues=item.optionValues.split(",");
+				item.isNormal = item.isNormal == false ? "0" : "1";
+				if (item.optionValues) {
+					item.optionValues = item.optionValues.split(",");
+					item.thresholdValue = item.thresholdValue.split(",");
+					item.fieldValue=item.fieldValue.split(",");
+					let flag=0;
+					for (const ite of item.optionValues) {
+						if(ite==item.fieldValue){
+							flag++
+						}	
+					}
+					if(flag==0){
+						item.abnormal=true;
+					}
+				}
+				if(!item.fieldValue){
+					item.abnormal=true;
+				}
 			}
 			return data;
 		},
@@ -473,6 +530,7 @@ export default {
 		 */
 		editDepart(id) {
 			this.modal = true;
+			this.hzxxId=id;
 			API.Dataaudit.infoResult({
 				id: "7a093412-ebc4-11e7-94fe-6cae8b369de4"
 			}).then((res) => {
@@ -500,8 +558,40 @@ export default {
 				}
 			});
 		},
-		submitData(){
-			let ajaxDa
+		submitData() {
+			/**
+			 * 发送数据
+			 */
+			let ajaxDa={
+				id:this.planInfo.id,               
+				dateEnd: this.planInfo.dateEnd,    
+				hzxxId:this.hzxxId,   
+				vetRemark:this.planInfo.remark,  
+				orderReplyQuestions:[],
+			}
+			for (let item of this.planInfo.orderReplyQuestions) {
+				let copyData=JSON.parse(JSON.stringify(item));
+				if(copyData.fieldValue[0]){
+					copyData.fieldValue=copyData.fieldValue.join(",");
+				}
+				copyData.isNormal=copyData.isNormal==0?false:true;
+				ajaxDa.orderReplyQuestions.push({
+					id:copyData.id,
+					asr:copyData.asr,
+					isNormal:copyData.isNormal,
+					fieldName:copyData.fieldName,
+					fieldValue:copyData.fieldValue,
+				})
+			}
+			API.Dataaudit.saveResult(
+				ajaxDa
+			).then((res) => {
+				this.$Message.success("提交成功");
+				this.getData();
+			}).catch((err) => {
+
+			});
+
 		},
 		/** 
          * 重置所有属性
@@ -517,6 +607,7 @@ export default {
 			this.getData();
 		},
 	}, mounted() {
+		this.getDepartList();
 		this.getData();
 	}
 }

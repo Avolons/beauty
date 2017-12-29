@@ -195,7 +195,7 @@
 								<span>
 									疾病类型
 								</span>
-								<Select v-model="patParams.diseaseId" filterable remote not-found-text="" :remote-method="remoteMethod" clearable>
+								<Select v-model="searchParams.diseaseId" filterable remote not-found-text="" :remote-method="remoteMethod" clearable>
 									<Option v-for="(item, index) in diseaseList" :value="item.id" :key="index">{{item.name}}</Option>
 								</Select>
 								</Col>

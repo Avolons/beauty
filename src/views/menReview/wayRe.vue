@@ -1,3 +1,13 @@
+<style lang="less">
+	td.ivu-table-expanded-cell{
+		padding: 0;
+		padding-left: 50px;
+		td{
+			background-color: #f8f8f9;
+		}
+	}
+</style>
+
 <template>
 	<Row class="planRe">
 		<!-- 搜索栏 -->
@@ -36,11 +46,8 @@
 		</Col>
 		<!-- 表格 -->
 		<Col span="24" class="fpTable">
-		<Table @on-selection-change="selectChange" ref="selection"  :columns="config" :data="dataList" class="margin-bottom-10"></Table>
+		<Table  ref="selection"  :columns="config" :data="dataList" class="margin-bottom-10"></Table>
 		<Row class="planRe_main_page">
-			<Button @click="handleSelectAll(true)">全选</Button>
-			<Button type="primary" @click="passPlan(haveSelect,2)">通过</Button>
-			<Button type="warning" @click="passPlan(haveSelect,1)">不通过</Button>
 			<Page style="float:right" :total="totalPage" @on-change="changePage" show-elevator show-total></Page>
 		</Row>
 		</Col>
@@ -72,7 +79,10 @@ export default {
 					render: (h, params) => {
 						return h(expandRow, {
 							props: {
-								row: params.row
+								data: params.row.child
+							},
+							on:{
+								getData:this.getData
 							}
 						})
 					}
@@ -104,6 +114,13 @@ export default {
 				{
 					title: '操作者',
 					key: 'operator',
+				},
+				{
+					title: '操作',
+					key: 'action',
+					width: 200,
+                    align: 'center',
+					
 				}
 				],
 
@@ -154,16 +171,6 @@ export default {
 			this.getData();
 		},
 		/** 
-		 * 选项改变
-		 */
-		selectChange(select) {
-			let arr = [];
-			for (let item of select) {
-				arr.push(item.id);
-			}
-			this.haveSelect = arr;
-		},
-		/** 
 		 * 数据格式化
 		 */
 		dataForm(data) {
@@ -191,35 +198,15 @@ export default {
 			for (let key in Arrays) {
 				newArray.push(Arrays[key]);
 			}
-			console.log(newArray);
+			return newArray;
 		},
 		/** 
 		 * 通过审核
 		 */
 		passPlan(arr, type) {
-			console.log(arr);
-			this.$Modal.confirm({
-				title: '审核确认',
-				content: '是否确定执行该操作？',
-				onOk: () => {
-					API.Dataaudit.passPlan({
-						status: type,
-						ids: arr
-					}).then((res) => {
-						this.$Message.success("操作成功");
-						this.getData
-					}).catch((err) => {
-
-					});
-				}
-			});
+			
 		},
-		/** 
-		 * 全选
-		 */
-		handleSelectAll(status) {
-			this.$refs.selection.selectAll(status);
-		},
+		
 
 	},
 	mounted() {

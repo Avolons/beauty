@@ -115,7 +115,6 @@
                 </FormItem>
                 <FormItem>
                     <Button type="primary" @click="handleSubmit('formData')">保存</Button>
-                    <Button type="ghost" @click="handleReset('formData')" style="margin-left: 8px">重置条件</Button>
                 </FormItem>
             </Form>
         </div>
@@ -215,7 +214,7 @@ export default {
                 password: data.pwd,//密码
                 reName: data.realname,//姓名
                 tel: data.mobile, // 电话号码
-                rIds: [],//权限Id（可多选）
+                rIds: data.roles,//权限Id（可多选）
                 adId: data.adminDepartmentId,//部门id
                 apId: data.adminPositionId//职位Id  
             }

@@ -155,7 +155,7 @@
             <Radio label="digit">数值</Radio>
           </RadioGroup>
         </FormItem>
-        <FormItem label="指标选项" v-if="radioText" prop="indexName">
+        <FormItem label="指标选项" v-if="radioText">
           <Input v-model="formItem.indexName" placeholder="请输入指标选项" style="width:80%"></Input>
           <Button type="primary" @click="addItem">添加</Button>
         </FormItem>
@@ -260,7 +260,7 @@ export default {
           key: 'diseaseName',
           align: 'center',
         },
-        {
+        /* {
           title: '启用状态',
           key: 'status',
           align: 'center',
@@ -273,12 +273,12 @@ export default {
             return h('div', {
             }, params.row.status);
           }
-        },
-        {
+        }, */
+        /* {
           title: '备注',
           key: 'remark',
           align: 'center',
-        },
+        }, */
         {
           title: '操作',
           key: 'action',
@@ -569,7 +569,7 @@ export default {
     *确定添加
     */
     addModel(name) {
-      if(this.formItem.radio=="select" && this.optionList1.length==0){
+      if(this.formItem.radio=="select" && this.optionList.length==0){
         this.$Message.warning("指标选项不可为空");
         return false;
       }

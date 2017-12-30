@@ -658,8 +658,8 @@ export default {
 	 *获取选中的疾病类型id，根据疾病类型获取所有问题
 	 */
 		selectChange(value) {
-			if (value != '') {
-				this.selecetDiseId = value;
+			this.selecetDiseId = value;
+			if (value !== '') {
 				API.followProblems.list({
 					'pager': 1,
 					'limit': '1000',
@@ -760,8 +760,8 @@ export default {
 		* tabs点击操作
 		*/
 		tabsClick(name) {
-			if (name == 0) {
-				name = ''
+			if(name==0){
+			 name="";
 			}
 			API.followProblems.list({
 				pager: 1,
@@ -770,7 +770,9 @@ export default {
 				diseaseId: this.selecetDiseId
 			}).then((res) => {
 				if (res.code == 0) {
-
+					if (name == '0') {
+						this.allQuestions = res.data
+					}
 					if (name == '01') {
 						this.question1 = res.data
 					}

@@ -155,7 +155,7 @@ export default {
             API.Jurisdiction.userInfo({
                 id: this.id
             }).then((res) => {
-                this.formData=this.dataForm(res.data);
+                this.formData=this.dataForm(res.data,res.roles);
             }).catch((err) => {
 
             });
@@ -205,7 +205,7 @@ export default {
         /** 
          * 数据格式化
          */
-        dataForm(data) {
+        dataForm(data,roles) {
             return {
                 aId: data.id,
                 types: data.type+'',//身份（0管理员，1医生）
@@ -214,7 +214,7 @@ export default {
                 password: data.pwd,//密码
                 reName: data.realname,//姓名
                 tel: data.mobile, // 电话号码
-                rIds: data.roles,//权限Id（可多选）
+                rIds: roles,//权限Id（可多选）
                 adId: data.adminDepartmentId,//部门id
                 apId: data.adminPositionId//职位Id  
             }

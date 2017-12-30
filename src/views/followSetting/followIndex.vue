@@ -127,7 +127,7 @@
     </Row>
     </Col>
     <!-- 编辑功能模态框 -->
-    <Modal v-model="patientText" title="添加指标 / 编辑指标" @on-ok="ok" @on-cancel="cancel()" width="650" class-name="patientInfo">
+    <Modal v-model="patientText" title="添加指标 / 编辑指标"  width="650" class-name="patientInfo">
       <Form :model="formItem" :label-width="100" ref="formValidate" :rules="followIndexVal">
         <input type="hidden" v-model="formItem.id" placeholder="id">
         <FormItem label="指标名称" prop="name">
@@ -454,20 +454,12 @@ export default {
       }).catch((error) => {
         console.log(error)
       })
-
     },
-    disChange() {
-
-    },
-    /**
-    疾病类型变化是触发 
+    /** 
+     * 删除指标
      */
-    selectChange() {
-
-    },
     deletIndex(index) {
       this.optionList.splice(index, 1);
-      this.optionList1.splice(index, 1);
     },
     /*
     *获取list列表数据
@@ -493,16 +485,11 @@ export default {
       API.follSetting.deleteList({
         id: id
       }).then((res) => {
-        if (res.code == 0) {
-          console.log(res.message)
-          this.list(1)
           this.$Message.success({
             content: '删除成功',
             top: 500
           });
-        } else {
-          alert(res.message)
-        }
+          this.list();
       }).catch((error) => {
         console.log(error)
       })
@@ -540,8 +527,7 @@ export default {
       }
       this.$refs[name].validate((valid) => {
         if (valid) {
-          let addPram
-          let addPram3 = {
+          let sendData = {
             "id": this.formItem.id,
             "name": this.formItem.name,
             "diseaseId": this.formItem.diseaseName.join(','),
@@ -554,7 +540,7 @@ export default {
             "thresholdValueEnd": this.formItem.bottom,
             "remark": this.formItem.textarea
           }
-          API.follSetting.addList(addPram3).then((res) => {
+          API.follSetting.addList(sendData).then((res) => {
             this.formItem.id = ''
             this.formItem.name = ''
             this.formItem.select2 = ''
@@ -562,13 +548,12 @@ export default {
             this.formItem.radio = 'string'
             this.formItem.textarea = ''
             this.patientText = false;
-            this.list(1);
+            this.list();
             this.$Message.success("提交成功");
           }).catch((error) => {
             console.log(error)
           })
         } else {
-          this.$Message.error('Fail!');
         }
       })
     },
@@ -577,28 +562,15 @@ export default {
     */
     radioChange(value) {
       if (value == 'select') {
-        this.radioText = true
-        this.radioNumber = false
+        this.radioText = true;
+        this.radioNumber = false;
       } else if (value == 'digit') {
-        this.radioNumber = true
-        this.radioText = false
+        this.radioNumber = true;
+        this.radioText = false;
       } else {
-        this.radioText = false
-        this.radioNumber = false
+        this.radioText = false;
+        this.radioNumber = false;
       }
-    },
-    /*
-    *编辑指标
-    */
-    ok() {
-      // this.$Message.info('Clicked ok');
-    },
-    cancel(name) {
-      this.selectLabel = '';
-    },
-    //编辑模态框提交按钮
-    handleEdit(name) {
-      this.$refs[name].validate((valid) => { })
     },
     /*
     *指标选项添加预警阀值

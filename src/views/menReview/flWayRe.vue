@@ -327,7 +327,8 @@ export default {
 				orderNo: "",//编码（可选）
 				brxm: "", //患者姓名（可选）
 				adminId: "",  //医生id
-				status: 2   //状态为2（必传）
+				status: 2 ,  //状态为2（必传）
+				isConceal:1
 			},
 			//随访结果详情
 			planInfo: {
@@ -439,6 +440,9 @@ export default {
 		 * 获取方案
 		 */
 		getPlan(){
+			if(!this.searchParam.adminId){
+				return false;
+			}
 			API.Dataaudit.listDoctorPlan({
 				id:this.searchParam.adminId
 			}).then((res) => {
@@ -493,7 +497,7 @@ export default {
          */
 		getData() {
 			API.Dataaudit.listResult(this.searchParam).then((res) => {
-				this.totalPage = res.data.total;
+				this.totalPage = res.total;
 				this.dataList = res.data;
 			}).catch((err) => {
 

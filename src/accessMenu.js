@@ -2,6 +2,86 @@
  * 功能权限控制对象
  */
 export const AM = {
+    /** 随访业务 */
+    FollowBussiness: {
+        /** 患者列表  */
+        listPat: '/visit/sufferer/list',
+
+        /** 编辑患者信息 */
+        savePat: '/visit/sufferer/save',
+
+        /** 患者详细信息  */
+        detailPat: '/visit/sufferer/get',
+
+        /** 随访计划列表 */
+        listPlan: '/visit/ordertask/list',
+
+        /** 删除随访  */
+        delPlan: '/visit/ordertask/delete',
+
+        /** 取消随访 */
+        cancelPlan: '/visit/ordertask/cancel',
+
+        /** 发起随访计划  */
+        startPlan: '/visit/ordertask/visit',
+
+        /** 随访记录列表 */
+        listLog: '/visit/order/list',
+
+        /** 删除随访记录  */
+        delLog: '/visit/order/delete',
+
+        /** 删除职位 */
+        detailLog: '/visit/order/view',
+
+        /** 获取医生列表 */
+        listDoctor: '/visit/admin/list',
+
+        /** 获取医生的患者列表  */
+        patList: '/visit/sufferer/select',
+
+        /** 添加临时随访任务 */
+        patSubmit: '/visit/order/temp/visit'
+
+    },
+    /** 随访设置 */
+    FollowSetting: {
+        /** 指标列表  */
+        listIndex: '/visit/organization/list',
+
+        /** 查看企业详情 */
+        infoBusiness: '/visit/organization/view',
+
+        /** 查看企业对应部门分类树  */
+        infoDepart: '/visit/adminDepartment/view',
+
+        /** 新增部门 */
+        addDepart: '/visit/adminDepartment/add',
+
+        /** 删除部门接口  */
+        delDepart: '/visit/adminDepartment/del',
+
+        /** 查看部门对应职位树 */
+        infoPosition: '/visit/position/view',
+
+        /** 新增职位  */
+        addPosition: '/visit/position/add',
+
+        /** 删除职位 */
+        delPosition: '/visit/position/del',
+
+        /** 权限设置-功能树  */
+        listFun: '/visit/admin/action/list',
+
+        /** 编辑功能 */
+        editFun: '/visit/admin/action/save',
+
+        /** 功能删除  */
+        delFun: '/visit/admin/action/del',
+
+        /** 角色列表 */
+        listRoles: '/visit/admin/roles/list'
+    },
     /** 权限管理 */
     Jur: {
         /** 企业添加  */

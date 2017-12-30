@@ -179,7 +179,7 @@ util.setCurrentPath = function (vm, name) {
                 },
                 {
                     title: childObj.title,
-                    path: currentPathObj.path + '/' + childObj.path,
+                    path: childObj.path,
                     name: name
                 }
             ];

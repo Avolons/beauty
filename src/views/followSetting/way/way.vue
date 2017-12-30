@@ -293,7 +293,7 @@
 								</FormItem>
 								<FormItem v-if="it.switchId==-1" label="无匹配超次数跳转">
 									<!-- <Input v-model="it.outRptSwitchID" placeholder="请输入无匹配的跳转次数"></Input> -->
-									<span>{{it.outRptSwitchID}}</span>
+									<span>{{it.outRptSwitchId}}</span>
 								</FormItem>
 							</Form>
 						</div>

@@ -61,7 +61,7 @@
                 
             </Row>
             <div class="inter-down_main_list">
-                 <Table border ref="selection" :columns="columns7" :data="data6"></Table>
+                 <Table border ref="selection" :columns="config" :data="dataList"></Table>
         
             </div>
             <Row class="inter-down_main_page">
@@ -80,7 +80,7 @@ export default {
         return {
             value1: "",
                 model1: '',
-            columns7: [
+            config: [
                 {
 					type: 'selection',
                     width: 60,
@@ -119,43 +119,8 @@ export default {
                     }
                 }
             ],
-            data6: [
-                {
-                    role:"医生",
-                    username:"1245786",
-                    time:"2017-11-30 11:08:30",
-                    action:"随访测试",
-                    name:"测试",
-                    mobile:14578884125,
-                    look:1,
-                },
-                {
-                    role:"医生",
-                    username:"1245786",
-                    time:"2017-11-30 11:08:30",
-                    action:"随访测试",
-                    name:"测试",
-                    mobile:14578884125,
-                    look:1,
-                },
-                {
-                    role:"医生",
-                    username:"1245786",
-                    time:"2017-11-30 11:08:30",
-                    action:"随访测试",
-                    name:"测试",
-                    mobile:14578884125,
-                    look:1,
-                },
-                {
-                    role:"医生",
-                    username:"1245786",
-                    time:"2017-11-30 11:08:30",
-                    action:"随访测试",
-                    name:"测试",
-                    mobile:14578884125,
-                    look:1,
-                }
+            dataList: [
+                
             ]
         }
     },
@@ -163,14 +128,14 @@ export default {
         show(index) {
             this.$Modal.info({
                 title: 'User Info',
-                content: `Name：${this.data6[index].name}<br>Age：${this.data6[index].age}<br>Address：${this.data6[index].address}`
+                content: `Name：${this.dataList[index].name}<br>Age：${this.dataList[index].age}<br>Address：${this.dataList[index].address}`
             })
 		},
 		handleSelectAll (status) {
                 this.$refs.selection.selectAll(status);
             },
         remove(index) {
-            this.data6.splice(index, 1);
+            this.dataList.splice(index, 1);
         },
         adduser(){
             this.$router.push('/access/user/inter-down_add/0');

@@ -359,7 +359,7 @@ export default {
                     this.patientText = true;
                     this.search.otype = "";
                     this.search.diseaseId = "";
-                    this.formItem.targetName1 ="";
+                    /* this.formItem.targetName1 =""; */
                     API.followProblems.editList({
                       "id": params.row.id
                     }).then((res) => {
@@ -368,7 +368,6 @@ export default {
                         this.formItem.content = res.data.content
                         this.formItem.playWavOnly = res.data.playWavOnly
                         this.formItem.isTarget = res.data.isTarget
-                        this.formItem.targetName1 = res.data.targetId
                         let arr = [];
                         res.data.diseaseId = res.data.diseaseId.split(",");
                         res.data.diseaseName = res.data.diseaseName.split(",");
@@ -400,6 +399,7 @@ export default {
                           value: res.data.targetId,
                         })
                         this.taglabel = res.data.targetName;
+                        this.formItem.targetName1 = res.data.targetId
                     
                     }).catch((error) => {
                       console.log(error)
@@ -619,6 +619,7 @@ export default {
     *添加指标
     */
     addBtn(name) {
+      this.formItem.targetName1="";
       this.formItem.id = "";
       this.patientText = true;//打开模态框
       this.$refs[name].resetFields();//清空表单

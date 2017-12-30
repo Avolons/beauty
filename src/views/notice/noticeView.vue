@@ -54,7 +54,7 @@
                 <span>
                     计划名称：
                 </span>
-                <input type="text" v-model="searchParams.activeName" placeholder="请输入计划名称">
+                <Input  v-model="searchParams.activeName" placeholder="请输入计划名称"></Input>
                 </Col>
                 <Col span="6">
                 <span>
@@ -63,10 +63,10 @@
                 <Select v-model="searchParams.status" style="width:200px">
                     <Option value="">全选</Option>
                     <Option value="0">待审核</Option>
-                    <Option value="1">不通过</Option>
-                    <Option value="2">审核通过</Option>
-                    <Option value="3">已排期</Option>
-                    <Option value="4">已取消</Option>
+                    <Option value="1">已审核</Option>
+                    <Option value="10">未处理</Option>
+                    <Option value="11">已处理</Option>
+                    <Option value="12">已取消</Option>
                 </Select>
                 </Col>
                 <Col span="6">
@@ -99,7 +99,7 @@ export default {
                 pager: 1, //当前页码
                 limit: 10,//每页条数
                 activeName: "",//通知计划名称（可选）
-                status: "0", //状态（可选）
+                status: "", //状态（可选）
                 dateBegin: "", //通知计划（可选）
                 dateEnd: ""    //通知计划（可选）
 

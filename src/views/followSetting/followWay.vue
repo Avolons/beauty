@@ -57,7 +57,7 @@
 				<span>
 					疾病类型
 				</span>
-			 <Select v-model="waySearch.diseaseId" filterable remote not-found-text="" :remote-method="remoteMethod2" :loading="loading2" clearable>
+			 <Select v-model="waySearch.diseaseId" filterable remote not-found-text="" :remote-method="remoteMethod2" :loading="loading2" placeholder="请输入疾病类型" clearable>
           <Option v-for="(option, index) in options2" :value="option.value" :key="index">{{option.label}}</Option>
         </Select>
 				</Col>

@@ -5,9 +5,9 @@
 		<Row class="inter-down_main_search" :gutter="15">
 			<Col span="6">
 			<span>
-				编号
+				随访编号
 			</span>
-			<Input type="text" v-model="searchParams.orderNo" placeholder="请输入患者编号"></Input>
+			<Input type="text" v-model="searchParams.orderNo" placeholder="请输入随访编号"></Input>
 			</Col>
 			<Col span="6">
 			<span>

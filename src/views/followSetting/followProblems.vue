@@ -195,7 +195,7 @@
       <span>
         疾病类型
       </span>
-      <Select v-model="proSearch.diseaseName" filterable remote not-found-text="" :remote-method="remoteMethod2" clearable placeholder="请输入名称首字母">
+      <Select v-model="proSearch.diseaseName" filterable remote not-found-text="" :remote-method="remoteMethod2" clearable placeholder="请输入疾病类型">
         <Option v-for="(option, index) in diseaseList" :value="option.value" :key="index">{{option.label}}</Option>
       </Select>
       </Col>

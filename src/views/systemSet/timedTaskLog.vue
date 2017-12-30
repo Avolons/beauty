@@ -47,7 +47,7 @@
                 <span>
                     任务名称：
                 </span>
-                <Input v-model="searchParam.namelk"  placeholder="large size"></Input>
+                <Input v-model="searchParam.namelk"  placeholder="请输入任务名称"></Input>
                 </Col>
 				<Col span="6">
                 <span>

@@ -214,7 +214,7 @@
 				</Col>
 				<Col span="21">
 				<InputNumber size="small" :max="100" :min="1" v-model="item.questionTemples.questionTempleFrequency.number"></InputNumber>次, 第
-				<InputNumber size="small" :min="1" v-model="item.questionTemples.questionTempleFrequency.firstday"></InputNumber> 天,第一次随访,每隔
+				<InputNumber v-if="index==0" size="small" :min="0" v-model="item.questionTemples.questionTempleFrequency.firstday"></InputNumber> 天,第一次随访,每隔
 				<InputNumber size="small" :max="100" :min="1" v-model="item.questionTemples.questionTempleFrequency.intervalDays"></InputNumber> 天，随访一次。
 				</Col>
 			</Row>
@@ -510,11 +510,16 @@ export default {
 				let copyItem = JSON.parse(JSON.stringify(item.questionTemples));
 				copyItem.questionSchemeWavs = [];
 				for (let ite of item.questionTemples.questionSchemeWavs) {
+					let newId= ite.questionId;
+					if(newId instanceof Array){
+						newId=newId[0];
+					}
 					for (let it of ite.questionTempleQuestionJumps) {
 						it.questionIdXml=JSON.parse(JSON.stringify(ite.questionIdXml));
-						it.questionId= JSON.parse(JSON.stringify(ite.questionId))[0];
+						it.questionId= newId;
 						it.templeId=ite.templeId;
 						copyItem.questionSchemeWavs.push(JSON.parse(JSON.stringify(it)));
+						console.log(it.questionId);
 					}
 				}
 				sendData.questionTemples.push(copyItem);

@@ -418,6 +418,7 @@ export default {
 						types:this.currentData.type-0,
 						mType:this.currentData.matchType-0,
 						state:this.currentData.isUse-0,
+						remark:this.currentData.remark
 					}).then((res) => {
 						this.$Message.success("修改成功");
 						this.modalexit = false;

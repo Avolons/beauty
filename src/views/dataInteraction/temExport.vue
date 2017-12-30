@@ -58,7 +58,6 @@
                 <Col span="6">
 					<Button @click="searchuser" type="primary">查询</Button>
                 </Col>
-                
             </Row>
             <div class="inter-down_main_list">
                  <Table border ref="selection" :columns="config" :data="dataList"></Table>

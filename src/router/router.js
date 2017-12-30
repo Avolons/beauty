@@ -527,8 +527,8 @@ export const appRouter = [{
         }
     }
     ]
-},
-{
+}
+/* {
     path: '/international',
     icon: 'earth',
     title: {
@@ -546,8 +546,8 @@ export const appRouter = [{
             require(['@/views/international/international.vue'], resolve);
         }
     }]
-},
-{
+}, */
+/* {
     path: '/error-page',
     icon: 'android-sad',
     title: '错误页面',
@@ -561,7 +561,7 @@ export const appRouter = [{
             require(['@/views/error-page/error-page.vue'], resolve);
         }
     }]
-}
+} */
 ];
 
 // 所有上面定义的路由都要写在下面的routers里

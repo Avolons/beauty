@@ -4,17 +4,12 @@
 export const AM = {
     /** 随访业务 */
     FollowBussiness: {
-        /** 患者列表  */
-        listPat: '/visit/sufferer/list',
 
         /** 编辑患者信息 */
         savePat: '/visit/sufferer/save',
 
         /** 患者详细信息  */
         detailPat: '/visit/sufferer/get',
-
-        /** 随访计划列表 */
-        listPlan: '/visit/ordertask/list',
 
         /** 删除随访  */
         delPlan: '/visit/ordertask/delete',
@@ -25,20 +20,11 @@ export const AM = {
         /** 发起随访计划  */
         startPlan: '/visit/ordertask/visit',
 
-        /** 随访记录列表 */
-        listLog: '/visit/order/list',
-
         /** 删除随访记录  */
         delLog: '/visit/order/delete',
 
-        /** 删除职位 */
+        /** 随访记录详情  */
         detailLog: '/visit/order/view',
-
-        /** 获取医生列表 */
-        listDoctor: '/visit/admin/list',
-
-        /** 获取医生的患者列表  */
-        patList: '/visit/sufferer/select',
 
         /** 添加临时随访任务 */
         patSubmit: '/visit/order/temp/visit'
@@ -46,41 +32,66 @@ export const AM = {
     },
     /** 随访设置 */
     FollowSetting: {
-        /** 指标列表  */
-        listIndex: '/visit/organization/list',
 
-        /** 查看企业详情 */
-        infoBusiness: '/visit/organization/view',
+        /** 删除指标 */
+        delIndex: '/visit/questiontarget/delete',
 
-        /** 查看企业对应部门分类树  */
-        infoDepart: '/visit/adminDepartment/view',
+        /** 新增指标  */
+        addIndex: '/visit/questiontarget/save',
 
-        /** 新增部门 */
-        addDepart: '/visit/adminDepartment/add',
+        /** 编辑指标 */
+        editIndex: '/visit/questiontarget/get',
 
-        /** 删除部门接口  */
-        delDepart: '/visit/adminDepartment/del',
+        /** 删除问题 */
+        delPro: '/visit/question/delete',
 
-        /** 查看部门对应职位树 */
-        infoPosition: '/visit/position/view',
+        /** 新增问题  */
+        addPro: '/visit/question/save',
 
-        /** 新增职位  */
-        addPosition: '/visit/position/add',
+        /** 编辑问题 */
+        editPro: '/visit/question/get',
 
-        /** 删除职位 */
-        delPosition: '/visit/position/del',
+        /** 编辑话术 */
+        editVoice: '/visit/question/script/list',
 
-        /** 权限设置-功能树  */
-        listFun: '/visit/admin/action/list',
+        /** 删除模板 */
+        delTem: '/visit/questiontemple/delete',
 
-        /** 编辑功能 */
-        editFun: '/visit/admin/action/save',
+        /** 新增模板 */
+        addTem: '/visit/questiontemple/save',
 
-        /** 功能删除  */
-        delFun: '/visit/admin/action/del',
+        /** 编辑模板 */
+        editTem: '/visit/questiontemple/get',
 
-        /** 角色列表 */
-        listRoles: '/visit/admin/roles/list'
+        /** 删除方案 */
+        delDep: '/visit/questionscheme/delete',
+
+        /** 新增方案 */
+        addDep: '/visit/questionscheme/save',
+
+        /** 编辑方案 */
+        editDep: '/visit/questionscheme/get'
+
+    },
+    /** 随访设置 */
+    Notice: {
+        /** 暂停计划 */
+        cancelNotice: '/visit/order/notice/cancel',
+
+        /**  删除计划 */
+        delNotice: '/visit/order/notice/delete'
+    },
+    /** 人工数据审核 */
+    Data: {
+
+        /** 通过/不通过计划  */
+        passPlan: '/visit/ordertask/vet',
+
+        /** 结果审核  */
+        saveResult: '/visit/order/vet/save',
+
+        /** 结果删除  */
+        delResult: '/visit/order/delete'
     },
     /** 权限管理 */
     Jur: {

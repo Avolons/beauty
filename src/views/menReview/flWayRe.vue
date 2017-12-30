@@ -271,15 +271,10 @@
 									<div class="follPass_single_patInner">
 										<Input v-model="item.asr" placeholder="患者回复"></Input>
 									</div>
-									<div class="follPass_single_patInner">
+									<div v-if="item.fieldName" class="follPass_single_patInner">
 										<h3>指标：{{item.fieldName}}</h3>
 										<h4>
 											采集指标：
-											<!-- <RadioGroup v-if="item.optionValues" v-model="item.fieldValue" @on-change="labeChange(item)">
-												<Radio v-for="ite,index in item.optionValues" :key="index" :label="ite">
-													<span></span>
-												</Radio>
-											</RadioGroup> -->
 											<CheckboxGroup style="display: inline-block;" v-if="item.optionValues" v-model="item.fieldValue" @on-change="labeChange(item)">
 												<Checkbox v-for="ite,index in item.optionValues" :key="index" :label="ite">
 													<span>{{ite}}</span>
@@ -340,26 +335,7 @@ export default {
 			departId: "",//科室id
 			doctorList: [],//医生选项列表
 			planList:[],
-			actionList: [{
-				value: "",
-				label: "全部"
-			}, {
-				value: 0,
-				label: "疾病"
-			}, {
-				value: 1,
-				label: "医生"
-			},],//随访方案列表
-			typeList: [{
-				value: "",
-				label: "全部"
-			}, {
-				value: 0,
-				label: "门诊"
-			}, {
-				value: 1,
-				label: "住院"
-			},],//随访类型
+			actionList: [],//随访方案列表
 			formData: {
 				name: "",
 				paixu: 0,
@@ -507,12 +483,15 @@ export default {
 		 * 数据格式化
 		 */
 		dataForm(data) {
+			console.log(data);
 			for (const item of data.orderReplyQuestions) {
 				item.isNormal = item.isNormal == false ? "0" : "1";
 				if (item.optionValues) {
 					item.optionValues = item.optionValues.split(",");
 					item.thresholdValue = item.thresholdValue.split(",");
-					item.fieldValue=item.fieldValue.split(",");
+					if(item.fieldValue){
+						item.fieldValue=item.fieldValue.split(",");
+					}
 					let flag=0;
 					for (const ite of item.optionValues) {
 						if(ite==item.fieldValue){

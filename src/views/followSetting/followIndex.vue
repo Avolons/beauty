@@ -26,11 +26,12 @@
     }
   }
 }
-.followIndex{
+
+.followIndex {
 
 
-  &_main{
-    &_select{
+  &_main {
+    &_select {
       background-color: #f1f1f1;
       border-radius: 3px;
       display: inline-block;
@@ -40,7 +41,7 @@
       line-height: 25px;
       margin-right: 15px;
     }
-    &_delet{
+    &_delet {
       position: absolute;
       top: -5px;
       right: -5px;
@@ -48,34 +49,34 @@
       cursor: pointer;
     }
     &_search {
-			box-sizing: border-box;
-			margin-bottom: 10px;
-			.ivu-col {
-				display: flex;
-				>span {
-					background-color: #dadada;
-					text-align: center;
-					line-height: 32px;
-					display: block;
-					width: 80px;
-					flex-shrink: 0;
-					border-top-left-radius: 4px;
-					border-bottom-left-radius: 4px;
-				}
-				.ivu-input {
-					border-top-left-radius: 0;
-					border-bottom-left-radius: 0;
-				}
-				.ivu-select {
-					flex-grow: 1;
-					flex-shrink: 1;
-				}
-				.ivu-select-selection {
-					border-top-left-radius: 0;
-					border-bottom-left-radius: 0;
-				}
-			}
-		}
+      box-sizing: border-box;
+      margin-bottom: 10px;
+      .ivu-col {
+        display: flex;
+        >span {
+          background-color: #dadada;
+          text-align: center;
+          line-height: 32px;
+          display: block;
+          width: 80px;
+          flex-shrink: 0;
+          border-top-left-radius: 4px;
+          border-bottom-left-radius: 4px;
+        }
+        .ivu-input {
+          border-top-left-radius: 0;
+          border-bottom-left-radius: 0;
+        }
+        .ivu-select {
+          flex-grow: 1;
+          flex-shrink: 1;
+        }
+        .ivu-select-selection {
+          border-top-left-radius: 0;
+          border-bottom-left-radius: 0;
+        }
+      }
+    }
   }
 }
 </style>
@@ -84,43 +85,43 @@
     <!-- 搜索栏 -->
     <Col span="24" class="searchCol">
     <Row class="followIndex_main_search" :gutter="15">
-				<Col span="6">
-				<span>
-					指标名称
-				</span>
-        <Input type="text" v-model="IndexSearch.name" placeholder="请输入指标名称"></Input>
-				</Col>
-				<Col span="6">
-				<span>
-					指标类型
-				</span>
-				 <Select v-model="IndexSearch.select">
-          <Option value="">无</Option>
-          <Option value="01">症状</Option>
-          <Option value="02">体征</Option>
-          <Option value="03">生活方式指导</Option>
-          <Option value="04">辅助检查</Option>
-          <Option value="05">用药反馈</Option>
-          <Option value="06">转诊情况</Option>
-          <Option value="07">通用</Option>
-        </Select>
-				</Col>
-				<Col span="6">
-				<span>
-					疾病类型
-				</span>
-				 <Select v-model="IndexSearch.diseaseName" filterable remote not-found-text="" :remote-method="remoteMethod2" :label-in-value="true" clearable @on-change="selectChange" placeholder="请输入名称首字母">
-          <Option v-for="(option, index) in options2" :value="option.value" :key="index">{{option.label}}</Option>
-        </Select>
-				</Col>
-				<Col span="6">
-          <Button style="margin-right:10px" type="primary" @click="handleSearch('IndexSearch')">查询</Button>
-          <Button type="info" @click="addBtn">添加指标</Button>
-				</Col>
-			</Row>
+      <Col span="6">
+      <span>
+        指标名称
+      </span>
+      <Input type="text" v-model="IndexSearch.name" placeholder="请输入指标名称"></Input>
+      </Col>
+      <Col span="6">
+      <span>
+        指标类型
+      </span>
+      <Select v-model="IndexSearch.select">
+        <Option value="">无</Option>
+        <Option value="01">症状</Option>
+        <Option value="02">体征</Option>
+        <Option value="03">生活方式指导</Option>
+        <Option value="04">辅助检查</Option>
+        <Option value="05">用药反馈</Option>
+        <Option value="06">转诊情况</Option>
+        <Option value="07">通用</Option>
+      </Select>
+      </Col>
+      <Col span="6">
+      <span>
+        疾病类型
+      </span>
+      <Select v-model="IndexSearch.diseaseId" filterable remote not-found-text="" :remote-method="remoteMethod2" :label-in-value="true" clearable @on-change="selectChange" placeholder="请输入名称首字母">
+        <Option v-for="(option, index) in options2" :value="option.value" :key="index">{{option.label}}</Option>
+      </Select>
+      </Col>
+      <Col span="6">
+      <Button style="margin-right:10px" type="primary" @click="handleSearch('IndexSearch')">查询</Button>
+      <Button type="info" @click="addBtn">添加指标</Button>
+      </Col>
+    </Row>
     </Col>
     <Col span="24" class="fpTable">
-    <Table border :columns="columns7" :data="datalist" class="margin-bottom-10"></Table>
+    <Table border :columns="config" :data="datalist" class="margin-bottom-10"></Table>
     <Row>
       <Page style="float:right" :total="pageTotal" @on-change="currentPage" show-elevator show-total></Page>
     </Row>
@@ -144,7 +145,7 @@
           </Select>
         </FormItem>
         <FormItem label="添加疾病类型" prop="diseaseName">
-          <Select :label="labelobj" v-model="formItem.diseaseName" multiple filterable remote :remote-method="remoteMethod2"    not-found-text="" >
+          <Select :label="labelobj" v-model="formItem.diseaseName" multiple filterable remote :remote-method="remoteMethod2" not-found-text="">
             <Option v-for="(option, index) in options2" :value="option.value" :key="index">{{option.label}}</Option>
           </Select>
         </FormItem>
@@ -159,7 +160,7 @@
           <Input v-model="formItem.indexName" placeholder="请输入指标选项" style="width:80%"></Input>
           <Button type="primary" @click="addItem">添加</Button>
         </FormItem>
-        <FormItem label="已选指标选项" v-if="radioText" >
+        <FormItem label="已选指标选项" v-if="radioText">
           <span class="followIndex_main_select" v-for="item,index in optionList">
             {{item.label}}
             <span @click="deletIndex(index)">
@@ -202,12 +203,13 @@ export default {
       }
     };
     return {
-      labelobj:[],
+      labelobj: [],//指标多选label标签
       IndexSearch: {
         name: '',
-        select: ''
+        select: '',
+        diseaseId:'',
       },
-      columns7: [//表格栏
+      config: [//表格栏
         {
           title: '指标名称',
           key: 'name',
@@ -218,25 +220,29 @@ export default {
           key: 'otype',
           align: 'center',
           render: (h, params) => {
-
-            if (params.row.otype == '01') {
-              return params.row.otype = '症状'
-            } else if (params.row.otype == '02') {
-              return params.row.otype = '体征'
-            } else if (params.row.otype == '03') {
-              return params.row.otype = '生活方式指导'
-            } else if (params.row.otype == '04') {
-              return params.row.otype = '辅助检查'
-            } else if (params.row.otype == '05') {
-              return params.row.otype = '用药反馈'
-            } else if (params.row.otype == '06') {
-              return params.row.otype = '转诊情况'
-            } else if (params.row.otype == '07') {
-              return params.row.otype = '通用'
+            switch (params.row.otype) {
+              case '01':
+                return '症状';
+                break;
+              case '02':
+                return '体征';
+                break;
+              case '03':
+                return '生活方式指导';
+                break;
+              case '04':
+                return '辅助检查';
+                break;
+              case '05':
+                return '用药反馈';
+                break;
+              case '06':
+                return '转诊情况';
+                break;
+              default:
+                return '通用';
+                break;
             }
-            return h('div', {
-
-            }, params.row.otype);
           }
         },
         {
@@ -244,15 +250,8 @@ export default {
           key: 'type',
           align: 'center',
           render: (h, params) => {
-            if (params.row.type == 'digit') {
-              return params.row.type = '数值'
-            } else if (params.row.type == 'select') {
-              return params.row.type = '选项'
-            } else if (params.row.type == 'string') {
-              return params.row.type = '文本'
-            }
-            return h('div', {
-            }, params.row.type);
+            let type = params.row.type;
+            return type == 'digit' ? '数值' : type == 'select' ? '选项' : '文本';
           }
         },
         {
@@ -303,23 +302,23 @@ export default {
                       id: params.row.id
                     }).then((res) => {
                       if (res.code == 0) {
-                        let arr=[];
-                        res.data.diseaseId=res.data.diseaseId.split(",");
-                        res.data.diseaseName=res.data.diseaseName.split(",");
-                        res.data.diseaseId.forEach((item,index)=>{
+                        let arr = [];
+                        res.data.diseaseId = res.data.diseaseId.split(",");
+                        res.data.diseaseName = res.data.diseaseName.split(",");
+                        res.data.diseaseId.forEach((item, index) => {
                           arr.push({
-                            value:item,
-                            label:res.data.diseaseName[index]
+                            value: item,
+                            label: res.data.diseaseName[index]
                           })
                         })
-                        this.options2=arr;
-                        let result=[];
-                        this.labelobj=[];
+                        this.options2 = arr;
+                        let result = [];
+                        this.labelobj = [];
                         for (const item of arr) {
-                            result.push(item.value);
-                            this.labelobj.push(item.label);
+                          result.push(item.value);
+                          this.labelobj.push(item.label);
                         }
-                        this.formItem.diseaseName=result;
+                        this.formItem.diseaseName = result;
                         this.formItem.id = res.data.id
                         this.formItem.name = res.data.name
                         this.formItem.radio = res.data.type
@@ -356,13 +355,12 @@ export default {
                         }
                         let p1;
                         for (let i = 0; i < kk.length; i++) {
-                          p1 = new Point(kk[i], kk[i])
+                            p1 = new Point(kk[i], kk[i])
                         }
                         let p2;
                         this.optionList1 = []
                         for (let i = 0; i < kk2.length; i++) {
                           p2 = new Point(kk2[i], kk2[i])
-                          this.optionList.push(p2)
                         }
                         console.log(this.optionList)
                         //预警阀值
@@ -377,28 +375,28 @@ export default {
                   }
                 }
               }, '编辑'),
-             /*  h('Button', {
-                props: {
-                  type: 'warning',
-                  size: 'small'
-                },
-                style: {
-
-                },
-                on: {
-                  click: () => {
-                    this.$Modal.confirm({
-                      title: '删除指标',
-                      content: '<p>确定要删除该指标吗?</p>',
-                      onOk: () => {
-                        this.deleteRow(params.row.id)
-                      },
-                      onCancel: () => {
-                      }
-                    })
-                  }
-                }
-              }, '删除') */
+              /*  h('Button', {
+                 props: {
+                   type: 'warning',
+                   size: 'small'
+                 },
+                 style: {
+ 
+                 },
+                 on: {
+                   click: () => {
+                     this.$Modal.confirm({
+                       title: '删除指标',
+                       content: '<p>确定要删除该指标吗?</p>',
+                       onOk: () => {
+                         this.deleteRow(params.row.id)
+                       },
+                       onCancel: () => {
+                       }
+                     })
+                   }
+                 }
+               }, '删除') */
             ]);
           }
         }
@@ -406,6 +404,7 @@ export default {
       datalist: [],
       pageTotal: 0,
       patientText: false,//添加--修改模态框
+      //编辑内容
       formItem: {
         select: '',
         radio: 'string',
@@ -445,18 +444,27 @@ export default {
     this.list(1)
   },
   methods: {
-    disChange(){
-      
+    /** 
+     * 清除所有历史遗留数据
+     */
+    clearAll() {
+
+    },
+    editIndex(id) {
+
+    },
+    disChange() {
+
     },
     /**
     疾病类型变化是触发 
      */
-    selectChange(){
+    selectChange() {
 
     },
-    deletIndex(index){
-      this.optionList.splice(index,1);
-      this.optionList1.splice(index,1);
+    deletIndex(index) {
+      this.optionList.splice(index, 1);
+      this.optionList1.splice(index, 1);
     },
     /*
     *获取list列表数据
@@ -469,14 +477,9 @@ export default {
         otype: this.IndexSearch.select,
         diseaseId: this.selectValue
       }).then((res) => {
-        if (res.code == 0) {
-          this.datalist = res.data
-          this.pageTotal = res.total
-        } else {
-          console.log(res.message)
-        }
+          this.datalist = res.data;
+          this.pageTotal = res.total;
       }).catch((error) => {
-        console.log(error)
       })
     },
     /*
@@ -552,14 +555,14 @@ export default {
       this.patientText = true
       this.formItem.id = ''
       this.formItem.name = ''
-      this.formItem.diseaseName=[];
-      this.labelobj=[];
-      this.options2=[];
+      this.formItem.diseaseName = [];
+      this.labelobj = [];
+      this.options2 = [];
       this.formItem.radio = 'string'
-      this.formItem.select=""
+      this.formItem.select = ""
       this.formItem.textarea = ''
       this.formItem.top = ''
-      this.tagCount=[];
+      this.tagCount = [];
       this.formItem.bottom = ''
       this.optionList = []
       this.radioText = false
@@ -569,7 +572,7 @@ export default {
     *确定添加
     */
     addModel(name) {
-      if(this.formItem.radio=="select" && this.optionList.length==0){
+      if (this.formItem.radio == "select" && this.optionList.length == 0) {
         this.$Message.warning("指标选项不可为空");
         return false;
       }
@@ -590,15 +593,15 @@ export default {
             "remark": this.formItem.textarea
           }
           API.follSetting.addList(addPram3).then((res) => {
-              this.formItem.id = ''
-              this.formItem.name = ''
-              this.formItem.select2 = ''
-              this.formItem.select = ''
-              this.formItem.radio = 'string'
-              this.formItem.textarea = ''
-              this.patientText = false;
-              this.list(1);
-              this.$Message.success("提交成功");
+            this.formItem.id = ''
+            this.formItem.name = ''
+            this.formItem.select2 = ''
+            this.formItem.select = ''
+            this.formItem.radio = 'string'
+            this.formItem.textarea = ''
+            this.patientText = false;
+            this.list(1);
+            this.$Message.success("提交成功");
           }).catch((error) => {
             console.log(error)
           })
@@ -642,19 +645,19 @@ export default {
     *指标选项添加预警阀值
     */
     addItem() {
-      if(this.formItem.indexName.trim()==""){
+      if (this.formItem.indexName.trim() == "") {
         this.$Message.warning('您添加的为空');
-          return false;
+        return false;
       }
       for (let item of this.optionList1) {
-        if(item==this.formItem.indexName){
+        if (item == this.formItem.indexName) {
           this.$Message.warning('不可重复添加');
           return false;
         }
       }
       this.optionList.push({
-        value:this.formItem.indexName,
-        label:this.formItem.indexName,
+        value: this.formItem.indexName,
+        label: this.formItem.indexName,
       });
       this.optionList1.push(this.formItem.indexName)
       this.formItem.indexName = ''
@@ -679,22 +682,22 @@ export default {
         'zjm': query
       }).then((res) => {
         console.log(res)
-          class Point {
-            constructor(item) {
-              this.value = item.value;
-              this.label = item.label;
-            }
+        class Point {
+          constructor(item) {
+            this.value = item.value;
+            this.label = item.label;
           }
-          let parr2 = []
-          let more2 = res.data
-          more2.forEach((item) => {
-            parr2.push(new Point({
-              value: item.id,
-              label: item.value
-            }))
-          })
+        }
+        let parr2 = []
+        let more2 = res.data
+        more2.forEach((item) => {
+          parr2.push(new Point({
+            value: item.id,
+            label: item.value
+          }))
+        })
 
-          this.options2 = parr2;
+        this.options2 = parr2;
 
       }).catch((error) => {
         console.log(error)

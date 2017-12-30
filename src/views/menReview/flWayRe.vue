@@ -532,7 +532,7 @@ export default {
 			this.modal = true;
 			this.hzxxId=id;
 			API.Dataaudit.infoResult({
-				id: "7a093412-ebc4-11e7-94fe-6cae8b369de4"
+				id: id
 			}).then((res) => {
 				this.planInfo = this.dataForm(res.data);
 			}).catch((err) => {

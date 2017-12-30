@@ -37,7 +37,7 @@
                     <Input v-model="formData.main_type" placeholder="请输入分类信息"></Input>
                 </FormItem>
                 <FormItem label="排序字段" prop="sort">
-                   <Input v-model="formData.sort" placeholder="请输入排序字段，整数"></Input>
+                  <InputNumber  :min="0"  v-model="formData.sort"></InputNumber>
                 </FormItem>
                 <FormItem label="参数值" prop="value">
                     <Input v-model="formData.value" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="请填写参数值"></Input>

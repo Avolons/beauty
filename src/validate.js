@@ -295,7 +295,7 @@ export default {
         AIphone: [{
             required: true,
             message: '请输入正确的手机号码',
-            pattern: ruleList.code,
+ /*            pattern: ruleList.code, */
             trigger: 'blur'
         }]
     },

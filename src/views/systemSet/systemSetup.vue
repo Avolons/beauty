@@ -122,7 +122,7 @@ export default {
                 },
                 {
                     title: '分类信息',
-                    key: 'main_type',
+                    key: 'mainType',
                 },
                 {
                     title: '排序字段',

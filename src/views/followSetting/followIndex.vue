@@ -95,7 +95,7 @@
       <span>
         指标类型
       </span>
-      <Select v-model="IndexSearch.select">
+      <Select v-model="IndexSearch.otype">
         <Option value="">无</Option>
         <Option value="01">症状</Option>
         <Option value="02">体征</Option>
@@ -111,11 +111,11 @@
         疾病类型
       </span>
       <Select v-model="IndexSearch.diseaseId" filterable remote not-found-text="" :remote-method="remoteMethod2" :label-in-value="true" clearable @on-change="selectChange" placeholder="请输入名称首字母">
-        <Option v-for="(option, index) in options2" :value="option.value" :key="index">{{option.label}}</Option>
+        <Option v-for="(option, index) in diseaseList" :value="option.value" :key="index">{{option.label}}</Option>
       </Select>
       </Col>
       <Col span="6">
-      <Button style="margin-right:10px" type="primary" @click="handleSearch('IndexSearch')">查询</Button>
+      <Button style="margin-right:10px" type="primary" @click="list">查询</Button>
       <Button type="info" @click="addBtn">添加指标</Button>
       </Col>
     </Row>
@@ -146,7 +146,7 @@
         </FormItem>
         <FormItem label="添加疾病类型" prop="diseaseName">
           <Select :label="labelobj" v-model="formItem.diseaseName" multiple filterable remote :remote-method="remoteMethod2" not-found-text="">
-            <Option v-for="(option, index) in options2" :value="option.value" :key="index">{{option.label}}</Option>
+            <Option v-for="(option, index) in diseaseList" :value="option.value" :key="index">{{option.label}}</Option>
           </Select>
         </FormItem>
         <FormItem label="结果类型" prop="radio">
@@ -162,15 +162,15 @@
         </FormItem>
         <FormItem label="已选指标选项" v-if="radioText">
           <span class="followIndex_main_select" v-for="item,index in optionList">
-            {{item.label}}
+            {{item}}
             <span @click="deletIndex(index)">
               <Icon class="followIndex_main_delet" type="ios-close"></Icon>
             </span>
           </span>
         </FormItem>
-        <FormItem label="预警阀值" v-if="radioText" prop="model10">
-          <Select v-model="formItem.model10" multiple style="width:260px">
-            <Option v-for="item in optionList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+        <FormItem label="预警阀值" v-if="radioText" prop="anormal">
+          <Select v-model="formItem.anormal" multiple style="width:260px">
+            <Option v-for="item,index in optionList" :value="item" :key="index">{{ item }}</Option>
           </Select>
         </FormItem>
         <FormItem label="预警阀值" v-if="radioNumber">
@@ -205,9 +205,11 @@ export default {
     return {
       labelobj: [],//指标多选label标签
       IndexSearch: {
+        pager: 1,
+        limit: 10,
         name: '',
-        select: '',
-        diseaseId:'',
+        otype: '',
+        diseaseId: '',
       },
       config: [//表格栏
         {
@@ -295,83 +297,7 @@ export default {
                 },
                 on: {
                   click: () => {
-                    this.patientText = true
-                    this.formItem.model10 = []
-                    this.optionList = []
-                    API.follSetting.editList({
-                      id: params.row.id
-                    }).then((res) => {
-                      if (res.code == 0) {
-                        let arr = [];
-                        res.data.diseaseId = res.data.diseaseId.split(",");
-                        res.data.diseaseName = res.data.diseaseName.split(",");
-                        res.data.diseaseId.forEach((item, index) => {
-                          arr.push({
-                            value: item,
-                            label: res.data.diseaseName[index]
-                          })
-                        })
-                        this.options2 = arr;
-                        let result = [];
-                        this.labelobj = [];
-                        for (const item of arr) {
-                          result.push(item.value);
-                          this.labelobj.push(item.label);
-                        }
-                        this.formItem.diseaseName = result;
-                        this.formItem.id = res.data.id
-                        this.formItem.name = res.data.name
-                        this.formItem.radio = res.data.type
-                        this.formItem.select = res.data.otype
-                        this.formItem.select2 = res.data.status
-                        this.formItem.textarea = res.data.remark
-                        this.formItem.top = res.data.thresholdValueStart
-                        this.formItem.bottom = res.data.thresholdValueEnd
-                        this.formItem.bottom = res.data.thresholdValueEnd
-                        console.log(this.formItem.select2)
-
-
-                        //判断指标类型
-                        if (this.formItem.radio == 'select') {
-                          this.radioText = true
-                          this.radioNumber = false
-                        } else if (this.formItem.radio == 'digit') {
-                          this.radioNumber = true
-                          this.radioText = false
-                        } else {
-                          this.radioText = false
-                          this.radioNumber = false
-                        }
-                        let oplist = res.data.optionValues;
-                        let oplist2 = res.data.thresholdValue;//指标阀值所有选项
-                        var kk = oplist.split(",");//以逗号作为分隔字符串
-                        var kk2 = oplist2.split(",");//以逗号作为分隔字符串
-
-                        class Point {
-                          constructor(value, label) {
-                            this.value = value;
-                            this.label = label;
-                          }
-                        }
-                        let p1;
-                        for (let i = 0; i < kk.length; i++) {
-                            p1 = new Point(kk[i], kk[i])
-                        }
-                        let p2;
-                        this.optionList1 = []
-                        for (let i = 0; i < kk2.length; i++) {
-                          p2 = new Point(kk2[i], kk2[i])
-                        }
-                        console.log(this.optionList)
-                        //预警阀值
-                        this.formItem.model10 = kk2
-                        //备注
-                      } else {
-                        console.log(res)
-                      }
-                    }).catch((error) => {
-                      console.log(error)
-                    })
+                    this.editIndex(params.row.id);
                   }
                 }
               }, '编辑'),
@@ -411,12 +337,12 @@ export default {
         select2: '',
         textarea: '',
         indexName: '',
-        model10: [],
+        anormal: [],
         top: '',
         bottom: '',
         diseaseName: [],//疾病标签 
       },
-      options2: [],//疾病标签下拉框数组
+      diseaseList: [],//疾病标签下拉框数组
       tagCount: [],
       tagCount2: [],
       loading2: false,
@@ -439,9 +365,8 @@ export default {
       defaultData: '',
     }
   },
-
   mounted() {
-    this.list(1)
+    this.list();
   },
   methods: {
     /** 
@@ -451,6 +376,84 @@ export default {
 
     },
     editIndex(id) {
+      /** 
+       * 显示编辑框
+       */
+      this.patientText = true;
+      this.formItem.anormal = [];
+      this.optionList = [];
+      API.follSetting.editList({
+        id: id
+      }).then((res) => {
+        let arr = [];
+        res.data.diseaseId = res.data.diseaseId.split(",");
+        res.data.diseaseName = res.data.diseaseName.split(",");
+        res.data.diseaseId.forEach((item, index) => {
+          arr.push({
+            value: item,
+            label: res.data.diseaseName[index]
+          })
+        })
+        this.diseaseList = arr;
+        let result = [];
+        this.labelobj = [];
+        for (const item of arr) {
+          result.push(item.value);
+          this.labelobj.push(item.label);
+        }
+        this.formItem.diseaseName = result;
+        this.formItem.id = res.data.id
+        this.formItem.name = res.data.name
+        this.formItem.radio = res.data.type
+        this.formItem.select = res.data.otype
+        this.formItem.select2 = res.data.status
+        this.formItem.textarea = res.data.remark
+        this.formItem.top = res.data.thresholdValueStart
+        this.formItem.bottom = res.data.thresholdValueEnd
+        /** 
+         * 指标类型判断
+         */
+        if (this.formItem.radio == 'select') {
+          this.radioText = true
+          this.radioNumber = false
+        } else if (this.formItem.radio == 'digit') {
+          this.radioNumber = true
+          this.radioText = false
+        } else {
+          this.radioText = false
+          this.radioNumber = false
+        }
+
+
+
+        res.data.optionValues = res.data.optionValues.split(",");
+        res.data.thresholdValue = res.data.thresholdValue.split(",");
+        this.optionList=res.data.optionValues;
+        this.formItem.anormal=res.data.thresholdValue;
+       /*  let oplist2 = res.data.thresholdValue;//指标阀值所有选项
+        var kk = oplist.split(",");//以逗号作为分隔字符串
+        var kk2 = oplist2.split(",");//以逗号作为分隔字符串
+        class Point {
+          constructor(value, label) {
+            this.value = value;
+            this.label = label;
+          }
+        }
+        let p1;
+        for (let i = 0; i < kk.length; i++) {
+          p1 = new Point(kk[i], kk[i])
+        }
+        let p2;
+        this.optionList1 = [];
+        for (let i = 0; i < kk2.length; i++) {
+          p2 = new Point(kk2[i], kk2[i])
+        } */
+        //预警阀值
+        //备注
+
+      }).catch((error) => {
+        console.log(error)
+      })
 
     },
     disChange() {
@@ -469,61 +472,20 @@ export default {
     /*
     *获取list列表数据
     */
-    list(pager) {
-      API.follSetting.list({
-        pager: pager,
-        limit: '10',
-        name: this.IndexSearch.name,
-        otype: this.IndexSearch.select,
-        diseaseId: this.selectValue
-      }).then((res) => {
-          this.datalist = res.data;
-          this.pageTotal = res.total;
+    list() {
+      API.follSetting.list(this.IndexSearch).then((res) => {
+        this.datalist = res.data;
+        this.pageTotal = res.total;
       }).catch((error) => {
       })
     },
     /*
     *获取分页列表数据
     */
-    currentPage: function(page) {
-      API.follSetting.list({
-        pager: page,
-        limit: '10',
-        name: this.IndexSearch.name,
-        otype: this.IndexSearch.select,
-        diseaseId: this.selectValue
-      }).then((res) => {
-        if (res.code == 0) {
-          this.datalist = res.data
-          this.pageTotal = res.total
-        } else {
-          console.log(res.message)
-        }
-      }).catch((error) => {
-        console.log(error)
-      })
-    },
-    /*
-    *查询
-    */
-    handleSearch() {
-      API.follSetting.list({
-        pager: 1,
-        limit: '10',
-        name: this.IndexSearch.name,
-        otype: this.IndexSearch.select,
-        diseaseId: this.selectValue
-      }).then((res) => {
-        if (res.code == 0) {
-          this.datalist = res.data
-          this.pageTotal = res.total
-        } else {
-          console.log(res.message)
-        }
-      }).catch((error) => {
-        console.log(error)
-      })
-    },
+    currentPage(page) {
+      this.IndexSearch.pager = page;
+      this.list();
+    }, 
     /*
     *删除
     */
@@ -557,7 +519,7 @@ export default {
       this.formItem.name = ''
       this.formItem.diseaseName = [];
       this.labelobj = [];
-      this.options2 = [];
+      this.diseaseList = [];
       this.formItem.radio = 'string'
       this.formItem.select = ""
       this.formItem.textarea = ''
@@ -586,8 +548,8 @@ export default {
             "status": '0',
             "type": this.formItem.radio,
             "otype": this.formItem.select,
-            "optionValues": this.optionList1.join(','),
-            "thresholdValue": this.formItem.model10.join(","),
+            "optionValues": this.optionList.join(','),
+            "thresholdValue": this.formItem.anormal.join(","),
             "thresholdValueStart": this.formItem.top,
             "thresholdValueEnd": this.formItem.bottom,
             "remark": this.formItem.textarea
@@ -632,10 +594,7 @@ export default {
       // this.$Message.info('Clicked ok');
     },
     cancel(name) {
-      // this.$refs[name].resetFields();
-      // this.defaultData = JSON.parse(JSON.stringify(this.$data.formItem));//清空表单
-      // this.$data = Object.assign(this.$data, this.defaultData)
-      this.selectLabel = ''
+      this.selectLabel = '';
     },
     //编辑模态框提交按钮
     handleEdit(name) {
@@ -649,18 +608,16 @@ export default {
         this.$Message.warning('您添加的为空');
         return false;
       }
-      for (let item of this.optionList1) {
+      for (let item of this.optionList) {
         if (item == this.formItem.indexName) {
           this.$Message.warning('不可重复添加');
           return false;
         }
       }
-      this.optionList.push({
-        value: this.formItem.indexName,
-        label: this.formItem.indexName,
-      });
-      this.optionList1.push(this.formItem.indexName)
-      this.formItem.indexName = ''
+      this.optionList.push(
+        this.formItem.indexName
+      );
+      this.formItem.indexName = '';
     },
     /*
     *获取选中的疾病标签列value
@@ -668,7 +625,6 @@ export default {
     selectChange(value) {
       this.selectLabel = value.label
       this.selectValue = value.value
-      console.log(value)
     },
     /*
     *疾病类型--远程搜索
@@ -677,30 +633,17 @@ export default {
       if (query == "") {
         return false;
       }
-      this.options2 = [];
+      this.diseaseList = [];
       API.followProblems.disease({
         'zjm': query
       }).then((res) => {
-        console.log(res)
-        class Point {
-          constructor(item) {
-            this.value = item.value;
-            this.label = item.label;
-          }
-        }
-        let parr2 = []
-        let more2 = res.data
-        more2.forEach((item) => {
-          parr2.push(new Point({
+        res.data.forEach((item) => {
+          this.diseaseList.push({
             value: item.id,
             label: item.value
-          }))
+          })
         })
-
-        this.options2 = parr2;
-
       }).catch((error) => {
-        console.log(error)
       })
     },
     /*

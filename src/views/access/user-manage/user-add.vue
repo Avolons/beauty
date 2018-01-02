@@ -85,7 +85,7 @@
                 <FormItem label="手机号码" prop="tel" style="width:450px;">
                     <Input v-model="formData.tel" placeholder="请输入手机号码"></Input>
                 </FormItem>
-                <FormItem label="身份" prop="types" style="width:450px;">
+                <FormItem label="身份"  style="width:450px;">
                     <Select  v-model="formData.types" style="width:200px">
                         <Option value="0" >管理员</Option>
                         <Option value="1" >医生</Option>

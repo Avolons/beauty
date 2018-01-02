@@ -415,8 +415,10 @@ export default {
           this.radioText = false;
           this.radioNumber = false;
         }
-        res.data.optionValues = res.data.optionValues.split(",");
-        res.data.thresholdValue = res.data.thresholdValue.split(",");
+        if(res.data.optionValues){
+            res.data.optionValues = res.data.optionValues.split(",");
+            res.data.thresholdValue = res.data.thresholdValue.split(",");
+        }
         this.optionList = res.data.optionValues;
         this.formItem.anormal = res.data.thresholdValue;
       }).catch((error) => {

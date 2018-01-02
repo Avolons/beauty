@@ -1,5 +1,9 @@
 <style lang="less">
 .follPass {
+	&_message{
+		height: 300px;
+		overflow-y: auto;
+	}
 	&_message_vemark {
 		text-indent: 0;
 		display: block;
@@ -219,7 +223,7 @@
 				<Page :page-size="pageSize" :total="totalPage" :current="searchParam.pager" show-elevator style="float:right" @on-change="changePage"></Page>
 			</Row>
 			<!-- 随访模态框 -->
-			<Modal v-model="modal" title="随访详情" width="950" class-name="patientInfo" :styles="{top:'100px'}">
+			<Modal v-model="modal" title="随访详情" width="950" class-name="" :styles="{top:'100px'}">
 				<Collapse v-model="showAll">
 					<Panel name="1">
 						随访结果
@@ -519,7 +523,6 @@ export default {
 		 */
 		editDepart(id) {
 			this.modal = true;
-			this.hzxxId=id;
 			API.Dataaudit.infoResult({
 				id: id
 			}).then((res) => {
@@ -554,7 +557,7 @@ export default {
 			let ajaxDa={
 				id:this.planInfo.id,               
 				dateEnd: this.planInfo.dateEnd,    
-				hzxxId:this.hzxxId,   
+				hzxxId:this.planInfo.hzxxId,   
 				vetRemark:this.planInfo.remark,  
 				orderReplyQuestions:[],
 			}

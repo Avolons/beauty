@@ -15,7 +15,7 @@
 <template>
     <div class="user">
         <div class="sys-sysset_main">
-            <Button @click="modal=true" v-if="!menuShow(this.AM.Systems.addSystem)" type="primary">添加</Button>
+            <Button @click="modal=true;formData.sort=0" v-if="!menuShow(this.AM.Systems.addSystem)" type="primary">添加</Button>
             <div class="sys-sysset_main_list">
                 <Table border :columns="config" :data="dataList"></Table>
             </div>
@@ -33,8 +33,8 @@
                 <FormItem label="编码" prop="key">
                     <Input v-model="formData.key" placeholder="请输入编码"></Input>
                 </FormItem>
-                <FormItem label="分类信息" prop="main_type">
-                    <Input v-model="formData.main_type" placeholder="请输入分类信息"></Input>
+                <FormItem label="分类信息" prop="mType">
+                    <Input v-model="formData.mType" placeholder="请输入分类信息"></Input>
                 </FormItem>
                 <FormItem label="排序字段" prop="sort">
                   <InputNumber  :min="0"  v-model="formData.sort"></InputNumber>
@@ -90,7 +90,7 @@ export default {
                 key: "",
                 value: "",
                 remark: "",
-                main_type:"",
+                mType:"",
                 sort:0,
             },
             //类型选项列表
@@ -113,7 +113,7 @@ export default {
             modal: false,
             config: [
                 {
-                    title: '编号',
+                    title: '编码',
                     key: 'key',
                 },
                 {

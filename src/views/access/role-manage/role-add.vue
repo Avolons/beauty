@@ -100,7 +100,7 @@
             </Form>
             <div class="roleAdd_main_btnList">
                 <Button type="primary" @click="saveRole()">保存</Button>
-                <Button type="ghost" @click="handleReset('formValidate')" style="margin-left: 8px">重置条件</Button>
+                
             </div>
         </div>
     </div>

@@ -820,7 +820,7 @@ export default {
 				"outrepeattimes": this.templateForm.outrepeattimes,//重复次数      
 				"person": this.templateForm.person,    //女声传0 男声传1      
 				"status": 0, //0 正常 1 停用      
-				"submoulds": (JSON.parse(JSON.stringify(this.tagCount))).join(';'), //通用库        
+				"submoulds":this.tagCount.length>1?(JSON.parse(JSON.stringify(this.tagCount))).join(';') : this.tagCount[0], //通用库        
 				"firsttaskid": this.templateForm.firsttaskid,//起始问题编号      
 				"questionTempleQuestions": this.templateList
 			}).then((res) => {

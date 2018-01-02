@@ -94,6 +94,20 @@ function fetch (type, url, params) {
 }
 
 /* 通用相关相关接口 *****/
+export const Data = {
+    /**
+     * 登录接口
+     * name
+     * password
+     * picCode
+     * @param {any} data
+     * @returns
+     */
+    doctorImport: axios.defaults.baseURL + '/visit/excel/adminImport',
+    PatImport: axios.defaults.baseURL + '/visit/excel/import'
+};
+
+/* 通用相关相关接口 *****/
 export const common = {
     /**
      * 登录接口

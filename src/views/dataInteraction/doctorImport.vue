@@ -20,7 +20,7 @@
 				multiple 
                 name="upfile"
 				type="drag" 
-				action="http://192.168.1.30:8081/visit/excel/adminImport" 
+				:action="API.Data.doctorImport" 
 				style="display: inline-block;width:158px;">
 			<div style="width: 158px;height:158px;display:flex;flex-direction:column;align-items:center;justify-content:center">
 				<Icon type="document-text" size="50"></Icon>
@@ -34,9 +34,11 @@
 	</div>
 </template>
 <script>
+import { API } from '@/services';
 export default {
 	data() {
 		return {
+			API:API,
 			defaultList: [
 
 			],

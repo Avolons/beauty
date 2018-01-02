@@ -91,7 +91,10 @@ export const AM = {
         saveResult: '/visit/order/vet/save',
 
         /** 结果删除  */
-        delResult: '/visit/order/delete'
+        delResult: '/visit/order/delete',
+
+        /** 重复匹配审核  */
+        listSame: '/visit/ordertask/list'
     },
     /** 权限管理 */
     Jur: {

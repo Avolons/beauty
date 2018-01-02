@@ -45,8 +45,8 @@
 		<Table @on-selection-change="selectChange" ref="selection" border :columns="config" :data="dataList" class="margin-bottom-10"></Table>
 		<Row class="planRe_main_page">
 			<Button @click="handleSelectAll(true)">全选</Button>
-			<Button type="primary" @click="passPlan(haveSelect,2)">通过</Button>
-			<Button type="warning" @click="passPlan(haveSelect,1)">不通过</Button>
+			<Button v-if="!menuShow(this.AM.Data.passPlan)" type="primary" @click="passPlan(haveSelect,2)">通过</Button>
+			<Button v-if="!menuShow(this.AM.Data.passPlan)" type="warning" @click="passPlan(haveSelect,1)">不通过</Button>
 			<Page style="float:right" :total="totalPage" @on-change="changePage" show-elevator show-total></Page>
 		</Row>
 		</Col>
@@ -121,6 +121,9 @@ export default {
 									style: {
 										marginRight: '5px',
 									},
+									 'class': {
+								menuHide: this.menuShow(this.AM.Data.passPlan)
+								},
 									on: {
 										click: () => {
 											this.passPlan([params.row.id], 2);
@@ -135,6 +138,9 @@ export default {
 									style: {
 
 									},
+									 'class': {
+								menuHide: this.menuShow(this.AM.Data.passPlan)
+								},
 									on: {
 										click: () => {
 											/** 

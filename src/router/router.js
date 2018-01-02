@@ -387,6 +387,16 @@ export const appRouter = [{
         component: resolve => {
             require(['@/views/dataInteraction/patientImpro.vue'], resolve);
         }
+    },
+    {
+        path: '/dataInteraction/doctorImport',
+        title: '医生导入',
+        access: '/dataInteraction/doctorImport', // access已经添加
+        name: 'doctorImport',
+        icon: 'social-reddit-outline',
+        component: resolve => {
+            require(['@/views/dataInteraction/doctorImport.vue'], resolve);
+        }
     }
     ]
 },

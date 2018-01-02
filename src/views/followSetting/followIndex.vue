@@ -116,7 +116,7 @@
       </Col>
       <Col span="6">
       <Button style="margin-right:10px" type="primary" @click="list">查询</Button>
-      <Button type="info" v-if="menuShow(this.AM.FollowSetting.addIndex)" @click="addBtn">添加指标</Button>
+      <Button type="info" v-if="!menuShow(this.AM.FollowSetting.addIndex)" @click="addBtn">添加指标</Button>
       </Col>
     </Row>
     </Col>
@@ -127,7 +127,7 @@
     </Row>
     </Col>
     <!-- 编辑功能模态框 -->
-    <Modal v-model="patientText" title="添加指标 / 编辑指标"  width="650" class-name="patientInfo">
+    <Modal v-model="patientText" title="添加指标 / 编辑指标" width="650" class-name="patientInfo">
       <Form :model="formItem" :label-width="100" ref="formValidate" :rules="followIndexVal">
         <input type="hidden" v-model="formItem.id" placeholder="id">
         <FormItem label="指标名称" prop="name">
@@ -203,7 +203,7 @@ export default {
       }
     };
     return {
-      labelobj: [],//指标多选label标签
+      //搜索数据
       IndexSearch: {
         pager: 1,
         limit: 10,
@@ -211,7 +211,8 @@ export default {
         otype: '',
         diseaseId: '',
       },
-      config: [//表格栏
+      //表格栏
+      config: [
         {
           title: '指标名称',
           key: 'name',
@@ -276,40 +277,40 @@ export default {
                 style: {
                   marginRight: '5px'
                 },
-                'class':{
-									menuHide:this.menuShow(this.AM.FollowSetting.editIndex)
-								},
+                'class': {
+                  menuHide: this.menuShow(this.AM.FollowSetting.editIndex)
+                },
                 on: {
                   click: () => {
                     this.editIndex(params.row.id);
                   }
                 }
               }, '编辑'),
-               h('Button', {
-                 props: {
-                   type: 'warning',
-                   size: 'small'
-                 },
-                 style: {
- 
-                 },
-                 'class':{
-									menuHide:this.menuShow(this.AM.FollowSetting.delIndex)
-								},
-                 on: {
-                   click: () => {
-                     this.$Modal.confirm({
-                       title: '删除指标',
-                       content: '<p>确定要删除该指标吗?</p>',
-                       onOk: () => {
-                         this.deleteRow(params.row.id)
-                       },
-                       onCancel: () => {
-                       }
-                     })
-                   }
-                 }
-               }, '删除')
+              h('Button', {
+                props: {
+                  type: 'warning',
+                  size: 'small'
+                },
+                style: {
+
+                },
+                'class': {
+                  menuHide: this.menuShow(this.AM.FollowSetting.delIndex)
+                },
+                on: {
+                  click: () => {
+                    this.$Modal.confirm({
+                      title: '删除指标',
+                      content: '<p>确定要删除该指标吗?</p>',
+                      onOk: () => {
+                        this.deleteRow(params.row.id)
+                      },
+                      onCancel: () => {
+                      }
+                    })
+                  }
+                }
+              }, '删除')
             ]);
           }
         }
@@ -317,22 +318,26 @@ export default {
       datalist: [],
       pageTotal: 0,
       patientText: false,//添加--修改模态框
+      labelobj: [],//指标多选label标签
       //编辑内容
       formItem: {
-        select: '',
-        radio: 'string',
-        select2: '',
-        textarea: '',
-        indexName: '',
-        anormal: [],
-        top: '',
-        bottom: '',
+        name:"",//指标名称
+        select: '',//指标类型，id
+        radio: 'string',//结果类型
+        select2: '',//
+        textarea: '',//备注
+        indexName: '',//指标选项（临时数据）
+        anormal: [],//预警阈值
+        top: '',//预警阈值上限（数值类型）
+        bottom: '',//预警阈值下限（数值类型）
         diseaseName: [],//疾病标签 
       },
       diseaseList: [],//疾病标签下拉框数组
+      optionList: [],//指标选项的select
+      optionList1: [],//指标选项select的label
       tagCount: [],
       tagCount2: [],
-      loading2: false,
+      //校验规则
       followIndexVal: {
         name: [
           { required: true, message: '指标名称不能为空', trigger: 'blur' }
@@ -343,16 +348,15 @@ export default {
         radio: [
           { required: true, message: '请选择是否放音', trigger: 'change' }
         ],
-
       },
-      optionList: [],//指标选项的select
-      optionList1: [],//指标选项select的label
-      radioText: false,
-      radioNumber: false,
-      defaultData: '',
+      radioText: false,//文本类型
+      radioNumber: false,//数值类型
     }
   },
   mounted() {
+    /** 
+     * 获取数据
+     */
     this.list();
   },
   methods: {
@@ -366,6 +370,7 @@ export default {
       /** 
        * 显示编辑框
        */
+      this.clearAll();
       this.patientText = true;
       this.formItem.anormal = [];
       this.optionList = [];
@@ -401,43 +406,19 @@ export default {
          * 指标类型判断
          */
         if (this.formItem.radio == 'select') {
-          this.radioText = true
-          this.radioNumber = false
+          this.radioText = true;
+          this.radioNumber = false;
         } else if (this.formItem.radio == 'digit') {
-          this.radioNumber = true
-          this.radioText = false
+          this.radioNumber = true;
+          this.radioText = false;
         } else {
-          this.radioText = false
-          this.radioNumber = false
+          this.radioText = false;
+          this.radioNumber = false;
         }
-
-
-
         res.data.optionValues = res.data.optionValues.split(",");
         res.data.thresholdValue = res.data.thresholdValue.split(",");
-        this.optionList=res.data.optionValues;
-        this.formItem.anormal=res.data.thresholdValue;
-       /*  let oplist2 = res.data.thresholdValue;//指标阀值所有选项
-        var kk = oplist.split(",");//以逗号作为分隔字符串
-        var kk2 = oplist2.split(",");//以逗号作为分隔字符串
-        class Point {
-          constructor(value, label) {
-            this.value = value;
-            this.label = label;
-          }
-        }
-        let p1;
-        for (let i = 0; i < kk.length; i++) {
-          p1 = new Point(kk[i], kk[i])
-        }
-        let p2;
-        this.optionList1 = [];
-        for (let i = 0; i < kk2.length; i++) {
-          p2 = new Point(kk2[i], kk2[i])
-        } */
-        //预警阀值
-        //备注
-
+        this.optionList = res.data.optionValues;
+        this.formItem.anormal = res.data.thresholdValue;
       }).catch((error) => {
         console.log(error)
       })
@@ -464,7 +445,7 @@ export default {
     currentPage(page) {
       this.IndexSearch.pager = page;
       this.list();
-    }, 
+    },
     /*
     *删除
     */
@@ -472,37 +453,38 @@ export default {
       API.follSetting.deleteList({
         id: id
       }).then((res) => {
-          this.$Message.success({
-            content: '删除成功',
-            top: 500
-          });
-          this.list();
+        this.$Message.success({
+          content: '删除成功',
+          top: 500
+        });
+        this.list();
       }).catch((error) => {
         console.log(error)
       })
     },
-    /*
-    *添加指标
-    */
-    addBtn() {
-      /** 
-       * 数据清空处理
-       */
-      this.patientText = true
+    clearAll(){
       this.formItem.id = ''
       this.formItem.name = ''
       this.formItem.diseaseName = [];
       this.labelobj = [];
       this.diseaseList = [];
+      this.formItem.anormal=[];
       this.formItem.radio = 'string'
       this.formItem.select = ""
       this.formItem.textarea = ''
-      this.formItem.top = ''
+      this.formItem.top = '';
       this.tagCount = [];
       this.formItem.bottom = ''
       this.optionList = []
       this.radioText = false
       this.radioNumber = false
+    },
+    /*
+    *添加指标
+    */
+    addBtn() {
+      this.clearAll();
+      this.patientText = true;
     },
     /*
     *确定添加

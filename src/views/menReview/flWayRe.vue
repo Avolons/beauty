@@ -383,6 +383,9 @@ export default {
 								style: {
 									marginRight: '5px'
 								},
+								 'class': {
+								menuHide: this.menuShow(this.AM.Data.saveResult)
+								},
 								on: {
 									click: () => {
 										this.editDepart(params.row.id)
@@ -396,6 +399,9 @@ export default {
 								},
 								style: {
 									marginRight: '5px'
+								},
+								 'class': {
+								menuHide: this.menuShow(this.AM.Data.delResult)
 								},
 								on: {
 									click: () => {

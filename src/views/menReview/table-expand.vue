@@ -42,8 +42,8 @@
                     </td>
                     <td class="ivu-table-column-center" style="width:200px">
                         <div class="ivu-table-cell">
-                            <Button @click="pass(item.id,2)" type="primary">通过</Button>
-                            <Button @click="pass(item.id,1)" type="info">不通过</Button>
+                            <Button v-if="!menuShow(this.AM.Data.listSame)" @click="pass(item.id,2)" type="primary">通过</Button>
+                            <Button v-if="!menuShow(this.AM.Data.listSame)" @click="pass(item.id,1)" type="info">不通过</Button>
                         </div>
                     </td>
                 </tr>

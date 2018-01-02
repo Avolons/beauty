@@ -379,16 +379,17 @@ export default {
 					key: 'brxb'
 				},
 				{
-					title: '居住地址',
-					key: 'xzzQtdz'
-				},
-				{
 					title: '年龄',
 					key: 'age'
 				},
 				{
 					title: '民族',
 					key: 'mz'
+				},
+				
+				{
+					title: '居住地址',
+					key: 'xzzQtdz'
 				},
 				{
 					title: '家庭电话',
@@ -427,16 +428,20 @@ export default {
 					key: 'brxb'
 				},
 				{
-					title: '居住地址',
-					key: 'xzzQtdz'
-				},
-				{
 					title: '年龄',
 					key: 'age'
 				},
 				{
 					title: '民族',
 					key: 'mz'
+				},
+				{
+					title: '疾病类型',
+					key: 'diseaseName'
+				},
+				{
+					title: '居住地址',
+					key: 'xzzQtdz'
 				},
 				{
 					title: '家庭电话',

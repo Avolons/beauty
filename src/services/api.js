@@ -58,7 +58,10 @@ function fetch (type, url, params) {
                 params: params
             })
                 .then(response => {
-                    if (JSON.parse(response.data).code === 0) {
+                    let code = JSON.parse(response.data).code;
+                    if (code === 2 || code === 21) {
+                        window.RSYS.$router.push('/login');
+                    } else if (code === 0) {
                         resolve(JSON.parse(response.data));
                     } else {
                         window.RSYS.$Message.warning(JSON.parse(response.data).message);
@@ -72,10 +75,13 @@ function fetch (type, url, params) {
         } else {
             axios.post(url, params)
                 .then(response => {
-                    if (JSON.parse(response.data).code === 0) {
+                    let code = JSON.parse(response.data).code;
+                    if (code === 2 || code === 21) {
+                        window.RSYS.$router.push('/login');
+                    } else if (code === 0) {
                         resolve(JSON.parse(response.data));
                     } else {
-                        window.RSYS.$Message.error(JSON.parse(response.data).message);
+                        window.RSYS.$Message.warning(JSON.parse(response.data).message);
                     }
                 }, err => {
                     reject(err);

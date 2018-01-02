@@ -97,6 +97,9 @@ export default {
                                 style: {
                                     marginRight: '5px'
                                 },
+                                'class':{
+									menuHide:this.menuShow(this.AM.Systems.remarkTime)
+								},
                                 on: {
                                     click: () => {
                                         this.remarkTime(params.row.id)
@@ -108,6 +111,9 @@ export default {
                                     type: params.row.isEnabled ? 'error' : 'info',
                                     size: 'small'
                                 },
+                                'class':{
+									menuHide:this.menuShow(this.AM.Systems.typeTime)
+								},
                                 style: {
                                     marginRight: '5px'
                                 },
@@ -122,6 +128,9 @@ export default {
                                     type: 'warning',
                                     size: 'small'
                                 },
+                                'class':{
+									menuHide:this.menuShow(this.AM.Systems.delTime)
+								},
                                 style: {
                                     marginRight: '5px'
                                 },

@@ -712,15 +712,15 @@ export default {
 				/** 
 				 * 临时数据初始化三种问题
 				 */
-				if(item.playWavOnly==0){
+				/* if(item.playWavOnly==0){ */
 					this.switchArr.push({
-						switchId:-1
+						switchId:-1,
 					},{
-						switchId:-2
+						switchId:-2,
 					},{
-						switchId:-3
+						switchId:-3,
 					});
-				}
+				/* } */
 				/** 
 				 * 遍历生成新的问题模板
 				 */

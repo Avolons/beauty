@@ -65,7 +65,7 @@
                 </Col>
                 <Col span="6">
                 <Button @click="searchData" type="primary" style="margin-left:15px">查询</Button>
-                <Button @click="modal=true" type="info" style="margin-left:15px">新增</Button>
+                <Button @click="modal=true" v-if="!menuShow(this.AM.Systems.addDisease)" type="info" style="margin-left:15px">新增</Button>
                 </Col>
             </Row>
             <div class="sys-dis_main_list">
@@ -243,6 +243,9 @@ export default {
                                 style: {
                                     marginRight: '5px'
                                 },
+                                'class':{
+									menuHide:this.menuShow(this.AM.Systems.editDisease)
+								},
                                 on: {
                                     click: () => {
                                         this.editDisease(params.row);
@@ -254,6 +257,9 @@ export default {
                                     type: 'info',
                                     size: 'small'
                                 },
+                                'class':{
+									menuHide:this.menuShow(this.AM.Systems.saveDisAction)
+								},
                                 style: {
                                     marginRight: '5px'
                                 },
@@ -268,6 +274,9 @@ export default {
                                     type: 'warning',
                                     size: 'small'
                                 },
+                                'class':{
+									menuHide:this.menuShow(this.AM.Systems.delDisease)
+								},
                                 style: {
                                     marginRight: '5px'
                                 },

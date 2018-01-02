@@ -554,7 +554,7 @@ export default {
 			}
 			for (let item of this.planInfo.orderReplyQuestions) {
 				let copyData=JSON.parse(JSON.stringify(item));
-				if(copyData.fieldValue[0]){
+				if(copyData.fieldValue instanceof Array){
 					copyData.fieldValue=copyData.fieldValue.join(",");
 				}
 				copyData.isNormal=copyData.isNormal==0?false:true;
@@ -570,6 +570,7 @@ export default {
 				ajaxDa
 			).then((res) => {
 				this.$Message.success("提交成功");
+				this.modal = false;
 				this.getData();
 			}).catch((err) => {
 

@@ -81,7 +81,7 @@
             </Row>
             <div class="user_main_add">
                 <Button @click="searchUser" type="primary">查询</Button>
-                <Button @click="editUser(-1)" type="primary">新增用户</Button>
+                <Button @click="editUser(-1)" v-if="!menuShow(this.AM.Jur.addUser)" type="primary">新增用户</Button>
             </div>
             <div class="user_main_list">
                 <Table border :columns="config" :data="dataList"></Table>
@@ -243,6 +243,9 @@ export default {
                                 style: {
                                     marginRight: '5px'
                                 },
+                                'class':{
+									menuHide:this.menuShow(this.AM.Jur.addUser)
+								},
                                 on: {
                                     click: () => {
                                         this.editUser(params.row.admin.id);
@@ -254,6 +257,9 @@ export default {
                                     type: 'primary',
                                     size: 'small'
                                 },
+                                'class':{
+									menuHide:this.menuShow(this.AM.Jur.updataPass)
+								},
                                 style: {
                                     marginRight: '5px'
                                 },
@@ -269,6 +275,9 @@ export default {
                                     type: params.row.admin.isLock ? 'primary' : 'info',
                                     size: 'small'
                                 },
+                                'class':{
+									menuHide:(this.menuShow(this.AM.Jur.unLookUser)&&params.row.admin.isLock) || (this.menuShow(this.AM.Jur.lookaUser)&&!params.row.admin.isLock)
+								},
                                 style: {
                                     marginRight: '5px'
                                 },
@@ -292,6 +301,9 @@ export default {
                                 style: {
                                     marginRight: '5px'
                                 },
+                                'class':{
+									menuHide:this.menuShow(this.AM.Jur.saveAction)
+								},
                                 on: {
                                     click: () => {
                                         this.actionUser(params.row.admin.id);
@@ -306,6 +318,9 @@ export default {
                                 style: {
                                     marginRight: '5px'
                                 },
+                                'class':{
+									menuHide:this.menuShow(this.AM.Jur.editUser)
+								},
                                 on: {
                                     click: () => {
                                         this.delUser(params.row.admin.id);

@@ -14,9 +14,9 @@ import VueI18n from 'vue-i18n';
 import util from '@/libs/util';
 import validate from './validate.js';
 import promise from 'es6-promise';
-import accessMenu from './accessMenu.js';
+import {AM } from './accessMenu.js';
 
-Vue.prototype.accessMenu = accessMenu;
+Vue.prototype.AM = AM;
 
 /** 解决es5的兼容性问题 */
 promise.polyfill();
@@ -66,11 +66,11 @@ window.RSYS = new Vue({
 let menuShow = (url) => {
     let accessList = JSON.parse(localStorage.getItem('funList'));
     for (let item of accessList) {
-        if (item == url) {
-            return true;
+        if (item.url == url) {
+            return false;
         }
     }
-    return false;
+    return true;
 };
 
 Vue.prototype.menuShow = menuShow;

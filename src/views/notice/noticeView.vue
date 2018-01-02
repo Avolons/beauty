@@ -147,7 +147,8 @@ export default {
                                     size: 'small',
                                 },
                                 'class':{
-                                  noshow:params.row.vetStatusStr.trim()=="已取消"||params.row.vetStatusStr.trim()=="未开始"
+                                  noshow:params.row.vetStatusStr.trim()=="已取消"||params.row.vetStatusStr.trim()=="未开始",
+                                  menuHide:this.menuShow(this.AM.Notice.cancelNotice)
                                 },
                                 style: {
                                     marginRight: '5px'
@@ -165,6 +166,9 @@ export default {
                                 },
                                 style: {
                                 },
+                                'class':{
+									menuHide:this.menuShow(this.AM.Notice.delNotice)
+								},
                                 on: {
                                     click: () => {
                                         this.deletNotice(params.row.activeId);

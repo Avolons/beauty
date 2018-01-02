@@ -164,6 +164,9 @@ export default {
 								style: {
 									marginRight: '5px'
 								},
+								 'class':{
+									menuHide:this.menuShow(this.AM.FollowBussiness.detailLog)
+								},
 								on: {
 									click: () => {
 										/** 
@@ -182,6 +185,9 @@ export default {
 								},
 								style: {
 
+								},
+								 'class':{
+									menuHide:this.menuShow(this.AM.FollowBussiness.delLog)
 								},
 								on: {
 									click: () => {

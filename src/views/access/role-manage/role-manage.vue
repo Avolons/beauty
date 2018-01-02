@@ -21,7 +21,7 @@
     <div class="role">
         <div class="role_main">
             <div class="role_main_add">
-                <Button @click="addRole" type="primary">新增角色</Button>
+                <Button @click="addRole" v-if="!menuShow(this.AM.Jur.infoRoles)" type="primary">新增角色</Button>
             </div>
             <div class="role_main_list">
                 <Table border :columns="config" :data="dataList"></Table>
@@ -95,6 +95,9 @@ export default {
                                 style: {
                                     marginRight: '5px'
                                 },
+                                'class':{
+									menuHide:this.menuShow(this.AM.Jur.editRoles)
+								},
                                 on: {
                                     click: () => {
                                         this.editRole(params.row.id,1)
@@ -106,6 +109,9 @@ export default {
                                     type: 'warning',
                                     size: 'small'
                                 },
+                                'class':{
+									menuHide:this.menuShow(this.AM.Jur.delRoles)
+								},
                                 on: {
                                     click: () => {
                                         this.delRole(params.row.id)

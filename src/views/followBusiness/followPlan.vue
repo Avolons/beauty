@@ -112,6 +112,9 @@ export default {
                                 style: {
                                     marginRight: '5px'
                                 },
+                                'class':{
+									menuHide:this.menuShow(this.AM.FollowBussiness.startPlan)
+								},
                                 on: {
                                     click: () => {
                                         this.startPlan(params.row.id);
@@ -126,6 +129,9 @@ export default {
                                 style: {
 
                                 },
+                                'class':{
+									menuHide:this.menuShow(this.AM.FollowBussiness.delPlan)
+								},
                                 on: {
                                     click: () => {
                                         /** 

@@ -393,6 +393,9 @@ export default {
 									type: 'primary',
 									size: 'small'
 								},
+								'class':{
+									menuHide:this.menuShow(this.AM.FollowBussiness.savePat)
+								},
 								style: {
 									marginRight: '5px'
 								},
@@ -407,6 +410,9 @@ export default {
 								props: {
 									type: 'info',
 									size: 'small'
+								},
+								'class':{
+									menuHide:this.menuShow(this.AM.FollowBussiness.detailPat)
 								},
 								style: {
 									marginRight: '5px'

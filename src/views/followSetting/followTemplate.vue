@@ -69,7 +69,7 @@
       </Col>
       <Col span="6">
       <Button type="primary" style="margin-right:10px" @click="handleSearch('IndexSearch')">查询</Button>
-      <Button type="info" @click="addBtn">添加模板</Button>
+      <Button type="info" v-if="!menuShow(this.AM.FollowSetting.addTem)" @click="addBtn">添加模板</Button>
       </Col>
     </Row>
     </Col>
@@ -122,7 +122,7 @@ export default {
         {
           title: '操作',
           key: 'action',
-          width: 100,
+          width: 200,
           align: 'center',
           render: (h, params) => {
             return h('div', [
@@ -134,13 +134,16 @@ export default {
                 style: {
                   marginRight: '5px'
                 },
+                'class':{
+									menuHide:this.menuShow(this.AM.FollowSetting.editTem)
+								},
                 on: {
                   click: () => {
                     this.$router.push({ path: `/followSetting/template/template/${params.row.id}` });
                   }
                 }
               }, '编辑'),
-             /*  h('Button', {
+              h('Button', {
                 props: {
                   type: 'warning',
                   size: 'small'
@@ -148,12 +151,15 @@ export default {
                 style: {
 
                 },
+                'class':{
+									menuHide:this.menuShow(this.AM.FollowSetting.delTem)
+								},
                 on: {
                   click: () => {
                     this.deleteRow(params.row.id)
                   }
                 }
-              }, '删除') */
+              }, '删除')
             ]);
           }
         }

@@ -21,7 +21,7 @@
                 <Button @click="initData" type="ghost" >取消</Button>
               </Col>
               <Col span="6">
-               <Button @click="edit(0)" type="primary" style="float:right">新增企业</Button>
+               <Button @click="edit(0)" v-show="!menuShow(this.AM.Jur.addBusiness)" type="primary" style="float:right">新增企业</Button>
               </Col>
           </Row>
           <Row class="business_main_list">
@@ -67,6 +67,9 @@ export default {
                                         type: 'primary',
                                         size: 'small'
                                     },
+                                     'class':{
+									menuHide:this.menuShow(this.AM.Jur.infoBusiness)
+								},
                                     style: {
                                         marginRight: '5px'
                                     },
@@ -84,13 +87,16 @@ export default {
                                     style: {
                                         marginRight: '5px'
                                     },
+                                     'class':{
+									menuHide:this.menuShow(this.AM.Jur.infoDepart)
+								},
                                     on: {
                                         click: () => {
                                             this.manage(params.row.id,params.row.name)
                                         }
                                     }
                                 }, '管理部门'),
-                                h('Button', {
+                               /*  h('Button', {
                                     props: {
                                         type: 'info',
                                         size: 'small'
@@ -103,12 +109,15 @@ export default {
                                             this.lookTree(params.row.id)
                                         }
                                     }
-                                }, '查看架构'),
+                                }, '查看架构'), */
                                 h('Button', {
                                     props: {
                                         type: 'warning',
                                         size: 'small'
                                     },
+                                     'class':{
+									menuHide:this.menuShow(this.AM.Jur.deletBusiness)
+								},
                                     on: {
                                         click: () => {
                                             this.remove(params.row.id)

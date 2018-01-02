@@ -14,7 +14,7 @@ Vue.prototype.$http = axios;
 /* 默认最长响应时间 */
 axios.defaults.timeout = 5000;
 /* 默认的接口地址 */
-/* axios.defaults.baseURL = 'http://192.168.1.100:8080'; */
+/* axios.defaults.baseURL = 'http://192.168.1.100:8088'; */
 
 let JsonData = ['/order/temp/visit', '/visit/order/vet/save', '/visit/order/notice', '/ordertask/vet', '/question/script/save', '/questionscheme/save', '/questiontemple/save', '/questiontarget/save'];
 // 添加请求拦截器
@@ -654,12 +654,27 @@ export const follSetting = {
     list (data) {
         return fetch('get', 'visit/questiontarget/list', data);
     },
+    /**
+     * 删除指标
+     * @param {any} data
+     * @returns
+     */
     deleteList (data) {
         return fetch('get', 'visit/questiontarget/delete', data);
     },
+    /**
+     * 新增指标
+     * @param {any} data
+     * @returns
+     */
     addList (data) {
         return fetch('post', 'visit/questiontarget/save', data);
     },
+    /**
+     * 编辑指标
+     * @param {any} data
+     * @returns
+     */
     editList (data) {
         return fetch('get', 'visit/questiontarget/get', data);
     }
@@ -678,15 +693,35 @@ export const followProblems = {
     list (data) {
         return fetch('get', 'visit/question/list', data);
     },
+    /**
+     *删除问题
+     * @param {any} data
+     * @returns
+     */
     deleteList (data) {
         return fetch('get', 'visit/question/delete', data);
     },
+    /**
+     *新增问题
+     * @param {any} data
+     * @returns
+     */
     addList (data) {
         return fetch('post', 'visit/question/save', data);
     },
+    /**
+     * 编辑问题
+     * @param {any} data
+     * @returns
+     */
     editList (data) {
         return fetch('get', 'visit/question/get', data);
     },
+    /**
+     * 疾病自动补全
+     * @param {any} data
+     * @returns
+     */
     disease (data) {
         return fetch('get', 'visit/disease/autocomplete', data);
     }
@@ -751,6 +786,7 @@ export const followTemplate = {
     }
 
 };
+
 /* 随访设置--随访方案接口 *****/
 export const followWay = {
     /*
@@ -805,7 +841,7 @@ export const FollowBussiness = {
      * 编辑患者信息
      */
     savePat (data) {
-        return fetch('post', 'visit/sufferer/save', data);
+        return fetch('post', '/visit/sufferer/save', data);
     },
     /*
      * 患者详细信息
@@ -854,21 +890,21 @@ export const FollowBussiness = {
     brxm:许建月 //患者姓名（可选）
      */
     listLog (data) {
-        return fetch('get', 'visit/order/list', data);
+        return fetch('get', '/visit/order/list', data);
     },
     /*
      * 删除随访记录
      * id:34259
      */
     delLog (data) {
-        return fetch('post', 'visit/order/delete', data);
+        return fetch('post', '/visit/order/delete', data);
     },
     /*
      * 随访记录详情
      * id:34259
      */
     detailLog (data) {
-        return fetch('get', 'visit/order/view', data);
+        return fetch('get', '/visit/order/view', data);
     },
     /**
      * 获取医生列表
@@ -880,7 +916,7 @@ export const FollowBussiness = {
      * @returns
      */
     listDoctor (data) {
-        return fetch('get', 'visit/admin/list', data);
+        return fetch('get', '/visit/admin/list', data);
     },
     /**
      * 获取医生的患者列表
@@ -891,14 +927,16 @@ export const FollowBussiness = {
      * @returns
      */
     patList (data) {
-        return fetch('get', 'visit/sufferer/select', data);
+        return fetch('get', '/visit/sufferer/select', data);
     },
     /**
-     * 获取医生的患者列表
-     * pager:1, //当前页码
-        limit:3,//每页条数
-        admin:288,//医生id（必选）
-        brxm:陈金浩 //病人姓名（可选）
+     * 添加临时随访任务
+     *"schemeId":"66afc543-e0ab-11e7-a153-6cae8b369de4", //方案id
+    "schemeName":"测试方案",                            //方案名称
+    "adminId":288,                                     //医生id
+    "mobile":"18888888888",                            //发起人专属服务号码
+    "visitStartTime":"2017-12-19 15:32:33",            //随访起始时间
+    "hzxxIds":["73125","20121","3190"]                 //患者id
      * @returns
      */
     patSubmit (data) {
@@ -959,7 +997,7 @@ export const Notice = {
 
 };
 
-/* 随访计划相关接口 *****/
+/* 数据审核 *****/
 export const Dataaudit = {
     /*
      * 随访计划列表

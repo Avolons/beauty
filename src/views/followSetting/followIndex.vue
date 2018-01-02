@@ -116,7 +116,7 @@
       </Col>
       <Col span="6">
       <Button style="margin-right:10px" type="primary" @click="list">查询</Button>
-      <Button type="info" @click="addBtn">添加指标</Button>
+      <Button type="info" v-if="menuShow(this.AM.FollowSetting.addIndex)" @click="addBtn">添加指标</Button>
       </Col>
     </Row>
     </Col>
@@ -261,29 +261,10 @@ export default {
           key: 'diseaseName',
           align: 'center',
         },
-        /* {
-          title: '启用状态',
-          key: 'status',
-          align: 'center',
-          render: (h, params) => {
-            if (params.row.status == '0') {
-              return params.row.status = '启用'
-            } else if (params.row.status == '1') {
-              return params.row.status = '停用'
-            }
-            return h('div', {
-            }, params.row.status);
-          }
-        }, */
-        /* {
-          title: '备注',
-          key: 'remark',
-          align: 'center',
-        }, */
         {
           title: '操作',
           key: 'action',
-          width: 100,
+          width: 150,
           align: 'center',
           render: (h, params) => {
             return h('div', [
@@ -295,13 +276,16 @@ export default {
                 style: {
                   marginRight: '5px'
                 },
+                'class':{
+									menuHide:this.menuShow(this.AM.FollowSetting.editIndex)
+								},
                 on: {
                   click: () => {
                     this.editIndex(params.row.id);
                   }
                 }
               }, '编辑'),
-              /*  h('Button', {
+               h('Button', {
                  props: {
                    type: 'warning',
                    size: 'small'
@@ -309,6 +293,9 @@ export default {
                  style: {
  
                  },
+                 'class':{
+									menuHide:this.menuShow(this.AM.FollowSetting.delIndex)
+								},
                  on: {
                    click: () => {
                      this.$Modal.confirm({
@@ -322,7 +309,7 @@ export default {
                      })
                    }
                  }
-               }, '删除') */
+               }, '删除')
             ]);
           }
         }

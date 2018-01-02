@@ -63,7 +63,7 @@
 				</Col>
 				<Col span="6">
 				<Button style="margin-right:10px" type="primary" @click="handleSearch()">查询</Button>
-        <Button type="info" @click="addBtn()">增加随访方案</Button>
+        <Button type="info" v-if="!menuShow(this.AM.FollowSetting.addDep)" @click="addBtn()">增加随访方案</Button>
 				</Col>
 			</Row>
     </Col>
@@ -172,6 +172,9 @@ export default {
                 style: {
                   marginRight: '5px'
                 },
+                'class':{
+									menuHide:this.menuShow(this.AM.FollowSetting.editDep)
+								},
                 on: {
                   click: () => {
                     this.$router.push({ path: `/followSetting/way/way/${params.row.id}` });
@@ -187,6 +190,9 @@ export default {
                 style: {
                   marginRight: '5px'
                 },
+                'class':{
+									menuHide:this.menuShow(this.AM.FollowSetting.delDep)
+								},
                 on: {
                   click: () => {
                     this.$Modal.confirm({

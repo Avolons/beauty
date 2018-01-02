@@ -79,7 +79,7 @@
 			</Row>
 			<div class="sys-depart_main_add">
 				<Button @click="getData" type="primary">查询</Button>
-				<Button @click="addData" type="info">新增科室</Button>
+				<Button v-if="!menuShow(this.AM.Systems.addDepart)" @click="addData" type="info">新增科室</Button>
 			</div>
 			<div class="sys-depart_main_list">
 				<Table border :columns="config" :data="dataList"></Table>
@@ -294,6 +294,9 @@ export default {
 								style: {
 									marginRight: '5px'
 								},
+								'class':{
+									menuHide:this.menuShow(this.AM.Systems.editDepart)
+								},
 								on: {
 									click: () => {
 										this.editDepart(params.row)
@@ -307,6 +310,9 @@ export default {
 								},
 								style: {
 									marginRight: '5px'
+								},
+								'class':{
+									menuHide:this.menuShow(this.AM.Systems.delDepart)
 								},
 								on: {
 									click: () => {

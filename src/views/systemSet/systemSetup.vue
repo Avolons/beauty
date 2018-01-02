@@ -15,7 +15,7 @@
 <template>
     <div class="user">
         <div class="sys-sysset_main">
-            <Button @click="modal=true" type="primary">添加</Button>
+            <Button @click="modal=true" v-if="!menuShow(this.AM.Systems.addSystem)" type="primary">添加</Button>
             <div class="sys-sysset_main_list">
                 <Table border :columns="config" :data="dataList"></Table>
             </div>
@@ -155,6 +155,9 @@ export default {
                                 style: {
                                     marginRight: '5px'
                                 },
+                                'class':{
+									menuHide:this.menuShow(this.AM.Systems.editSystem)
+								},
                                 on: {
                                     click: () => {
                                         this.editSetting(params.row)
@@ -169,6 +172,9 @@ export default {
                                 style: {
                                     marginRight: '5px'
                                 },
+                                'class':{
+									menuHide:this.menuShow(this.AM.Systems.delSystem)
+								},
                                 on: {
                                     click: () => {
                                         this.delSetting(params.row.id)

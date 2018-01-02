@@ -73,7 +73,7 @@ export const AM = {
         editDep: '/visit/questionscheme/get'
 
     },
-    /** 随访设置 */
+    /** 通知 */
     Notice: {
         /** 暂停计划 */
         cancelNotice: '/visit/order/notice/cancel',
@@ -137,14 +137,32 @@ export const AM = {
         /** 角色列表 */
         listRoles: '/visit/admin/roles/list',
 
-        /** 角色详情  */
+        /** 角色新增  */
         infoRoles: '/visit/admin/roles/add',
 
         /** 角色编辑 */
         editRoles: '/visit/admin/roles/save',
 
         /** 角色删除 */
-        delRoles: '/visit/admin/roles/del'
+        delRoles: '/visit/admin/roles/del',
+
+        /** 用户添加 */
+        addUser: '/visit/admin/add',
+
+        /** 用户删除  */
+        editUser: '/visit/admin/update',
+
+        /** 禁用用户 */
+        lookaUser: '/visit/admin/stop',
+
+        /** 启用用户  */
+        unLookUser: '/visit/admin/unstop',
+
+        /** 默认方案 */
+        saveAction: '/visit/admin/save',
+
+        /** 重置密码 */
+        updataPass: '/visit/admin/resetPwd'
     },
     /** 系统设置 */
     Systems: {

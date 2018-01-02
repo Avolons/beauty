@@ -201,7 +201,7 @@
       </Col>
       <Col span="6">
       <Button style="margin-right:10px" type="primary" @click="handleSearch('proSearch')">查询</Button>
-      <Button type="info" @click="addBtn('proRuleModel')">添加问题</Button>
+      <Button type="info"  v-if="!menuShow(this.AM.FollowSetting.addPro)"  @click="addBtn('proRuleModel')">添加问题</Button>
       </Col>
     </Row>
     </Col>
@@ -342,7 +342,7 @@ export default {
         {
           title: '操作',
           key: 'action',
-          width: 180,
+          width: 250,
           align: 'center',
           render: (h, params) => {
             return h('div', [
@@ -351,6 +351,9 @@ export default {
                   type: 'primary',
                   size: 'small'
                 },
+                'class':{
+									menuHide:this.menuShow(this.AM.FollowSetting.editPro)
+								},
                 style: {
                   marginRight: '5px'
                 },
@@ -415,6 +418,9 @@ export default {
                 style: {
                   marginRight: '5px'
                 },
+                'class':{
+									menuHide:this.menuShow(this.AM.FollowSetting.editVoice) || params.row.playWavOnly==1
+								},
                 on: {
                   click: () => {
                     let id = params.row.id
@@ -422,11 +428,14 @@ export default {
                   }
                 }
               }, '编辑话述'),
-              /* h('Button', {
+              h('Button', {
                 props: {
                   type: 'warning',
                   size: 'small'
                 },
+                'class':{
+									menuHide:this.menuShow(this.AM.FollowSetting.delPro)
+								},
                 on: {
                   click: () => {
                     this.$Modal.confirm({
@@ -440,7 +449,7 @@ export default {
                     });
                   }
                 }
-              }, '删除'), */
+              }, '删除'),
             ]);
           }
         }],

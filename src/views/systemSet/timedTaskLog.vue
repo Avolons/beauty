@@ -83,6 +83,7 @@ export default {
                  page: 1,//当前页码
                  namelk:"",
                  state:null,
+                 limit:10
             },
             pageSize:10,
             totalPage: 10,//总页码

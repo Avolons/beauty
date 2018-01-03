@@ -16,9 +16,9 @@
             <div class="sys-task_main_list">
                 <Table border :columns="config" :data="dataList"></Table>
             </div>
-            <!-- <Row class="sys-task_main_page">
+            <Row class="sys-task_main_page">
                     <Page :total="totalPage" :current="page" show-elevator style="float:right" @on-change="changePage"></Page>
-                </Row> -->
+                </Row>
         </div>
     </div>
 </template>
@@ -152,8 +152,12 @@ export default {
          * 获取所有数据
          */
         getData() {
-            API.Systems.listTime().then((res) => {
+            API.Systems.listTime({
+                pager:this.page,
+                limit:10
+            }).then((res) => {
                 this.dataList = res.data;
+                this.totalPage=res.total;
             }).catch((err) => {
 
             });

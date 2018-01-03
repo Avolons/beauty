@@ -250,7 +250,7 @@ export default {
 						ids: arr
 					}).then((res) => {
 						this.$Message.success("操作成功");
-						this.getData
+						this.getData();
 					}).catch((err) => {
 
 					});

@@ -558,7 +558,7 @@ export default {
 				id:this.planInfo.id,               
 				dateEnd: this.planInfo.dateEnd,    
 				hzxxId:this.planInfo.hzxxId,   
-				vetRemark:this.planInfo.remark,  
+				vetRemark:this.planInfo.vetRemark,  
 				orderReplyQuestions:[],
 			}
 			for (let item of this.planInfo.orderReplyQuestions) {

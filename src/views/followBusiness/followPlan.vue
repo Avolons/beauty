@@ -205,6 +205,7 @@ export default {
                         phone:this.AIform.AIphone
                     }).then((res)=>{
                         this.$Message.success('提交成功!');
+                        this.AIform.AIphone="";
                         this.followShow = false;
                     }).catch((err)=>{
 

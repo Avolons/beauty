@@ -418,9 +418,10 @@ export default {
         if(res.data.optionValues){
             res.data.optionValues = res.data.optionValues.split(",");
             res.data.thresholdValue = res.data.thresholdValue.split(",");
+            this.optionList = res.data.optionValues;
+            this.formItem.anormal = res.data.thresholdValue;
         }
-        this.optionList = res.data.optionValues;
-        this.formItem.anormal = res.data.thresholdValue;
+        
       }).catch((error) => {
         console.log(error)
       })
@@ -505,8 +506,8 @@ export default {
             "status": '0',
             "type": this.formItem.radio,
             "otype": this.formItem.select,
-            "optionValues": this.optionList.join(','),
-            "thresholdValue": this.formItem.anormal.join(","),
+            "optionValues": this.formItem.radio=="select"?this.optionList.join(','):"",
+            "thresholdValue": this.formItem.radio=="select"?this.formItem.anormal.join(","):"",
             "thresholdValueStart": this.formItem.top,
             "thresholdValueEnd": this.formItem.bottom,
             "remark": this.formItem.textarea

@@ -572,14 +572,14 @@ export default {
 			this.tagCount.forEach((item) => {
 				if (this.templateForm.addSubmoulds == item || this.templateForm.addSubmoulds == '') {
 					flag++;
-					this.$Message.warning('您添加的为空或者重复添加');
+					this.$Message.warning('您添加的格式不正确或者重复添加');
 				}
 			})
 			if (flag > 0) {
 				this.templateForm.addSubmoulds = ''
 				return false;
 			}
-			let strRegex = "(.xml)$"; //用于验证图片扩展名的正则表达式
+			let strRegex = /.\.xml/; //用于验证图片扩展名的正则表达式
 			let re = new RegExp(strRegex);
 			if (re.test(this.templateForm.addSubmoulds)) {
 				/** 

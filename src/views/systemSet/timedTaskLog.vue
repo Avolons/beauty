@@ -68,7 +68,7 @@
                 <Table border :columns="config" :data="dataList"></Table>
             </div>
             <Row class="sys-tasklog_main_page">
-            <Page  :page-size="pageSize" :total="totalPage" :current="searchParam.page" show-elevator style="float:right" @on-change="changePage"></Page>
+            <Page   :total="totalPage" :current="searchParam.page" show-elevator style="float:right" @on-change="changePage"></Page>
             </Row>
         </div>
     </div>
@@ -85,7 +85,6 @@ export default {
                  state:null,
                  limit:10
             },
-            pageSize:10,
             totalPage: 10,//总页码
             config: [
                 {
@@ -157,9 +156,8 @@ export default {
          */
         getData(){
             API.Systems.listTimeLog(this.searchParam).then((res) => {
-                this.pageSize=res.data.pageSize;
-                this.totalPage=res.data.totalPage;
-                this.dataList=res.data.result;
+                this.totalPage=res.total;
+                this.dataList=res.data;
             }).catch((err) => {
 
             });

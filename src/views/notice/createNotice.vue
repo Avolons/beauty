@@ -259,7 +259,7 @@
 								<Input disabled v-model="sendData.schemeName" style="width: 435px" placeholder="请选择计划"></Input>
 							</FormItem>
 							<FormItem label="通知起止时间"  style="width:450px;">
-								<DatePicker @on-change="dateChange" type="datetimerange" format="yyyy-MM-dd HH:mm" placeholder="请选择通知起止时间" style="width: 435px"></DatePicker>
+								<DatePicker @on-change="dateChange" type="datetimerange" format="yyyy-MM-dd HH:mm:ss" placeholder="请选择通知起止时间" style="width: 435px"></DatePicker>
 							</FormItem>
 							<FormItem label="通知简介" prop="remark" style="width:450px;">
 								<Input type="textarea" v-model="sendData.remark" style="width: 435px" placeholder="请填写通知简介"></Input>

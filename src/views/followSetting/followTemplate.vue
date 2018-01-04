@@ -76,7 +76,7 @@
     <Col span="24" class="fpTable">
     <Table border :columns="columns7" :data="datalist" class="margin-bottom-10"></Table>
     <Row>
-      <Page style="margin-top:10px;float:right" :total="pageTotal" @on-change="currentPage" show-elevator show-total></Page>
+      <Page :current="page" style="margin-top:10px;float:right" :total="pageTotal" @on-change="currentPage" show-elevator show-total></Page>
     </Row>
     </Col>
   </Row>
@@ -102,6 +102,7 @@ export default {
         name: '',
         diseaseName: ''
       },
+      page:1,
       columns7: [//表格栏
         {
           title: 'id',
@@ -222,6 +223,7 @@ export default {
      *获取分页列表数据
      */
     currentPage: function(page) {
+      this.page=page;
       API.followTemplate.list({
         pager: page,
         limit: '10',
@@ -242,6 +244,7 @@ export default {
     *查询
     */
     handleSearch() {
+      this.page=1;
       API.followTemplate.list({
         pager: 1,
         limit: '10',

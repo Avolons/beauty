@@ -322,7 +322,7 @@ export const appRouter = [{
     }
     ]
 },
-{
+/* {
     path: '/dataShow',
     icon: 'soup-can',
     name: 'dataShow',
@@ -350,7 +350,7 @@ export const appRouter = [{
         }
     }
     ]
-},
+}, */
 {
     path: '/dataInteraction',
     icon: 'mouse',
@@ -358,7 +358,8 @@ export const appRouter = [{
     title: '数据交互',
     access: '/dataInteraction', // access已经添加
     component: Main,
-    children: [{
+    children: [
+       /*  {
         path: '/dataInteraction/temImport',
         title: '随访模板导入',
         access: '/dataInteraction/temImport', // access已经添加
@@ -377,27 +378,27 @@ export const appRouter = [{
         component: resolve => {
             require(['@/views/dataInteraction/temExport.vue'], resolve);
         }
-    },
-    {
-        path: '/dataInteraction/patientImpro',
-        title: '病患导入',
-        access: '/dataInteraction/patientImpro', // access已经添加
-        name: 'patientImpro',
-        icon: 'ios-cloud-upload',
-        component: resolve => {
-            require(['@/views/dataInteraction/patientImpro.vue'], resolve);
+    }, */
+        {
+            path: '/dataInteraction/patientImpro',
+            title: '病患导入',
+            access: '/dataInteraction/patientImpro', // access已经添加
+            name: 'patientImpro',
+            icon: 'ios-cloud-upload',
+            component: resolve => {
+                require(['@/views/dataInteraction/patientImpro.vue'], resolve);
+            }
+        },
+        {
+            path: '/dataInteraction/doctorImport',
+            title: '医生导入',
+            access: '/dataInteraction/doctorImport', // access已经添加
+            name: 'doctorImport',
+            icon: 'social-reddit-outline',
+            component: resolve => {
+                require(['@/views/dataInteraction/doctorImport.vue'], resolve);
+            }
         }
-    },
-    {
-        path: '/dataInteraction/doctorImport',
-        title: '医生导入',
-        access: '/dataInteraction/doctorImport', // access已经添加
-        name: 'doctorImport',
-        icon: 'social-reddit-outline',
-        component: resolve => {
-            require(['@/views/dataInteraction/doctorImport.vue'], resolve);
-        }
-    }
     ]
 },
 {
@@ -466,8 +467,8 @@ export const appRouter = [{
         component: resolve => {
             require(['@/views/systemSet/systemLog.vue'], resolve);
         }
-    },
-    {
+    }
+   /*  {
         path: '/systemSet/followType',
         title: '随访类型优先级展示',
         access: '/systemSet/followType', // access已经添加
@@ -476,7 +477,7 @@ export const appRouter = [{
         component: resolve => {
             require(['@/views/systemSet/followType.vue'], resolve);
         }
-    }
+    } */
     ]
 },
 {
@@ -496,7 +497,7 @@ export const appRouter = [{
             require(['@/views/access/access-control/accessControl.vue'], resolve);
         }
     },
-    {
+    /* {
         path: '/access/group',
         icon: 'wand',
         title: '数据权限',
@@ -505,7 +506,7 @@ export const appRouter = [{
         component: resolve => {
             require(['@/views/access/group-manage/groupList.vue'], resolve);
         }
-    },
+    }, */
     {
         path: '/access/business',
         icon: 'social-buffer',

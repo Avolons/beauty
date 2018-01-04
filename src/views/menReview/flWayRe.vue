@@ -1,7 +1,7 @@
 <style lang="less">
 .follPass {
 	&_message{
-		height: 300px;
+		height: 450px;
 		overflow-y: auto;
 	}
 	&_message_vemark {
@@ -21,13 +21,13 @@
 				font-size: 20px;
 				margin-right: 10px;
 				width: 20px;
-				margin-top: 10px;
+				margin-top: 5px;
 			}
 			span {
 				display: inline-block;
 				background-color: #d9edf7;
 				border-radius: 4px;
-				padding: 10px;
+				padding: 5px;
 				font-size: 13px;
 				box-sizing: border-box;
 				vertical-align: top;
@@ -38,11 +38,12 @@
 			width: 100%;
 			float: left;
 			background-color: #d9edf7;
+			border:1px solid #d9edf7;
 			border-radius: 4px;
-			padding: 10px;
 			font-size: 13px;
+			padding: 2px;
 			box-sizing: border-box;
-			margin-top: 10px;
+			margin-top: 5px;
 			clear: both;
 			>h3 {
 				font-size: 14px;
@@ -69,13 +70,14 @@
 				float: left;
 				background-color: #d9edf7;
 				border-radius: 4px;
-				padding: 10px;
 				font-size: 13px;
+				padding: 5px;
 				box-sizing: border-box;
-
 				width: calc(~"100% - 30px");
 				audio {
-					display: inline-block;
+					display:block;
+					width: 100%;
+					margin: 0;
 				}
 			}
 			&:after {
@@ -86,10 +88,10 @@
 		}
 		&_abnormal{
 			>span{
-				background-color: #f80000;
+				background-color: #fd6e6e;
 			}
 			.follPass_main_patInner{
-				background-color: #f80000;
+				background-color: #fd6e6e;
 			}
 		}
 	}
@@ -101,8 +103,8 @@
 			border-collapse: collapse;
 		}
 		tr {
-			height: 35px;
-			line-height: 35px;
+			height: 25px;
+			line-height: 25px;
 			font-size: 13px;
 			&:nth-of-type(odd) {
 				background-color: #f7f7f7;
@@ -223,7 +225,7 @@
 				<Page :page-size="pageSize" :total="totalPage" :current="searchParam.pager" show-elevator style="float:right" @on-change="changePage"></Page>
 			</Row>
 			<!-- 随访模态框 -->
-			<Modal v-model="modal" title="随访详情" width="950" class-name="" :styles="{top:'100px'}">
+			<Modal v-model="modal" title="随访详情" width="950" class-name="" :styles="{top:'50px'}">
 				<Collapse v-model="showAll">
 					<Panel name="1">
 						随访结果

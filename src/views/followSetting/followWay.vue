@@ -73,7 +73,7 @@
     </Col>
     <!-- 分页 -->
     <Col span="24" class="pages">
-    <Page style="margin-top:10px;float:right" :total="pageTotal" @on-change="currentPage" show-elevator show-total></Page>
+    <Page style="margin-top:10px;float:right" :current="page" :total="pageTotal" @on-change="currentPage" show-elevator show-total></Page>
     </Col>
     <!-- 详情模态框 -->
     <Modal v-model="patientText" name="添加问题 / 编辑问题" @on-ok="ok" @on-cancel="cancel" width="650" class-name="patientInfo">
@@ -134,6 +134,7 @@ export default {
         diseaseId: '',
         departmentId: '',
       },
+      page:1,
       deparmentSelect: [],//科室列表
       columns7: [//表格栏
         {
@@ -331,7 +332,7 @@ export default {
     *获取分页列表数据
     */
     currentPage: function(page) {
-      console.log(this.waySearch.diseaseName)
+      this.page=page;
       API.followWay.list({
         'pager': page,
         'limit': '10',
@@ -397,6 +398,7 @@ export default {
     *查询功能
     */
     handleSearch() {
+      this.page=1;
       API.followWay.list({
         'pager': 1,
         'limit': '10',

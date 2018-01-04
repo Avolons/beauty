@@ -211,7 +211,7 @@
     </Col>
     <!-- 分页 -->
     <Col span="24" style="margin-top:10px;">
-    <Page style="float:right" :total="pageTotal"  @on-change="currentPage" show-elevator show-total></Page>
+    <Page style="float:right" :total="pageTotal" :current="page"  @on-change="currentPage" show-elevator show-total></Page>
     </Col>
     <!-- 详情模态框 -->
     <Modal v-model="patientText" title="添加问题 / 编辑问题" width="650">
@@ -274,6 +274,7 @@ import { API } from '@/services';
 export default {
   data() {
     return {
+      page:1,
       taglabel: "",
       //指标筛选
       search: {
@@ -290,11 +291,6 @@ export default {
         diseaseName: '',
       },
       config: [//表格栏
-        {
-          title: 'id',
-          key: 'id',
-          align: 'center'
-        },
         {
           title: '问题标题',
           key: 'title',
@@ -544,7 +540,7 @@ export default {
     *获取分页列表数据
     */
     currentPage: function(page) {
-      /* console.log(this.proSearch.diseaseName) */
+      this.page=page;
       API.followProblems.list({
         pager: page,
         limit: '10',

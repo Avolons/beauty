@@ -88,10 +88,13 @@
 		}
 		&_abnormal{
 			>span{
-				background-color: #fd6e6e;
+				background-color: #ffdede;
 			}
 			.follPass_main_patInner{
-				background-color: #fd6e6e;
+				background-color: #ffdede;
+			}
+			audio{
+				background-color: #ff8181;
 			}
 		}
 	}

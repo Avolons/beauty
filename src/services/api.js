@@ -103,8 +103,8 @@ export const Data = {
      * @param {any} data
      * @returns
      */
-    doctorImport: axios.defaults.baseURL + '/visit/excel/adminImport',
-    PatImport: axios.defaults.baseURL + '/visit/excel/import'
+    doctorImport: axios.defaults.baseURL || '' + '/visit/excel/adminImport',
+    PatImport: axios.defaults.baseURL || '' + '/visit/excel/import'
 };
 
 /* 通用相关相关接口 *****/

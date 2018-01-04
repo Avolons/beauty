@@ -28,6 +28,7 @@
 				点击导入模板
 			</div>
 		</Upload>
+		 <Button style="display:block;margin-top:20px;" type="primary"><a style="color:#fff" href="/assets/templatedoc/doctors.xls">点击导出医生模板</a></Button>
 		<!-- <Modal title="View Image" v-model="visible">
 			<img :src="'https://o5wwk8baw.qnssl.com/' + imgName + '/large'" v-if="visible" style="width: 100%">
 		</Modal> -->

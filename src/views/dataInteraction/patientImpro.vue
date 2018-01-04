@@ -31,6 +31,7 @@
 				点击导入病患信息
 			</div>
 		</Upload>
+		<Button style="display:block;margin-top:20px;" type="primary"><a style="color:#fff" href="/assets/templatedoc/Patient.xls">点击导出患者模板</a></Button>
 		<Modal title="View Image" v-model="visible">
 			<img :src="'https://o5wwk8baw.qnssl.com/' + imgName + '/large'" v-if="visible" style="width: 100%">
 		</Modal>

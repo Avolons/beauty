@@ -60,7 +60,7 @@
                 </Select>
                 </Col>
                 <Col span="6">
-					<Button @click="getData" type="primary">查询</Button>
+					<Button @click="searchParam.page=1;getData()" type="primary">查询</Button>
                 </Col>
                 
             </Row>

@@ -167,7 +167,7 @@
 							<Input type="text" v-model="searchParams.brxm" placeholder="请输入患者姓名"></Input>
 							</Col>
 							<Col span="6">
-							<Button @click="getData" type="primary">搜索</Button>
+							<Button @click="searchParams.pager=1;getData()" type="primary">搜索</Button>
 							</Col>
 						</Row>
 						<div class="creatNotice_main_add">
@@ -205,11 +205,11 @@
 								</Select>
 								</Col>
 								<Col span="6">
-								<Button @click="getPlanList" type="primary">搜索</Button>
+								<Button @click="patParams.pager=1;getPlanList()" type="primary">搜索</Button>
 								</Col>
 							</Row>
 							<Table border :columns="planConfig" :data="planList"></Table>
-							<Page :total="patTotalPage" :current="searchParams.pager" show-elevator style="float:right;margin-top:10px;" @on-change="patChangePage"></Page>
+							<Page :total="patTotalPage" :current="patParams.pager" show-elevator style="float:right;margin-top:10px;" @on-change="patChangePage"></Page>
 						</div>
 						<Button @click="returnStep(1)" style="margin-right:10px">返回上一步</Button>
 					</TabPane>

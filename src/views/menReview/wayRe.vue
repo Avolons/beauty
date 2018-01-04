@@ -40,7 +40,7 @@
 			<Input type="text" v-model="searchParams.adminName" placeholder="请输入医生姓名"></Input>
 			</Col>
 			<Col span="6">
-			<Button type="primary" @click="getData">查询</Button>
+			<Button type="primary" @click="searchParams.pager=1;getData()">查询</Button>
 			</Col>
 		</Row>
 		</Col>
@@ -48,7 +48,7 @@
 		<Col span="24" class="fpTable">
 		<Table  ref="selection"  :columns="config" :data="dataList" class="margin-bottom-10"></Table>
 		<Row class="planRe_main_page">
-			<Page style="float:right" :total="totalPage" @on-change="changePage" show-elevator show-total></Page>
+			<Page style="float:right" :current="searchParams.pager" :total="totalPage" @on-change="changePage" show-elevator show-total></Page>
 		</Row>
 		</Col>
 	</Row>

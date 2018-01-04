@@ -201,7 +201,7 @@ export default {
                     key: 'dpName',
                 },
                 {
-                    title: '是否锁定',
+                    title: '是否禁用',
                     key: 'look',
                     align: 'center',
                     render: (h, params) => {

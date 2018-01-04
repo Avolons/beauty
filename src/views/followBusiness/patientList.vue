@@ -198,7 +198,7 @@
 			<Input type="text" v-model="searchParams.brxm" placeholder="请输入患者姓名"></Input>
 			</Col>
 			<Col span="6">
-			<Button type="primary" @click="getData">查询</Button>
+			<Button type="primary" @click="searchParams.pager=1;getData()">查询</Button>
 			</Col>
 		</Row>
 		<!-- 表格 -->
@@ -207,7 +207,7 @@
 		</Col>
 		<!-- 分页 -->
 		<Col span="24" class="pages">
-		<Page :total="totalPage" show-elevator @on-change="changePage" show-total></Page>
+		<Page :total="totalPage" :current="searchParams.pager" show-elevator @on-change="changePage" show-total></Page>
 		</Col>
 		<!-- 详情模态框 -->
 		<Modal v-model="patientDetail" title="患者信息" class-name="patientInfo" :styles="{top: '180px'}" width="1000">

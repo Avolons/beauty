@@ -282,18 +282,18 @@
 								<FormItem v-if="it.switchId!=-1&&it.switchId!=-2&&it.switchId!=-3" label="指标值">
 									<span>{{it.keyname}} ：{{it.keyvalue}}</span>
 								</FormItem>
+								<FormItem v-if="it.switchId==-2"  label="超时语音">
+									<Input v-model="it.silenceWav" placeholder="请输入超时语音地址"></Input>
+								</FormItem>
 								<FormItem   label="AI语音">
-									<!-- <Upload action="//jsonplaceholder.typicode.com/posts/" :before-upload="handleUpload">
-											<Button type="ghost" icon="ios-cloud-upload-outline">请输入ai语音地址</Button>
-										</Upload> -->
 									<Input v-model="it.switchWav" placeholder="请输入ai语音地址"></Input>
 								</FormItem>
 								<FormItem label="跳转问题编号">
 									<span>{{it.nextQuestionId}}</span>
 								</FormItem>
 								<FormItem v-if="it.switchId==-1" label="无匹配超次数跳转">
-									<!-- <Input v-model="it.outRptSwitchID" placeholder="请输入无匹配的跳转次数"></Input> -->
-									<span>{{it.outRptSwitchId}}</span>
+									<Input v-model="it.outRptSwitchID" placeholder="请输入无匹配的跳转"></Input>
+									<!-- <span>{{it.outRptSwitchId}}</span> -->
 								</FormItem>
 							</Form>
 						</div>

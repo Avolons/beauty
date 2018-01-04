@@ -36,7 +36,7 @@
 			<Input type="text" v-model="searchParams.operator" placeholder="请输入操作者姓名"></Input>
 			</Col>
 			<Col span="6">
-			<Button type="primary" @click="getData">查询</Button>
+			<Button type="primary" @click="searchParams.pager=1;getData()">查询</Button>
 			</Col>
 		</Row>
 		</Col>
@@ -47,7 +47,7 @@
 			<Button @click="handleSelectAll(true)">全选</Button>
 			<Button v-if="!menuShow(this.AM.Data.passPlan)" type="primary" @click="passPlan(haveSelect,2)">通过</Button>
 			<Button v-if="!menuShow(this.AM.Data.passPlan)" type="warning" @click="passPlan(haveSelect,1)">不通过</Button>
-			<Page style="float:right" :total="totalPage" @on-change="changePage" show-elevator show-total></Page>
+			<Page style="float:right" :total="totalPage" @on-change="changePage" :current="searchParams.pager" show-elevator show-total></Page>
 		</Row>
 		</Col>
 	</Row>

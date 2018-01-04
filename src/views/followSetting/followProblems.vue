@@ -211,7 +211,7 @@
     </Col>
     <!-- 分页 -->
     <Col span="24" style="margin-top:10px;">
-    <Page style="float:right" :total="pageTotal" @on-change="currentPage" show-elevator show-total></Page>
+    <Page style="float:right" :total="pageTotal"  @on-change="currentPage" show-elevator show-total></Page>
     </Col>
     <!-- 详情模态框 -->
     <Modal v-model="patientText" title="添加问题 / 编辑问题" width="650">
@@ -296,7 +296,7 @@ export default {
           align: 'center'
         },
         {
-          title: '问题名称',
+          title: '问题标题',
           key: 'title',
           align: 'center'
         },
@@ -412,19 +412,22 @@ export default {
               }, '编辑'),
               h('Button', {
                 props: {
-                  type: 'info',
+                  type: params.row.playWavOnly==1?'dashed':'info',
                   size: 'small'
                 },
                 style: {
                   marginRight: '5px'
                 },
                 'class':{
-									menuHide:this.menuShow(this.AM.FollowSetting.editVoice) || params.row.playWavOnly==1
+									menuHide:this.menuShow(this.AM.FollowSetting.editVoice) 
 								},
                 on: {
                   click: () => {
-                    let id = params.row.id
-                    this.$router.push({ path: `/followSetting/voice/voice/${params.row.id}` });
+                    if(params.row.playWavOnly!=1){
+                      let id = params.row.id
+                      this.$router.push({ path: `/followSetting/voice/voice/${params.row.id}` });
+                    }
+                    
                   }
                 }
               }, '编辑话述'),

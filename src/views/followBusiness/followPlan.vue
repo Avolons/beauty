@@ -24,7 +24,7 @@
                 </Select>
                 </Col>
                 <Col span="6">
-                   <Button type="primary" @click="getData">查询</Button>
+                   <Button type="primary" @click="searchParams.pager=1;getData()">查询</Button>
                 </Col>
             </Row>
         </Col>
@@ -32,7 +32,7 @@
         <Col span="24" class="fpTable">
         <Table border :columns="config" :data="dataList" class="margin-bottom-10"></Table>
         <Row>
-            <Page style="float:right" :total="totalPage" @on-change="changePage" show-elevator show-total></Page>
+            <Page style="float:right" :current="searchParams.pager" :total="totalPage" @on-change="changePage" show-elevator show-total></Page>
         </Row>
         </Col>
         <!-- 随访模态框 -->

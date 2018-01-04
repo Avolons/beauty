@@ -201,7 +201,7 @@
 								</Col>
 						</Row>
 						<div class="creatNotice_main_add">
-							<Button @click="getData" style="margin-right:10px" type="primary">搜索</Button>
+							<Button @click="searchParams.pager=1;getData()" style="margin-right:10px" type="primary">搜索</Button>
 							<Badge :count="addList.length">
 								<Button @click="patModal=true" type="info">已添加患者</Button>
 							</Badge>
@@ -236,11 +236,11 @@
 								</Select>
 								</Col>
 								<Col span="6">
-								<Button @click="getPlanList" type="primary">搜索</Button>
+								<Button @click="patParams.pager=1;getPlanList()" type="primary">搜索</Button>
 								</Col>
 							</Row>
 							<Table border :columns="planConfig" :data="planList"></Table>
-							<Page :total="patTotalPage" :current="searchParams.pager" show-elevator style="float:right;margin-top:10px;" @on-change="patChangePage"></Page>
+							<Page :total="patTotalPage" :current="patParams.pager" show-elevator style="float:right;margin-top:10px;" @on-change="patChangePage"></Page>
 						</div>
 						<Button @click="returnStep(1)" style="margin-right:10px">返回上一步</Button>
 					</TabPane>

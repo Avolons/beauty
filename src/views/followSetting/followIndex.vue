@@ -115,15 +115,15 @@
       </Select>
       </Col>
       <Col span="6">
-      <Button style="margin-right:10px" type="primary" @click="list">查询</Button>
+      <Button style="margin-right:10px" type="primary" @click="IndexSearch.pager=1;list()">查询</Button>
       <Button type="info" v-if="!menuShow(this.AM.FollowSetting.addIndex)" @click="addBtn">添加指标</Button>
       </Col>
     </Row>
     </Col>
     <Col span="24" class="fpTable">
-    <Table border :columns="config" :data="datalist" class="margin-bottom-10"></Table>
+    <Table border :columns="config"  :data="datalist" class="margin-bottom-10"></Table>
     <Row>
-      <Page style="float:right" :total="pageTotal" @on-change="currentPage" show-elevator show-total></Page>
+      <Page style="float:right" :current="IndexSearch.pager" :total="pageTotal" @on-change="currentPage" show-elevator show-total></Page>
     </Row>
     </Col>
     <!-- 编辑功能模态框 -->

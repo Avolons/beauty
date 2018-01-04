@@ -213,7 +213,7 @@
 				</Col>
 
 				<Col span="6">
-				<Button @click="getData" type="primary">查询</Button>
+				<Button @click="searchParam.pager=1;getData()" type="primary">查询</Button>
 				</Col>
 			</Row>
 			<div class="sys-depart_main_list">

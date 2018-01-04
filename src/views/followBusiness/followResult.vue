@@ -22,7 +22,7 @@
 			<Input type="text" v-model="searchParams.schemeName" placeholder="请输入随访方案"></Input>
 			</Col>
 			<Col span="6">
-			<Button @click="getData" type="primary">查询</Button>
+			<Button @click="searchParams.pager=1;getData()" type="primary">查询</Button>
 			</Col>
 		</Row>
 		</Col>
@@ -30,7 +30,7 @@
 		<Col span="24" class="fpTable">
 		<Table border :columns="config" :data="dataList" class="margin-bottom-10"></Table>
 		<Row>
-			<Page style="float:right" :total="totalPage" @on-change="changePage" show-elevator show-total></Page>
+			<Page style="float:right" :current="searchParams.pager"  :total="totalPage" @on-change="changePage" show-elevator show-total></Page>
 		</Row>
 		</Col>
 		<!-- 随访模态框 -->

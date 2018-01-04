@@ -76,14 +76,14 @@
                 <DatePicker @on-change="timeChange" type="daterange" placement="bottom-end" placeholder="请选择时间范围"></DatePicker>
                 </Col>
                 <Col span="6">
-                    <Button @click="getData" type="primary">查询</Button>
+                    <Button  @click="searchParams.pager=1;getData()" type="primary">查询</Button>
                 </Col>
             </Row>
             <div class="inter-down_main_list">
                 <Table border :columns="config" :data="dataList"></Table>
             </div>
             <Row class="inter-down_main_page">
-                <Page style="float:right" :total="totalPage" @on-change="changePage" show-elevator show-total></Page>
+                <Page style="float:right" :total="totalPage" :current="searchParams.pager" @on-change="changePage" show-elevator show-total></Page>
             </Row>
         </div>
     </div>

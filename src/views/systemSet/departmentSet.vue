@@ -78,7 +78,7 @@
 				</Col>
 			</Row>
 			<div class="sys-depart_main_add">
-				<Button @click="getData" type="primary">查询</Button>
+				<Button @click="searchParam.page=1;getData()" type="primary">查询</Button>
 				<Button v-if="!menuShow(this.AM.Systems.addDepart)" @click="addData" type="info">新增科室</Button>
 			</div>
 			<div class="sys-depart_main_list">

@@ -22,7 +22,7 @@
 				:on-exceeded-size="handleMaxSize" 
 				:before-upload="handleBeforeUpload" 
 				multiple 
-				:name="upfile"
+				name="upfile"
 				type="drag" 
 				:action="API.Data.PatImport" 
 				style="display: inline-block;width:158px;">

@@ -14,7 +14,7 @@ Vue.prototype.$http = axios;
 /* 默认最长响应时间 */
 axios.defaults.timeout = 5000;
 /* 默认的接口地址 */
-axios.defaults.baseURL = 'http://192.168.1.100:8088';
+/* axios.defaults.baseURL = 'http://192.168.1.100:8088'; */
 
 let JsonData = ['/order/temp/visit', '/visit/order/vet/save', '/visit/order/notice', '/ordertask/vet', '/question/script/save', '/questionscheme/save', '/questiontemple/save', '/questiontarget/save'];
 // 添加请求拦截器

@@ -483,6 +483,9 @@ export default {
 		 */
 		handleSave() {
 			this.$refs["sendData"].validate((valid) => {
+				if(!valid){
+					return false;
+				}
 				if (this.sendData.visitEndTime == "" || this.sendData.visitStartTime == "") {
 					this.$Message.warning("请填写具体随访发起时间");
 					return false;
@@ -495,8 +498,8 @@ export default {
 							this.sendData.hzxxIds.push(item.id);
 						}
 						let ajaxData=JSON.parse(JSON.stringify(this.sendData));
-						delete ajaxData.admin;
-						delete ajaxData.adminId;
+						/* delete ajaxData.admin;
+						delete ajaxData.adminId; */
 						API.Notice.createNotice(ajaxData).then((res) => {
 							this.$Message.success("发起成功");
 						}).catch((err) => {

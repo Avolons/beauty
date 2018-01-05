@@ -231,8 +231,9 @@
 							<FormItem>
 								<Button @click="returnStep(2)" style="margin-right:10px">返回上一步</Button>
 								<Button type="primary" @click="handleSave()">发起随访</Button>
-							</FormItem>
+							</FormItem>	
 						</Form>
+								
 						<!-- <div class="creatNotice_main_success">
 								<Icon type="checkmark-circled"></Icon>
 								<Alert type="success">恭喜你，发起通知成功</Alert>
@@ -429,6 +430,9 @@ export default {
 		 */
 		handleSave() {
 			this.$refs["sendData"].validate((valid) => {
+				if(!valid){
+					return false;
+				}
 				if (this.timeobj.date == "" || this.timeobj.time == "") {
 					this.$Message.warning("请填写具体随访发起时间");
 					return false;
@@ -496,6 +500,7 @@ export default {
 			 */
 			this.sendData.admin = this.searchParams.admin.split(",")[0];
 			this.sendData.adminId = this.searchParams.admin.split(",")[1];
+			this.searchParams.adminId=this.sendData.adminId;
 			API.FollowBussiness.patList(this.searchParams).then((res) => {
 				this.dataList = this.formData(res.data);
 				this.totalPage = res.total;

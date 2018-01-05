@@ -447,6 +447,9 @@ export default {
 						this.sendData.visitStartTime = this.timeobj.date + " " + this.timeobj.time;
 						API.FollowBussiness.patSubmit(this.sendData).then((res) => {
 							this.$Message.success("发起成功");
+							setTimeout(()=> {
+								this.$router.push("/followBusiness/followPlan");
+							}, 1000);
 						}).catch((err) => {
 
 						});
@@ -557,12 +560,6 @@ export default {
 		 * 添加患者
 		 */
 		addPat(data, index) {
-			/* for (let item of addList) {
-				if(item.id==data.id){
-					this.$Message
-					return false;
-				}		
-			} */
 			let copyData = JSON.parse(JSON.stringify(data));
 			copyData.isAdd = 1;
 			this.dataList.splice(index, 1, copyData);

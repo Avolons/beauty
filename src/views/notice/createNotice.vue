@@ -502,6 +502,9 @@ export default {
 						delete ajaxData.adminId; */
 						API.Notice.createNotice(ajaxData).then((res) => {
 							this.$Message.success("发起成功");
+							setTimeout(()=> {
+								this.$router.push("/notice/viewNotice");
+							}, 1000);
 						}).catch((err) => {
 
 						});
@@ -687,7 +690,6 @@ export default {
 			}).then((res) => {
 				this.diseaseList = res.data;
 			}).catch((error) => {
-				console.log(error)
 			})
 		},
 	},

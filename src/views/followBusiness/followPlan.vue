@@ -42,7 +42,7 @@
                     <Input v-model="AIform.AIphone" placeholder="请输入号码" type="text"></Input>
                 </FormItem>
                 <FormItem>
-                    <Button type="primary" @click="submitData('AIform')">提交AI</Button>
+                    <Button type="primary" @click="submitData('AIform')">提交</Button>
                 </FormItem>
             </Form>
         </Modal>

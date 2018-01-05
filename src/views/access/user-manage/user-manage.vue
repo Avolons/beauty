@@ -4,6 +4,11 @@
         &_add {
             margin-bottom: 10px;
         }
+        &_actionTitle{
+            margin: 10px 0;
+            font-size: 15px;
+            font-weight: 400;
+        }
         &_search {
             box-sizing: border-box;
             margin-bottom: 10px;
@@ -109,7 +114,10 @@
                     </Col>
                 </Row>
                 <Table style="margin-top:30px;" border :columns="tempconfig" :data="actionTree"></Table>
+                <h3 class="user_main_actionTitle">已选方案:</h3>
+                <Tag  @on-close="deletAction" :name="index" v-for="item,index in selectList" :key="item.id" closable color="blue">{{item.name}}</Tag>
                 <div slot="footer" class="user_main_btnList">
+                    <Button type="primary" @click="saveDisAction">确认</Button>
                 </div>
             </Modal>
             <Modal v-model="passwordmodal" title="重置密码">
@@ -127,6 +135,7 @@ import { API } from '../../../services';
 export default {
     data() {
         return {
+            selectList:[],//已选方案tag
             //当前用户id
             UserId: 0,
             //新密码
@@ -354,7 +363,7 @@ export default {
                                 },
                                 on: {
                                     click: () => {
-                                        this.saveDisAction(params.row.id);
+                                        this.addAction(params.row);
                                     }
                                 }
                             }, '选择'),
@@ -466,7 +475,7 @@ export default {
             })
         },
         /** 
-         * 
+         * 锁定用户
          */
         lookUser(id) {
             let self = this;
@@ -486,7 +495,7 @@ export default {
             });
         },
         /** 
-         * 
+         * 解锁用户
          */
         unLookUser(id) {
             let self = this;
@@ -558,16 +567,39 @@ export default {
             });
         },
         /** 
+         * 默认方案是选择新增方案
+         */
+        addAction(item){
+            for (const ite of this.selectList) {
+                if(item.id==ite.id){
+                    this.$Message.success("您已添加过");
+                    return false;
+                }  
+            }
+            this.selectList.push(item);
+        },
+        /** 
+         * 删除已选择的方案
+         */
+        deletAction(event,name){
+            this.selectList.splice(name,1);
+        },
+        /** 
          * 保存方案
          */
-        saveDisAction(id) {
+        saveDisAction() {
+            let idArray=[];
+            for (const item of this.selectList) {
+                idArray.push(item.id);
+            }
             API.Jurisdiction.saveAction({
                 id: this.UserId,
-                qtId: id
+                qtId: idArray.join(',')
             }).then((res) => {
-                this.$Message.success("选择成功");
+                this.$Message.success("保存成功");
                 this.actionmodal = false;
                 this.getData();
+                this.selectList=[];
             }).catch((err) => {
 
             });

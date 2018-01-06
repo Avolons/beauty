@@ -63,10 +63,11 @@
                 <Select v-model="searchParams.status" style="width:200px">
                     <Option value="">全选</Option>
                     <Option value="0">待审核</Option>
-                    <Option value="1">已审核</Option>
-                    <Option value="10">未处理</Option>
-                    <Option value="11">已处理</Option>
-                    <Option value="12">已取消</Option>
+                    <Option value="1">审核不通过</Option>
+                    <Option value="2">审核通过</Option>
+                    <Option value="3">已排期</Option>
+                    <Option value="4">已取消</Option>
+                    <Option value="5">无方案</Option>
                 </Select>
                 </Col>
                 <Col span="6">
@@ -120,7 +121,7 @@ export default {
                 },
                 {
                     title: '状态',
-                    key: 'vetStatusStr'
+                    key: 'statusStr'
                 },
                 {
                     title: '通知总人数',

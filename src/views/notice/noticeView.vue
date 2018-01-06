@@ -109,7 +109,7 @@ export default {
             config: [
                 {
                     title: '通知计划名称',
-                    key: 'activeName'
+                    key: 'taskName'
                 },
                 {
                     title: '通知方案',
@@ -148,7 +148,7 @@ export default {
                                     size: 'small',
                                 },
                                 'class':{
-                                  noshow:params.row.vetStatusStr.trim()=="已取消"||params.row.vetStatusStr.trim()=="未开始",
+                                  noshow:params.row.statusStr.trim()=="已取消"||params.row.statusStr.trim()=="未开始",
                                   menuHide:this.menuShow(this.AM.Notice.cancelNotice)
                                 },
                                 style: {

@@ -135,7 +135,7 @@ export default {
 				},
 
 				{
-					title: '患者',
+					title: '患者姓名',
 					key: 'brxm',
 					align: 'center'
 				},

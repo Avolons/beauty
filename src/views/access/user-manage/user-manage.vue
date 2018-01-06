@@ -160,24 +160,24 @@ export default {
                 page: 1,//当前页码
                 dpId: "",//科室Id
                 yhName: "", //用户名
-                types: "-1",//身份（0管理员，1医生）
+                types: "-1",//角色（0管理员，1医生）
                 state: "-1" //状态（0锁定，1正常）
             },
             actionmodal: false,//方案选择模态框
             passwordmodal: false,//密码更改模态框
             config: [
                 {
-                    title: '角色',
-                    key: 'role',
-                    render: (h, params) => {
-                        return params.row.admin.type == 0 ? "管理员" : "医生";
-                    }
-                },
-                {
                     title: '用户名',
                     key: 'username',
                     render: (h, params) => {
                         return params.row.admin.username
+                    }
+                },
+                {
+                    title: '身份',
+                    key: 'role',
+                    render: (h, params) => {
+                        return params.row.admin.type == 0 ? "管理员" : "医生";
                     }
                 },
                 {
@@ -192,14 +192,14 @@ export default {
                     key: 'dvtName',
                 },
                 {
-                    title: '姓名',
+                    title: '真实姓名',
                     key: 'name',
                     render: (h, params) => {
                         return params.row.admin.realname
                     }
                 },
                 {
-                    title: '手机',
+                    title: '手机号码',
                     key: 'mobile',
                     render: (h, params) => {
                         return params.row.admin.mobile

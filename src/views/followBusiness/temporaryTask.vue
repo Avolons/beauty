@@ -331,7 +331,7 @@ export default {
 			],
 			patConfig: [
 				{
-					title: '姓名',
+					title: '患者姓名',
 					key: 'brxm'
 				},
 				{

@@ -79,26 +79,23 @@
     │   ├── 500.vue
     │   ├── error-page.less
     │   └── error-page.vue
-    ├── followBusiness
-    │   ├── followPlan.vue
-    │   ├── followResult.vue
-    │   ├── page
-    │   │   └── page.vue
-    │   ├── patientList.vue
-    │   └── temporaryTask.vue
-    ├── followSetting
-    │   ├── followIndex.vue
-    │   ├── followProblems.vue
-    │   ├── followTemplate.vue
-    │   ├── followWay.vue
-    │   ├── template
-    │   │   ├── aa.js
+    ├── followBusiness 随访业务
+    │   ├── followPlan.vue 随访计划
+    │   ├── followResult.vue 随访记录
+    │   ├── patientList.vue 患者列表
+    │   └── temporaryTask.vue 发起随访
+    ├── followSetting 随访设置
+    │   ├── followIndex.vue 随访指标
+    │   ├── followProblems.vue 随访问题
+    │   ├── followTemplate.vue 随访模板
+    │   ├── followWay.vue 随访方案
+    │   ├── template  模板编辑
     │   │   └── template.vue
-    │   ├── voice
+    │   ├── voice 话术编辑
     │   │   └── voice.vue
-    │   └── way
+    │   └── way 方案编辑
     │       └── way.vue
-    ├── home
+    ├── home 首页
     │   ├── components
     │   │   ├── countUp.vue
     │   │   ├── dataSourcePie.vue
@@ -119,24 +116,20 @@
     │       ├── get-city-value.js
     │       ├── get-geography-value.js
     │       └── get-style-json.js
-    ├── homePage.vue
-    ├── international
-    │   ├── international.less
-    │   └── international.vue
     ├── login.less
-    ├── login.vue
-    ├── main-components
-    │   ├── breadcrumb-nav.vue
-    │   ├── fullscreen.vue
-    │   ├── lockscreen
+    ├── login.vue 登录
+    ├── main-components 组件
+    │   ├── breadcrumb-nav.vue 面包屑
+    │   ├── fullscreen.vue 全屏
+    │   ├── lockscreen 锁屏
     │   │   ├── components
     │   │   │   ├── locking-page.vue
     │   │   │   └── unlock.vue
     │   │   ├── lockscreen.vue
     │   │   └── styles
     │   │       └── unlock.less
-    │   ├── message-tip.vue
-    │   ├── shrinkable-menu
+    │   ├── message-tip.vue 
+    │   ├── shrinkable-menu 左侧按钮列表
     │   │   ├── components
     │   │   │   ├── sidebarMenu.vue
     │   │   │   └── sidebarMenuShrink.vue
@@ -144,48 +137,31 @@
     │   │   └── styles
     │   │       └── menu.less
     │   ├── tags-page-opened.vue
-    │   └── theme-switch
+    │   └── theme-switch 主题切换
     │       ├── theme
     │       │   ├── g.css
     │       │   ├── r.css
     │       │   └── y.css
     │       └── theme-switch.vue
-    ├── main.less
-    ├── menReview
-    │   ├── flWayRe.vue
-    │   ├── planRe.vue
-    │   └── wayRe.vue
-    ├── message
+    ├── main.less 
+    ├── menReview 人工数据审核
+    │   ├── flWayRe.vue 随访结果审核
+    │   ├── planRe.vue 随访计划审核
+    │   └── wayRe.vue  重复方案审核
+    ├── message 消息通知
     │   ├── message.less
     │   └── message.vue
-    ├── my-components
-    │   ├── area-linkage
-    │   │   ├── area-linkage.less
-    │   │   ├── area-linkage.vue
-    │   │   ├── components
-    │   │   │   ├── al-cascader.vue
-    │   │   │   └── al-selector.vue
-    │   │   └── util
-    │   │       └── index.js
-    │   └── text-editor
-    │       ├── text-editor.vue
-    │       └── tinymce
-    │           ├── langs
-    │           ├── plugins
-    │           ├── skins
-    │           └── themes
-    ├── notice
-    │   ├── createNotice.vue
-    │   └── noticeView.vue
-    ├── own-space
+    ├── notice 通知
+    │   ├── createNotice.vue 发起通知计划
+    │   └── noticeView.vue 查看通知进度
+    ├── own-space  个人信息
     │   ├── own-space.less
-    │   └── own-space.vue
-    └── systemSet
-        ├── departmentSet.vue
-        ├── diseaseSet.vue
-        ├── followType.vue
-        ├── systemLog.vue
-        ├── systemSetup.vue
-        ├── timedTask.vue
-        └── timedTaskLog.vue
+    │   └── own-space.vue 
+    └── systemSet 系统设置
+        ├── departmentSet.vue 科室设置
+        ├── diseaseSet.vue 疾病设置
+        ├── systemLog.vue 系统日志
+        ├── systemSetup.vue 系统设置
+        ├── timedTask.vue 定时任务
+        └── timedTaskLog.vue 定时任务日志
 ```

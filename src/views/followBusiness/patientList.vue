@@ -350,11 +350,11 @@ export default {
 			//表格配置
 			config: [
 				{
-					title: '编号',
+					title: '患者编号',
 					key: 'brid'
 				},
 				{
-					title: '姓名',
+					title: '患者姓名',
 					key: 'brxm'
 				},
 				{

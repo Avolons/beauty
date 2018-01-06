@@ -226,6 +226,10 @@ export default {
 					key: 'id',
 				},
 				{
+					title: '科室名称',
+					key: 'name',
+				},
+				{
 					title: '类型',
 					key: 'type',
 					render: (h, params) => {
@@ -233,15 +237,11 @@ export default {
 					}
 				},
 				{
-					title: '方案匹配模式',
+					title: '方案匹配',
 					key: 'matchType',
 					render: (h, params) => {
 						return params.row.matchType == 0 ? "疾病" : "医生"
 					}
-				},
-				{
-					title: '名称',
-					key: 'name',
 				},
 				{
 					title: '状态',

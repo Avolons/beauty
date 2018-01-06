@@ -358,7 +358,7 @@ export default {
 			//表格配置
 			config: [
 				{
-					title: '编号',
+					title: '随访编号',
 					key: 'orderNo',
 				},
 				{
@@ -366,11 +366,11 @@ export default {
 					key: 'schemeName',
 				},
 				{
-					title: '患者',
+					title: '患者姓名',
 					key: 'brxm',
 				},
 				{
-					title: '状态',
+					title: '随访状态',
 					key: 'statusStr',
 				},
 				{

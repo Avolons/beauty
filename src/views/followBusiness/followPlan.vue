@@ -76,7 +76,7 @@ export default {
                 },
 
                 {
-                    title: '状态',
+                    title: '审核状态',
                     key: 'statusStr',
                     align: 'center'
                 },

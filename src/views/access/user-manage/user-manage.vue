@@ -315,6 +315,7 @@ export default {
 								},
                                 on: {
                                     click: () => {
+                                        this.selectList=[];
                                         this.actionUser(params.row.admin.id);
                                     }
                                 }

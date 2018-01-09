@@ -47,7 +47,7 @@ window.RSYS = new Vue({
         // 权限菜单过滤相关
         this.$store.commit('updateMenulist');
         // iview-admin检查更新
-        util.checkUpdate(this);
+        /* util.checkUpdate(this); */
     },
     created () {
         let tagsList = [];

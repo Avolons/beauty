@@ -314,6 +314,10 @@ export default {
               label: item.name
             }))
           })
+          this.deparmentSelect.splice(0,0,{
+            value:"",
+            label:"全部"
+          })
         } else {
           console.log(res.code)
         }

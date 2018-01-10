@@ -464,6 +464,11 @@ export default {
 		getDepartList() {
 			API.Systems.listDisDepart().then((res) => {
 				this.departList = res.data;
+				this.departList.splice(0,0,{
+					id:"",
+					name:'全部'
+				});
+				this.getDoctorList();
 			}).catch((err) => {
 
 			});

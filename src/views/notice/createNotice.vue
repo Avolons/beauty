@@ -167,7 +167,6 @@
 							选择接收随访患者
 						</h3>
 						<Row class="creatNotice_main_search" :gutter="15">
-
 							<Col span="6">
 							<span>
 								患者姓名：
@@ -530,6 +529,11 @@ export default {
 		getDepartList() {
 			API.Systems.listDisDepart().then((res) => {
 				this.departList = res.data;
+				this.departList.splice(0,0,{
+					id:"",
+					name:'全部'
+				});
+				this.getDoctorList();
 			}).catch((err) => {
 
 			});

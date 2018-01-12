@@ -75,7 +75,7 @@ export default {
     data() {
         return {
             page: 1,//当前页码
-            totalPage: 10,//总页码
+            totalPage: 0,//总页码
             pageSize:10,
             //当前被点击触发的数据
             currentInfo: {
@@ -199,8 +199,8 @@ export default {
                 page: this.page
             }).then((res) => {
                 this.dataList=res.data;
-                this.totalPage = res.data.totalRow;
-				this.pageSize=res.data.pageSize;
+                this.totalPage = res.totleRow;
+				this.pageSize=res.pageSize;
             }).catch((err) => {
 
             });

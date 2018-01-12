@@ -14,9 +14,9 @@ Vue.prototype.$http = axios;
 /* 默认最长响应时间 */
 axios.defaults.timeout = 5000;
 /* 默认的接口地址 */
-axios.defaults.baseURL = 'http://192.168.1.100:8080';
+/* axios.defaults.baseURL = 'http://192.168.1.100:8080'; */
 
-let JsonData = ['/order/temp/visit', '/visit/order/vet/save', '/visit/order/notice', '/ordertask/vet', '/question/script/save', '/questionscheme/save', '/questiontemple/save', '/questiontarget/save'];
+let JsonData = ['/order/temp/testvisit', '/order/temp/visit', '/visit/order/vet/save', '/visit/order/notice', '/ordertask/vet', '/question/script/save', '/questionscheme/save', '/questiontemple/save', '/questiontarget/save'];
 // 添加请求拦截器
 axios.interceptors.request.use(function (config) {
     let flag = 0;
@@ -961,6 +961,17 @@ export const FollowBussiness = {
      */
     patSubmit (data) {
         return fetch('post', '/visit/order/temp/visit', data);
+    },
+    /**
+     * 测试时间
+     * "schemeId":"66afc543-e0ab-11e7-a153-6cae8b369de4", //方案id(必须)
+    "schemeName":"测试方案",                            //方案名称(必须)
+    "visitStartTime":"2017-12-19 15:32:33"            //随访起始时间(可选)
+     * @param {any} data
+     * @returns
+      */
+    patCeshi (data) {
+        return fetch('post', '/visit/order/temp/testvisit', data);
     }
 };
 

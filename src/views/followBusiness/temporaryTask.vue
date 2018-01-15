@@ -214,7 +214,7 @@
 						<Button @click="returnStep(1)" style="margin-right:10px">返回上一步</Button>
 					</TabPane>
 					<TabPane label="标签三" name="step_three">
-						<Form ref="sendData" class="creatNotice_main_form" :model="sendData" :rules="validate.sendData" :label-width="100">
+						<Form ref="sendData" class="creatNotice_main_form" :model="sendData" :rules="validate.sendData" :label-width="110">
 							<FormItem label="医生" style="width:450px;">
 								<Input disabled v-model="sendData.admin" style="width: 435px"></Input>
 							</FormItem>
@@ -231,10 +231,10 @@
 							<FormItem>
 								<Button @click="returnStep(2)" style="margin-right:10px">返回上一步</Button>
 								<Button type="primary" @click="handleSave()">发起随访</Button>
-								<Button type="info" @click="submitCeshi">查看时间</Button>
+								<!-- <Button type="info" @click="submitCeshi">查看时间</Button> -->
 							</FormItem>
 						</Form>
-						<Table border :columns="timeConfig" :data="timeList"></Table>
+						<!-- <Table border :columns="timeConfig" :data="timeList"></Table> -->
 						<!-- <div class="creatNotice_main_success">
 									<Icon type="checkmark-circled"></Icon>
 									<Alert type="success">恭喜你，发起通知成功</Alert>
@@ -253,21 +253,21 @@ export default {
 	data() {
 		return {
 			//用来测试的，没几把用
-			timeList: [],
-			timeConfig: [
-				{
-					title: '方案名称',
-					key: 'schemeName'
-				},
-				{
-					title: '编号',
-					key: 'orderNo'
-				},
-				{
-					title: '随访时间',
-					key: 'dateBegin'
-				},
-			],
+			// timeList: [],
+			// timeConfig: [
+			// 	{
+			// 		title: '方案名称',
+			// 		key: 'schemeName'
+			// 	},
+			// 	{
+			// 		title: '编号',
+			// 		key: 'orderNo'
+			// 	},
+			// 	{
+			// 		title: '随访时间',
+			// 		key: 'dateBegin'
+			// 	},
+			// ],
 			timeobj: {
 				date: "",
 				time: "",
@@ -475,21 +475,21 @@ export default {
 				})
 			});
 		},
-		submitCeshi() {
-			API.FollowBussiness.patCeshi({
-				schemeId: this.sendData.schemeId,
-				schemeName: this.sendData.schemeName,
-				visitStartTime: this.sendData.visitStartTime,
-			}).then((res) => {
-				this.timeList=res.data;
-				/* this.$Message.success("发起成功");
-				setTimeout(()=> {
-					this.$router.push("/followBusiness/followPlan");
-				}, 1000); */
-			}).catch((err) => {
+		// submitCeshi() {
+		// 	API.FollowBussiness.patCeshi({
+		// 		schemeId: this.sendData.schemeId,
+		// 		schemeName: this.sendData.schemeName,
+		// 		visitStartTime: this.sendData.visitStartTime,
+		// 	}).then((res) => {
+		// 		this.timeList=res.data;
+		// 		/* this.$Message.success("发起成功");
+		// 		setTimeout(()=> {
+		// 			this.$router.push("/followBusiness/followPlan");
+		// 		}, 1000); */
+		// 	}).catch((err) => {
 
-			});
-		},
+		// 	});
+		// },
 		/** 
 		 * 获取随访方案
 		 */

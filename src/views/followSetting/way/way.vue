@@ -143,8 +143,8 @@
 			width: 90%;
 		}
 		&_saveButton {
-			margin: 10px auto;
-			display: block;
+			margin: 10px 10px;
+			display: inline-block;
 			margin-top: 30px;
 		}
 		&_timePicker {
@@ -160,7 +160,7 @@
 		<!-- 随访方案信息 -->
 		<Col span="24">
 		<h2 class="way_main_commonTitle">随访方案信息:</h2>
-		<Form ref="wayForms" :model="wayForm" :label-width="80" :rules="validate.followAction" class="way_main_wayForm">
+		<Form ref="wayForms" :model="wayForm" :label-width="90" :rules="validate.followAction" class="way_main_wayForm">
 			<FormItem label="方案名称" prop="name">
 				<Input v-model="wayForm.name" placeholder="请输入方案名称"></Input>
 			</FormItem>
@@ -188,125 +188,141 @@
 					<Option v-for="item in temList" :value="item.id" :key="item.id">{{ item.name }}</Option>
 				</Select>
 			</FormItem>
+			<FormItem label="随访开始时间" style="width:450px;">
+				<DatePicker @on-change="dateChange" format="yyyy-MM-dd" placement="bottom-end" placeholder="请选择随访发起时间" style="width:50%"></DatePicker>
+				<TimePicker @on-change="ylTimeChange" format="HH:mm:ss" placeholder="请选择时间" style="width: 112px"></TimePicker>
+			</FormItem>
 		</Form>
 		</Col>
 		<!-- 配置随访方案 -->
 		<h2 class="way_main_commonTitle">配置随访方案:</h2>
 		<Col span="24" v-for="(item,index) in showList" :key="item.id">
-		<!-- 模板名称&&随访周期 -->
-		<Row>
-			<Col span="1" class="lineheight32">
-			<h3 class="way_main_temIndex">{{index+1}}</h3>
-			</Col>
-			<Col span="2" style="max-width:70px" class="lineheight32 way_main_commonTemTitle">
-			<strong>模板名称:</strong>
-			</Col>
-			<Col span="21" class="lineheight32 way_main_commonTemTitle">
-			<strong>{{item.name}}</strong>
-			</Col>
-			<Col span="2" style="max-width:65px" class="lineheight32 " offset="1">
-			<strong>随访周期:</strong>
-			</Col>
-			<Col span="21" class="lineheight32">
+			<!-- 模板名称&&随访周期 -->
 			<Row>
-				<Col span="2">
-				<span>随访次数:</span>
+				<Col span="1" class="lineheight32">
+				<h3 class="way_main_temIndex">{{index+1}}</h3>
+				</Col>
+				<Col span="2" style="max-width:70px" class="lineheight32 way_main_commonTemTitle">
+				<strong>模板名称:</strong>
+				</Col>
+				<Col span="21" class="lineheight32 way_main_commonTemTitle">
+				<strong>{{item.name}}</strong>
+				</Col>
+				<Col span="2" style="max-width:65px" class="lineheight32 " offset="1">
+				<strong>随访周期:</strong>
+				</Col>
+				<Col span="21" class="lineheight32">
+				<Row>
+					<Col span="2">
+					<span>随访次数:</span>
+					</Col>
+					<Col span="21">
+					<InputNumber size="small" :max="100" :min="1" v-model="item.questionTemples.questionTempleFrequency.number"></InputNumber>次, 第
+					<InputNumber v-if="index==0" size="small" :min="0" v-model="item.questionTemples.questionTempleFrequency.firstday"></InputNumber> 天,第一次随访,每隔
+					<InputNumber size="small" :max="100" :min="1" v-model="item.questionTemples.questionTempleFrequency.intervalDays"></InputNumber> 天，随访一次。
+					</Col>
+				</Row>
+				</Col>
+			</Row>
+			<!-- 随访区间 -->
+			<Row style="margin:10px 0;">
+				<Col style="max-width:65px" span="2" class="lineheight32" offset="1">
+				<strong>随访区间:</strong>
+				</Col>
+				<Col span="21" class="lineheight32">
+				<Row>
+					<Col span="2">
+					<span>时间段:</span>
+					</Col>
+					<template v-for="ite,i in item.questionTemples.questionTempleTimeRanges">
+						<Col span="4" class="way_main_timeSection">
+						<span>{{ite.beginTime}}</span>
+						<span>-</span>
+						<span>{{ite.endTime}}</span>
+						<span @click="deletTime(item.questionTemples.questionTempleTimeRanges,i)">
+							<Icon class="way_main_closeTime" type="ios-close"></Icon>
+						</span>
+						</Col>
+					</template>
+					<Col span="2">
+					<Button type="primary" size="small" @click="addTime(item)">新增</Button>
+					</Col>
+				</Row>
+				</Col>
+			</Row>
+			<Row style="margin-top:10px;">
+				<Col style="max-width:65px" span="2" offset="1">
+				<strong style="margin-top:5px;display:block">语音配置:</strong>
 				</Col>
 				<Col span="21">
-				<InputNumber size="small" :max="100" :min="1" v-model="item.questionTemples.questionTempleFrequency.number"></InputNumber>次, 第
-				<InputNumber v-if="index==0" size="small" :min="0" v-model="item.questionTemples.questionTempleFrequency.firstday"></InputNumber> 天,第一次随访,每隔
-				<InputNumber size="small" :max="100" :min="1" v-model="item.questionTemples.questionTempleFrequency.intervalDays"></InputNumber> 天，随访一次。
-				</Col>
-			</Row>
-			</Col>
-		</Row>
-		<!-- 随访区间 -->
-		<Row style="margin:10px 0;">
-			<Col style="max-width:65px" span="2" class="lineheight32" offset="1">
-			<strong>随访区间:</strong>
-			</Col>
-			<Col span="21" class="lineheight32">
-			<Row>
-				<Col span="2">
-				<span>时间段:</span>
-				</Col>
-				<template v-for="ite,i in item.questionTemples.questionTempleTimeRanges">
-					<Col span="4" class="way_main_timeSection">
-					<span>{{ite.beginTime}}</span>
-					<span>-</span>
-					<span>{{ite.endTime}}</span>
-					<span @click="deletTime(item.questionTemples.questionTempleTimeRanges,i)">
-						<Icon class="way_main_closeTime" type="ios-close"></Icon>
+				<!-- title和只能语音单独处理 -->
+				<Row class="wayIndex" v-for="ite in item.questionTemples.questionSchemeWavs" :key="ite.id">
+					<Col span="2">
+					<span class="way_main_questSize">
+						{{ite.questionIdXml}}
 					</span>
 					</Col>
-				</template>
-				<Col span="2">
-				<Button type="primary" size="small" @click="addTime(item)">新增</Button>
+					<Col span="20">
+					<Collapse v-model="ite.questionId">
+						<Panel name="1">
+							<span class="way_main_nowarp">问题:{{ite.questionName}}</span>
+							<Icon type="chevron-right" size="14" color="#999" style="line-height: 35px; float:right; margin-right:10px"></Icon>
+							<div slot="content">
+								<Form  :label-width="110" v-for="it,index in ite.questionTempleQuestionJumps" :key="index" v-if="it.switchId==''">
+									<FormItem  label="问题AI语音">
+										<Input v-model="it.switchWav" placeholder="请输入问题ai语音"></Input>
+									</FormItem>
+								</Form>
+								<Form :model="it" :rules="validate.followAction" :label-width="110" v-for="it,index in ite.questionTempleQuestionJumps" :key="index" v-if="it.switchId!=''">
+									<FormItem class="way_main_questTitle" label="处理">
+										<span>{{it.switchId==-1?"无匹配":it.switchId==-2?"无声音":it.switchId==-3?"通用处理":it.switchId==""?"人工ai":it.switchId}}</span>
+									</FormItem>
+									<FormItem v-if="it.switchId!='-1'&&it.switchId!='-2'&&it.switchId!='-3'&&it.switchId!=''" label="话术名称">
+											<span>{{it.switchText}}</span>
+									</FormItem>
+									<FormItem v-if="it.switchId!=-1&&it.switchId!=-2&&it.switchId!=-3" label="判别规则">
+										<span>{{it.switchRegexText}}</span>
+									</FormItem>
+									<FormItem v-if="it.switchId!=-1&&it.switchId!=-2&&it.switchId!=-3" label="指标值">
+										<span>{{it.keyname}} ：{{it.keyvalue}}</span>
+									</FormItem>
+									<FormItem v-if="it.switchId==-2"  label="超时语音">
+										<Input v-model="it.silenceWav" placeholder="请输入超时语音地址"></Input>
+									</FormItem>
+									<FormItem   label="AI语音">
+										<Input v-model="it.switchWav" placeholder="请输入ai语音地址"></Input>
+									</FormItem>
+									<FormItem label="跳转问题编号">
+										<span>{{it.nextQuestionId}}</span>
+									</FormItem>
+									<FormItem v-if="it.switchId==-1" label="无匹配超次数跳转">
+										<Input v-model="it.outRptSwitchID" placeholder="请输入无匹配的跳转"></Input>
+										<!-- <span>{{it.outRptSwitchId}}</span> -->
+									</FormItem>
+								</Form>
+							</div>
+						</Panel>
+					</Collapse>
+					</Col>
+				</Row>
 				</Col>
 			</Row>
-			</Col>
-		</Row>
-		<Row style="margin-top:10px;">
-			<Col style="max-width:65px" span="2" offset="1">
-			<strong style="margin-top:5px;display:block">语音配置:</strong>
-			</Col>
-			<Col span="21">
-			<!-- title和只能语音单独处理 -->
-			<Row class="wayIndex" v-for="ite in item.questionTemples.questionSchemeWavs" :key="ite.id">
-				<Col span="2">
-				<span class="way_main_questSize">
-					{{ite.questionIdXml}}
-				</span>
-				</Col>
-				<Col span="20">
-				<Collapse v-model="ite.questionId">
-					<Panel name="1">
-						<span class="way_main_nowarp">问题:{{ite.questionName}}</span>
-						<Icon type="chevron-right" size="14" color="#999" style="line-height: 35px; float:right; margin-right:10px"></Icon>
-						<div slot="content">
-							<Form  :label-width="110" v-for="it,index in ite.questionTempleQuestionJumps" :key="index" v-if="it.switchId==''">
-								<FormItem  label="问题AI语音">
-									<Input v-model="it.switchWav" placeholder="请输入问题ai语音"></Input>
-								</FormItem>
-							</Form>
-							<Form :model="it" :rules="validate.followAction" :label-width="110" v-for="it,index in ite.questionTempleQuestionJumps" :key="index" v-if="it.switchId!=''">
-								<FormItem class="way_main_questTitle" label="处理">
-									<span>{{it.switchId==-1?"无匹配":it.switchId==-2?"无声音":it.switchId==-3?"通用处理":it.switchId==""?"人工ai":it.switchId}}</span>
-								</FormItem>
-								<FormItem v-if="it.switchId!='-1'&&it.switchId!='-2'&&it.switchId!='-3'&&it.switchId!=''" label="话术名称">
-										<span>{{it.switchText}}</span>
-								</FormItem>
-								<FormItem v-if="it.switchId!=-1&&it.switchId!=-2&&it.switchId!=-3" label="判别规则">
-									<span>{{it.switchRegexText}}</span>
-								</FormItem>
-								<FormItem v-if="it.switchId!=-1&&it.switchId!=-2&&it.switchId!=-3" label="指标值">
-									<span>{{it.keyname}} ：{{it.keyvalue}}</span>
-								</FormItem>
-								<FormItem v-if="it.switchId==-2"  label="超时语音">
-									<Input v-model="it.silenceWav" placeholder="请输入超时语音地址"></Input>
-								</FormItem>
-								<FormItem   label="AI语音">
-									<Input v-model="it.switchWav" placeholder="请输入ai语音地址"></Input>
-								</FormItem>
-								<FormItem label="跳转问题编号">
-									<span>{{it.nextQuestionId}}</span>
-								</FormItem>
-								<FormItem v-if="it.switchId==-1" label="无匹配超次数跳转">
-									<Input v-model="it.outRptSwitchID" placeholder="请输入无匹配的跳转"></Input>
-									<!-- <span>{{it.outRptSwitchId}}</span> -->
-								</FormItem>
-							</Form>
-						</div>
-					</Panel>
-				</Collapse>
-				</Col>
-			</Row>
-			</Col>
-		</Row>
 		</Col>
 		<Col span="24">
-		<Button class="way_main_saveButton" type="primary" @click="saveChange">保存</Button>
+			<Row style="margin:10px 0;">
+				<Col span="8" offset="8">
+				  <Button class="way_main_saveButton" type="primary" @click="saveChange">保存</Button>
+					<Button class="way_main_saveButton" type="info" @click="submitCeshi" v-if="this.templateId">查看时间</Button>
+					<Button class="way_main_saveButton" type="success" @click="backWay">返回随访方案</Button>
+				</Col>
+				<Col span="8">
+				</Col>
+			</Row>
 		</Col>
+		<h2 class="way_main_commonTitle" v-if="this.templateId">预览随访方案:</h2>
+		<!-- 预览方案时间 -->
+		<Table border :columns="timeConfig" :data="timeList" v-if="this.templateId"></Table>
+		<!-- model -->
 		<Modal v-model="timemodal" title="新增随访时间段">
 			<TimePicker @on-change="timeChange" class="way_main_timePicker" format="HH:mm:ss" type="timerange" placement="bottom-end" placeholder="请选择随访时间段" style="width: 168px"></TimePicker>
 			<div slot="footer" class="sys-sysset_main_btnList">
@@ -340,6 +356,7 @@ export default {
 				status: 0,//状态：0，启用；1，禁用
 				wayTem: [],
 				tagCount: [],//疾病标签列表
+				visitStartTime: ''
 			},
 			creatTime: [],//生成的时间
 			clickTime: {},//被选中的对象
@@ -356,6 +373,27 @@ export default {
 			targetShow: true,//判断是否疾病标签是否展示
 			targetTag: '',//指标标签
 			tagShow: false,//标签是否展示,
+			//预览方案时间
+			timeList: [],
+			timeConfig: [
+				{
+					title: '方案名称',
+					key: 'schemeName'
+				},
+				{
+					title: '编号',
+					key: 'orderNo'
+				},
+				{
+					title: '随访时间',
+					key: 'dateBegin'
+				},
+			],
+			timeobj: {//随访时间
+				date: "",
+				time: "",
+			},
+
 		}
 	},
 	computed: {
@@ -468,6 +506,52 @@ export default {
 			this.timemodal = true;
 		},
 		/** 
+		 * 日期改变
+		 */
+		dateChange(date) {
+			this.timeobj.date = date;
+		},
+		/** 
+		 * 预览时间改变
+		 */
+		ylTimeChange(date) {
+			this.timeobj.time = date;
+		},
+		/** 
+		 * 预览随访方案
+		 */
+		submitCeshi() {
+			this.wayForm.visitStartTime = this.timeobj.date + " " + this.timeobj.time;
+				console.log(this.wayForm.visitStartTime.toString().length)
+			if(this.wayForm.visitStartTime.toString().length < 18) {
+				this.$Message.error('请选择随访开始时间!')
+			}else {
+				API.FollowBussiness.patCeshi({
+					schemeId: this.templateId,
+					schemeName: this.wayForm.name,
+					visitStartTime: this.wayForm.visitStartTime,
+				}).then((res) => {
+					this.timeList=res.data;
+					/* this.$Message.success("发起成功");
+					setTimeout(()=> {
+						this.$router.push("/followBusiness/followPlan");
+					}, 1000); */
+				}).catch((err) => {
+					console.log(err)
+				});
+			}
+		},
+		/**
+		 * 返回随访方案页
+		 */
+		backWay() {
+			this.$Spin.show();
+			setTimeout(()=>{
+				this.$Spin.hide();
+				this.$router.push("/followSetting/followWay");
+			},1500);
+		},
+		/** 
 		 * 最终的数据保存操作
 		 */
 		saveChange() {
@@ -526,9 +610,9 @@ export default {
 			}
 			API.followWay.addList(sendData).then((res) => {
 				this.$Message.success("保存成功");
-				setTimeout(()=>{
-					this.$router.push("/followSetting/followWay");
-				},1500);
+				// setTimeout(()=>{
+				// 	this.$router.push("/followSetting/followWay");
+				// },1500);
 			}).catch((error) => {
 				console.log(error)
 			})

@@ -312,7 +312,7 @@
 			<Row style="margin:10px 0;">
 				<Col span="8" offset="8">
 				  <Button class="way_main_saveButton" type="primary" @click="saveChange">保存</Button>
-					<Button class="way_main_saveButton" type="info" @click="submitCeshi" v-if="this.templateId">查看时间</Button>
+					<Button class="way_main_saveButton" type="info" @click="submitCeshi" v-if="this.templateId">预览计划</Button>
 					<Button class="way_main_saveButton" type="success" @click="backWay">返回随访方案</Button>
 				</Col>
 				<Col span="8">
@@ -377,16 +377,24 @@ export default {
 			timeList: [],
 			timeConfig: [
 				{
-					title: '方案名称',
-					key: 'schemeName'
+					title: '计划序号',
+					key: 'index',
+					align: 'center',
+					render: (h, params) => {
+                        return h('div', [
+                            h('strong', '第'+Number(params.index+1)+'次')
+                        ]);
+                    }
 				},
 				{
-					title: '编号',
-					key: 'orderNo'
+					title: '模板名称',
+					key: 'schemeName',
+					align: 'center'
 				},
 				{
 					title: '随访时间',
-					key: 'dateBegin'
+					key: 'dateBegin',
+					align: 'center'
 				},
 			],
 			timeobj: {//随访时间

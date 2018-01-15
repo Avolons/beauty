@@ -71,8 +71,8 @@ export default {
              * 登录验证
              */
             form: {
-                name: 'admin',
-                password: 'renshi',
+                name: '',
+                password: '',
                /*  code: "1234", */
             },
             rules: {

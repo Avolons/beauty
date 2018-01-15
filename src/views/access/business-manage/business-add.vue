@@ -65,12 +65,7 @@
 
 <template>
     <div class="busadd">
-        <Modal
-            v-model="modal"
-            title="保存成功"
-            ok-text="管理部门"
-            cancel-text="以后再说"
-            @on-ok="editDepart">
+        <Modal v-model="modal" title="保存成功" ok-text="管理部门" cancel-text="以后再说" @on-ok="editDepart">
             <p>恭喜你，保存成功，是否进入部门管理</p>
         </Modal>
         <div class="busadd_main">
@@ -102,7 +97,7 @@
                 <h5>联系信息</h5>
 
                 <FormItem label="所在地区" prop="city" style="width:600px;">
-                    <al-selector class="busadd_main_city" v-model="formValidate.city" />
+                    <al-selector ref="alCascader" data-type="name" class="busadd_main_city" v-model="formValidate.city" />
                 </FormItem>
                 <FormItem label="街道地址" prop="address" style="width:450px;">
                     <Input v-model="formValidate.address" placeholder="请输入具体地址"></Input>
@@ -124,7 +119,7 @@
                     <Button type="ghost" @click="handleReset('formValidate')" style="margin-left: 8px">重置条件</Button>
                 </FormItem>
             </Form>
-           
+
         </div>
     </div>
 </template>
@@ -132,13 +127,13 @@
 <script>
 import Vue from 'vue';
 import iviewArea from 'iview-area';
-import {API} from '../../../services';
+import { API } from '../../../services';
 Vue.use(iviewArea);
 export default {
     data() {
         return {
-            id:-1,//增查判断
-            modal:false,
+            id: -1,//增查判断
+            modal: false,
             //行业分类
             industryList: [
                 {
@@ -245,24 +240,24 @@ export default {
                     value: '公共事业/城市服务',
                     label: '公共事业/城市服务'
                 },
-                
+
             ],
             res_s: [],
             //所需验证数据
             formValidate: {
                 name: '',//企业名称
-                repre:"",//企业法人
+                repre: "",//企业法人
                 nature: '',//企业性质
                 industry: '',//行业分类
                 product: '',//产品
-                city: [],//企业所在地
+                city: ["","","",""],//企业所在地
                 address: "",//街道地址
-                contacts:"",//企业联系人
-                phone:'',//企业联系电话
+                contacts: "",//企业联系人
+                phone: '',//企业联系电话
                 mail: '',//企业邮箱
                 desc: ''//企业简介
             },
-            /* 验证规则 */ 
+            /* 验证规则 */
             ruleValidate: this.validate.addBussiness
         }
     },
@@ -271,18 +266,21 @@ export default {
          * 保存信息
          */
         handleSave(name) {
+
             this.$refs[name].validate((valid) => {
                 if (valid) {
-                    API.Jurisdiction.addBusiness({
-                        name:this.formValidate.name,
-                        address:this.formValidate.address,
-                        contacts:this.formValidate.contacts,
-                        phone:this.formValidate.phone,
-                    }).then((res)=>{
-                        this.modal=true;
+                    let obj=JSON.parse(JSON.stringify(this.formValidate));
+                    if (this.id != -1) {
+                        obj.id = this.id;
+                    }
+                    obj.city=obj.city.join(",");
+                    API.Jurisdiction.addBusiness(
+                        obj
+                    ).then((res) => {
+                        this.modal = true;
                         //绑定返回后的id
-                        this.id=res.data;
-                    }).catch((err)=>{
+                        this.id = res.data;
+                    }).catch((err) => {
 
                     });
                 } else {
@@ -294,13 +292,13 @@ export default {
         /** 
          * 编辑部门
          */
-        editDepart(){
-            this.modal=false;
+        editDepart() {
+            this.modal = false;
             this.$router.push({
-                path:"/access/business/depart",
-                query:{
-                    business_id:this.id,
-                    name:this.formValidate.name
+                path: "/access/business/depart",
+                query: {
+                    business_id: this.id,
+                    name: this.formValidate.name
                 }
             })
         },
@@ -313,13 +311,18 @@ export default {
         /** 
          * 初始化所有属性
          */
-        initData(){
-            if(this.id!=-1){
+        initData() {
+            if (this.id != -1) {
                 API.Jurisdiction.infoBusiness({
-                    id:this.id
-                }).then((res)=>{
-                    this.formValidate={...this.formValidate,...res.data};
-                }).catch((err)=>{
+                    id: this.id
+                }).then((res) => {
+                    res.data.city=res.data.city.split(',');
+                    this.formValidate = { ...this.formValidate, ...res.data };
+                    this.$refs.alCascader.value=res.data.city;
+                    this.$refs.alCascader.init();
+                    /* this.$refs.alCascader.setDefaultValue(this.formValidate.city); */
+                    
+                }).catch((err) => {
 
                 });
             }
@@ -330,7 +333,7 @@ export default {
      */
     mounted () {
         /* id为-1 的情况下 是新增*/
-        this.id= this.$route.query.business_id;  
+        this.id = this.$route.query.business_id;
         /* 初始化数据 */
         this.initData();
     }

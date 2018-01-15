@@ -136,7 +136,7 @@ export const Jurisdiction = {
      * @returns
      */
     addBusiness (data) {
-        return fetch('post', '/visit/organization/add', data);
+        return fetch('post', '/visit/organization/save', data);
     },
     /**
      * 删除企业

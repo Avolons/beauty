@@ -1,4 +1,5 @@
 <style lang="less">
+@import "../../styles/jzda.less";
 .follPass {
 	&_message{
 		height: 450px;
@@ -313,6 +314,176 @@
 				</div>
 			</Modal>
 		</div>
+		<!-- 详情模态框 -->
+    <Modal v-model="patientDetail" title="患者信息" class-name="patientInfo" :styles="{top: '36px'}" width="1000">
+      <Row class="infoRow">
+        <Col span="12" class="infoCol12 mb12">
+          <div class="info">
+            <div class="info-row">
+              <div class="info1 bb1">姓名</div>
+              <div class="info2 bdx1">{{currentData.brxm}}</div>
+            </div>
+            <div class="info-row">
+              <div class="info1">性别</div>
+              <div class="info2">{{currentData.brxb}}</div>
+            </div>
+          </div>
+        </Col>
+        <Col span="12" class="infoCol12 mb12">
+          <div class="info">
+            <div class="info-row">
+              <div class="info1 bb1">电话</div>
+              <div class="info2 bdx1">{{currentData.jtdh}}</div>
+            </div>
+            <div class="info-row">
+              <div class="info1">地址</div>
+              <div class="info2">{{currentData.xzzQtdz}}</div>
+            </div>
+          </div>
+        </Col>
+        <Col span="12" class="infoCol12 mb12">
+          <div class="info">
+            <div class="info-row">
+              <div class="info1 bb1">年龄</div>
+              <div class="info2 bdx1">{{currentData.age}}</div>
+            </div>
+            <div class="info-row">
+              <div class="info1">民族</div>
+              <div class="info2">{{currentData.mz}}</div>
+            </div>
+          </div>
+        </Col>
+        <Col span="12" class="infoCol12 mb12">
+          <div class="info">
+            <div class="info-row">
+              <div class="info1 bb1">出生年月</div>
+              <div class="info2 bdx1">{{currentData.csny}}</div>
+            </div>
+            <div class="info-row">
+              <div class="info1">身份证号</div>
+              <div class="info2">{{currentData.sfzh}}</div>
+            </div>
+          </div>
+        </Col>
+        <Col span="12" class="infoCol12 mb12">
+          <div class="info">
+            <div class="info-row">
+              <div class="info1 bb1">紧急联系人</div>
+              <div class="info2 bdx1">{{currentData.lxrm}}</div>
+            </div>
+            <div class="info-row">
+              <div class="info1">关系</div>
+              <div class="info2">{{currentData.lxgx}}</div>
+            </div>
+          </div>
+        </Col>
+        <Col span="12" class="infoCol12 mb12">
+          <div class="info">
+            <div class="info-row">
+              <div class="info1 bb1">联系地址</div>
+              <div class="info2 bdx1">{{currentData.lxdz}}</div>
+            </div>
+            <div class="info-row">
+              <div class="info1">联系电话</div>
+              <div class="info2">{{currentData.lxdh}}</div>
+            </div>
+          </div>
+        </Col>
+        <Col span="12" class="infoCol12 mb12">
+          <div class="info" style="height: 32px;">
+            <div class="info-row">
+              <div class="info1 bdx1">单位</div>
+              <div class="info2 bdx1">{{currentData.dwmc}}</div>
+            </div>
+          </div>
+        </Col>
+        <!-- 门诊 -->
+        <Col span="24" class="infoCol24" v-if="mjzData.length" v-for="item,index in mjzData" :key="index">
+          <Row class="infoRow2">
+            <Col span="4" class="sfCol4">
+            <div class="counts">
+              <p class="suifang">门诊</p>
+            </div>
+            </Col>
+            <Col span="20" class="sfCol20">
+            <h3 class="sfName">{{currentData.brxm}}</h3>            
+            <Row>
+              <Col span="12">
+                <span>就诊卡号:</span><span>{{currentData.jzkh}}</span>
+              </Col>
+              <Col span="12">
+                <span>患者性质:</span><span>{{currentData.brxz}}</span>
+              </Col>
+              <Col span="12">
+                <span>就诊时间:</span><span>{{item.jzrq}}</span>
+              </Col>
+              <Col span="12">
+                <span>是否初诊:</span><span>44</span>
+              </Col>
+              <Col span="12">
+                <span>就诊科室:</span><span>{{item.ksmc}}</span>
+              </Col>
+              <Col span="12">
+                <span>就诊医生:</span><span>{{item.ysxm}}</span>
+              </Col>
+              <Col span="12">
+                <span>主诉:</span><span>{{item.zs}}</span>
+              </Col>
+              <Col span="12">
+                <span>诊断:</span><span>{{item.zdmc}}</span>
+              </Col>
+            </Row>
+            </Col>
+          </Row>
+        </Col>
+        <!-- 住院 -->
+        <Col span="24" class="infoCol24" v-if="zyData.length" v-for="item1,index1 in zyData" :key="index1">
+          <Row class="infoRow2">
+
+            <Col span="4" class="sfCol4">
+            <div class="counts">
+              <p class="suifang">住院</p>
+            </div>
+            </Col>
+            <Col span="20" class="sfCol20">
+            <h3 class="sfName">{{currentData.brxm}}</h3>            
+            <Row>
+              <Col span="12">
+                <span>住院号:</span><span>{{item1.zyhm}}</span>
+              </Col>
+              <Col span="12">
+                <span>患者性质:</span><span>{{currentData.brxz}}</span>
+              </Col>
+              <Col span="12">
+                <span>入院时间:</span><span>{{item1.admissiontime}}</span>
+              </Col>
+              <Col span="12">
+                <span>出院时间:</span><span>{{item1.leavetime}}</span>
+              </Col>
+              <Col span="12">
+                <span>入院科别:</span><span>{{item1.departname}}</span>
+              </Col>
+              <Col span="12">
+                <span>主治医生:</span><span>{{item1.doctorname}}</span>
+              </Col>
+              <Col span="12">
+                <span>入院诊断:</span><span>{{item1.admissiondiagnose}}</span>
+              </Col>
+              <Col span="12">
+                <span>出院诊断:</span><span>{{item1.leavediagnose}}</span>
+              </Col>
+              <Col span="12">
+                <span>入院情况:</span><span>{{item1.admissiondescription}}</span>
+              </Col>
+              <Col span="12">
+                <span>出院情况:</span><span>{{item1.leavedescription}}</span>
+              </Col>
+            </Row>
+            </Col>
+          </Row>
+        </Col>
+      </Row>
+    </Modal>
 	</div>
 </template>
 
@@ -362,12 +533,32 @@ export default {
 					key: 'orderNo',
 				},
 				{
-					title: '随访方案',
-					key: 'schemeName',
-				},
-				{
 					title: '患者姓名',
 					key: 'brxm',
+					render: (h, params)=>{
+            return h('div', [
+              h('span', {
+                props: {
+                    type: 'primary',
+                    size: 'small'
+                },
+                style: {
+                    borderBottom: '1px solid #5cadff',
+                    color: '#5cadff'
+                },
+                on: {
+                  click: () => {
+                    this.getInfo(params.row.hzxxId);
+                    this.patientDetail = true;
+                  }
+                }
+              }, params.row.brxm),
+            ])
+          }
+				},
+				{
+					title: '随访方案',
+					key: 'schemeName',
 				},
 				{
 					title: '随访状态',
@@ -423,7 +614,15 @@ export default {
 				}
 			],
 			//列表数据
-			dataList: []
+			dataList: [],
+			//当前被点击患者，编辑和详情按钮触发时更换数据
+      currentData: {},
+      //门急诊信息
+      mjzData: [],
+      //住院信息
+      zyData: [],
+      //详情模态框
+      patientDetail: false,
 		}
 	},
 	methods: {
@@ -609,7 +808,27 @@ export default {
 			this.searchParam.pager = page;
 			this.getData();
 		},
-	}, mounted() {
+		/** 
+     * 查看患者详情
+     */
+    getInfo(id) {
+      API.FollowBussiness.detailPat({
+        id: id
+      }).then((res) => {
+        if(res.data.mjzs.length) {
+          this.mjzData = res.data.mjzs
+        }
+        if(res.data.cyxjs.length) {
+          this.zyData = res.data.cyxjs
+        } 
+        this.currentData = res.data;
+      }).catch((err) => {
+        console.log(err)
+
+      });
+    },
+	},
+	mounted() {
 		this.getDepartList();
 		this.getData();
 	}

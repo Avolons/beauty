@@ -1,4 +1,5 @@
 <style lang="less">
+@import "../../styles/jzda.less";
 .patientSearch {
 
 	border-radius: 5px;
@@ -30,88 +31,8 @@
 	.ivu-modal {
 		top: 0;
 	}
-} //详情
-.patientInfo .ivu-modal .ivu-modal-content {
-	.ivu-modal-header {
-		.ivu-modal-header-inner,
-		.ivu-modal-header p {
-			font-size: 16px;
-			color: #1c2432;
-			font-weight: normal;
-		}
-	}
-	.ivu-modal-footer {
-		display: none;
-	}
-}
-
-.infoRow {
-	.infoCol12 {
-		height: 65px;
-		padding: 0px 20px!important;
-		.info {
-			width: 442px;
-			height: 65px;
-			border: 1px solid #DCEBF7;
-			.info-row {
-				.info1 {
-					width: 110px;
-					height: 32px;
-					float: left;
-					line-height: 32px;
-					color: #336199;
-					background-color: #EDF3F4;
-					text-align: right;
-					padding-right: 10px;
-				}
-				.info2 {
-					width: 330px;
-					height: 32px;
-					float: left;
-					line-height: 32px;
-					padding-left: 15px;
-				}
-			}
-		}
-	}
-	.infoCol24 {
-		background: #f9f9f9;
-		padding: 15px;
-		.infoRow2 {
-			.sfCol4 {
-				.counts {
-					width: 80px;
-					height: 80px;
-					color: #fff;
-					border-radius: 10px;
-					line-height: 1.5;
-					background: #2a8bcb;
-					padding-top: 10px;
-					text-align: center;
-					.suifang {
-						font-size: 28px;
-					}
-					.sfCounts {
-						font-size: 14px;
-					}
-				}
-			}
-			.sfCol20 {
-				h3 {
-					padding: 20px 0 10px 0;
-					font-size: 24px;
-					font-weight: normal;
-					line-height: 24px;
-				}
-				.sfTime {
-					span {
-						color: #FF892A;
-					}
-				}
-			}
-		}
-	}
-} //编辑
+} 
+//编辑
 .editInfo .ivu-modal .ivu-modal-content {
 	.ivu-modal-header {
 		.ivu-modal-header-inner,
@@ -127,18 +48,6 @@
 	.ivu-modal-footer {
 		display: none;
 	}
-}
-
-.bb1 {
-	border-bottom: 1px solid #fff;
-}
-
-.bdx1 {
-	border-bottom: 1px dotted #EDF3F4;
-}
-
-.mb12 {
-	margin-bottom: 12px;
 }
 .inter-down {
     &_main {
@@ -699,7 +608,6 @@ export default {
 				console.log(err)
 
 			});
-			
 		},
 		/** 
 		 * 修改患者信息

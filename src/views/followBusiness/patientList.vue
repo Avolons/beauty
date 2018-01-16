@@ -228,7 +228,7 @@
 					<div class="info">
 						<div class="info-row">
 							<div class="info1 bb1">电话</div>
-							<div class="info2 bdx1">{{currentData.lxdh}}</div>
+							<div class="info2 bdx1">{{currentData.jtdh}}</div>
 						</div>
 						<div class="info-row">
 							<div class="info1">地址</div>
@@ -383,69 +383,69 @@
 		<Modal v-model="patientText" title="编辑患者信息" class-name="patientInfo" :styles="{top: '36px'}" width="1000">
 			<!-- 门诊 -->
 			<Row class="infoRow">
-					<Form ref="formCustom" :model="formCustom" :label-width="80">
-						<Col span="12">
-							<FormItem label="姓名">
-		            <Input v-model="formCustom.brxm" disabled></Input>
-		          </FormItem>
-						</Col>
-						<Col span="12">
-							<FormItem label="性别">
-		            <Input v-model="formCustom.brxb" disabled></Input>
-		          </FormItem>
-						</Col>
-						<Col span="12">
-							<FormItem label="民族">
-		            <Input v-model="formCustom.mz" disabled></Input>
-		          </FormItem>
-						</Col>
-						<Col span="12">
-							<FormItem label="身份证号">
-		            <Input v-model="formCustom.sfzh" disabled></Input>
-		          </FormItem>
-						</Col>
-						<Col span="12">
-							<FormItem label="家庭电话">
-		            <Input v-model="formCustom.jtdh" placeholder="请输入家庭电话"></Input>
-		          </FormItem>
-						</Col>
-						<Col span="12">
-							<FormItem label="出生年月">
-		            <DatePicker :value="formCustom.csny" type="date" placeholder="Select date" style="width: 200px"></DatePicker>
-		          </FormItem>
-						</Col>
-						<Col span="12">
-							<FormItem label="住址">
-		            <Input v-model="formCustom.xzzQtdz" placeholder="请输入住址"></Input>
-		          </FormItem>
-						</Col>
-						<Col span="12">
-							<FormItem label="单位">
-		            <Input v-model="formCustom.dwmc" placeholder="请输入单位"></Input>
-		          </FormItem>
-						</Col>
-						<Col span="12">
-							<FormItem label="紧急联系人">
-		            <Input v-model="formCustom.lxrm" placeholder="请输入紧急联系人"></Input>
-		          </FormItem>
-						</Col>
-						<Col span="12">
-							<FormItem label="关系">
-		            <Input v-model="formCustom.lxgx" placeholder="请输入与紧急联系人关系"></Input>
-		          </FormItem>
-						</Col>
-						<Col span="12">
-							<FormItem label="联系地址">
-		            <Input v-model="formCustom.lxdz" placeholder="请输入紧急联系人地址"></Input>
-		          </FormItem>
-						</Col>
-						<Col span="12">
-							<FormItem label="联系电话">
-		            <Input v-model="formCustom.lxdh" placeholder="请输入紧急联系人电话"></Input>
-		          </FormItem>
-						</Col>
-						<Col span="24" :style="{textAlign:'right',margin: '10px 0'}"><Button type="primary" @click="submitData('formCustom')">保存</Button></Col>
-					</Form>
+				<Form ref="formCustom" :model="formCustom" :label-width="80">
+					<Col span="12">
+						<FormItem label="姓名">
+	            <Input v-model="formCustom.brxm" disabled></Input>
+	          </FormItem>
+					</Col>
+					<Col span="12">
+						<FormItem label="性别">
+	            <Input v-model="formCustom.brxb" disabled></Input>
+	          </FormItem>
+					</Col>
+					<Col span="12">
+						<FormItem label="民族">
+	            <Input v-model="formCustom.mz" disabled></Input>
+	          </FormItem>
+					</Col>
+					<Col span="12">
+						<FormItem label="身份证号">
+	            <Input v-model="formCustom.sfzh" disabled></Input>
+	          </FormItem>
+					</Col>
+					<Col span="12">
+						<FormItem label="家庭电话">
+	            <Input v-model="formCustom.jtdh" placeholder="请输入家庭电话"></Input>
+	          </FormItem>
+					</Col>
+					<Col span="12">
+						<FormItem label="出生年月">
+	            <DatePicker :value="formCustom.csny" type="date" placeholder="Select date" style="width: 200px" @on-change="csnyChange"></DatePicker>
+	          </FormItem>
+					</Col>
+					<Col span="12">
+						<FormItem label="住址">
+	            <Input v-model="formCustom.xzzQtdz" placeholder="请输入住址"></Input>
+	          </FormItem>
+					</Col>
+					<Col span="12">
+						<FormItem label="单位">
+	            <Input v-model="formCustom.dwmc" placeholder="请输入单位"></Input>
+	          </FormItem>
+					</Col>
+					<Col span="12">
+						<FormItem label="紧急联系人">
+	            <Input v-model="formCustom.lxrm" placeholder="请输入紧急联系人"></Input>
+	          </FormItem>
+					</Col>
+					<Col span="12">
+						<FormItem label="关系">
+	            <Input v-model="formCustom.lxgx" placeholder="请输入与紧急联系人关系"></Input>
+	          </FormItem>
+					</Col>
+					<Col span="12">
+						<FormItem label="联系地址">
+	            <Input v-model="formCustom.lxdz" placeholder="请输入紧急联系人地址"></Input>
+	          </FormItem>
+					</Col>
+					<Col span="12">
+						<FormItem label="联系电话">
+	            <Input v-model="formCustom.lxdh" placeholder="请输入紧急联系人电话"></Input>
+	          </FormItem>
+					</Col>
+					<Col span="24" :style="{textAlign:'right',margin: '10px 0'}"><Button type="primary" @click="submitData('formCustom')">保存</Button></Col>
+				</Form>
 				<Col span="24" class="infoCol24" v-if="mjzData.length" v-for="item,index in mjzData" :key="index">
 					<Row class="infoRow2">
 						<Col span="4" class="sfCol4">
@@ -613,7 +613,7 @@ export default {
 				},
 				{
 					title: '身份证号',
-					key: 'zjlx',
+					key: 'sfzh',
 					align: 'center'
 				},
 				{
@@ -674,6 +674,12 @@ export default {
 		editPat(data) {
 			this.formCustom = JSON.parse(JSON.stringify(data));
 			this.patientText = true;
+		},
+		/**
+		 * 编辑出生年月
+		 */
+		csnyChange(value) {
+			this.formCustom.csny = value
 		},
 		/** 
 		 * 查看患者详情

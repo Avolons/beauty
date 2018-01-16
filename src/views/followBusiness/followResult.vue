@@ -158,7 +158,7 @@ export default {
 						return h('div', [
 							h('Button', {
 								props: {
-									type: params.row.vetStatus == 1 ? 'primary' : 'dashed',
+									type: params.row.vetStatus != 0 ? 'primary' : 'dashed',
 									size: 'small',
 								},
 								style: {
@@ -172,7 +172,7 @@ export default {
 										/** 
 										 * 该处类型判断
 										 */
-										if (params.row.vetStatus == 1) {
+										if (params.row.vetStatus != 0) {
 											this.showInfo(params.row.id);
 										}
 									}

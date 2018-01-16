@@ -1,5 +1,10 @@
+<style lang="less">
+
+</style>
+
 <template>
-    <div style="width:100%;height:100%;" id="data_source_con"></div>
+    <div :data="data" style="height:280px;width:100%" id="data_source_con">
+    </div>
 </template>
 
 <script>
@@ -7,50 +12,105 @@ import echarts from 'echarts';
 
 export default {
     name: 'dataSourcePie',
-    data () {
+    data() {
         return {
-            //
+            dataSourcePie:"",
         };
     },
-    mounted () {
-        this.$nextTick(() => {
-            var dataSourcePie = echarts.init(document.getElementById('data_source_con'));
+    props: {
+         data:Array
+    },
+    methods: {
+        init(){
+             let legend=[];
+             let all=0;
+           for (const item of this.data) {
+               legend.push(item.name);
+               all+=(item.value-0);
+           }
             const option = {
+                backgroundColor: '#fff',
+                title: {
+                    text:all,
+                    /* subtext: '2016年', */
+                    x: 'center',
+                    y: '110px',
+                    textStyle: {
+                        fontWeight: 'normal',
+                        fontSize: 14
+                    }
+                },
                 tooltip: {
+                    show: true,
                     trigger: 'item',
-                    formatter: '{a} <br/>{b} : {c} ({d}%)'
+                    formatter: "{b}: {c} ({d}%)"
                 },
                 legend: {
-                    orient: 'vertical',
-                    left: 'right',
-                    data: ['ios', 'android', 'pc', 'web', 'others']
+                    type:"scroll",
+                    orient: 'horizontal',
+                    bottom: '0%',
+                    data:legend
                 },
-                series: [
-                    {
-                        name: '访问来源',
-                        type: 'pie',
-                        radius: '66%',
-                        center: ['50%', '60%'],
-                        data: [
-                            {value: 2103456, name: 'ios', itemStyle: {normal: {color: '#9bd598'}}},
-                            {value: 1305923, name: 'android', itemStyle: {normal: {color: '#ffd58f'}}},
-                            {value: 543250, name: 'pc', itemStyle: {normal: {color: '#abd5f2'}}},
-                            {value: 798403, name: 'web', itemStyle: {normal: {color: '#ab8df2'}}},
-                            {value: 302340, name: 'others', itemStyle: {normal: {color: '#e14f60'}}}
-                        ],
-                        itemStyle: {
-                            emphasis: {
-                                shadowBlur: 10,
-                                shadowOffsetX: 0,
-                                shadowColor: 'rgba(0, 0, 0, 0.5)'
+                series: [{
+                    center: ['50%', '120px'],
+                    type: 'pie',
+                    selectedMode: 'single',
+                    radius: ['25%', '58%'],
+                    color: ['#86D560', '#AF89D6', '#59ADF3', '#FF999A', '#FFCC67'],
+                    label: {
+                        normal: {
+                            position: 'inner',
+                            formatter: '{d}%',
+
+                            textStyle: {
+                                color: '#fff',
+                                fontWeight: 'bold',
+                                fontSize: 12
                             }
                         }
-                    }
-                ]
+                    },
+                    labelLine: {
+                        normal: {
+                            show: false
+                        }
+                    },
+                    data: this.data
+                }, {
+                    center: ['50%', '120px'],
+                    type: 'pie',
+                    radius: ['58%', '83%'],
+                    itemStyle: {
+                        normal: {
+                            color: '#F2F2F2'
+                        },
+                        emphasis: {
+                            color: '#ADADAD'
+                        }
+                    },
+                    label: {
+                        normal: {
+                            position: 'inner',
+                            formatter: '{c}',
+                            textStyle: {
+                                color: '#777777',
+                                fontWeight: 'bold',
+                                fontSize: 10
+                            }
+                        }
+                    },
+                    data: this.data
+                }]
             };
-            dataSourcePie.setOption(option);
-            window.addEventListener('resize', function () {
-                dataSourcePie.resize();
+            this.dataSourcePie.setOption(option);
+        }  
+    },
+    mounted() {
+        this.$nextTick(() => {
+            this.dataSourcePie = echarts.init(document.getElementById('data_source_con'));
+            this.init();
+            let self=this;
+            window.addEventListener('resize', function() {
+                self.dataSourcePie.resize();
             });
         });
     }

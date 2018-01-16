@@ -1,5 +1,10 @@
 <style lang="less">
     @import './styles/infor-card.less';
+    .infor-intro-text{
+        font-size: 15px;
+        color: #333;
+        margin-bottom: 5px;
+    }
 </style>
 
 <template>
@@ -15,12 +20,13 @@
                     <count-up 
                         class="infor-card-count user-created-count" 
                         :id-name="idName" 
+                        :id-names="idNames" 
                         :end-val="endVal" 
                         :color="color"
                         :countSize="countSize"
                         :countWeight="countWeight"
                     >
-                        <p class="infor-intro-text" slot="intro">{{ introText }}</p>
+                    <p class="infor-intro-text" slot="intro">{{ introText }}</p>
                     </count-up>
                 </Row>
             </Col>
@@ -38,7 +44,8 @@ export default {
     },
     props: {
         idName: String,
-        endVal: Number,
+        idNames:String,
+        endVal: Array,
         color: String,
         iconType: String,
         introText: String,

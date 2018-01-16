@@ -120,6 +120,12 @@ export default {
                              */
                             Cookies.set('user', this.form.name);
                             Cookies.set('password', this.form.password);
+
+                            Cookies.set('baseData', JSON.stringify({
+                                name:res.admin.username,
+                                type:res.admin.typeStr,
+                                loginTime:res.admin.dateLogin,
+                            }));
                             /** 
                              * 登录后设置头像
                              */

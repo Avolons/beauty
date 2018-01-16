@@ -1,5 +1,6 @@
 <template>
-    <div style="width:calc(100% - 10px);height:305px;" id="home_page_map"></div>
+    <div :mapData="mapData" style="width:calc(100% - 10px);height:305px;" id="home_page_map">
+    </div>
 </template>
 
 <script>
@@ -7,82 +8,162 @@ import echarts from 'echarts';
 import geoData from '../map-data/get-geography-value.js';
 export default {
     name: 'homeMap',
-    props: {
-        cityData: Array
-    },
-    mounted () {
-        var convertData = function (data) {
-            let res = [];
-            let len = data.length;
-            for (var i = 0; i < len; i++) {
-                var geoCoord = geoData[data[i].name];
-                if (geoCoord) {
-                    res.push({
-                        name: data[i].name,
-                        value: geoCoord.concat(data[i].value)
-                    });
-                }
-            }
-            return res;
+    data(){
+        return{
+            map:"",
         };
-
-        var map = echarts.init(document.getElementById('home_page_map'));
-        const chinaJson = require('../map-data/china.json');
-        echarts.registerMap('china', chinaJson);
-        map.setOption({
-            backgroundColor: '#FFF',
-            geo: {
-                map: 'china',
-                label: {
-                    emphasis: {
-                        show: false
-                    }
+    },
+    props: {
+        cityData: Array,
+        mapData:Array
+    },
+    watch: {
+     mapData(value){
+        this.map.resize();
+     }
+    },
+    methods:{
+        init(){
+            let dateList=[];
+            let numList=[];
+            for (const item of this.mapData) {
+                dateList.push(item.diagnoseTime);
+                numList.push(item.jzNum);
+            }
+            this.map.setOption({
+            backgroundColor: '#fff',
+            title: {
+                text: '每日就诊患者',
+                textStyle: {
+                    fontWeight: 'normal',
+                    fontSize: 16,
+                    color: '#333'
                 },
-                itemStyle: {
-                    normal: {
-                        areaColor: '#EFEFEF',
-                        borderColor: '#CCC'
-                    },
-                    emphasis: {
-                        areaColor: '#E5E5E5'
+                left: '20px'
+            },
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    lineStyle: {
+                        color: '#57617B'
                     }
+                }
+            },
+            legend: {
+                icon: 'rect',
+                itemWidth: 14,
+                itemHeight: 5,
+                itemGap: 13,
+                data: ['就诊数量'],
+                right: '4%',
+                textStyle: {
+                    fontSize: 12,
+                    color: '#F1F1F3'
                 }
             },
             grid: {
-                top: 0,
-                left: '2%',
-                right: '2%',
-                bottom: '0',
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
                 containLabel: true
             },
-            series: [{
-                type: 'scatter',
-                coordinateSystem: 'geo',
-                data: convertData(this.cityData),
-                symbolSize: function (val) {
-                    return val[2] / 10;
+            xAxis: [{
+                type: 'category',
+                boundaryGap: false,
+                axisLine: {
+                    lineStyle: {
+                        color: '#57617B'
+                    }
                 },
-                label: {
+                data: dateList
+            }, {
+                axisPointer: {
+                    show: false
+                },
+                axisLine: {
+                    lineStyle: {
+                        color: '#57617B'
+                    }
+                },
+                axisTick: {
+                    show: false
+                },
+
+                position: 'bottom',
+                offset: 20,
+            }],
+            yAxis: [{
+                type: 'value',
+                name: '单位（人次）',
+                axisTick: {
+                    show: false
+                },
+                axisLine: {
+                    lineStyle: {
+                        color: '#57617B'
+                    }
+                },
+                axisLabel: {
+                    margin: 10,
+                    textStyle: {
+                        fontSize: 14
+                    }
+                },
+                splitLine: {
+                    lineStyle: {
+                        color: '#fff'
+                    }
+                }
+            }],
+            series: [{
+                name: '就诊人数',
+                type: 'line',
+                smooth: true,
+                symbol: 'circle',
+                symbolSize: 5,
+                showSymbol: false,
+                lineStyle: {
                     normal: {
-                        formatter: '{b}',
-                        position: 'right',
-                        show: false
-                    },
-                    emphasis: {
-                        show: true
+                        width: 1
+                    }
+                },
+                areaStyle: {
+                    normal: {
+                        color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+                            offset: 0,
+                            color: 'rgba(45, 140, 240, 0.7)'
+                        }, {
+                            offset: 0.8,
+                            color: 'rgba(45, 140, 240, 0.2)'
+                        }], false),
+                        shadowColor: 'rgba(0, 0, 0, 0.1)',
+                        shadowBlur: 10
                     }
                 },
                 itemStyle: {
                     normal: {
-                        color: '#0099CC'
+                        color: 'rgb(45, 140, 240)',
+                        borderColor: 'rgba(45, 140, 240,0.27)',
+                        borderWidth: 12
+
                     }
-                }
+                },
+                data:numList
             }]
 
         });
-        window.addEventListener('resize', function () {
-            map.resize();
+        }
+    },
+    mounted() {
+        this.$nextTick(() => {
+            this.map = echarts.init(document.getElementById('home_page_map'));
+        this.init();
+       let self=this;
+        window.addEventListener('resize', function() {
+            self.map.resize();
         });
+        });
+        
     }
 };
 </script>

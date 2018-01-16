@@ -210,102 +210,326 @@
 		<Page :total="totalPage" :current="searchParams.pager" show-elevator @on-change="changePage" show-total></Page>
 		</Col>
 		<!-- 详情模态框 -->
-		<Modal v-model="patientDetail" title="患者信息" class-name="patientInfo" :styles="{top: '180px'}" width="1000">
+		<Modal v-model="patientDetail" title="患者信息" class-name="patientInfo" :styles="{top: '36px'}" width="1000">
 			<Row class="infoRow">
 				<Col span="12" class="infoCol12 mb12">
-				<div class="info">
-					<div class="info-row">
-						<div class="info1 bb1">姓名</div>
-						<div class="info2 bdx1">{{currentData.brxm}}</div>
+					<div class="info">
+						<div class="info-row">
+							<div class="info1 bb1">姓名</div>
+							<div class="info2 bdx1">{{currentData.brxm}}</div>
+						</div>
+						<div class="info-row">
+							<div class="info1">性别</div>
+							<div class="info2">{{currentData.brxb}}</div>
+						</div>
 					</div>
-					<div class="info-row">
-						<div class="info1">性别</div>
-						<div class="info2">{{currentData.brxb}}</div>
-					</div>
-				</div>
 				</Col>
 				<Col span="12" class="infoCol12 mb12">
-				<div class="info">
-					<div class="info-row">
-						<div class="info1 bb1">电话</div>
-						<div class="info2 bdx1">{{currentData.lxdh}}</div>
+					<div class="info">
+						<div class="info-row">
+							<div class="info1 bb1">电话</div>
+							<div class="info2 bdx1">{{currentData.lxdh}}</div>
+						</div>
+						<div class="info-row">
+							<div class="info1">地址</div>
+							<div class="info2">{{currentData.xzzQtdz}}</div>
+						</div>
 					</div>
-					<div class="info-row">
-						<div class="info1">地址</div>
-						<div class="info2">{{currentData.xzzQtdz}}</div>
-					</div>
-				</div>
 				</Col>
 				<Col span="12" class="infoCol12 mb12">
-				<div class="info">
-					<div class="info-row">
-						<div class="info1 bb1">年龄</div>
-						<div class="info2 bdx1">{{currentData.age}}</div>
+					<div class="info">
+						<div class="info-row">
+							<div class="info1 bb1">年龄</div>
+							<div class="info2 bdx1">{{currentData.age}}</div>
+						</div>
+						<div class="info-row">
+							<div class="info1">民族</div>
+							<div class="info2">{{currentData.mz}}</div>
+						</div>
 					</div>
-					<div class="info-row">
-						<div class="info1">民族</div>
-						<div class="info2">{{currentData.mz}}</div>
-					</div>
-				</div>
 				</Col>
-				<Col span="24" class="infoCol24">
-				<Row class="infoRow2" v-for="item in currentData.logs" :key="item.id">
-					<Col span="4" class="sfCol4">
-					<div class="counts">
-						<p class="suifang">{{item.type}}</p>
+				<Col span="12" class="infoCol12 mb12">
+					<div class="info">
+						<div class="info-row">
+							<div class="info1 bb1">出生年月</div>
+							<div class="info2 bdx1">{{currentData.csny}}</div>
+						</div>
+						<div class="info-row">
+							<div class="info1">身份证号</div>
+							<div class="info2">{{currentData.sfzh}}</div>
+						</div>
 					</div>
-					</Col>
-					<Col span="20" class="sfCol20">
-					<h3 class="sfName">{{currentData.brxm}}</h3>
-					<p class="sfTime mb12">
-						<span>{{item.dateAdd}}</span> {{item.title}}</p>
-					<Row>
-						<Col v-for="ite,index in item.jsonData" span="12" :key="index">
-						<p>
-							{{ite}}
-						</p>
+				</Col>
+				<Col span="12" class="infoCol12 mb12">
+					<div class="info">
+						<div class="info-row">
+							<div class="info1 bb1">紧急联系人</div>
+							<div class="info2 bdx1">{{currentData.lxrm}}</div>
+						</div>
+						<div class="info-row">
+							<div class="info1">关系</div>
+							<div class="info2">{{currentData.lxgx}}</div>
+						</div>
+					</div>
+				</Col>
+				<Col span="12" class="infoCol12 mb12">
+					<div class="info">
+						<div class="info-row">
+							<div class="info1 bb1">联系地址</div>
+							<div class="info2 bdx1">{{currentData.lxdz}}</div>
+						</div>
+						<div class="info-row">
+							<div class="info1">联系电话</div>
+							<div class="info2">{{currentData.lxdh}}</div>
+						</div>
+					</div>
+				</Col>
+				<Col span="12" class="infoCol12 mb12">
+					<div class="info" style="height: 32px;">
+						<div class="info-row">
+							<div class="info1 bdx1">单位</div>
+							<div class="info2 bdx1">{{currentData.dwmc}}</div>
+						</div>
+					</div>
+				</Col>
+				<!-- 门诊 -->
+				<Col span="24" class="infoCol24" v-if="mjzData.length" v-for="item,index in mjzData" :key="index">
+					<Row class="infoRow2">
+						<Col span="4" class="sfCol4">
+						<div class="counts">
+							<p class="suifang">门诊</p>
+						</div>
+						</Col>
+						<Col span="20" class="sfCol20">
+						<h3 class="sfName">{{currentData.brxm}}</h3>						
+						<Row>
+							<Col span="12">
+								<span>就诊卡号:</span><span>{{currentData.jzkh}}</span>
+							</Col>
+							<Col span="12">
+								<span>患者性质:</span><span>{{currentData.brxz}}</span>
+							</Col>
+							<Col span="12">
+								<span>就诊时间:</span><span>{{item.jzrq}}</span>
+							</Col>
+							<Col span="12">
+								<span>是否初诊:</span><span>44</span>
+							</Col>
+							<Col span="12">
+								<span>就诊科室:</span><span>{{item.ksmc}}</span>
+							</Col>
+							<Col span="12">
+								<span>就诊医生:</span><span>{{item.ysxm}}</span>
+							</Col>
+							<Col span="12">
+								<span>主诉:</span><span>{{item.zs}}</span>
+							</Col>
+							<Col span="12">
+								<span>诊断:</span><span>{{item.zdmc}}</span>
+							</Col>
+						</Row>
 						</Col>
 					</Row>
-					</Col>
-				</Row>
+				</Col>
+				<!-- 住院 -->
+				<Col span="24" class="infoCol24" v-if="zyData.length" v-for="item1,index1 in zyData" :key="index1">
+					<Row class="infoRow2">
+
+						<Col span="4" class="sfCol4">
+						<div class="counts">
+							<p class="suifang">住院</p>
+						</div>
+						</Col>
+						<Col span="20" class="sfCol20">
+						<h3 class="sfName">{{currentData.brxm}}</h3>						
+						<Row>
+							<Col span="12">
+								<span>住院号:</span><span>{{item1.zyhm}}</span>
+							</Col>
+							<Col span="12">
+								<span>患者性质:</span><span>{{currentData.brxz}}</span>
+							</Col>
+							<Col span="12">
+								<span>入院时间:</span><span>{{item1.admissiontime}}</span>
+							</Col>
+							<Col span="12">
+								<span>出院时间:</span><span>{{item1.leavetime}}</span>
+							</Col>
+							<Col span="12">
+								<span>入院科别:</span><span>{{item1.departname}}</span>
+							</Col>
+							<Col span="12">
+								<span>主治医生:</span><span>{{item1.doctorname}}</span>
+							</Col>
+							<Col span="12">
+								<span>入院诊断:</span><span>{{item1.admissiondiagnose}}</span>
+							</Col>
+							<Col span="12">
+								<span>出院诊断:</span><span>{{item1.leavediagnose}}</span>
+							</Col>
+							<Col span="12">
+								<span>入院情况:</span><span>{{item1.admissiondescription}}</span>
+							</Col>
+							<Col span="12">
+								<span>出院情况:</span><span>{{item1.leavedescription}}</span>
+							</Col>
+						</Row>
+						</Col>
+					</Row>
 				</Col>
 			</Row>
 		</Modal>
 		<!-- 编辑功能模态框 -->
-		<Modal v-model="patientText" title="编辑患者信息" class-name="editInfo" :styles="{top: '180px'}" width="800">
-			<Form ref="formCustom" :model="formCustom" :rules="validate.formCustom" :label-width="80">
-				<FormItem label="姓名">
-					<span v-model="formCustom.ptNa">{{formCustom.brxm}}</span>
-				</FormItem>
-				<FormItem label="手机号码" prop="jtdh">
-					<Input v-model="formCustom.jtdh" placeholder="请输入电话号码"></Input>
-				</FormItem>
-				<FormItem label="住址" prop="xzzQtdz">
-					<Input type="text" v-model="formCustom.xzzQtdz" placeholder="请输入住址"></Input>
-				</FormItem>
-				<FormItem label="邮编" prop="xzzYb">
-					<Input type="text" v-model="formCustom.xzzYb" placeholder="请输入邮编"></Input>
-				</FormItem>
-				<FormItem label="联系人姓名" prop="lxrm">
-					<Input type="text" v-model="formCustom.lxrm" placeholder="请输入联系人姓名"></Input>
-				</FormItem>
-				<FormItem label="联系人关系" prop="lxgx">
-					<Input type="text" v-model="formCustom.lxgx" placeholder="请输入联系人关系"></Input>
-				</FormItem>
-				<FormItem label="联系人地址" prop="lxdz">
-					<Input type="text" v-model="formCustom.lxdz" placeholder="请输入联系人地址"></Input>
-				</FormItem>
-				<FormItem label="联系人手机" prop="lxdh">
-					<Input type="text" v-model="formCustom.lxdh" placeholder="请输入联系人电话号码"></Input>
-				</FormItem>
-				<FormItem label="单位名称" prop="dwmc">
-					<Input type="text" v-model="formCustom.dwmc" placeholder="请输入单位名称"></Input>
-				</FormItem>
-				<FormItem>
-					<Button type="primary" style="margin-left: 110px;" @click="submitData('formCustom')">提交</Button>
-					<Button type="ghost" style="margin-left: 8px" @click="handleReset('formCustom')">重置</Button>
-				</FormItem>
-			</Form>
+		<Modal v-model="patientText" title="编辑患者信息" class-name="patientInfo" :styles="{top: '36px'}" width="1000">
+			<!-- 门诊 -->
+			<Row class="infoRow">
+					<Form ref="formCustom" :model="formCustom" :label-width="80">
+						<Col span="12">
+							<FormItem label="姓名">
+		            <Input v-model="formCustom.brxm" disabled></Input>
+		          </FormItem>
+						</Col>
+						<Col span="12">
+							<FormItem label="性别">
+		            <Input v-model="formCustom.brxb" disabled></Input>
+		          </FormItem>
+						</Col>
+						<Col span="12">
+							<FormItem label="民族">
+		            <Input v-model="formCustom.mz" disabled></Input>
+		          </FormItem>
+						</Col>
+						<Col span="12">
+							<FormItem label="身份证号">
+		            <Input v-model="formCustom.sfzh" disabled></Input>
+		          </FormItem>
+						</Col>
+						<Col span="12">
+							<FormItem label="家庭电话">
+		            <Input v-model="formCustom.jtdh" placeholder="请输入家庭电话"></Input>
+		          </FormItem>
+						</Col>
+						<Col span="12">
+							<FormItem label="出生年月">
+		            <DatePicker :value="formCustom.csny" type="date" placeholder="Select date" style="width: 200px"></DatePicker>
+		          </FormItem>
+						</Col>
+						<Col span="12">
+							<FormItem label="住址">
+		            <Input v-model="formCustom.xzzQtdz" placeholder="请输入住址"></Input>
+		          </FormItem>
+						</Col>
+						<Col span="12">
+							<FormItem label="单位">
+		            <Input v-model="formCustom.dwmc" placeholder="请输入单位"></Input>
+		          </FormItem>
+						</Col>
+						<Col span="12">
+							<FormItem label="紧急联系人">
+		            <Input v-model="formCustom.lxrm" placeholder="请输入紧急联系人"></Input>
+		          </FormItem>
+						</Col>
+						<Col span="12">
+							<FormItem label="关系">
+		            <Input v-model="formCustom.lxgx" placeholder="请输入与紧急联系人关系"></Input>
+		          </FormItem>
+						</Col>
+						<Col span="12">
+							<FormItem label="联系地址">
+		            <Input v-model="formCustom.lxdz" placeholder="请输入紧急联系人地址"></Input>
+		          </FormItem>
+						</Col>
+						<Col span="12">
+							<FormItem label="联系电话">
+		            <Input v-model="formCustom.lxdh" placeholder="请输入紧急联系人电话"></Input>
+		          </FormItem>
+						</Col>
+						<Col span="24" :style="{textAlign:'right',margin: '10px 0'}"><Button type="primary" @click="submitData('formCustom')">保存</Button></Col>
+					</Form>
+				<Col span="24" class="infoCol24" v-if="mjzData.length" v-for="item,index in mjzData" :key="index">
+					<Row class="infoRow2">
+						<Col span="4" class="sfCol4">
+						<div class="counts">
+							<p class="suifang">门诊</p>
+						</div>
+						</Col>
+						<Col span="20" class="sfCol20">
+						<h3 class="sfName">{{currentData.brxm}}</h3>						
+						<Row>
+							<Col span="12">
+								<span>就诊卡号:</span><span>{{currentData.jzkh}}</span>
+							</Col>
+							<Col span="12">
+								<span>患者性质:</span><span>{{currentData.brxz}}</span>
+							</Col>
+							<Col span="12">
+								<span>就诊时间:</span><span>{{item.jzrq}}</span>
+							</Col>
+							<Col span="12">
+								<span>是否初诊:</span><span>44</span>
+							</Col>
+							<Col span="12">
+								<span>就诊科室:</span><span>{{item.ksmc}}</span>
+							</Col>
+							<Col span="12">
+								<span>就诊医生:</span><span>{{item.ysxm}}</span>
+							</Col>
+							<Col span="12">
+								<span>主诉:</span><span>{{item.zs}}</span>
+							</Col>
+							<Col span="12">
+								<span>诊断:</span><span>{{item.zdmc}}</span>
+							</Col>
+						</Row>
+						</Col>
+					</Row>
+				</Col>
+				<!-- 住院 -->
+				<Col span="24" class="infoCol24" v-if="zyData.length" v-for="item1,index1 in zyData" :key="index1">
+					<Row class="infoRow2">
+						<Col span="4" class="sfCol4">
+							<div class="counts">
+								<p class="suifang">住院</p>
+							</div>
+						</Col>
+						<Col span="20" class="sfCol20">
+						<h3 class="sfName">{{currentData.brxm}}</h3>						
+						<Row>
+							<Col span="12">
+								<span>住院号:</span><span>{{item1.zyhm}}</span>
+							</Col>
+							<Col span="12">
+								<span>患者性质:</span><span>{{currentData.brxz}}</span>
+							</Col>
+							<Col span="12">
+								<span>入院时间:</span><span>{{item1.admissiontime}}</span>
+							</Col>
+							<Col span="12">
+								<span>出院时间:</span><span>{{item1.leavetime}}</span>
+							</Col>
+							<Col span="12">
+								<span>入院科别:</span><span>{{item1.departname}}</span>
+							</Col>
+							<Col span="12">
+								<span>主治医生:</span><span>{{item1.doctorname}}</span>
+							</Col>
+							<Col span="12">
+								<span>入院诊断:</span><span>{{item1.admissiondiagnose}}</span>
+							</Col>
+							<Col span="12">
+								<span>出院诊断:</span><span>{{item1.leavediagnose}}</span>
+							</Col>
+							<Col span="12">
+								<span>入院情况:</span><span>{{item1.admissiondescription}}</span>
+							</Col>
+							<Col span="12">
+								<span>出院情况:</span><span>{{item1.leavedescription}}</span>
+							</Col>
+						</Row>
+						</Col>
+					</Row>
+				</Col>
+			</Row>
 		</Modal>
 	</Row>
 </template>
@@ -324,9 +548,11 @@ export default {
 			},
 			totalPage: 100,//总页数
 			//当前被点击患者，编辑和详情按钮触发时更换数据
-			currentData: {
-
-			},
+			currentData: {},
+			//门急诊信息
+			mjzData: [],
+			//住院信息
+			zyData: [],
 			//详情模态框
 			patientDetail: false,
 			//编辑模态框
@@ -334,52 +560,66 @@ export default {
 			//编辑功能form数据,暂时未知必填信息，字段未知
 			formCustom: {
 				brxm: '',//姓名
+				brxb: '',//性别
+				mz: '',//民族
+				sfzh: '',//身份证号
 				jtdh: '',//电话
 				xzzQtdz: '',//地址
-				xzzYb: '',//邮编
 				lxrm: '',//联系人名
 				lxgx: '',//联系人关系
 				lxdz: '',//联系地址
 				lxdh: '',//联系电话
-				dwmc: ''//单位名称
+				dwmc: '',//单位名称
+				csny: '',//出生年月
 			},
 			//表格数据
-			dataList: [
-
-			],
+			dataList: [],
 			//表格配置
 			config: [
 				{
 					title: '患者编号',
-					key: 'brid'
+					key: 'brid',
+					align: 'center'
 				},
 				{
 					title: '患者姓名',
-					key: 'brxm'
+					key: 'brxm',
+					align: 'center'
 				},
 				{
 					title: '民族',
-					key: 'mz'
+					key: 'mz',
+					align: 'center'
 				},
 				{
 					title: '出生年月',
-					key: 'csny'
+					key: 'csny',
+					align: 'center'
 				},
 				{
 					title: '性别',
-					key: 'brxb'
+					key: 'brxb',
+					align: 'center'
 				},
 				{
 					title: '家庭电话',
-					key: 'jtdh'
+					key: 'jtdh',
+					align: 'center'
 				},
 				{
 					title: '居住地址',
-					key: 'xzzQtdz'
+					key: 'xzzQtdz',
+					align: 'center'
+				},
+				{
+					title: '身份证号',
+					key: 'zjlx',
+					align: 'center'
 				},
 				{
 					title: '单位名称',
-					key: 'dwmc'
+					key: 'dwmc',
+					align: 'center'
 				},
 				{
 					title: '操作',
@@ -403,6 +643,7 @@ export default {
 									click: () => {
 										/* 传递相关的id，渲染完成后显示出模态框 */
 										this.editPat(params.row);
+										this.getInfo(params.row.id)
 									}
 								}
 							}, '编辑'),
@@ -420,14 +661,13 @@ export default {
 								on: {
 									click: () => {
 										this.getInfo(params.row.id);
+										this.patientDetail = true;
 									}
 								}
 							}, '详情')
 						]);
 					}
 				}],
-
-
 		}
 	},
 	methods: {
@@ -442,38 +682,33 @@ export default {
 			API.FollowBussiness.detailPat({
 				id: id
 			}).then((res) => {
-				for (let item of res.data.logs) {
-					item.jsonData = item.jsonData.replace(/"/g, '');
-					item.jsonData = item.jsonData.replace("{", '');
-					item.jsonData = item.jsonData.replace("}", '');
-					item.jsonData = item.jsonData.split(",");
+				if(res.data.mjzs.length) {
+					this.mjzData = res.data.mjzs
 				}
+				if(res.data.cyxjs.length) {
+					this.zyData = res.data.cyxjs
+				} 
 				this.currentData = res.data;
 			}).catch((err) => {
+				console.log(err)
 
 			});
-			this.patientDetail = true;
+			
 		},
 		/** 
 		 * 修改患者信息
 		 */
 		submitData(name) {
-			this.$refs[name].validate((valid) => {
-				if (valid) {
-					/** 
-					 * 此处填写具体的ajax请求
-					 */
-					API.FollowBussiness.savePat(this.formCustom).then((res) => {
-						this.$Message.success("编辑成功");
-						this.getData();
-						this.patientText = false;
-					}).catch((err) => {
+			/** 
+			 * 此处填写具体的ajax请求
+			 */
+			API.FollowBussiness.savePat(this.formCustom).then((res) => {
+				this.$Message.success("编辑成功");
+				this.getData();
+				this.patientText = false;
+			}).catch((err) => {
 
-					});
-				} else {
-					this.$Message.error('请正确填写信息');
-				}
-			})
+			});
 		},
 		/** 
 		 * 获取列表数据,搜索接口

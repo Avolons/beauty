@@ -167,7 +167,21 @@
 							<Input type="text" v-model="searchParams.brxm" placeholder="请输入患者姓名"></Input>
 							</Col>
 							<Col span="6">
-							<Button @click="searchParams.pager=1;getData()" type="primary">搜索</Button>
+								<p :style="{lineHeight:'32px'}">
+									导入开始时间：
+								</p>
+								<DatePicker @on-change="dateChange1" format="yyyy-MM-dd" placement="bottom-end" placeholder="请选择随访发起时间" style="width:45%"></DatePicker>
+								<TimePicker @on-change="timeChange1" format="HH:mm:ss" placeholder="请选择时间" style="width: 112px;margin-left:10px;"></TimePicker>
+							</Col>
+							<Col span="6">
+								<p :style="{lineHeight:'32px'}">
+									导入结束时间：
+								</p>
+								<DatePicker @on-change="dateChange2" format="yyyy-MM-dd" placement="bottom-end" placeholder="请选择随访发起时间" style="width:45%"></DatePicker>
+								<TimePicker @on-change="timeChange2" format="HH:mm:ss" placeholder="请选择时间" style="width: 112px;margin-left:10px;"></TimePicker>
+							</Col>
+							<Col span="6">
+								<Button @click="searchParams.pager=1;getData()" type="primary">搜索</Button>
 							</Col>
 						</Row>
 						<div class="creatNotice_main_add">
@@ -268,7 +282,15 @@ export default {
 			// 		key: 'dateBegin'
 			// 	},
 			// ],
-			timeobj: {
+			timeobj: {//发起随访时间
+				date: "",
+				time: "",
+			},
+			timeobj1: {//患者导入开始时间
+				date: "",
+				time: "",
+			},
+			timeobj2: {//患者导入结束时间
 				date: "",
 				time: "",
 			},
@@ -281,6 +303,8 @@ export default {
 				brxm: '',//患者姓名
 				limit: 10,//每页条数
 				adminId: "",
+				beginTime: '',//导入开始时间：年月日时分秒(可选)
+				endTime: '',//导入结束时间：年月日时分秒（可选）
 			},
 			/** 
 			 * 方案请求数据
@@ -343,9 +367,7 @@ export default {
 					}
 				}
 			],
-			planList: [
-
-			],
+			planList: [],
 			patConfig: [
 				{
 					title: '患者姓名',
@@ -538,9 +560,16 @@ export default {
 			/** 
 			 * id 赋值
 			 */
-			this.sendData.admin = this.searchParams.admin.split(",")[0];
-			this.sendData.adminId = this.searchParams.admin.split(",")[1];
+			console.log(this.searchParams.admin)
+			if(this.searchParams.admin) {
+				this.sendData.admin = this.searchParams.admin.split(",")[0];
+				this.sendData.adminId = this.searchParams.admin.split(",")[1];
+			}
 			this.searchParams.adminId = this.sendData.adminId;
+			this.searchParams.beginTime = this.timeobj1.date + " " + this.timeobj1.time;
+			this.searchParams.endTime = this.timeobj2.date + " " + this.timeobj2.time;
+			console.log(this.searchParams.beginTime)
+			console.log(this.searchParams.endTime)
 			API.FollowBussiness.patList(this.searchParams).then((res) => {
 				this.dataList = this.formData(res.data);
 				this.totalPage = res.total;
@@ -581,7 +610,7 @@ export default {
 				}
 			}
 		},
-		/** 
+		/** ylTimeChange
 		 * 日期改变
 		 */
 		dateChange(date) {
@@ -592,6 +621,30 @@ export default {
 		 */
 		timeChange(date) {
 			this.timeobj.time = date;
+		},
+		/** 
+		 * 患者导入开始时间
+		 */
+		dateChange1(date) {
+			this.timeobj1.date = date;
+		},
+		/** 
+		 * 患者导入开始时间
+		 */
+		timeChange1(date) {
+			this.timeobj1.time = date;
+		},
+		/** 
+		 * 患者导入结束时间
+		 */
+		dateChange2(date) {
+			this.timeobj2.date = date;
+		},
+		/** 
+		 * 患者导入结束时间
+		 */
+		timeChange2(date) {
+			this.timeobj2.time = date;
 		},
 		/** 
 		 * 添加患者

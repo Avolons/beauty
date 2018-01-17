@@ -376,86 +376,63 @@ export default {
                  * 完成    删除
                  */
                 render: (h, params) => {
-                    return h('div', [
-                        h('Button', {
-                          props: {
-                              type: 'primary',
-                              size: 'small'
-                          },
-                          style: {
-                              marginRight: '5px'
-                          },
-                          //'class':{
-              						// 	menuHide:this.menuShow(this.AM.FollowBussiness.startPlan)
-              						// },
-                          on: {
-                            click: () => {
-                              this.followShow = true;
-                              this.sfMobile(params.row.hzxxId)
-                              this.startPlan(params.row.id);
-                            }
-                          }
-                        }, '随访'),
-                        h('Button', {
-                          props: {
-                            type: 'success',
-                            size: 'small'
-                          },
-                          style: {
-                            marginRight: '5px'
-                          },
-                          // 'class':{
-                          //   menuHide:this.menuShow(this.AM.FollowBussiness.delPlan)
-                          // },
-                          on: {
-                            click: () => {
-                              this.sfjhModel = true;
-                              this.detailFun(params.row.id)
-                              /** 
-                               * 删除计划
-                               */
-                              //this.deletPlan(params.row.id);
-                            }
-                          }
-                        }, '详情'),
-                        h('Button', {
-                          props: {
-                            type: 'warning',
-                            size: 'small'
-                          },
-                          style: {
+                  return h('div', [
+                    h('Button', {
+                      props: {
+                          type: 'primary',
+                          size: 'small'
+                      },
+                      style: {
+                          marginRight: '5px'
+                      },
+                      on: {
+                        click: () => {
+                          this.followShow = true;
+                          this.sfMobile(params.row.hzxxId)
+                          this.startPlan(params.row.id);
+                        }
+                      }
+                    }, '随访'),
+                    h('Button', {
+                      props: {
+                        type: 'success',
+                        size: 'small'
+                      },
+                      style: {
+                        marginRight: '5px'
+                      },
+                      // 'class':{
+                      //   menuHide:this.menuShow(this.AM.FollowBussiness.delPlan)
+                      // },
+                      on: {
+                        click: () => {
+                          this.sfjhModel = true;
+                          this.detailFun(params.row.id)
+                          /** 
+                           * 删除计划
+                           */
+                          //this.deletPlan(params.row.id);
+                        }
+                      }
+                    }, '详情'),
+                    h('Button', {
+                      props: {
+                        type: 'warning',
+                        size: 'small'
+                      },
+                      style: {
 
-                          },
-                          'class':{
-                            menuHide:this.menuShow(this.AM.FollowBussiness.delPlan)
-                          },
-                          on: {
-                            click: () => {
-                              this.zzsfFun(params.row.brxm, params.row.id)
-                            }
-                          }
-                        }, '终止随访')
-                      //   h('Button', {
-                      //       props: {
-                      //           type: 'warning',
-                      //           size: 'small'
-                      //       },
-                      //       style: {
-
-                      //       },
-                      //       'class':{
-                						// 	menuHide:this.menuShow(this.AM.FollowBussiness.delPlan)
-                						// },
-                      //       on: {
-                      //           click: () => {
-                      //               /** 
-                      //                * 删除计划
-                      //                */
-                      //               this.deletPlan(params.row.id);
-                      //           }
-                      //       }
-                      //   }, '终止随访')
-                    ]);
+                      },
+                      'class':{
+                        menuHide:this.menuShow(this.AM.FollowBussiness.delPlan)
+                      },
+                      on: {
+                        click: () => {
+                          this.zzsfFun(params.row.brxm, params.row.id)
+                        }
+                      }
+                    }, '终止随访')
+                  ]);
                 }
             }],
         //列表数据

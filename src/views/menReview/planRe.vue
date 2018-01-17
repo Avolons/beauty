@@ -50,7 +50,7 @@
 			<Page style="float:right" :total="totalPage" @on-change="changePage" :current="searchParams.pager" show-elevator show-total></Page>
 		</Row>
 		</Col>
-		<!-- 详情模态框 -->
+		<!-- 就诊档案模态框 -->
     <Modal v-model="patientDetail" title="患者信息" class-name="patientInfo" :styles="{top: '36px'}" width="1000">
       <Row class="infoRow">
         <Col span="12" class="infoCol12 mb12">
@@ -220,6 +220,47 @@
         </Col>
       </Row>
     </Modal>
+    <!-- 随访计划详情 -->
+    <Modal v-model="sfjhModel" title="随访计划详情" class-name="sfjhModel" :styles="{top: '36px'}" width="700">
+      <Row class="sfjhContent">
+        <Row class="patientMs">
+          <Col span="4" offset="4" class="hzName">{{sfjhData.znjqrHzxx.brxm}}</Col>
+          <Col span="16" class="hzxq">{{sfjhData.znjqrHzxx.brxb}}<span>/</span>{{sfjhData.znjqrHzxx.age}}</Col>
+        </Row>
+        <Row class="patientMs2">
+          <Col span="4" offset="4" class="hzXx1">疾病诊断:</Col>
+           <Col span="16" class="hzXx2">{{sfjhData.icdName}}</Col>
+        </Row>
+        <Row class="patientMs2">
+          <Col span="4" offset="4" class="hzXx1">电话号码:</Col>
+           <Col span="16" class="hzXx2">{{sfjhData.znjqrHzxx.jtdh}}</Col>
+        </Row>
+        <Row class="patientMs2">
+          <Col span="4" offset="4" class="hzXx1">就诊日期:</Col>
+          <Col span="16" class="hzXx2">{{sfjhData.visitStartTime}}</Col>
+        </Row>
+        <!-- 随访模板 -->
+        <Row class="patientMs2 gray">
+          <Col span="4" offset="4" class="hzXx1">随访方案:</Col>
+          <Col span="16" class="hzXx2">{{sfjhData.schemeName}}</Col>
+        </Row> 
+        <Row class="patientMs2 gray">
+          <Col span="4" offset="4" class="hzXx1">随访进度:</Col>
+          <Col span="16" class="hzXx2">{{sfjhData.totalNum}}</Col>
+        </Row>
+        <!-- 随访计划时间 -->
+        <Row style="height:500px;overflow-y:auto;">
+          <Row class="gray" style="font-size:14px;padding-top:20px;" v-for="(item,index) in sfjhData.orders" :key="index">
+            <Col span="20" offset="4">{{item.startDate}}</Col>
+            <Row style="padding-left:200px;">
+              <Col span="6" v-for="(item1,index1) in item.CollectionIndex" :key="index1+1" style="line-height:30px;">{{item1}}</Col> 
+            </Row>
+          </Row>
+        </Row>
+      </Row>
+      <Row slot="footer">
+      </Row>
+    </Modal>
 	</Row>
 </template>
 
@@ -273,6 +314,11 @@ export default {
           }
 				},
 				{
+					title: '疾病诊断',
+					key: 'icdName',
+					align: 'center'
+				},
+				{
 					title: '随访方案',
 					key: 'schemeName',
 					align: 'center'
@@ -280,11 +326,24 @@ export default {
 				{
 					title: '审核状态',
 					key: 'statusStr',
-					align: 'center'
+					align: 'center',
+					render: (h, params) => {
+						return h('div', [
+							  h('div', {
+	              }, params.row.statusStr),
+	              h('div', {
+	              }, params.row.vetMinuteName)
+						]);
+					}
 				},
 				{
 					title: '生成时间',
 					key: 'dateAdd',
+					align: 'center'
+				},
+				{
+					title: '计划开始时间',
+					key: 'visitStartTime',
 					align: 'center'
 				},
 				{
@@ -305,66 +364,62 @@ export default {
 				{
 					title: '审核操作',
 					key: 'action',
-					width: 150,
 					align: 'center',
+					width: '200px',
 					render: (h, params) => {
-						if (params.row.status == 0) {
-							return h('div', [
-								h('Button', {
-									props: {
-										type: 'primary',
-										size: 'small'
-									},
-									style: {
-										marginRight: '5px',
-									},
-									 'class': {
+						return h('div', [
+							h('Button', {
+								props: {
+									type: 'primary',
+									size: 'small'
+								},
+								style: {
+									marginRight: '5px',
+								},
+								'class': {
 								menuHide: this.menuShow(this.AM.Data.passPlan)
 								},
-									on: {
-										click: () => {
-											this.passPlan([params.row.id], 2);
-										}
+								on: {
+									click: () => {
+										this.passPlan([params.row.id], 2);
 									}
-								}, '通过'),
-								h('Button', {
-									props: {
-										type: 'warning',
-										size: 'small'
-									},
-									style: {
-
-									},
-									 'class': {
+								}
+							}, '通过'),
+							h('Button', {
+								props: {
+									type: 'warning',
+									size: 'small'
+								},
+								style: {
+									marginRight: '5px'
+								},
+								'class': {
 								menuHide: this.menuShow(this.AM.Data.passPlan)
 								},
-									on: {
-										click: () => {
-											/** 
-											 * 删除计划
-											 */
-											this.passPlan([params.row.id], 1);
-										}
+								on: {
+									click: () => {
+										/** 
+										 * 删除计划
+										 */
+										this.passPlan([params.row.id], 1);
 									}
-								}, '不通过')
-							]);
-						} else {
-							return h('div', [
-								h('Button', {
-									props: {
-										type: 'dashed',
-										size: 'small'
-									},
-									style: {
-										marginRight: '5px',
-									},
-									on: {
-
-									}
-								}, params.row.statusStr)
-							]);
-						}
-
+								}
+							}, '不通过'),
+							h('Button', {
+                props: {
+                  type: 'success',
+                  size: 'small'
+                },
+                'class':{},
+                on: {
+                  click: () => {
+                    this.sfjhModel = true;
+                    this.detailFun(params.row.id)
+                    
+                  }
+                }
+              }, '详情')
+						]);
 					}
 				}],
 			//列表数据
@@ -397,8 +452,15 @@ export default {
       mjzData: [],
       //住院信息
       zyData: [],
-      //详情模态框
+      //患者档案模态框
       patientDetail: false,
+      //随访计划详情
+      sfjhModel: false,
+      sfjhData: {
+        znjqrHzxx: {
+          brxm: '',
+        },
+      },//随访计划详情
 		}
 	},
 	methods: {
@@ -487,6 +549,26 @@ export default {
 
       });
     },
+    /**
+       * 获取随访计划详情
+       */
+      detailFun(id) {
+        API.FollowBussiness.detail({
+          id:id,
+        }).then((res)=>{
+          console.log(res)
+          // this.$Message.success('成功!');
+          // this.zzsfModel = false;
+          this.sfjhData = res.data;
+          if(res.data.orders.length) {
+            res.data.orders.forEach((item)=> {
+              item.CollectionIndex = item.CollectionIndex.split(',')
+            })
+          }
+        }).catch((err)=>{
+
+        });
+      },
 
 	},
 	mounted() {

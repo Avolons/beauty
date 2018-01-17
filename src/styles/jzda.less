@@ -1,4 +1,4 @@
-//详情
+//就诊档案
 .patientInfo .ivu-modal .ivu-modal-content {
 	.ivu-modal-header {
 		.ivu-modal-header-inner,
@@ -93,4 +93,44 @@
 }
 .mb12 {
 	margin-bottom: 12px;
+}
+
+//随访计划详情
+.sfjhModel .ivu-modal .ivu-modal-content {
+  border-radius: 6px;
+  .ivu-modal-body {
+    padding: 0;
+    //计划内容
+    .sfjhContent {
+      margin: 16px 0 0px;
+      padding-bottom: 16px; 
+      background: #f0f0f0;
+      border-radius: 10px;
+      //患者基本信息
+      .patientMs {
+        background: #fff;
+        line-height: 30px;
+        padding-bottom: 10px;
+        .hzName {
+          font-size: 20px;
+          color: #ff6800;
+        }
+        .hzxq {
+          font-size: 14px;
+        }
+      }
+      //诊断信息
+      .patientMs2 {
+        background: #fff;
+
+        line-height: 24px;
+        font-size: 14px;
+        padding-bottom: 10px;
+      }
+    }
+  }
+  .ivu-modal-footer {
+    padding: 0;
+    border: none;
+  }
 }

@@ -176,10 +176,10 @@
 }
 </style>
 
-
 <template>
 	<div class="user">
 		<div class="sys-depart_main">
+			<!-- 搜索 -->
 			<Row class="sys-depart_main_search" :gutter="15">
 				<Col span="6">
 				<span>
@@ -222,9 +222,11 @@
 				<Button @click="searchParam.pager=1;getData()" type="primary">查询</Button>
 				</Col>
 			</Row>
+			<!-- 表格 -->
 			<div class="sys-depart_main_list">
 				<Table border :columns="config" :data="dataList"></Table>
 			</div>
+			<!-- 分页 -->
 			<Row class="sys-depart_main_page">
 				<Page :page-size="pageSize" :total="totalPage" :current="searchParam.pager" show-elevator style="float:right" @on-change="changePage"></Page>
 			</Row>
@@ -260,6 +262,26 @@
 									</td>
 								</tr>
 							</table>
+							<Form :model="zzsfForm" ref="zzsfForm" :rules="zzsfFormRule" :label-width="60">
+								<FormItem label="终止随访">
+			            <RadioGroup v-model="zzsfForm.radio" @on-change="radioChange">
+		                <Radio label="1">是</Radio>
+		                <Radio label="0">否</Radio>
+			            </RadioGroup>
+				        </FormItem>
+			          <FormItem label="原因"  prop="select" style="text-align:left;" v-if="zzsfForm.radio == 1">
+			            <Select v-model="zzsfForm.select" style="width: 50%;" @on-change="xzReason">
+			                <Option value="1">死亡</Option>
+			                <Option value="2">拒绝随访</Option>
+			                <Option value="3">随访方案重复</Option>
+			                <Option value="4">方案不匹配</Option>
+			                <Option value="5">其他</Option>
+			            </Select>
+			          </FormItem>
+			          <FormItem label="详情" prop="textarea" style="text-align:left;" v-if="zzsfForm.radio == 1">
+			            <Input v-model="zzsfForm.textarea" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="请详细说明情况" style="width: 50%;"></Input>
+			          </FormItem>
+			        </Form>
 						</div>
 					</Panel>
 					<Panel name="2">
@@ -484,6 +506,34 @@
         </Col>
       </Row>
     </Modal>
+     <!-- 终止随访 -->
+    <Modal v-model="zzsfModel" class-name="zzsfModel" width="480px">
+      <p slot="header" style="color:#ed3f14;text-align:center;font-size:16px;">
+        <span>终止{{sfrName}}所有随访</span>
+      </p>
+      <div style="text-align:center">
+        <Form :model="zzsfForm" ref="zzsfForm" :rules="zzsfFormRule" :label-width="80">
+          <FormItem label="原因"  prop="select" style="text-align:left;">
+            <Select v-model="zzsfForm.select" style="width: 80%;" @on-change="xzReason">
+                <Option value="1">死亡</Option>
+                <Option value="2">拒绝随访</Option>
+                <Option value="3">随访方案重复</Option>
+                <Option value="4">方案不匹配</Option>
+                <Option value="5">其他</Option>
+            </Select>
+          </FormItem>
+          <FormItem label="详情" prop="textarea" style="text-align:left;">
+            <Input v-model.trim="zzsfForm.textarea" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="请详细说明情况" style="width: 80%;"></Input>
+          </FormItem>
+          <FormItem>
+            <Button type="primary" @click="zzsfCancel('zzsfForm')">取消</Button>
+            <Button type="ghost" @click="zzsfOk('zzsfForm')" style="margin-left: 8px">提交</Button>
+          </FormItem>
+        </Form>
+      </div>
+      <div slot="footer">
+      </div>
+    </Modal>
 	</div>
 </template>
 
@@ -507,7 +557,7 @@ export default {
 			},
 			//随访结果详情
 			planInfo: {
-				orderReplyQuestions: []
+				orderReplyQuestions: [],
 			},
 			pageSize: 10,
 			totalPage: 10,//总页码
@@ -557,6 +607,10 @@ export default {
           }
 				},
 				{
+					title: '疾病诊断',
+					key: 'icdName',
+				},
+				{
 					title: '随访方案',
 					key: 'schemeName',
 				},
@@ -565,8 +619,16 @@ export default {
 					key: 'statusStr',
 				},
 				{
-					title: '生成时间',
-					key: 'dateAdd'
+					title: '执行日期',
+					key: 'dateBegin'
+				},
+				{
+					title: '审核人',
+					key: 'vetPerson'
+				},
+				{
+					title: '审核日期',
+					key: 'vetDate'
 				},
 				{
 					title: '操作',
@@ -592,23 +654,41 @@ export default {
 									}
 								}
 							}, params.row.vetStatus == 0 ? '审核' : '重新审核'),
+							// h('Button', {
+							// 	props: {
+							// 		type: 'warning',
+							// 		size: 'small'
+							// 	},
+							// 	style: {
+							// 		marginRight: '5px'
+							// 	},
+							// 	 'class': {
+							// 	menuHide: this.menuShow(this.AM.Data.delResult)
+							// 	},
+							// 	on: {
+							// 		click: () => {
+							// 			this.delDepart(params.row.id)
+							// 		}
+							// 	}
+							// }, '删除'),
 							h('Button', {
-								props: {
-									type: 'warning',
-									size: 'small'
-								},
-								style: {
-									marginRight: '5px'
-								},
-								 'class': {
-								menuHide: this.menuShow(this.AM.Data.delResult)
-								},
-								on: {
-									click: () => {
-										this.delDepart(params.row.id)
-									}
-								}
-							}, '删除'),
+                props: {
+                  type: 'warning',
+                  size: 'small'
+                },
+                style: {
+
+                },
+                'class':{
+                  menuHide:this.menuShow(this.AM.FollowBussiness.delPlan)
+                },
+                on: {
+                  click: () => {
+                    this.zzsfFun(params.row.brxm, params.row.id)
+                    this.$refs.zzsfForm.resetFields();
+                  }
+                }
+              }, '终止随访')
 						]);
 					}
 				}
@@ -623,6 +703,23 @@ export default {
       zyData: [],
       //详情模态框
       patientDetail: false,
+      //终止随访
+      zzsfModel: false,//弹框
+      sfrName: '',//终止随访人姓名
+      nowId: '',//终止随访人数据id
+      zzsfForm: {
+        select: '',//终止随访原因
+        textarea: '',//终止随访备注
+        radio: '0',
+      },
+      zzsfFormRule: {//终止随访form验证
+        select: [
+          { required: true, message: '请选择不通过原因', trigger: 'change' }
+        ],
+        textarea: [
+          { required: true, message: '请输入详情', trigger: 'blur' },
+        ]
+      },
 		}
 	},
 	methods: {
@@ -736,6 +833,12 @@ export default {
 				id: id
 			}).then((res) => {
 				this.planInfo = this.dataForm(res.data);
+				if(res.data.notPassReason !='') {
+					this.zzsfForm.select = res.data.notPassReason;
+					this.zzsfForm.textarea = res.data.notPassRemark;
+				}else {
+					this.zzsfForm.radio = 0;
+				}
 			}).catch((err) => {
 
 			});
@@ -759,6 +862,15 @@ export default {
 				}
 			});
 		},
+		/**
+		 * 审核是否终止随访
+		 */
+		radioChange(value) {
+			console.log(value)
+			if(value == 1) {//清空
+				this.$refs.zzsfForm.resetFields();
+			}
+		},		 
 		submitData() {
 			/**
 			 * 发送数据
@@ -769,6 +881,8 @@ export default {
 				hzxxId:this.planInfo.hzxxId,   
 				vetRemark:this.planInfo.vetRemark,  
 				orderReplyQuestions:[],
+				notPassReason: this.zzsfForm.select,
+				notPassRemark: this.zzsfForm.textarea
 			}
 			for (let item of this.planInfo.orderReplyQuestions) {
 				let copyData=JSON.parse(JSON.stringify(item));
@@ -784,20 +898,23 @@ export default {
 					fieldValue:copyData.fieldValue,
 				})
 			}
-			API.Dataaudit.saveResult(
-				ajaxDa
-			).then((res) => {
-				this.$Message.success("提交成功");
-				this.modal = false;
-				this.getData();
-			}).catch((err) => {
+			if(this.zzsfForm.select == ''||this.zzsfForm.textarea.toString().length<1) {
+				this.$Message.error('请填写终止随访的原因')
+			}else {
+				API.Dataaudit.saveResult(
+					ajaxDa
+				).then((res) => {
+					this.$Message.success("提交成功");
+					this.modal = false;
+					this.getData();
+				}).catch((err) => {
 
-			});
-
+				});
+			}
 		},
 		/** 
-         * 重置所有属性
-         */
+     * 重置所有属性
+     */
 		handleReset(name) {
 			this.$refs[name].resetFields();
 		},
@@ -827,6 +944,48 @@ export default {
 
       });
     },
+    /**
+       * 终止随访按钮
+       */
+      zzsfFun(name, id) {
+        this.zzsfModel = true;
+        this.sfrName = name;
+        this.nowId = id;
+      },
+      //选择终止随访的原因
+      xzReason(value) {
+        this.zzsfForm.select = value
+      },
+      /**
+       * 终止随访取消按钮
+       */
+      zzsfCancel (name) {
+        this.$refs[name].resetFields();
+        this.zzsfModel = false;
+      },
+      /**
+       * 终止随访确定按钮
+       */
+      zzsfOk (name) {
+        this.$refs[name].validate((valid) => {
+          if (valid) {
+            API.Dataaudit.cancelall({
+                id:this.nowId,
+                notPassReason:this.zzsfForm.select,
+                notPassRemark:this.zzsfForm.textarea,
+            }).then((res)=>{
+              console.log(res)
+              this.$Message.success('成功!');
+              this.zzsfModel = false;
+               
+            }).catch((err)=>{
+
+            });
+          } else {
+              this.$Message.error('失败');
+          }
+        })
+      },
 	},
 	mounted() {
 		this.getDepartList();

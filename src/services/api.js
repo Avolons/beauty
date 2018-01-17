@@ -1091,6 +1091,15 @@ export const Dataaudit = {
         return fetch('get', '/visit/order/list', data);
     },
     /**
+     * 终止随访
+     *id：
+     *notPassReason：2
+     *notPassRemark: 拒绝随访
+     */
+    cancelall (data) {
+        return fetch('post', '/visit/order/cancelall', data);
+    },
+    /**
      * 根据医生id获取方案列表接口
      * id
      * @param {any} data

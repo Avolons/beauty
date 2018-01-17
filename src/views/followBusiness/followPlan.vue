@@ -815,13 +815,6 @@ export default {
 .mb12 {
     margin-bottom: 12px;
 }
-//终止随访model
-.zzsfModel .ivu-modal .ivu-modal-content {
-  .ivu-modal-footer {
-    padding: 0;
-    border: none;
-  }
-}
 //随访计划详情
 .sfjhModel .ivu-modal .ivu-modal-content {
   border-radius: 6px;

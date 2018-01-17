@@ -273,12 +273,14 @@
           <Col span="16" class="hzXx2">{{sfjhData.totalNum}}</Col>
         </Row>
         <!-- 随访计划时间 -->
-        <Row class="gray" style="font-size:14px;padding-top:20px;" v-for="(item,index) in sfjhData.orders" :key="index">
+        <Row style="height:500px;overflow-y:auto;">
+          <Row class="gray" style="font-size:14px;padding-top:20px;" v-for="(item,index) in sfjhData.orders" :key="index">
             <Col span="20" offset="4">{{item.startDate}}</Col>
             <Row style="padding-left:200px;">
               <Col span="6" v-for="(item1,index1) in item.CollectionIndex" :key="index1+1" style="line-height:30px;">{{item1}}</Col> 
             </Row>
           </Row>
+        </Row>
       </Row>
       <Row slot="footer">
       </Row>

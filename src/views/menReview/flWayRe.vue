@@ -332,7 +332,7 @@
 					</Panel>
 				</Collapse>
 				<div slot="footer" class="sys-sysset_main_btnList">
-					<Button @click="submitData" type="primary">提交审核</Button>
+					<Button @click="submit1" type="primary">提交审核</Button>
 				</div>
 			</Modal>
 		</div>
@@ -534,6 +534,12 @@
       <div slot="footer">
       </div>
     </Modal>
+    <!-- 确定终止随访计划 -->
+    <Modal v-model="qdqx" title="提示" @on-ok="submitData">
+      <div style="text-align:center;line-height:30px;font-size:16px;">
+        <p>确认提交后将终止该患者一切随访计划，<br>且不再为该患者自动生成随访计划?</p>
+      </div>
+    </Modal>
 	</div>
 </template>
 
@@ -720,6 +726,7 @@ export default {
           { required: true, message: '请输入详情', trigger: 'blur' },
         ]
       },
+      qdqx: false,//确定终止随访？Model
 		}
 	},
 	methods: {
@@ -870,7 +877,17 @@ export default {
 			if(value == 1) {//清空
 				this.$refs.zzsfForm.resetFields();
 			}
-		},		 
+		},
+		/**
+		 * 判断是否终止随访
+		 */
+		submit1() {
+			if(this.zzsfForm.radio == 1) {
+				this.qdqx = true;
+			}else {
+				this.submitData()
+			}
+		}	,	 
 		submitData() {
 			/**
 			 * 发送数据
@@ -898,8 +915,20 @@ export default {
 					fieldValue:copyData.fieldValue,
 				})
 			}
-			if(this.zzsfForm.select == ''||this.zzsfForm.textarea.toString().length<1) {
-				this.$Message.error('请填写终止随访的原因')
+			if(this.zzsfForm.radio == 1) {
+				if(this.zzsfForm.select == ''||this.zzsfForm.textarea.toString().length<1) {
+					this.$Message.error('请填写终止随访的原因')
+				}else {
+					API.Dataaudit.saveResult(
+						ajaxDa
+					).then((res) => {
+						this.$Message.success("提交成功");
+						this.modal = false;
+						this.getData();
+					}).catch((err) => {
+
+					});
+				}
 			}else {
 				API.Dataaudit.saveResult(
 					ajaxDa

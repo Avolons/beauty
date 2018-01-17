@@ -12,9 +12,9 @@ import qs from 'qs';
 Vue.prototype.$http = axios;
 
 /* 默认最长响应时间 */
-axios.defaults.timeout = 5000;
+// axios.defaults.timeout = 5000;
 /* 默认的接口地址 */
-/* axios.defaults.baseURL = 'http://192.168.1.100:8080'; */
+ // axios.defaults.baseURL = 'http://192.168.1.100:8080'; 
 
 let JsonData = ['/order/temp/testvisit', '/order/temp/visit', '/visit/order/vet/save', '/visit/order/notice', '/ordertask/vet', '/question/script/save', '/questionscheme/save', '/questiontemple/save', '/questiontarget/save'];
 // 添加请求拦截器
@@ -893,6 +893,30 @@ export const FollowBussiness = {
     cancelPlan (data) {
         return fetch('get', '/visit/ordertask/cancel', data);
     },
+    /*
+     * 终止随访
+     * id:34259
+     * notPassReason:1,//未通过原因:1,患者已死亡;2,患者不接受随访;3,随访方案重复;4,方案不匹配;
+     * notPassRemark:人人健康活百岁
+     */
+    cancleall (data) {
+        return fetch('post', '/visit/ordertask/cancleall', data);
+    },
+    /*
+     * 获取随访人的号码
+     * id:患者id
+     */
+    gethzxx (data) {
+        return fetch('get', '/visit/sufferer/gethzxx', data);
+    },
+    /*
+     * 查看随访计划详情
+     * id:id
+     */
+    detail (data) {
+        return fetch('get', '/visit/ordertask/detail', data);
+    },
+
     /*
      * 发起随访计划
      * id:34259,  //id

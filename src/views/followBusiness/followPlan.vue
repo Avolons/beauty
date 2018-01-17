@@ -1,222 +1,289 @@
 <template>
+  <Row>
+    <!-- 搜索栏 -->
+    <Col span="24" class="followPlan">
+      <Row class="inter-down_main_search" :gutter="15">
+        <Col span="6">
+          <span>
+            患者姓名
+          </span>
+          <Input type="text" v-model="searchParams.brxm" placeholder="请输入患者姓名"></Input>
+        </Col>
+        <Col span="6">
+          <span>
+            随访方案
+          </span>
+          <Input type="text" v-model="searchParams.schemeName" placeholder="请输入随访方案"></Input>
+        </Col>
+        <Col span="6">
+          <span>
+            审核状态
+          </span>
+          <Select v-model="searchParams.status">
+            <Option v-for="item in statusList" :value="item.id" :key="item.id">{{item.name}}</Option>
+          </Select>
+        </Col>
+        <Col span="6">
+         <Button type="primary" @click="searchParams.pager=1;getData()">查询</Button>
+        </Col>
+      </Row>
+    </Col>
+    <!-- 表格 -->
+    <Col span="24" class="fpTable">
+    <Table border :columns="config" :data="dataList" class="margin-bottom-10"></Table>
     <Row>
-        <!-- 搜索栏 -->
-        <Col span="24" class="followPlan">
-        <Row class="inter-down_main_search" :gutter="15">
-                <Col span="6">
-                <span>
-                    患者姓名
-                </span>
-                <Input type="text" v-model="searchParams.brxm" placeholder="请输入患者姓名"></Input>
-                </Col>
-                <Col span="6">
-                <span>
-                    随访方案
-                </span>
-                <Input type="text" v-model="searchParams.schemeName" placeholder="请输入随访方案"></Input>
-                </Col>
-                <Col span="6">
-                <span>
-                    审核状态
-                </span>
-                <Select v-model="searchParams.status">
-                    <Option v-for="item in statusList" :value="item.id" :key="item.id">{{item.name}}</Option>
-                </Select>
-                </Col>
-                <Col span="6">
-                   <Button type="primary" @click="searchParams.pager=1;getData()">查询</Button>
-                </Col>
+        <Page style="float:right" :current="searchParams.pager" :total="totalPage" @on-change="changePage" show-elevator show-total></Page>
+    </Row>
+    </Col>
+    <!-- 随访模态框 -->
+    <Modal v-model="followShow" title="随访电话" class-name="patientInfo" :styles="{top: '180px'}">
+        <Form ref="AIform" :model="AIform" :rules="validate.followPlan" inline :label="80" class="AIform">
+            <FormItem prop="AIphone" label="电话">
+                <Input v-model="AIform.AIphone" placeholder="请输入号码" type="text"></Input>
+            </FormItem>
+            <FormItem>
+                <Button type="primary" @click="submitData('AIform')">提交</Button>
+            </FormItem>
+        </Form>
+    </Modal>
+    <!-- 就诊档案 -->
+    <Modal v-model="patientDetail" title="患者信息" class-name="patientInfo" :styles="{top: '36px'}" width="1000">
+      <Row class="infoRow">
+        <Col span="12" class="infoCol12 mb12">
+          <div class="info">
+            <div class="info-row">
+              <div class="info1 bb1">姓名</div>
+              <div class="info2 bdx1">{{currentData.brxm}}</div>
+            </div>
+            <div class="info-row">
+              <div class="info1">性别</div>
+              <div class="info2">{{currentData.brxb}}</div>
+            </div>
+          </div>
+        </Col>
+        <Col span="12" class="infoCol12 mb12">
+          <div class="info">
+            <div class="info-row">
+              <div class="info1 bb1">电话</div>
+              <div class="info2 bdx1">{{currentData.jtdh}}</div>
+            </div>
+            <div class="info-row">
+              <div class="info1">地址</div>
+              <div class="info2">{{currentData.xzzQtdz}}</div>
+            </div>
+          </div>
+        </Col>
+        <Col span="12" class="infoCol12 mb12">
+          <div class="info">
+            <div class="info-row">
+              <div class="info1 bb1">年龄</div>
+              <div class="info2 bdx1">{{currentData.age}}</div>
+            </div>
+            <div class="info-row">
+              <div class="info1">民族</div>
+              <div class="info2">{{currentData.mz}}</div>
+            </div>
+          </div>
+        </Col>
+        <Col span="12" class="infoCol12 mb12">
+          <div class="info">
+            <div class="info-row">
+              <div class="info1 bb1">出生年月</div>
+              <div class="info2 bdx1">{{currentData.csny}}</div>
+            </div>
+            <div class="info-row">
+              <div class="info1">身份证号</div>
+              <div class="info2">{{currentData.sfzh}}</div>
+            </div>
+          </div>
+        </Col>
+        <Col span="12" class="infoCol12 mb12">
+          <div class="info">
+            <div class="info-row">
+              <div class="info1 bb1">紧急联系人</div>
+              <div class="info2 bdx1">{{currentData.lxrm}}</div>
+            </div>
+            <div class="info-row">
+              <div class="info1">关系</div>
+              <div class="info2">{{currentData.lxgx}}</div>
+            </div>
+          </div>
+        </Col>
+        <Col span="12" class="infoCol12 mb12">
+          <div class="info">
+            <div class="info-row">
+              <div class="info1 bb1">联系地址</div>
+              <div class="info2 bdx1">{{currentData.lxdz}}</div>
+            </div>
+            <div class="info-row">
+              <div class="info1">联系电话</div>
+              <div class="info2">{{currentData.lxdh}}</div>
+            </div>
+          </div>
+        </Col>
+        <Col span="12" class="infoCol12 mb12">
+          <div class="info" style="height: 32px;">
+            <div class="info-row">
+              <div class="info1 bdx1">单位</div>
+              <div class="info2 bdx1">{{currentData.dwmc}}</div>
+            </div>
+          </div>
+        </Col>
+        <!-- 门诊 -->
+        <Col span="24" class="infoCol24" v-if="mjzData.length" v-for="item,index in mjzData" :key="index">
+          <Row class="infoRow2">
+            <Col span="4" class="sfCol4">
+            <div class="counts">
+              <p class="suifang">门诊</p>
+            </div>
+            </Col>
+            <Col span="20" class="sfCol20">
+            <h3 class="sfName">{{currentData.brxm}}</h3>            
+            <Row>
+              <Col span="12">
+                <span>就诊卡号:</span><span>{{currentData.jzkh}}</span>
+              </Col>
+              <Col span="12">
+                <span>患者性质:</span><span>{{currentData.brxz}}</span>
+              </Col>
+              <Col span="12">
+                <span>就诊时间:</span><span>{{item.jzrq}}</span>
+              </Col>
+              <Col span="12">
+                <span>是否初诊:</span><span>44</span>
+              </Col>
+              <Col span="12">
+                <span>就诊科室:</span><span>{{item.ksmc}}</span>
+              </Col>
+              <Col span="12">
+                <span>就诊医生:</span><span>{{item.ysxm}}</span>
+              </Col>
+              <Col span="12">
+                <span>主诉:</span><span>{{item.zs}}</span>
+              </Col>
+              <Col span="12">
+                <span>诊断:</span><span>{{item.zdmc}}</span>
+              </Col>
             </Row>
-        </Col>
-        <!-- 表格 -->
-        <Col span="24" class="fpTable">
-        <Table border :columns="config" :data="dataList" class="margin-bottom-10"></Table>
-        <Row>
-            <Page style="float:right" :current="searchParams.pager" :total="totalPage" @on-change="changePage" show-elevator show-total></Page>
-        </Row>
-        </Col>
-        <!-- 随访模态框 -->
-        <Modal v-model="followShow" title="随访电话" class-name="patientInfo" :styles="{top: '180px'}">
-            <Form ref="AIform" :model="AIform" :rules="validate.followPlan" inline :label="80" class="AIform">
-                <FormItem prop="AIphone" label="电话">
-                    <Input v-model="AIform.AIphone" placeholder="请输入号码" type="text"></Input>
-                </FormItem>
-                <FormItem>
-                    <Button type="primary" @click="submitData('AIform')">提交</Button>
-                </FormItem>
-            </Form>
-        </Modal>
-        <!-- 详情模态框 -->
-        <Modal v-model="patientDetail" title="患者信息" class-name="patientInfo" :styles="{top: '36px'}" width="1000">
-          <Row class="infoRow">
-            <Col span="12" class="infoCol12 mb12">
-              <div class="info">
-                <div class="info-row">
-                  <div class="info1 bb1">姓名</div>
-                  <div class="info2 bdx1">{{currentData.brxm}}</div>
-                </div>
-                <div class="info-row">
-                  <div class="info1">性别</div>
-                  <div class="info2">{{currentData.brxb}}</div>
-                </div>
-              </div>
-            </Col>
-            <Col span="12" class="infoCol12 mb12">
-              <div class="info">
-                <div class="info-row">
-                  <div class="info1 bb1">电话</div>
-                  <div class="info2 bdx1">{{currentData.jtdh}}</div>
-                </div>
-                <div class="info-row">
-                  <div class="info1">地址</div>
-                  <div class="info2">{{currentData.xzzQtdz}}</div>
-                </div>
-              </div>
-            </Col>
-            <Col span="12" class="infoCol12 mb12">
-              <div class="info">
-                <div class="info-row">
-                  <div class="info1 bb1">年龄</div>
-                  <div class="info2 bdx1">{{currentData.age}}</div>
-                </div>
-                <div class="info-row">
-                  <div class="info1">民族</div>
-                  <div class="info2">{{currentData.mz}}</div>
-                </div>
-              </div>
-            </Col>
-            <Col span="12" class="infoCol12 mb12">
-              <div class="info">
-                <div class="info-row">
-                  <div class="info1 bb1">出生年月</div>
-                  <div class="info2 bdx1">{{currentData.csny}}</div>
-                </div>
-                <div class="info-row">
-                  <div class="info1">身份证号</div>
-                  <div class="info2">{{currentData.sfzh}}</div>
-                </div>
-              </div>
-            </Col>
-            <Col span="12" class="infoCol12 mb12">
-              <div class="info">
-                <div class="info-row">
-                  <div class="info1 bb1">紧急联系人</div>
-                  <div class="info2 bdx1">{{currentData.lxrm}}</div>
-                </div>
-                <div class="info-row">
-                  <div class="info1">关系</div>
-                  <div class="info2">{{currentData.lxgx}}</div>
-                </div>
-              </div>
-            </Col>
-            <Col span="12" class="infoCol12 mb12">
-              <div class="info">
-                <div class="info-row">
-                  <div class="info1 bb1">联系地址</div>
-                  <div class="info2 bdx1">{{currentData.lxdz}}</div>
-                </div>
-                <div class="info-row">
-                  <div class="info1">联系电话</div>
-                  <div class="info2">{{currentData.lxdh}}</div>
-                </div>
-              </div>
-            </Col>
-            <Col span="12" class="infoCol12 mb12">
-              <div class="info" style="height: 32px;">
-                <div class="info-row">
-                  <div class="info1 bdx1">单位</div>
-                  <div class="info2 bdx1">{{currentData.dwmc}}</div>
-                </div>
-              </div>
-            </Col>
-            <!-- 门诊 -->
-            <Col span="24" class="infoCol24" v-if="mjzData.length" v-for="item,index in mjzData" :key="index">
-              <Row class="infoRow2">
-                <Col span="4" class="sfCol4">
-                <div class="counts">
-                  <p class="suifang">门诊</p>
-                </div>
-                </Col>
-                <Col span="20" class="sfCol20">
-                <h3 class="sfName">{{currentData.brxm}}</h3>            
-                <Row>
-                  <Col span="12">
-                    <span>就诊卡号:</span><span>{{currentData.jzkh}}</span>
-                  </Col>
-                  <Col span="12">
-                    <span>患者性质:</span><span>{{currentData.brxz}}</span>
-                  </Col>
-                  <Col span="12">
-                    <span>就诊时间:</span><span>{{item.jzrq}}</span>
-                  </Col>
-                  <Col span="12">
-                    <span>是否初诊:</span><span>44</span>
-                  </Col>
-                  <Col span="12">
-                    <span>就诊科室:</span><span>{{item.ksmc}}</span>
-                  </Col>
-                  <Col span="12">
-                    <span>就诊医生:</span><span>{{item.ysxm}}</span>
-                  </Col>
-                  <Col span="12">
-                    <span>主诉:</span><span>{{item.zs}}</span>
-                  </Col>
-                  <Col span="12">
-                    <span>诊断:</span><span>{{item.zdmc}}</span>
-                  </Col>
-                </Row>
-                </Col>
-              </Row>
-            </Col>
-            <!-- 住院 -->
-            <Col span="24" class="infoCol24" v-if="zyData.length" v-for="item1,index1 in zyData" :key="index1">
-              <Row class="infoRow2">
-
-                <Col span="4" class="sfCol4">
-                <div class="counts">
-                  <p class="suifang">住院</p>
-                </div>
-                </Col>
-                <Col span="20" class="sfCol20">
-                <h3 class="sfName">{{currentData.brxm}}</h3>            
-                <Row>
-                  <Col span="12">
-                    <span>住院号:</span><span>{{item1.zyhm}}</span>
-                  </Col>
-                  <Col span="12">
-                    <span>患者性质:</span><span>{{currentData.brxz}}</span>
-                  </Col>
-                  <Col span="12">
-                    <span>入院时间:</span><span>{{item1.admissiontime}}</span>
-                  </Col>
-                  <Col span="12">
-                    <span>出院时间:</span><span>{{item1.leavetime}}</span>
-                  </Col>
-                  <Col span="12">
-                    <span>入院科别:</span><span>{{item1.departname}}</span>
-                  </Col>
-                  <Col span="12">
-                    <span>主治医生:</span><span>{{item1.doctorname}}</span>
-                  </Col>
-                  <Col span="12">
-                    <span>入院诊断:</span><span>{{item1.admissiondiagnose}}</span>
-                  </Col>
-                  <Col span="12">
-                    <span>出院诊断:</span><span>{{item1.leavediagnose}}</span>
-                  </Col>
-                  <Col span="12">
-                    <span>入院情况:</span><span>{{item1.admissiondescription}}</span>
-                  </Col>
-                  <Col span="12">
-                    <span>出院情况:</span><span>{{item1.leavedescription}}</span>
-                  </Col>
-                </Row>
-                </Col>
-              </Row>
             </Col>
           </Row>
-        </Modal>
-    </Row>
+        </Col>
+        <!-- 住院 -->
+        <Col span="24" class="infoCol24" v-if="zyData.length" v-for="item1,index1 in zyData" :key="index1">
+          <Row class="infoRow2">
+
+            <Col span="4" class="sfCol4">
+            <div class="counts">
+              <p class="suifang">住院</p>
+            </div>
+            </Col>
+            <Col span="20" class="sfCol20">
+            <h3 class="sfName">{{currentData.brxm}}</h3>            
+            <Row>
+              <Col span="12">
+                <span>住院号:</span><span>{{item1.zyhm}}</span>
+              </Col>
+              <Col span="12">
+                <span>患者性质:</span><span>{{currentData.brxz}}</span>
+              </Col>
+              <Col span="12">
+                <span>入院时间:</span><span>{{item1.admissiontime}}</span>
+              </Col>
+              <Col span="12">
+                <span>出院时间:</span><span>{{item1.leavetime}}</span>
+              </Col>
+              <Col span="12">
+                <span>入院科别:</span><span>{{item1.departname}}</span>
+              </Col>
+              <Col span="12">
+                <span>主治医生:</span><span>{{item1.doctorname}}</span>
+              </Col>
+              <Col span="12">
+                <span>入院诊断:</span><span>{{item1.admissiondiagnose}}</span>
+              </Col>
+              <Col span="12">
+                <span>出院诊断:</span><span>{{item1.leavediagnose}}</span>
+              </Col>
+              <Col span="12">
+                <span>入院情况:</span><span>{{item1.admissiondescription}}</span>
+              </Col>
+              <Col span="12">
+                <span>出院情况:</span><span>{{item1.leavedescription}}</span>
+              </Col>
+            </Row>
+            </Col>
+          </Row>
+        </Col>
+      </Row>
+    </Modal>
+    <!-- 终止随访 -->
+    <Modal v-model="zzsfModel" class-name="zzsfModel" width="480px">
+      <p slot="header" style="color:#ed3f14;text-align:center;font-size:16px;">
+        <span>终止{{sfrName}}所有随访</span>
+      </p>
+      <div style="text-align:center">
+        <Form :model="zzsfForm" ref="zzsfForm" :rules="zzsfFormRule" :label-width="80">
+          <FormItem label="原因"  prop="select" style="text-align:left;">
+            <Select v-model="zzsfForm.select" style="width: 80%;" @on-change="xzReason">
+                <Option value="1">死亡</Option>
+                <Option value="2">拒绝随访</Option>
+                <Option value="3">随访方案重复</Option>
+                <Option value="4">方案不匹配</Option>
+                <Option value="5">其他</Option>
+            </Select>
+          </FormItem>
+          <FormItem label="详情" prop="textarea" style="text-align:left;">
+            <Input v-model="zzsfForm.textarea" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="请详细说明情况" style="width: 80%;"></Input>
+          </FormItem>
+          <FormItem>
+            <Button type="primary" @click="zzsfCancel('zzsfForm')">取消</Button>
+            <Button type="ghost" @click="zzsfOk('zzsfForm')" style="margin-left: 8px">提交</Button>
+          </FormItem>
+        </Form>
+      </div>
+      <div slot="footer">
+      </div>
+    </Modal>
+    <!-- 随访计划详情 -->
+    <Modal v-model="sfjhModel" title="随访计划详情" class-name="sfjhModel" :styles="{top: '36px'}" width="700">
+      <Row class="sfjhContent">
+        <Row class="patientMs">
+          <Col span="4" offset="4" class="hzName">{{sfjhData.znjqrHzxx.brxm}}</Col>
+          <Col span="16" class="hzxq">{{sfjhData.znjqrHzxx.brxb}}<span>/</span>{{sfjhData.znjqrHzxx.age}}</Col>
+        </Row>
+        <Row class="patientMs2">
+          <Col span="4" offset="4" class="hzXx1">疾病诊断:</Col>
+           <Col span="16" class="hzXx2">{{sfjhData.icdName}}</Col>
+        </Row>
+        <Row class="patientMs2">
+          <Col span="4" offset="4" class="hzXx1">电话号码:</Col>
+           <Col span="16" class="hzXx2">{{sfjhData.znjqrHzxx.jtdh}}</Col>
+        </Row>
+        <Row class="patientMs2">
+          <Col span="4" offset="4" class="hzXx1">就诊日期:</Col>
+          <Col span="16" class="hzXx2">{{sfjhData.visitStartTime}}</Col>
+        </Row>
+        <!-- 随访模板 -->
+        <Row class="patientMs2 gray">
+          <Col span="4" offset="4" class="hzXx1">随访方案:</Col>
+          <Col span="16" class="hzXx2">{{sfjhData.schemeName}}</Col>
+        </Row> 
+        <Row class="patientMs2 gray">
+          <Col span="4" offset="4" class="hzXx1">随访进度:</Col>
+          <Col span="16" class="hzXx2">{{sfjhData.totalNum}}</Col>
+        </Row>
+        <!-- 随访计划时间 -->
+        <Row class="gray" style="font-size:14px;padding-top:20px;" v-for="(item,index) in sfjhData.orders" :key="index">
+            <Col span="20" offset="4">{{item.startDate}}</Col>
+            <Row style="padding-left:200px;">
+              <Col span="6" v-for="(item1,index1) in item.CollectionIndex" :key="index1+1" style="line-height:30px;">{{item1}}</Col> 
+            </Row>
+          </Row>
+      </Row>
+      <Row slot="footer">
+      </Row>
+    </Modal>
+  </Row>
 </template>
 
 <script>
@@ -226,11 +293,11 @@ export default {
       return {
         //搜索选项
         searchParams: {
-            brxm: '',//患者姓名
-            schemeName: '',//随访方案
-            status: '',//审核状态
-            pager: 1,//
-            limit:10,//每页条数
+          brxm: '',//患者姓名
+          schemeName: '',//随访方案
+          status: '',//审核状态
+          pager: 1,//
+          limit:10,//每页条数
         },
         //列表配置
         config: [
@@ -260,11 +327,15 @@ export default {
                 }
             },
             {
+                title: '疾病诊断',
+                key: 'icdName',
+                align: 'center'
+            },
+            {
                 title: '随访方案',
                 key: 'schemeName',
                 align: 'center'
             },
-
             {
                 title: '审核状态',
                 key: 'statusStr',
@@ -276,8 +347,18 @@ export default {
                 align: 'center'
             },
             {
+                title: '计划开始时间',
+                key: 'visitStartTime',
+                align: 'center'
+            },
+            {
                 title: '审核时间',
                 key: 'dateVet',
+                align: 'center'
+            },
+            {
+                title: '随访进度',
+                key: 'totalNum',
                 align: 'center'
             },
             {
@@ -295,42 +376,83 @@ export default {
                 render: (h, params) => {
                     return h('div', [
                         h('Button', {
-                            props: {
-                                type: 'primary',
-                                size: 'small'
-                            },
-                            style: {
-                                marginRight: '5px'
-                            },
-                            'class':{
-                							menuHide:this.menuShow(this.AM.FollowBussiness.startPlan)
-                						},
-                            on: {
-                                click: () => {
-                                    this.startPlan(params.row.id);
-                                }
+                          props: {
+                              type: 'primary',
+                              size: 'small'
+                          },
+                          style: {
+                              marginRight: '5px'
+                          },
+                          //'class':{
+              						// 	menuHide:this.menuShow(this.AM.FollowBussiness.startPlan)
+              						// },
+                          on: {
+                            click: () => {
+                              this.followShow = true;
+                              this.sfMobile(params.row.hzxxId)
+                              this.startPlan(params.row.id);
                             }
+                          }
                         }, '随访'),
                         h('Button', {
-                            props: {
-                                type: 'warning',
-                                size: 'small'
-                            },
-                            style: {
-
-                            },
-                            'class':{
-                							menuHide:this.menuShow(this.AM.FollowBussiness.delPlan)
-                						},
-                            on: {
-                                click: () => {
-                                    /** 
-                                     * 删除计划
-                                     */
-                                    this.deletPlan(params.row.id);
-                                }
+                          props: {
+                            type: 'success',
+                            size: 'small'
+                          },
+                          style: {
+                            marginRight: '5px'
+                          },
+                          // 'class':{
+                          //   menuHide:this.menuShow(this.AM.FollowBussiness.delPlan)
+                          // },
+                          on: {
+                            click: () => {
+                              this.sfjhModel = true;
+                              this.detailFun(params.row.id)
+                              /** 
+                               * 删除计划
+                               */
+                              //this.deletPlan(params.row.id);
                             }
-                        }, '删除')
+                          }
+                        }, '详情'),
+                        h('Button', {
+                          props: {
+                            type: 'warning',
+                            size: 'small'
+                          },
+                          style: {
+
+                          },
+                          'class':{
+                            menuHide:this.menuShow(this.AM.FollowBussiness.delPlan)
+                          },
+                          on: {
+                            click: () => {
+                              this.zzsfFun(params.row.brxm, params.row.id)
+                            }
+                          }
+                        }, '终止随访')
+                      //   h('Button', {
+                      //       props: {
+                      //           type: 'warning',
+                      //           size: 'small'
+                      //       },
+                      //       style: {
+
+                      //       },
+                      //       'class':{
+                						// 	menuHide:this.menuShow(this.AM.FollowBussiness.delPlan)
+                						// },
+                      //       on: {
+                      //           click: () => {
+                      //               /** 
+                      //                * 删除计划
+                      //                */
+                      //               this.deletPlan(params.row.id);
+                      //           }
+                      //       }
+                      //   }, '终止随访')
                     ]);
                 }
             }],
@@ -377,6 +499,29 @@ export default {
         zyData: [],
         //详情模态框
         patientDetail: false,
+        //终止随访
+        zzsfModel: false,//弹框
+        sfrName: '',//终止随访人姓名
+        nowId: '',//终止随访人数据id
+        zzsfForm: {
+          select: '',//终止随访原因
+          textarea: ''//终止随访备注
+        },
+        zzsfFormRule: {//终止随访form验证
+          select: [
+            { required: true, message: '请选择不通过原因', trigger: 'change' }
+          ],
+          textarea: [
+            { required: true, message: '请输入详情', trigger: 'blur' },
+          ]
+        },
+        //随访计划详情
+        sfjhModel: false,
+        sfjhData: {
+          znjqrHzxx: {
+            brxm: '',
+          },
+        },//随访计划详情
       }
     },
     methods: {
@@ -397,6 +542,18 @@ export default {
         changePage(index) {
             this.searchParams.pager = index;
             this.getData();
+        },
+        /**
+         * 请求随访人的号码
+         */
+        sfMobile(id) {
+          API.FollowBussiness.gethzxx({
+            id: id
+          }).then((res) => {
+            this.AIform.AIphone = res.data.jtdh
+          }).catch((err) => {
+
+          });
         },
         //随访提交
         submitData(name) {
@@ -424,20 +581,20 @@ export default {
          * 删除随访计划
          */
         deletPlan(id) {
-            this.$Modal.confirm({
-				title: '删除设置',
-				content: '确定删除该系统设置？',
-				onOk: () => {
-					API.FollowBussiness.delPlan({
-						id: id
-					}).then((res) => {
-						this.$Message.success("删除成功");
-						this.getData();
-					}).catch((err) => {
+          this.$Modal.confirm({
+  				title: '删除设置',
+  				content: '确定删除该系统设置？',
+  				onOk: () => {
+  					API.FollowBussiness.delPlan({
+  						id: id
+  					}).then((res) => {
+  						this.$Message.success("删除成功");
+  						this.getData();
+  					}).catch((err) => {
 
-					});
-				}
-			});
+  					});
+  				}
+  			});
             
         },
         /** 
@@ -445,7 +602,7 @@ export default {
          */
         startPlan(id) {
             this.id = id;
-            this.followShow = true;
+            // this.followShow = true;
         },
         /** 
          * 停止计划
@@ -476,6 +633,68 @@ export default {
           this.currentData = res.data;
         }).catch((err) => {
           console.log(err)
+
+        });
+      },
+      /**
+       * 终止随访按钮
+       */
+      zzsfFun(name, id) {
+        this.zzsfModel = true;
+        this.sfrName = name;
+        this.nowId = id;
+      },
+      //选择终止随访的原因
+      xzReason(value) {
+        this.zzsfForm.select = value
+      },
+      /**
+       * 终止随访确定按钮
+       */
+      zzsfCancel (name) {
+        this.$refs[name].resetFields();
+        this.$Message.success('取消按钮');
+      },
+      /**
+       * 终止随访取消按钮
+       */
+      zzsfOk (name) {
+        this.$refs[name].validate((valid) => {
+          if (valid) {
+            API.FollowBussiness.cancleall({
+                id:this.nowId,
+                notPassReason:this.zzsfForm.select,
+                notPassRemark:this.zzsfForm.textarea,
+            }).then((res)=>{
+              console.log(res)
+              this.$Message.success('成功!');
+              this.zzsfModel = false;
+               
+            }).catch((err)=>{
+
+            });
+          } else {
+              this.$Message.error('失败');
+          }
+        })
+      },
+      /**
+       * 获取随访计划详情
+       */
+      detailFun(id) {
+        API.FollowBussiness.detail({
+          id:id,
+        }).then((res)=>{
+          console.log(res)
+          // this.$Message.success('成功!');
+          // this.zzsfModel = false;
+          this.sfjhData = res.data;
+          if(res.data.orders.length) {
+            res.data.orders.forEach((item)=> {
+              item.CollectionIndex = item.CollectionIndex.split(',')
+            })
+          }
+        }).catch((err)=>{
 
         });
       },
@@ -616,5 +835,55 @@ export default {
 
 .mb12 {
     margin-bottom: 12px;
+}
+//终止随访model
+.zzsfModel .ivu-modal .ivu-modal-content {
+  .ivu-modal-footer {
+    padding: 0;
+    border: none;
+  }
+}
+//随访计划详情
+.sfjhModel .ivu-modal .ivu-modal-content {
+  border-radius: 6px;
+  .ivu-modal-body {
+    padding: 0;
+    //计划内容
+    .sfjhContent {
+      margin: 16px 0 0px;
+      padding-bottom: 16px; 
+      background: #f0f0f0;
+      border-radius: 10px;
+      //患者基本信息
+      .patientMs {
+        background: #fff;
+        line-height: 30px;
+        padding-bottom: 10px;
+        .hzName {
+          font-size: 20px;
+          color: #ff6800;
+        }
+        .hzxq {
+          font-size: 14px;
+        }
+      }
+      //诊断信息
+      .patientMs2 {
+        background: #fff;
+
+        line-height: 24px;
+        font-size: 14px;
+        padding-bottom: 10px;
+      }
+    }
+  }
+  .ivu-modal-footer {
+    padding: 0;
+    border: none;
+  }
+}
+//随访计划背景色
+.gray {
+  // background: #f0f0f0;
 }
 </style>

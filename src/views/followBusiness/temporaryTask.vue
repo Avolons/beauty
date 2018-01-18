@@ -167,7 +167,21 @@
 							<Input type="text" v-model="searchParams.brxm" placeholder="请输入患者姓名"></Input>
 							</Col>
 							<Col span="6">
-							<Button @click="searchParams.pager=1;getData()" type="primary">搜索</Button>
+								<p :style="{lineHeight:'32px'}">
+									导入开始时间：
+								</p>
+								<DatePicker @on-change="dateChange1" format="yyyy-MM-dd" placement="bottom-end" placeholder="请选择随访发起时间" style="width:45%"></DatePicker>
+								<TimePicker @on-change="timeChange1" format="HH:mm:ss" placeholder="请选择时间" style="width: 112px;margin-left:10px;"></TimePicker>
+							</Col>
+							<Col span="6">
+								<p :style="{lineHeight:'32px'}">
+									导入结束时间：
+								</p>
+								<DatePicker @on-change="dateChange2" format="yyyy-MM-dd" placement="bottom-end" placeholder="请选择随访发起时间" style="width:45%"></DatePicker>
+								<TimePicker @on-change="timeChange2" format="HH:mm:ss" placeholder="请选择时间" style="width: 112px;margin-left:10px;"></TimePicker>
+							</Col>
+							<Col span="6">
+								<Button @click="searchParams.pager=1;getData()" type="primary">搜索</Button>
 							</Col>
 						</Row>
 						<div class="creatNotice_main_add">
@@ -214,7 +228,7 @@
 						<Button @click="returnStep(1)" style="margin-right:10px">返回上一步</Button>
 					</TabPane>
 					<TabPane label="标签三" name="step_three">
-						<Form ref="sendData" class="creatNotice_main_form" :model="sendData" :rules="validate.sendData" :label-width="100">
+						<Form ref="sendData" class="creatNotice_main_form" :model="sendData" :rules="validate.sendData" :label-width="110">
 							<FormItem label="医生" style="width:450px;">
 								<Input disabled v-model="sendData.admin" style="width: 435px"></Input>
 							</FormItem>
@@ -231,10 +245,10 @@
 							<FormItem>
 								<Button @click="returnStep(2)" style="margin-right:10px">返回上一步</Button>
 								<Button type="primary" @click="handleSave()">发起随访</Button>
-								<Button type="info" @click="submitCeshi">查看时间</Button>
+								<!-- <Button type="info" @click="submitCeshi">查看时间</Button> -->
 							</FormItem>
 						</Form>
-						<Table border :columns="timeConfig" :data="timeList"></Table>
+						<!-- <Table border :columns="timeConfig" :data="timeList"></Table> -->
 						<!-- <div class="creatNotice_main_success">
 									<Icon type="checkmark-circled"></Icon>
 									<Alert type="success">恭喜你，发起通知成功</Alert>
@@ -253,22 +267,30 @@ export default {
 	data() {
 		return {
 			//用来测试的，没几把用
-			timeList: [],
-			timeConfig: [
-				{
-					title: '方案名称',
-					key: 'schemeName'
-				},
-				{
-					title: '编号',
-					key: 'orderNo'
-				},
-				{
-					title: '随访时间',
-					key: 'dateBegin'
-				},
-			],
-			timeobj: {
+			// timeList: [],
+			// timeConfig: [
+			// 	{
+			// 		title: '方案名称',
+			// 		key: 'schemeName'
+			// 	},
+			// 	{
+			// 		title: '编号',
+			// 		key: 'orderNo'
+			// 	},
+			// 	{
+			// 		title: '随访时间',
+			// 		key: 'dateBegin'
+			// 	},
+			// ],
+			timeobj: {//发起随访时间
+				date: "",
+				time: "",
+			},
+			timeobj1: {//患者导入开始时间
+				date: "",
+				time: "",
+			},
+			timeobj2: {//患者导入结束时间
 				date: "",
 				time: "",
 			},
@@ -281,6 +303,8 @@ export default {
 				brxm: '',//患者姓名
 				limit: 10,//每页条数
 				adminId: "",
+				beginTime: '',//导入开始时间：年月日时分秒(可选)
+				endTime: '',//导入结束时间：年月日时分秒（可选）
 			},
 			/** 
 			 * 方案请求数据
@@ -343,9 +367,7 @@ export default {
 					}
 				}
 			],
-			planList: [
-
-			],
+			planList: [],
 			patConfig: [
 				{
 					title: '患者姓名',
@@ -475,21 +497,21 @@ export default {
 				})
 			});
 		},
-		submitCeshi() {
-			API.FollowBussiness.patCeshi({
-				schemeId: this.sendData.schemeId,
-				schemeName: this.sendData.schemeName,
-				visitStartTime: this.sendData.visitStartTime,
-			}).then((res) => {
-				this.timeList=res.data;
-				/* this.$Message.success("发起成功");
-				setTimeout(()=> {
-					this.$router.push("/followBusiness/followPlan");
-				}, 1000); */
-			}).catch((err) => {
+		// submitCeshi() {
+		// 	API.FollowBussiness.patCeshi({
+		// 		schemeId: this.sendData.schemeId,
+		// 		schemeName: this.sendData.schemeName,
+		// 		visitStartTime: this.sendData.visitStartTime,
+		// 	}).then((res) => {
+		// 		this.timeList=res.data;
+		// 		/* this.$Message.success("发起成功");
+		// 		setTimeout(()=> {
+		// 			this.$router.push("/followBusiness/followPlan");
+		// 		}, 1000); */
+		// 	}).catch((err) => {
 
-			});
-		},
+		// 	});
+		// },
 		/** 
 		 * 获取随访方案
 		 */
@@ -538,9 +560,16 @@ export default {
 			/** 
 			 * id 赋值
 			 */
-			this.sendData.admin = this.searchParams.admin.split(",")[0];
-			this.sendData.adminId = this.searchParams.admin.split(",")[1];
+			console.log(this.searchParams.admin)
+			if(this.searchParams.admin) {
+				this.sendData.admin = this.searchParams.admin.split(",")[0];
+				this.sendData.adminId = this.searchParams.admin.split(",")[1];
+			}
 			this.searchParams.adminId = this.sendData.adminId;
+			this.searchParams.beginTime = this.timeobj1.date + " " + this.timeobj1.time;
+			this.searchParams.endTime = this.timeobj2.date + " " + this.timeobj2.time;
+			console.log(this.searchParams.beginTime)
+			console.log(this.searchParams.endTime)
 			API.FollowBussiness.patList(this.searchParams).then((res) => {
 				this.dataList = this.formData(res.data);
 				this.totalPage = res.total;
@@ -581,7 +610,7 @@ export default {
 				}
 			}
 		},
-		/** 
+		/** ylTimeChange
 		 * 日期改变
 		 */
 		dateChange(date) {
@@ -592,6 +621,30 @@ export default {
 		 */
 		timeChange(date) {
 			this.timeobj.time = date;
+		},
+		/** 
+		 * 患者导入开始时间
+		 */
+		dateChange1(date) {
+			this.timeobj1.date = date;
+		},
+		/** 
+		 * 患者导入开始时间
+		 */
+		timeChange1(date) {
+			this.timeobj1.time = date;
+		},
+		/** 
+		 * 患者导入结束时间
+		 */
+		dateChange2(date) {
+			this.timeobj2.date = date;
+		},
+		/** 
+		 * 患者导入结束时间
+		 */
+		timeChange2(date) {
+			this.timeobj2.time = date;
 		},
 		/** 
 		 * 添加患者

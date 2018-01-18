@@ -1,39 +1,6 @@
 <style lang="less">
-.main .single-page-con .single-page {
-	height: 100%;
-}
-
 .way {
-	/* background: #fff; */
-}
-
-.way {
-	padding: 0 !important;
-	height: 100%;
-	>.ivu-col {
-		height: 100%;
-		&:first-of-type {
-			display: flex;
-			flex-direction: column;
-			justify-content: space-between;
-			>.ivu-card {
-				&:last-of-type {
-					flex: 1;
-				}
-			}
-		}
-		&:last-of-type {
-			.ivu-card {
-				height: 100%;
-				.ivu-card-body {
-					height: calc(~'100% - 51px');
-					overflow-y: auto;
-					box-sizing: border-box;
-				}
-			}
-		}
-	}
-	&_main {}
+	background: #fff;
 }
 
 .line {
@@ -97,9 +64,9 @@
 	border-radius: 5px;
 	&_main {
 		&_commonTemTitle {
-			font-size: 15px;
+			font-size: 16px;
 			color: #2d8cf0;
-			/* margin-bottom: 10px; */
+			margin-bottom: 10px;
 		}
 		&_commonTitle {
 			font-size: 20px;
@@ -113,9 +80,6 @@
 		}
 		&_wayForm {
 			max-width: 500px;
-			.ivu-form-item {
-				margin-bottom: 20px;
-			}
 		}
 		&_questSize {
 			height: 35px;
@@ -127,7 +91,6 @@
 			color: #fff;
 			font-size: 12px;
 			display: block;
-			margin: 0 auto;
 		}
 		&_timeSection {
 			text-align: center;
@@ -157,37 +120,31 @@
 			line-height: 21px;
 			margin-top: 5px;
 		}
-		&_innerBox {
-			.ivu-form-item {
-				margin-bottom: 10px;
-			}
-		}
 		&_questTitle {
 			border: 1px solid #f1f1f1;
 			border-radius: 5px;
 			background-color: #f1f1f1;
 			.ivu-form-item-label {
 				color: #2d8cf0;
-				font-size: 13px;
+				font-size: 15px;
 				padding-top: 8px;
 				width: 50px !important;
 			}
 			.ivu-form-item-content {
 				color: #2d8cf0;
-				font-size: 13px;
+				font-size: 15px;
 				margin-left: 50px !important;
 			}
 			color: #2d8cf0;
-			font-size: 13px;
-			margin-bottom: 10px;
+			font-size: 15px;
 		}
 		&_nowarp {
 			/* display: inline-block; */
 			width: 90%;
 		}
 		&_saveButton {
-			margin: 10px auto;
-			display: block;
+			margin: 10px 10px;
+			display: inline-block;
 			margin-top: 30px;
 		}
 		&_timePicker {
@@ -199,182 +156,173 @@
 </style>
 
 <template>
-	<Row class="way" :gutter="10">
+	<Row class="way">
 		<!-- 随访方案信息 -->
-		<Col span="10">
-		<Card>
-			<p slot="title">
-				<Icon type="android-archive"></Icon>
-				随访方案基本信息
-			</p>
-			<Form ref="wayForms" :model="baseData" :label-width="80" :rules="validate.followAction" class="way_main_wayForm">
-				<FormItem label="方案名称" prop="name">
-					<Input v-model="baseData.name" placeholder="请输入方案名称"></Input>
-				</FormItem>
-				<FormItem label="科室类别" prop="departmentId">
-					<Select v-model="baseData.departmentId" placeholder="情选择科室类别">
-						<Option v-for="item in departmentList" :value="item.id" :key="item.id">{{item.name}}</Option>
-					</Select>
-				</FormItem>
-				<FormItem label="方案类型" prop="activeType">
-					<RadioGroup v-model="baseData.activeType">
-						<Radio label="0">随访</Radio>
-						<Radio label="1">通知</Radio>
-					</RadioGroup>
-				</FormItem>
-				<FormItem label="疾病类型" prop="diseaseId">
-					<Select :label="labelobj" v-model="baseData.diseaseId" not-found-text="" multiple filterable remote :remote-method="autoSearch_base" :label-in-value="true" placeholder="搜索疾病类型">
-						<Option v-for="item in diseaseList" :value="item.value" :key="item.value">{{item.label}}</Option>
-					</Select>
-				</FormItem>
-			</Form>
-		</Card>
-		<Card style="margin-top:10px">
-			<p slot="title">
-				<Icon type="social-buffer"></Icon>
-				选择随访模板
-			</p>
-			<Form :label-width="80" class="way_main_wayForm">
-				<FormItem label="疾病类型">
-					<Select v-model="selectDisTemp" not-found-text="" multiple filterable remote :remote-method="autoSearch_tem" @on-change="selectChange" :label-in-value="true" placeholder="搜索疾病类型">
-						<Option v-for="item in diseaseList_tem" :value="item.value" :key="item.value">{{item.label}}</Option>
-					</Select>
-				</FormItem>
-			</Form>
-			<Table border height="400" :columns="tableConfig" :data="tableList"></Table>
-		</Card>
+		<Col span="24">
+		<h2 class="way_main_commonTitle">随访方案信息:</h2>
+		<Form ref="wayForms" :model="wayForm" :label-width="90" :rules="validate.followAction" class="way_main_wayForm">
+			<FormItem label="方案名称" prop="name">
+				<Input v-model="wayForm.name" placeholder="请输入方案名称"></Input>
+			</FormItem>
+			<FormItem label="科室类别" prop="departmentId">
+				<Select v-model="wayForm.departmentId" placeholder="情选择科室类别">
+					<Option v-for="item in departmentList" :value="item.id" :key="item.id">{{item.name}}</Option>
+				</Select>
+			</FormItem>
+			<FormItem label="方案类型" prop="activeType">
+				<RadioGroup v-model="wayForm.activeType" @on-change="typeChange">
+					<Radio label="0">随访</Radio>
+					<Radio label="1">通知</Radio>
+				</RadioGroup>
+			</FormItem>
+			<FormItem label="疾病类型">
+				<Select :label="labelobj" v-model="wayForm.diseaseId" not-found-text="" multiple filterable remote :remote-method="autoSearch" @on-change="selectChange" :label-in-value="true" placeholder="搜索疾病类型添加至疾病标签">
+					<Option v-for="item in diseaseList" :value="item.value" :key="item.value">{{item.label}}</Option>
+				</Select>
+			</FormItem>
+			<!-- <FormItem  label="疾病标签">
+						<tag v-for="item in wayForm.tagCount" color="blue" :key="item.value" :name="item.label" closable @on-close="tagClose">{{item.label}}</tag>
+					</FormItem> -->
+			<FormItem label="选择模板" prop="wayTem">
+				<Select v-model="wayForm.wayTem" multiple  @on-change="temChange" style="width:260px">
+					<Option v-for="item in temList" :value="item.id" :key="item.id">{{ item.name }}</Option>
+				</Select>
+			</FormItem>
+			<FormItem label="随访开始时间" style="width:450px;">
+				<DatePicker @on-change="dateChange" format="yyyy-MM-dd" placement="bottom-end" placeholder="请选择随访发起时间" style="width:50%"></DatePicker>
+				<TimePicker @on-change="ylTimeChange" format="HH:mm:ss" placeholder="请选择时间" style="width: 112px"></TimePicker>
+			</FormItem>
+		</Form>
 		</Col>
 		<!-- 配置随访方案 -->
-		<Col span="14">
-		<Card>
-			<p slot="title">
-				<Icon type="android-list"></Icon>
-				配置随访方案
-			</p>
-			<ul class="way_main_planList">
-				<li class="way_main_planSingle" v-for="(item,index) in showList" :key="item.id">
-					<!-- 模板名称&&随访周期 -->
-					<Row>
-						<Col span="2" class="lineheight32">
-							<h3 class="way_main_temIndex">{{index+1}}</h3>
+		<h2 class="way_main_commonTitle">配置随访方案:</h2>
+		<Col span="24" v-for="(item,index) in showList" :key="item.id">
+			<!-- 模板名称&&随访周期 -->
+			<Row>
+				<Col span="1" class="lineheight32">
+				<h3 class="way_main_temIndex">{{index+1}}</h3>
+				</Col>
+				<Col span="2" style="max-width:70px" class="lineheight32 way_main_commonTemTitle">
+				<strong>模板名称:</strong>
+				</Col>
+				<Col span="21" class="lineheight32 way_main_commonTemTitle">
+				<strong>{{item.name}}</strong>
+				</Col>
+				<Col span="2" style="max-width:65px" class="lineheight32 " offset="1">
+				<strong>随访周期:</strong>
+				</Col>
+				<Col span="21" class="lineheight32">
+				<Row>
+					<Col span="2">
+					<span>随访次数:</span>
+					</Col>
+					<Col span="21">
+					<InputNumber size="small" :max="100" :min="1" v-model="item.questionTemples.questionTempleFrequency.number"></InputNumber>次, 第
+					<InputNumber v-if="index==0" size="small" :min="0" v-model="item.questionTemples.questionTempleFrequency.firstday"></InputNumber> 天,第一次随访,每隔
+					<InputNumber size="small" :max="100" :min="1" v-model="item.questionTemples.questionTempleFrequency.intervalDays"></InputNumber> 天，随访一次。
+					</Col>
+				</Row>
+				</Col>
+			</Row>
+			<!-- 随访区间 -->
+			<Row style="margin:10px 0;">
+				<Col style="max-width:65px" span="2" class="lineheight32" offset="1">
+				<strong>随访区间:</strong>
+				</Col>
+				<Col span="21" class="lineheight32">
+				<Row>
+					<Col span="2">
+					<span>时间段:</span>
+					</Col>
+					<template v-for="ite,i in item.questionTemples.questionTempleTimeRanges">
+						<Col span="4" class="way_main_timeSection">
+						<span>{{ite.beginTime}}</span>
+						<span>-</span>
+						<span>{{ite.endTime}}</span>
+						<span @click="deletTime(item.questionTemples.questionTempleTimeRanges,i)">
+							<Icon class="way_main_closeTime" type="ios-close"></Icon>
+						</span>
 						</Col>
-						<Col span="4" style="max-width:70px" class="lineheight32 way_main_commonTemTitle">
-							<strong>模板名称:</strong>
-						</Col>
-						<Col span="14" class="lineheight32 way_main_commonTemTitle">
-							<strong>{{item.name}}</strong>
-						</Col>
-						<Col span="4" class="lineheight32 " >
-							<Button size="small" v-show="followId!='new'" style="float:right" type="primary" @click="updateTemp(item,index)">更新</Button>
-						</Col>
-						<Col span="24" style="margin-top:10px" class="lineheight32 " >
-							<Row>
-								<Col span="4" style="max-width:65px" offset="1" class="lineheight32 " >
-									<strong>随访周期:</strong>
-								</Col>
-								<Col span="20" class="lineheight32">
-									<Row>
-										<Col span="3">
-											<span>随访次数:</span>
-										</Col>
-										<Col span="21">
-											<InputNumber size="small" :max="100" :min="1" v-model="item.questionTemples.questionTempleFrequency.number"></InputNumber>次, 第
-											<InputNumber v-if="index==0" size="small" :min="0" v-model="item.questionTemples.questionTempleFrequency.firstday"></InputNumber> 天,第一次随访,每隔
-											<InputNumber size="small" :max="100" :min="1" v-model="item.questionTemples.questionTempleFrequency.intervalDays"></InputNumber> 天，随访一次。
-										</Col>
-									</Row>
-								</Col>
-							</Row>
-						</Col>
-					</Row>
-					<!-- 随访区间 -->
-					<Row style="margin:10px 0;">
-						<Col style="max-width:65px" span="4" class="lineheight32" offset="1">
-						<strong>随访区间:</strong>
-						</Col>
-						<Col span="20" class="lineheight32">
-						<Row>
-							<Col span="3">
-							<span>时间段:</span>
-							</Col>
-							<template v-for="ite,i in item.questionTemples.questionTempleTimeRanges">
-								<Col span="8" class="way_main_timeSection">
-								<span>{{ite.beginTime}}</span>
-								<span>-</span>
-								<span>{{ite.endTime}}</span>
-								<span @click="deletTime(item.questionTemples.questionTempleTimeRanges,i)">
-									<Icon class="way_main_closeTime" type="ios-close"></Icon>
-								</span>
-								</Col>
-							</template>
-							<Col span="2">
-							<Button type="primary" size="small" @click="addTime(item)">新增</Button>
-							</Col>
-						</Row>
-						</Col>
-					</Row>
-					<Row style="margin-top:10px;">
-						<Col style="max-width:65px" span="4" offset="1">
-							<strong style="margin-top:5px;display:block">语音配置:</strong>
-						</Col>
-						<Col span="20">
-						<!-- title和只能语音单独处理 -->
-						<Row class="wayIndex" v-for="ite in item.questionTemples.questionSchemeWavs" :key="ite.id">
-							<Col span="3">
-							<span class="way_main_questSize">
-								{{ite.questionIdXml}}
-							</span>
-							</Col>
-							<Col span="20">
-							<Collapse v-model="ite.questionId">
-								<Panel name="1">
-									<span class="way_main_nowarp">问题:{{ite.questionName}}</span>
-									<Icon type="chevron-right" size="14" color="#999" style="line-height: 35px; float:right; margin-right:10px"></Icon>
-									<div slot="content" class="way_main_innerBox">
-										<Form :label-width="110" v-for="it,index in ite.questionTempleQuestionJumps" :key="index" v-if="it.switchId==''">
-											<FormItem label="问题AI语音">
-												<Input v-model="it.switchWav" placeholder="请输入问题ai语音"></Input>
-											</FormItem>
-										</Form>
-										<Form :model="it" :rules="validate.followAction" :label-width="110" v-for="it,index in ite.questionTempleQuestionJumps" :key="index" v-if="it.switchId!=''">
-											<FormItem class="way_main_questTitle" label="处理">
-												<span>{{it.switchId==-1?"无匹配":it.switchId==-2?"无声音":it.switchId==-3?"通用处理":it.switchId==""?"人工ai":it.switchId}}</span>
-											</FormItem>
-											<FormItem v-if="it.switchId!='-1'&&it.switchId!='-2'&&it.switchId!='-3'&&it.switchId!=''" label="话术名称">
-												<span>{{it.switchText}}</span>
-											</FormItem>
-											<FormItem v-if="it.switchId!=-1&&it.switchId!=-2&&it.switchId!=-3" label="判别规则">
-												<span>{{it.switchRegexText}}</span>
-											</FormItem>
-											<FormItem v-if="it.switchId!=-1&&it.switchId!=-2&&it.switchId!=-3" label="指标值">
-												<span>{{it.keyname}} ：{{it.keyvalue}}</span>
-											</FormItem>
-											<FormItem v-if="it.switchId==-2" label="超时语音">
-												<Input v-model="it.silenceWav" placeholder="请输入超时语音地址"></Input>
-											</FormItem>
-											<FormItem label="AI语音">
-												<Input v-model="it.switchWav" placeholder="请输入ai语音地址"></Input>
-											</FormItem>
-											<FormItem label="跳转问题编号">
-												<span>{{it.nextQuestionId}}</span>
-											</FormItem>
-											<FormItem v-if="it.switchId==-1" label="无匹配超次数跳转">
-												<Input v-model="it.outRptSwitchID" placeholder="请输入无匹配的跳转"></Input>
-												<!-- <span>{{it.outRptSwitchId}}</span> -->
-											</FormItem>
-										</Form>
-									</div>
-								</Panel>
-							</Collapse>
-							</Col>
-						</Row>
-						</Col>
-					</Row>
-				</li>
-			</ul>
-			<Button v-show="temList.length>0" class="way_main_saveButton" type="primary" @click="saveChange">保存</Button>
-		</Card>
+					</template>
+					<Col span="2">
+					<Button type="primary" size="small" @click="addTime(item)">新增</Button>
+					</Col>
+				</Row>
+				</Col>
+			</Row>
+			<Row style="margin-top:10px;">
+				<Col style="max-width:65px" span="2" offset="1">
+				<strong style="margin-top:5px;display:block">语音配置:</strong>
+				</Col>
+				<Col span="21">
+				<!-- title和只能语音单独处理 -->
+				<Row class="wayIndex" v-for="ite in item.questionTemples.questionSchemeWavs" :key="ite.id">
+					<Col span="2">
+					<span class="way_main_questSize">
+						{{ite.questionIdXml}}
+					</span>
+					</Col>
+					<Col span="20">
+					<Collapse v-model="ite.questionId">
+						<Panel name="1">
+							<span class="way_main_nowarp">问题:{{ite.questionName}}</span>
+							<Icon type="chevron-right" size="14" color="#999" style="line-height: 35px; float:right; margin-right:10px"></Icon>
+							<div slot="content">
+								<Form  :label-width="110" v-for="it,index in ite.questionTempleQuestionJumps" :key="index" v-if="it.switchId==''">
+									<FormItem  label="问题AI语音">
+										<Input v-model="it.switchWav" placeholder="请输入问题ai语音"></Input>
+									</FormItem>
+								</Form>
+								<Form :model="it" :rules="validate.followAction" :label-width="110" v-for="it,index in ite.questionTempleQuestionJumps" :key="index" v-if="it.switchId!=''">
+									<FormItem class="way_main_questTitle" label="处理">
+										<span>{{it.switchId==-1?"无匹配":it.switchId==-2?"无声音":it.switchId==-3?"通用处理":it.switchId==""?"人工ai":it.switchId}}</span>
+									</FormItem>
+									<FormItem v-if="it.switchId!='-1'&&it.switchId!='-2'&&it.switchId!='-3'&&it.switchId!=''" label="话术名称">
+											<span>{{it.switchText}}</span>
+									</FormItem>
+									<FormItem v-if="it.switchId!=-1&&it.switchId!=-2&&it.switchId!=-3" label="判别规则">
+										<span>{{it.switchRegexText}}</span>
+									</FormItem>
+									<FormItem v-if="it.switchId!=-1&&it.switchId!=-2&&it.switchId!=-3" label="指标值">
+										<span>{{it.keyname}} ：{{it.keyvalue}}</span>
+									</FormItem>
+									<FormItem v-if="it.switchId==-2"  label="超时语音">
+										<Input v-model="it.silenceWav" placeholder="请输入超时语音地址"></Input>
+									</FormItem>
+									<FormItem   label="AI语音">
+										<Input v-model="it.switchWav" placeholder="请输入ai语音地址"></Input>
+									</FormItem>
+									<FormItem label="跳转问题编号">
+										<span>{{it.nextQuestionId}}</span>
+									</FormItem>
+									<FormItem v-if="it.switchId==-1" label="无匹配超次数跳转">
+										<Input v-model="it.outRptSwitchID" placeholder="请输入无匹配的跳转"></Input>
+										<!-- <span>{{it.outRptSwitchId}}</span> -->
+									</FormItem>
+								</Form>
+							</div>
+						</Panel>
+					</Collapse>
+					</Col>
+				</Row>
+				</Col>
+			</Row>
 		</Col>
+		<Col span="24">
+			<Row style="margin:10px 0;">
+				<Col span="8" offset="8">
+				  <Button class="way_main_saveButton" type="primary" @click="saveChange">保存</Button>
+					<Button class="way_main_saveButton" type="info" @click="submitCeshi" v-if="this.templateId">预览计划</Button>
+					<Button class="way_main_saveButton" type="success" @click="backWay">返回随访方案</Button>
+				</Col>
+				<Col span="8">
+				</Col>
+			</Row>
+		</Col>
+		<h2 class="way_main_commonTitle" v-if="this.templateId">预览随访方案:</h2>
+		<!-- 预览方案时间 -->
+		<Table border :columns="timeConfig" :data="timeList" v-if="this.templateId"></Table>
+		<!-- model -->
 		<Modal v-model="timemodal" title="新增随访时间段">
 			<TimePicker @on-change="timeChange" class="way_main_timePicker" format="HH:mm:ss" type="timerange" placement="bottom-end" placeholder="请选择随访时间段" style="width: 168px"></TimePicker>
 			<div slot="footer" class="sys-sysset_main_btnList">
@@ -386,75 +334,18 @@
 
 <script>
 import { API } from '@/services';
+//模拟数据
+import { aa } from '@/views/followSetting/template/aa.js'
 export default {
 	data() {
 		return {
-			/** 
-			 * 基础数据，
-			 */
-			baseData: {
-				id: "",   		//id不传表示新增
-				name: "",  		//方案名称
-				departmentId: "",//科室类型id
-				diseaseId: [],    //疾病类型id,多个之间用英文逗号分开
-				activeType: 0,    //方案类型：0代表随访，1代表通知
-				status: 0,        //状态：0，启用；1，禁用
-			},
-			labelobj: [],//疾病多选初始化名称
-			departmentList: [],//科室列表
-			diseaseList: [],//疾病列表
-			/** 
-			 * 最终需要提交数据的列表部分
-			 */
-			questionTemples: [],
-			/** 
-			 * 第二部分，模板筛选部分
-			 */
-			diseaseList_tem: [],//疾病列表(模板筛选)
-			selectDisTemp: [],//被选中的疾病id
-			tableList: [],//表格数据
-			//表格配置
-			tableConfig: [
-				{
-					title: '模板名称',
-					key: 'name',
-				},
-				{
-					title: '操作',
-					key: 'action',
-					width: 150,
-					align: 'center',
-					render: (h, params) => {
-						return h('div', [
-							h('Button', {
-								props: {
-									type: 'primary',
-									size: 'small'
-								},
-
-								on: {
-									click: () => {
-										this.addTemplate(params.row)
-									}
-								}
-							}, '添加到方案编辑'),
-
-						]);
-					}
-				}
-			],
-			/**  */
-			temList: [],//模板列表
-			/** 
-			 * 复制出来的数据，用于辨识
-			 */
-			copyList: [],
-			copyIndex: [],//已选模板id
-
+			copyList:[],
+			copyIndex:[],//已选模板id
+			labelobj: [],
 			diseaseLength: 0,
 			//最终需要提交的数据
-			formData: {},
-			followId: '',//模板id
+			formData: aa,
+			templateId: '',//模板id
 			//最终提交数据数据头部
 			wayForm: {
 				/* id:"",//id不传代表新增 */
@@ -465,12 +356,14 @@ export default {
 				status: 0,//状态：0，启用；1，禁用
 				wayTem: [],
 				tagCount: [],//疾病标签列表
+				visitStartTime: ''
 			},
 			creatTime: [],//生成的时间
 			clickTime: {},//被选中的对象
 			timemodal: false,
-
-
+			departmentList: [],//科室列表
+			diseaseList: [],//疾病列表
+			temList: [],//模板列表
 			selectList: [],//已选择模板列表
 			normaldata: {
 			},//默认数据
@@ -480,6 +373,35 @@ export default {
 			targetShow: true,//判断是否疾病标签是否展示
 			targetTag: '',//指标标签
 			tagShow: false,//标签是否展示,
+			//预览方案时间
+			timeList: [],
+			timeConfig: [
+				{
+					title: '计划序号',
+					key: 'index',
+					align: 'center',
+					render: (h, params) => {
+                        return h('div', [
+                            h('strong', '第'+Number(params.index+1)+'次')
+                        ]);
+                    }
+				},
+				{
+					title: '模板名称',
+					key: 'schemeName',
+					align: 'center'
+				},
+				{
+					title: '随访时间',
+					key: 'dateBegin',
+					align: 'center'
+				},
+			],
+			timeobj: {//随访时间
+				date: "",
+				time: "",
+			},
+
 		}
 	},
 	computed: {
@@ -487,27 +409,66 @@ export default {
 		 * 自动计算已经选中的方案
 		 */
 		showList() {
-			for (const item of this.temList) {
+			let arr = [];
+			for (let item of this.wayForm.wayTem) {
+				for (let ite of this.temList) {
+					if (item == ite.id) {
+						arr.push(ite);
+					}
+				}
+			}
+			for (const item of arr) {
 				for (let ite of item.questionTemples.questionSchemeWavs) {
-					if (!ite.questionTempleQuestionJumps[0]) {
+					if (!ite.questionTempleQuestionJumps[0]  ) {
 						ite.questionTempleQuestionJumps.splice(0, 0, {
 							switchId: "",
 							switchWav: "",
 						})
-					} else {
-						if (ite.questionTempleQuestionJumps[0].switchId != "") {
+					}else{
+						if(ite.questionTempleQuestionJumps[0].switchId != ""){
 							ite.questionTempleQuestionJumps.splice(0, 0, {
-								switchId: "",
-								switchWav: "",
-							})
+							switchId: "",
+							switchWav: "",
+						})
 						}
 					}
 				}
 			}
-			return this.temList;
+			return arr;
 		}
 	},
 	methods: {
+		temChange(value){
+			/** 
+			 * 说明删除了
+			 */
+			if(value.length<this.copyIndex.length){
+				 for (const item of this.copyIndex) {
+					 let flag=0;
+					 for (let ite of value) {
+						if(item==ite){
+							flag++;
+							break;
+						} 
+					 }
+					 if(flag==0 || this.copyIndex.length==1){
+						  /* 获取到item */
+						for (let ite of this.temList) {
+							if(ite.id==item){
+								for (let it of this.copyList) {
+									if(it[0].templeId==item){
+										ite.questionTemples.questionSchemeWavs=it;
+									}
+								}
+							}
+						}
+					 }
+				 }
+			}else{
+
+			}
+			this.copyIndex=JSON.parse(JSON.stringify(value));
+		},
 		/** 
 		 * 删除时间段
 		 */
@@ -522,18 +483,9 @@ export default {
 				onOk: () => {
 					obj.splice(index, 1);
 					this.$Message.success("删除成功");
-					this.clickTime = obj;
-					this.timemodal = true;
-					this.timemodal = false;
+
 				}
 			});
-		},
-		/** 
-		 * 新增时间段
-		 */
-		addTime(obj) {
-			this.clickTime = obj;
-			this.timemodal = true;
 		},
 		/** 
 		 * 保存新增的时间段
@@ -555,55 +507,64 @@ export default {
 			this.creatTime = time;
 		},
 		/** 
-		 * 更新模板
+		 * 新增时间段
 		 */
-		updateTemp(item,index){
-			API.followTemplate.questionList({
-				id: item.id,
-			}).then((res) => {
-				this.temList[index].questionTemples.questionSchemeWavs=this.differData(res.data,this.temList[index].questionTemples.questionSchemeWavs)
-				let obj=JSON.parse(JSON.stringify(this.temList[index]));
-				this.temList.splice(index,1,obj);
-			}).catch((error) => {
-			})
+		addTime(obj) {
+			this.clickTime = obj;
+			this.timemodal = true;
 		},
-		differData(newdata,old){
-			for (let item of newdata) {
-				for (let ite of old) {
-					if(item.questionId==ite.questionId){
-						/** 
-						 * 循环之前初始默认节点
-						 */
-						item.questionTempleQuestionJumps.splice(0, 0, {
-								switchId: "",
-								switchWav: "",
-						});
-						for (let it of item.questionTempleQuestionJumps) {
-							for (let i of ite.questionTempleQuestionJumps) {
-								if(it.switchId==i.switchId){
-									if(i.outRptSwitchID){
-										it.outRptSwitchID=i.outRptSwitchID;
-									}
-									if(i.silenceWav){
-										it.silenceWav=i.silenceWav;
-									}
-									if(i.switchWav){
-										it.switchWav=i.switchWav;
-									}
-								}
-							}
-						}
-					}	
-				}
+		/** 
+		 * 日期改变
+		 */
+		dateChange(date) {
+			this.timeobj.date = date;
+		},
+		/** 
+		 * 预览时间改变
+		 */
+		ylTimeChange(date) {
+			this.timeobj.time = date;
+		},
+		/** 
+		 * 预览随访方案
+		 */
+		submitCeshi() {
+			this.wayForm.visitStartTime = this.timeobj.date + " " + this.timeobj.time;
+				console.log(this.wayForm.visitStartTime.toString().length)
+			if(this.wayForm.visitStartTime.toString().length < 18) {
+				this.$Message.error('请选择随访开始时间!')
+			}else {
+				API.FollowBussiness.patCeshi({
+					schemeId: this.templateId,
+					schemeName: this.wayForm.name,
+					visitStartTime: this.wayForm.visitStartTime,
+				}).then((res) => {
+					this.timeList=res.data;
+					/* this.$Message.success("发起成功");
+					setTimeout(()=> {
+						this.$router.push("/followBusiness/followPlan");
+					}, 1000); */
+				}).catch((err) => {
+					console.log(err)
+				});
 			}
-			return newdata;
+		},
+		/**
+		 * 返回随访方案页
+		 */
+		backWay() {
+			this.$Spin.show();
+			setTimeout(()=>{
+				this.$Spin.hide();
+				this.$router.push("/followSetting/followWay");
+			},1500);
 		},
 		/** 
 		 * 最终的数据保存操作
 		 */
 		saveChange() {
 			let flag = 0;
-			this.$refs.wayForms.validate((valid) => {
+			this.$refs["wayForms"].validate((valid) => {
 				if (valid) {
 
 				} else {
@@ -611,50 +572,78 @@ export default {
 					flag++;
 				}
 			});
+			/* for (let item of this.showList) {
+				for (let ite of item.questionTemples.questionSchemeWavs) {
+					for (let it of ite.questionTempleQuestionJumps) {
+						if (it.switchWav != undefined && (it.switchWav).trim() == "") {
+							this.$Message.error('请输入ai语音!');
+							flag++;
+							return false;
+						}
+					}
+				}
+			}
 			if (flag > 0) {
 				return false;
+			} */
+			if (this.wayForm.diseaseId.length == 0) {
+				this.$Message.error('请选择疾病类型!');
+				return false;
 			}
-			//深拷贝数据
-			let sendData = JSON.parse(JSON.stringify(this.baseData));
-			//格式化疾病id
+			let sendData = JSON.parse(JSON.stringify(this.wayForm));
+			delete sendData.wayTem;
 			sendData.diseaseId = sendData.diseaseId.join(",");
+
 			/** 
-			 * 模板列表序列化
+			 * 模板列表
 			 */
 			sendData.questionTemples = [];
 			for (let item of this.showList) {
 				let copyItem = JSON.parse(JSON.stringify(item.questionTemples));
 				copyItem.questionSchemeWavs = [];
 				for (let ite of item.questionTemples.questionSchemeWavs) {
-					let newId = ite.questionId;
-					if (newId instanceof Array) {
-						newId = newId[0];
+					let newId= ite.questionId;
+					if(newId instanceof Array){
+						newId=newId[0];
 					}
 					for (let it of ite.questionTempleQuestionJumps) {
-						it.questionIdXml = JSON.parse(JSON.stringify(ite.questionIdXml));
-						it.questionId = newId;
-						it.templeId = ite.templeId;
-						it.questionName = ite.questionName
+						it.questionIdXml=JSON.parse(JSON.stringify(ite.questionIdXml));
+						it.questionId= newId;
+						it.templeId=ite.templeId;
 						copyItem.questionSchemeWavs.push(JSON.parse(JSON.stringify(it)));
+						console.log(it.questionId);
 					}
 				}
 				sendData.questionTemples.push(copyItem);
 			}
 			API.followWay.addList(sendData).then((res) => {
 				this.$Message.success("保存成功");
-				setTimeout(() => {
-					this.$router.push("/followSetting/followWay");
-				}, 1500);
+				// setTimeout(()=>{
+				// 	this.$router.push("/followSetting/followWay");
+				// },1500);
 			}).catch((error) => {
+				console.log(error)
 			})
 		},
-
+		/**@argument
+		获取所有科室
+		 */
+		getDepartment() {
+			API.followWay.departmentList({
+				page: 1, //当前页码
+				limit: 100000,//每页条数
+			}).then((res) => {
+				this.departmentList = res.data;
+			}).catch((error) => {
+				console.log(error)
+			})
+		},
 		/*
 		*通过方案id获取方案信息
 		*/
 		templateInfo() {
 			API.followWay.editList({
-				id: this.followId,
+				id: this.templateId,
 			}).then((res) => {
 				res.data.diseaseId = res.data.diseaseId.split(',');
 				res.data.diseaseName = res.data.diseaseName.split(',');
@@ -666,94 +655,128 @@ export default {
 						value: idList[index]
 					});
 					this.labelobj.push(nameList[index]);
+					
 				}
 				/** 
-				 * 基础数据赋值
+				 * 数据重组
 				 */
-				this.baseData = {
-					id: this.followId,
+				
+				this.wayForm = {
+					id: this.templateId,
 					name: res.data.name,//方案名称
-					diseaseId: res.data.diseaseId,//疾病类型id
+					diseaseId:res.data.diseaseId  ,//疾病类型id
 					departmentId: res.data.departmentId, //科室类型id
 					activeType: res.data.activeType,//方案类型：0代表随访，1代表通知
 					status: res.data.status,//状态：0，启用；1，禁用
+					wayTem:[],
+					tagCount: []
+				}
+				this.$Spin.show();
+				setTimeout(()=>{
+					for (let item of this.editList) {
+						this.wayForm.wayTem.push(item.id)
+					}
+					this.$Spin.hide();
+				},2000);
+				for (let item of this.diseaseList) {
+					this.selectItem = item;
+					this.addTag();
 				}
 			}).catch((error) => {
 				console.log(error)
 			})
 		},
 		/** 
-		 * 方案编辑模板重组
-		 */
-		wavForm() {
-			for (const item of this.editList) {
-				let arr = [];
-				for (const ite of item.questionSchemeWavs) {
-					if (arr.length == 0) {
-						arr.push({
-							questionId: ite.questionId,
-							questionIdXml: ite.questionIdXml,
-							questionName: ite.questionName,
-							templeId: ite.templeId,
-							questionTempleQuestionJumps: [ite],
-						})
-					} else {
-						let flag = 0;
-						for (const it of arr) {
-							if (it.questionId == ite.questionId) {
-								it.questionTempleQuestionJumps.push(ite)
-								flag++;
-							}
-						}
-						if (flag == 0) {
-							arr.push({
-								questionId: ite.questionId,
-								questionIdXml: ite.questionIdXml,
-								questionName: ite.questionName,
-								templeId: ite.templeId,
-								questionTempleQuestionJumps: [ite],
-							})
-						}
-					}
-				}
-				item.questionSchemeWavs = arr;
-				item.questionTemples = {
-					questionSchemeWavs: item.questionSchemeWavs,
-					questionTempleFrequency: item.questionTempleFrequency,
-					questionTempleTimeRanges: item.questionTempleTimeRanges
-				}
-				delete item.questionSchemeWavs;
-				delete item.questionTempleFrequency;
-				delete item.questionTempleTimeRanges;
-
-			}
-			this.temList = this.editList;
-		},
-		/** 
 		 * 根据方案id获取语音等信息
 		 */
 		getvoiceList() {
 			API.followWay.voiceList({
-				id: this.followId,
+				id: this.templateId,
 			}).then((res) => {
-				/** 
-				 * 获取最新的数据列表
-				 */
 				this.editList = res.data;
-				this.wavForm();
+				this.actionTime = this.editList.length;
+				this.diseaseLength = this.editList.length;
 				this.templateInfo();
 			}).catch((error) => {
 			})
 		},
 		/*
+		* 方案类型切换
+		*/
+		typeChange(value) {
+			/* this.person = value */
+		},
+		/*
+		* 疾病类型--智能匹配
+		*/
+		autoSearch(query) {
+			if (query == "") {
+				return false;
+			}
+			this.diseaseList = [];
+			API.followProblems.disease({
+				zjm: query
+			}).then((res) => {
+				for (const item of res.data) {
+					this.diseaseList.push({
+						label: item.name,
+						value: item.id
+					})
+				}
+			}).catch((error) => {
+			})
+		},
+		/*
+		* 获取选中的疾病标签列value
+		*/
+		selectChange(item) {
+			/** 
+			 * 根据item的id获取对应的模板
+			 * 根据模板id获取获取问题模板
+			 */
+			if (item.length > this.diseaseLength && this.actionTime == 0) {
+				this.selectItem = item[item.length - 1];
+				this.addTag();
+				this.diseaseLength = item.length;
+			}
+
+		},
+		/*
 		 *通过模板id获取模板问题列表
 		 */
-		temQuestion(item) {
+		temQuestion(data) {
 			API.followTemplate.questionList({
-				id: item.id,
+				id: data.id,
 			}).then((res) => {
-				item.questionTemples.questionSchemeWavs = res.data;
-				this.temList.push(item);
+				data.questionTemples.questionSchemeWavs = res.data;
+				let flag=0;
+				for (const item of this.temList) {
+					if(item.id==data.id){
+						flag++;
+						break;
+					}
+				}
+				if(flag>0){
+					return false;
+				}
+				this.temList.push(data);
+				if (this.actionTime > 0) {
+					/** 
+					 * 最好在此处直接进行数据的最终格式化
+					 */
+					for (let item of this.editList) {
+						if (item.id == data.id) {
+							data.questionTemples.questionTempleFrequency = item.questionTempleFrequency;
+							data.questionTemples.questionTempleTimeRanges = item.questionTempleTimeRanges;
+							this.copyList.push(JSON.parse(JSON.stringify(data.questionTemples.questionSchemeWavs)));
+							data.questionTemples.questionSchemeWavs = this.editFormData(JSON.parse(JSON.stringify(data.questionTemples.questionSchemeWavs)), item);
+							this.actionTime--;
+							break;
+						}
+					}
+					
+				}
+
 			}).catch((error) => {
 			})
 		},
@@ -772,17 +795,51 @@ export default {
 			}
 			return data;
 		},
+		/** 
+		 * 根据疾病id获取具体模板信息
+		 */
+		temDisease(id) {
+			API.followTemplate.list({
+				diseaseId: id,
+				pager: 1, //当前页码
+				limit: 999999, //每页条数
+			}).then((res) => {
+				for (const item of res.data) {
+					this.dataForm(item);
+				}
+			}, err => {
+				console.log(err);
+			}).catch((error) => {
+				console.log(error);
+			})
+		},
 		/*
-		*添加当前模板到方案
+		*添加标签
 		*/
-		addTemplate(item) {
-			item = this.cerateItem(item);
-			this.temQuestion(item);
+		addTag() {
+			/* let flag = 0;
+			this.wayForm.tagCount.forEach((item) => {
+				if (this.selectItem.label == item || this.selectItem.label == '') {
+					flag++;
+					alert('您添加的为空或者重复添加')
+				}
+			})
+			if (flag > 0) {
+				this.selectItem = {}
+				return false;
+			} */
+			/** 
+			 * 获取具体模板
+			 */
+			this.temDisease(this.selectItem.value);
+			/* this.wayForm.tagCount.push(this.selectItem); */
+			this.selectItem = {};
+
 		},
 		/** 
-		 * 创建列表基础数据
+		 * 数据格式化
 		 */
-		cerateItem(data) {
+		dataForm(data) {
 			data.questionTemples = {
 				questionTempleTimeRanges: [
 					{
@@ -806,107 +863,32 @@ export default {
 				},
 				questionSchemeWavs: []
 			};
-			return data;
-		},
-
-		/*
-		* 疾病类型--智能匹配
-		*/
-		autoSearch_base(query) {
-			if (query == "") {
-				return false;
-			}
-			this.diseaseList = [];
-			API.followProblems.disease({
-				zjm: query
-			}).then((res) => {
-				for (const item of res.data) {
-					this.diseaseList.push({
-						label: item.name,
-						value: item.id
-					})
-				}
-			}).catch((error) => {
-			})
+			this.temQuestion(data)
 		},
 		/*
-		* 疾病类型--智能匹配(模板搜索)
+		* 疾病标签删除
 		*/
-		autoSearch_tem(query) {
-			if (query == "") {
-				return false;
-			}
-			this.diseaseList_tem = [];
-			API.followProblems.disease({
-				zjm: query
-			}).then((res) => {
-				for (const item of res.data) {
-					this.diseaseList_tem.push({
-						label: item.name,
-						value: item.id
-					})
-				}
-			}).catch((error) => {
-			})
+		tagClose(event, name) {
+			const index = this.wayForm.tagCount.indexOf(name);
+			this.wayForm.tagCount.splice(index, 1);
 		},
-		/*
-		* 获取选中的疾病标签列value
-		*/
-		selectChange(item) {
+		async dataInit() {
 			/** 
-			 * 根据item的id获取对应的模板
-			 * 根据模板id获取获取问题模板
+			 * 首先获取具体问题列表
 			 */
-			let id = item[item.length - 1].value;
-			API.followTemplate.list({
-				diseaseId: id,
-				pager: 1, //当前页码
-				limit: 999999, //每页条数
-			}).then((res) => {
-				/** 
-				 * 数据筛选
-				 */
-				for (const item of res.data) {
-					let flag = 0
-					for (const ite of this.tableList) {
-						if (ite.id == item.id) {
-							flag++
-						}
-					}
-					if (flag == 0) {
-						this.tableList.push(item);
-					}
-				}
-			}, err => {
-
-			}).catch((error) => {
-
-			})
-		},
-		/**@argument
-		获取所有科室
-		 */
-		getDepartment() {
-			API.followWay.departmentList({
-				page: 1, //当前页码
-				limit: 100000,//每页条数
-			}).then((res) => {
-				this.departmentList = res.data;
-			}).catch((error) => {
-
-			})
-		},
+			await this.getvoiceList();
+			/** 
+			 * 获取大体信息
+			 */
+			
+		}
 
 	},
 	mounted() {
-		/** 
-		 * 方案id赋值
-		 */
-		this.followId = this.$route.params.id
-		if (this.followId != "new") {
-			this.getvoiceList();
+		this.templateId = this.$route.params.id
+		if (this.templateId != "new") {
+			this.dataInit();
 		}
-		//获取所有科室
 		this.getDepartment();
 
 	}

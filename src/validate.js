@@ -289,6 +289,12 @@ export default {
             required: true,
             message: '请输入ai语音',
             trigger: 'change'
+        }],
+        diseaseId: [{
+            type: Array,
+            required: true,
+            message: '请选择疾病类型',
+            trigger: 'blur'
         }]
     },
     followPlan: {

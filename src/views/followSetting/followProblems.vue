@@ -521,6 +521,7 @@ export default {
    *获取prolist列表数据
    */
     list(pager) {
+   
       API.followProblems.list({
         'pager': pager,
         'limit': '10',
@@ -669,7 +670,7 @@ export default {
             this.formItem.textarea = ''
             this.patientText = false;
             this.tagCount = []//清空疾病标签
-            this.list(1)
+            this.list(this.page);
             this.$Message.success("提交成功");
           }).catch((error) => {
             console.log(error)

@@ -251,7 +251,7 @@
 							<FormItem label="发起人"  style="width:450px;">
 								<Input disabled v-model="sendData.admin" style="width: 435px"></Input>
 							</FormItem>
-							<FormItem label="发起人号码" prop="mobile" style="width:450px;">
+							<FormItem label="发起人号码" style="width:450px;">
 								<Input v-model="sendData.mobile" style="width: 435px" placeholder="请填写发起人号码"></Input>
 							</FormItem>
 							<FormItem label="已选方案" style="width:450px;">

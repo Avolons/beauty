@@ -235,7 +235,7 @@
 							<FormItem label="已选计划" style="width:450px;">
 								<Input disabled v-model="sendData.schemeName" style="width: 435px" placeholder="请选择计划"></Input>
 							</FormItem>
-							<FormItem label="发起人服务号码" prop="mobile" style="width:450px;">
+							<FormItem label="发起人服务号码"  style="width:450px;">
 								<Input v-model="sendData.mobile" style="width: 435px" placeholder="请填写发起人号码"></Input>
 							</FormItem>
 							<FormItem label="随访开始时间" style="width:450px;">
@@ -560,7 +560,7 @@ export default {
 			/** 
 			 * id 赋值
 			 */
-			console.log(this.searchParams.admin)
+			/* console.log(this.searchParams.admin) */
 			if(this.searchParams.admin) {
 				this.sendData.admin = this.searchParams.admin.split(",")[0];
 				this.sendData.adminId = this.searchParams.admin.split(",")[1];
@@ -568,8 +568,8 @@ export default {
 			this.searchParams.adminId = this.sendData.adminId;
 			this.searchParams.beginTime = this.timeobj1.date + " " + this.timeobj1.time;
 			this.searchParams.endTime = this.timeobj2.date + " " + this.timeobj2.time;
-			console.log(this.searchParams.beginTime)
-			console.log(this.searchParams.endTime)
+			/* console.log(this.searchParams.beginTime)
+			console.log(this.searchParams.endTime) */
 			API.FollowBussiness.patList(this.searchParams).then((res) => {
 				this.dataList = this.formData(res.data);
 				this.totalPage = res.total;

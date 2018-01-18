@@ -14,7 +14,7 @@ Vue.prototype.$http = axios;
 /* 默认最长响应时间 */
 // axios.defaults.timeout = 5000;
 /* 默认的接口地址 */
- // axios.defaults.baseURL = 'http://192.168.1.100:8080'; 
+/* axios.defaults.baseURL = 'http://192.168.1.100:8080'; */
 
 let JsonData = ['/order/temp/testvisit', '/order/temp/visit', '/visit/order/vet/save', '/visit/order/notice', '/ordertask/vet', '/question/script/save', '/questionscheme/save', '/questiontemple/save', '/questiontarget/save'];
 // 添加请求拦截器
@@ -105,6 +105,111 @@ export const Data = {
      */
     doctorImport: axios.defaults.baseURL || '' + '/visit/excel/adminImport',
     PatImport: axios.defaults.baseURL || '' + '/visit/excel/import'
+};
+
+/* 首页接口 *****/
+export const Home = {
+    /**
+     * 随访记录审核接口
+     * @param {any} data
+     * @returns
+     */
+    orderList (data) {
+        return fetch('get', '/visit/hp/orderlist', data);
+    },
+    /**
+     * 随访计划审核接口
+     * @param {any} data
+     * @returns
+     */
+    tasklist (data) {
+        return fetch('get', '/visit/hp/tasklist', data);
+    },
+    /**
+     * 方案重复匹配审核接口
+     * @param {any} data
+     * type:2    //必须为2(必传)
+     * @returns
+     */
+    taskList (data) {
+        return fetch('get', '/visit/hp/tasklist', data);
+    },
+    /**
+     * 医生接诊量排行获取科室接口
+     * @param {any} data
+     * @returns
+     */
+    getdepartment (data) {
+        return fetch('get', '/visit/hp/getdepartment', data);
+    },
+    /**
+     * 医生接诊量排行接口
+     * pager:1,           //当前页码
+        limit:3,           //每页条数
+        departmentId:6,   //科室(必传)
+        type:1            //类型(必传)：1表示7日，2表示30日
+     * @param {any} data
+     * @returns
+     */
+    seniority (data) {
+        return fetch('get', '/visit/hp/seniority', data);
+    },
+    /**
+     * 就诊患者统计接口
+     * departmentId:821,   //科室(必传)
+        type:1            //类型(必传)：1表示7日，2表示30日
+     * @param {any} data
+     * @returns
+     */
+    jzcount (data) {
+        return fetch('get', '/visit/hp/jzcount', data);
+    },
+    /**
+     * 随访情况获取科室接口
+     * @param {any} data
+     * @returns
+      */
+    departList (data) {
+        return fetch('get', '/visit/hp/getdepartmentbyorder', data);
+    },
+    /**
+     * 随访情况接口
+     * departmentId:17,   //科室(必传)
+        type:1            //类型(必传)：1表示7日，2表示30日
+     * @param {any} data
+     * @returns
+     */
+    countvisitorder (data) {
+        return fetch('get', '/visit/hp/countvisitorder', data);
+    },
+    /**
+     * 每日随访任务量接口
+        departmentId:821,   //科室(必传)
+        type:1            //类型(必传)：1表示7日，2表示30日
+     * @param {any} data
+     * @returns
+     */
+    hccount (data) {
+        return fetch('get', '/visit/hp/hccount', data);
+    },
+    /**
+     * 任务完成情况统计接口
+     * departmentId:5,   //科室(必传)
+        type:1            //类型(必传)：1表示7日，2表示30日
+     * @param {any} data
+     * @returns
+     */
+    countvisitfinish (data) {
+        return fetch('get', '/visit/hp/countvisitfinish', data);
+    },
+    /**
+     * 任务失败情况统计接口
+     * @param {any} data
+     * @returns
+     */
+    countordercancel (data) {
+        return fetch('get', '/visit/hp/countordercancel', data);
+    }
 };
 
 /* 通用相关相关接口 *****/

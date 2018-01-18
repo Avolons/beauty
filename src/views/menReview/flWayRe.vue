@@ -841,6 +841,7 @@ export default {
 			}).then((res) => {
 				this.planInfo = this.dataForm(res.data);
 				if(res.data.notPassReason !='') {
+					this.zzsfForm.radio = 1;
 					this.zzsfForm.select = res.data.notPassReason;
 					this.zzsfForm.textarea = res.data.notPassRemark;
 				}else {

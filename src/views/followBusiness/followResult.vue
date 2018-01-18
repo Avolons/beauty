@@ -77,6 +77,20 @@
 								<td colspan=3>{{planInfo.yishenyijian}}</td>
 							</tr>
 						</table>
+						<Form :model="zzsfForm" ref="zzsfForm" :rules="zzsfFormRule" :label-width="60" style="padding-top: 30px;">
+		          <FormItem label="原因"  prop="select" style="text-align:left;" v-if="zzsfForm.radio == 1">
+		            <Select v-model="zzsfForm.select" style="width: 50%;" @on-change="xzReason">
+		                <Option value="1">死亡</Option>
+		                <Option value="2">拒绝随访</Option>
+		                <Option value="3">随访方案重复</Option>
+		                <Option value="4">方案不匹配</Option>
+		                <Option value="5">其他</Option>
+		            </Select>
+		          </FormItem>
+		          <FormItem label="详情" prop="textarea" style="text-align:left;" v-if="zzsfForm.radio == 1">
+		            <Input v-model="zzsfForm.textarea" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="请详细说明情况" style="width: 50%;"></Input>
+		          </FormItem>
+		        </Form>
 					</div>
 				</Panel>
 				<Panel name="2">
@@ -101,175 +115,203 @@
 			</Collapse>
 		</Modal>
 		<!-- 详情模态框 -->
-        <Modal v-model="patientDetail" title="患者信息" class-name="patientInfo" :styles="{top: '36px'}" width="1000">
-          <Row class="infoRow">
-            <Col span="12" class="infoCol12 mb12">
-              <div class="info">
-                <div class="info-row">
-                  <div class="info1 bb1">姓名</div>
-                  <div class="info2 bdx1">{{currentData.brxm}}</div>
-                </div>
-                <div class="info-row">
-                  <div class="info1">性别</div>
-                  <div class="info2">{{currentData.brxb}}</div>
-                </div>
-              </div>
+    <Modal v-model="patientDetail" title="患者信息" class-name="patientInfo" :styles="{top: '36px'}" width="1000">
+      <Row class="infoRow">
+        <Col span="12" class="infoCol12 mb12">
+          <div class="info">
+            <div class="info-row">
+              <div class="info1 bb1">姓名</div>
+              <div class="info2 bdx1">{{currentData.brxm}}</div>
+            </div>
+            <div class="info-row">
+              <div class="info1">性别</div>
+              <div class="info2">{{currentData.brxb}}</div>
+            </div>
+          </div>
+        </Col>
+        <Col span="12" class="infoCol12 mb12">
+          <div class="info">
+            <div class="info-row">
+              <div class="info1 bb1">电话</div>
+              <div class="info2 bdx1">{{currentData.jtdh}}</div>
+            </div>
+            <div class="info-row">
+              <div class="info1">地址</div>
+              <div class="info2">{{currentData.xzzQtdz}}</div>
+            </div>
+          </div>
+        </Col>
+        <Col span="12" class="infoCol12 mb12">
+          <div class="info">
+            <div class="info-row">
+              <div class="info1 bb1">年龄</div>
+              <div class="info2 bdx1">{{currentData.age}}</div>
+            </div>
+            <div class="info-row">
+              <div class="info1">民族</div>
+              <div class="info2">{{currentData.mz}}</div>
+            </div>
+          </div>
+        </Col>
+        <Col span="12" class="infoCol12 mb12">
+          <div class="info">
+            <div class="info-row">
+              <div class="info1 bb1">出生年月</div>
+              <div class="info2 bdx1">{{currentData.csny}}</div>
+            </div>
+            <div class="info-row">
+              <div class="info1">身份证号</div>
+              <div class="info2">{{currentData.sfzh}}</div>
+            </div>
+          </div>
+        </Col>
+        <Col span="12" class="infoCol12 mb12">
+          <div class="info">
+            <div class="info-row">
+              <div class="info1 bb1">紧急联系人</div>
+              <div class="info2 bdx1">{{currentData.lxrm}}</div>
+            </div>
+            <div class="info-row">
+              <div class="info1">关系</div>
+              <div class="info2">{{currentData.lxgx}}</div>
+            </div>
+          </div>
+        </Col>
+        <Col span="12" class="infoCol12 mb12">
+          <div class="info">
+            <div class="info-row">
+              <div class="info1 bb1">联系地址</div>
+              <div class="info2 bdx1">{{currentData.lxdz}}</div>
+            </div>
+            <div class="info-row">
+              <div class="info1">联系电话</div>
+              <div class="info2">{{currentData.lxdh}}</div>
+            </div>
+          </div>
+        </Col>
+        <Col span="12" class="infoCol12 mb12">
+          <div class="info" style="height: 32px;">
+            <div class="info-row">
+              <div class="info1 bdx1">单位</div>
+              <div class="info2 bdx1">{{currentData.dwmc}}</div>
+            </div>
+          </div>
+        </Col>
+        <!-- 门诊 -->
+        <Col span="24" class="infoCol24" v-if="mjzData.length" v-for="item,index in mjzData" :key="index">
+          <Row class="infoRow2">
+            <Col span="4" class="sfCol4">
+            <div class="counts">
+              <p class="suifang">门诊</p>
+            </div>
             </Col>
-            <Col span="12" class="infoCol12 mb12">
-              <div class="info">
-                <div class="info-row">
-                  <div class="info1 bb1">电话</div>
-                  <div class="info2 bdx1">{{currentData.jtdh}}</div>
-                </div>
-                <div class="info-row">
-                  <div class="info1">地址</div>
-                  <div class="info2">{{currentData.xzzQtdz}}</div>
-                </div>
-              </div>
-            </Col>
-            <Col span="12" class="infoCol12 mb12">
-              <div class="info">
-                <div class="info-row">
-                  <div class="info1 bb1">年龄</div>
-                  <div class="info2 bdx1">{{currentData.age}}</div>
-                </div>
-                <div class="info-row">
-                  <div class="info1">民族</div>
-                  <div class="info2">{{currentData.mz}}</div>
-                </div>
-              </div>
-            </Col>
-            <Col span="12" class="infoCol12 mb12">
-              <div class="info">
-                <div class="info-row">
-                  <div class="info1 bb1">出生年月</div>
-                  <div class="info2 bdx1">{{currentData.csny}}</div>
-                </div>
-                <div class="info-row">
-                  <div class="info1">身份证号</div>
-                  <div class="info2">{{currentData.sfzh}}</div>
-                </div>
-              </div>
-            </Col>
-            <Col span="12" class="infoCol12 mb12">
-              <div class="info">
-                <div class="info-row">
-                  <div class="info1 bb1">紧急联系人</div>
-                  <div class="info2 bdx1">{{currentData.lxrm}}</div>
-                </div>
-                <div class="info-row">
-                  <div class="info1">关系</div>
-                  <div class="info2">{{currentData.lxgx}}</div>
-                </div>
-              </div>
-            </Col>
-            <Col span="12" class="infoCol12 mb12">
-              <div class="info">
-                <div class="info-row">
-                  <div class="info1 bb1">联系地址</div>
-                  <div class="info2 bdx1">{{currentData.lxdz}}</div>
-                </div>
-                <div class="info-row">
-                  <div class="info1">联系电话</div>
-                  <div class="info2">{{currentData.lxdh}}</div>
-                </div>
-              </div>
-            </Col>
-            <Col span="12" class="infoCol12 mb12">
-              <div class="info" style="height: 32px;">
-                <div class="info-row">
-                  <div class="info1 bdx1">单位</div>
-                  <div class="info2 bdx1">{{currentData.dwmc}}</div>
-                </div>
-              </div>
-            </Col>
-            <!-- 门诊 -->
-            <Col span="24" class="infoCol24" v-if="mjzData.length" v-for="item,index in mjzData" :key="index">
-              <Row class="infoRow2">
-                <Col span="4" class="sfCol4">
-                <div class="counts">
-                  <p class="suifang">门诊</p>
-                </div>
-                </Col>
-                <Col span="20" class="sfCol20">
-                <h3 class="sfName">{{currentData.brxm}}</h3>            
-                <Row>
-                  <Col span="12">
-                    <span>就诊卡号:</span><span>{{currentData.jzkh}}</span>
-                  </Col>
-                  <Col span="12">
-                    <span>患者性质:</span><span>{{currentData.brxz}}</span>
-                  </Col>
-                  <Col span="12">
-                    <span>就诊时间:</span><span>{{item.jzrq}}</span>
-                  </Col>
-                  <Col span="12">
-                    <span>是否初诊:</span><span>44</span>
-                  </Col>
-                  <Col span="12">
-                    <span>就诊科室:</span><span>{{item.ksmc}}</span>
-                  </Col>
-                  <Col span="12">
-                    <span>就诊医生:</span><span>{{item.ysxm}}</span>
-                  </Col>
-                  <Col span="12">
-                    <span>主诉:</span><span>{{item.zs}}</span>
-                  </Col>
-                  <Col span="12">
-                    <span>诊断:</span><span>{{item.zdmc}}</span>
-                  </Col>
-                </Row>
-                </Col>
-              </Row>
-            </Col>
-            <!-- 住院 -->
-            <Col span="24" class="infoCol24" v-if="zyData.length" v-for="item1,index1 in zyData" :key="index1">
-              <Row class="infoRow2">
-
-                <Col span="4" class="sfCol4">
-                <div class="counts">
-                  <p class="suifang">住院</p>
-                </div>
-                </Col>
-                <Col span="20" class="sfCol20">
-                <h3 class="sfName">{{currentData.brxm}}</h3>            
-                <Row>
-                  <Col span="12">
-                    <span>住院号:</span><span>{{item1.zyhm}}</span>
-                  </Col>
-                  <Col span="12">
-                    <span>患者性质:</span><span>{{currentData.brxz}}</span>
-                  </Col>
-                  <Col span="12">
-                    <span>入院时间:</span><span>{{item1.admissiontime}}</span>
-                  </Col>
-                  <Col span="12">
-                    <span>出院时间:</span><span>{{item1.leavetime}}</span>
-                  </Col>
-                  <Col span="12">
-                    <span>入院科别:</span><span>{{item1.departname}}</span>
-                  </Col>
-                  <Col span="12">
-                    <span>主治医生:</span><span>{{item1.doctorname}}</span>
-                  </Col>
-                  <Col span="12">
-                    <span>入院诊断:</span><span>{{item1.admissiondiagnose}}</span>
-                  </Col>
-                  <Col span="12">
-                    <span>出院诊断:</span><span>{{item1.leavediagnose}}</span>
-                  </Col>
-                  <Col span="12">
-                    <span>入院情况:</span><span>{{item1.admissiondescription}}</span>
-                  </Col>
-                  <Col span="12">
-                    <span>出院情况:</span><span>{{item1.leavedescription}}</span>
-                  </Col>
-                </Row>
-                </Col>
-              </Row>
+            <Col span="20" class="sfCol20">
+            <h3 class="sfName">{{currentData.brxm}}</h3>            
+            <Row>
+              <Col span="12">
+                <span>就诊卡号:</span><span>{{currentData.jzkh}}</span>
+              </Col>
+              <Col span="12">
+                <span>患者性质:</span><span>{{currentData.brxz}}</span>
+              </Col>
+              <Col span="12">
+                <span>就诊时间:</span><span>{{item.jzrq}}</span>
+              </Col>
+              <Col span="12">
+                <span>是否初诊:</span><span>44</span>
+              </Col>
+              <Col span="12">
+                <span>就诊科室:</span><span>{{item.ksmc}}</span>
+              </Col>
+              <Col span="12">
+                <span>就诊医生:</span><span>{{item.ysxm}}</span>
+              </Col>
+              <Col span="12">
+                <span>主诉:</span><span>{{item.zs}}</span>
+              </Col>
+              <Col span="12">
+                <span>诊断:</span><span>{{item.zdmc}}</span>
+              </Col>
+            </Row>
             </Col>
           </Row>
-        </Modal>
+        </Col>
+        <!-- 住院 -->
+        <Col span="24" class="infoCol24" v-if="zyData.length" v-for="item1,index1 in zyData" :key="index1">
+          <Row class="infoRow2">
+
+            <Col span="4" class="sfCol4">
+            <div class="counts">
+              <p class="suifang">住院</p>
+            </div>
+            </Col>
+            <Col span="20" class="sfCol20">
+            <h3 class="sfName">{{currentData.brxm}}</h3>            
+            <Row>
+              <Col span="12">
+                <span>住院号:</span><span>{{item1.zyhm}}</span>
+              </Col>
+              <Col span="12">
+                <span>患者性质:</span><span>{{currentData.brxz}}</span>
+              </Col>
+              <Col span="12">
+                <span>入院时间:</span><span>{{item1.admissiontime}}</span>
+              </Col>
+              <Col span="12">
+                <span>出院时间:</span><span>{{item1.leavetime}}</span>
+              </Col>
+              <Col span="12">
+                <span>入院科别:</span><span>{{item1.departname}}</span>
+              </Col>
+              <Col span="12">
+                <span>主治医生:</span><span>{{item1.doctorname}}</span>
+              </Col>
+              <Col span="12">
+                <span>入院诊断:</span><span>{{item1.admissiondiagnose}}</span>
+              </Col>
+              <Col span="12">
+                <span>出院诊断:</span><span>{{item1.leavediagnose}}</span>
+              </Col>
+              <Col span="12">
+                <span>入院情况:</span><span>{{item1.admissiondescription}}</span>
+              </Col>
+              <Col span="12">
+                <span>出院情况:</span><span>{{item1.leavedescription}}</span>
+              </Col>
+            </Row>
+            </Col>
+          </Row>
+        </Col>
+      </Row>
+    </Modal>
+     <!-- 终止随访 -->
+    <Modal v-model="zzsfModel" class-name="zzsfModel" width="480px">
+      <p slot="header" style="color:#ed3f14;text-align:center;font-size:16px;">
+        <span>终止{{sfrName}}所有随访</span>
+      </p>
+      <div style="text-align:center">
+        <Form :model="zzsfForm" ref="zzsfForm" :rules="zzsfFormRule" :label-width="80">
+          <FormItem label="原因"  prop="select" style="text-align:left;">
+            <Select v-model="zzsfForm.select" style="width: 80%;" @on-change="xzReason">
+                <Option value="1">死亡</Option>
+                <Option value="2">拒绝随访</Option>
+                <Option value="3">随访方案重复</Option>
+                <Option value="4">方案不匹配</Option>
+                <Option value="5">其他</Option>
+            </Select>
+          </FormItem>
+          <FormItem label="详情" prop="textarea" style="text-align:left;">
+            <Input v-model.trim="zzsfForm.textarea" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="请详细说明情况" style="width: 80%;"></Input>
+          </FormItem>
+          <FormItem>
+            <Button type="primary" @click="zzsfCancel('zzsfForm')">取消</Button>
+            <Button type="ghost" @click="zzsfOk('zzsfForm')" style="margin-left: 8px">提交</Button>
+          </FormItem>
+        </Form>
+      </div>
+      <div slot="footer">
+      </div>
+    </Modal>
 	</Row>
 </template>
 
@@ -324,6 +366,11 @@ export default {
           }
 				},
 				{
+					title: '疾病诊断',
+					key: 'icdName',
+					align: 'center'
+				},
+				{
 					title: '随访方案',
 					key: 'schemeName',
 					align: 'center'
@@ -336,6 +383,11 @@ export default {
 				{
 					title: '生成时间',
 					key: 'dateAdd',
+					align: 'center'
+				},
+				{
+					title: '执行日期',
+					key: 'dateBegin',
 					align: 'center'
 				},
 				{
@@ -368,22 +420,40 @@ export default {
 								}
 							}, params.row.vetStatus == 0 ? '审核中' : '详情'),
 							h('Button', {
-								props: {
-									type: 'warning',
-									size: 'small'
-								},
-								style: {
+                props: {
+                  type: 'warning',
+                  size: 'small'
+                },
+                style: {
 
-								},
-								 'class':{
-									menuHide:this.menuShow(this.AM.FollowBussiness.delLog)
-								},
-								on: {
-									click: () => {
-										this.deletResult(params.row.id);
-									}
-								}
-							}, '删除')
+                },
+                'class':{
+                  menuHide:this.menuShow(this.AM.FollowBussiness.delPlan)
+                },
+                on: {
+                  click: () => {
+                    this.zzsfFun(params.row.brxm, params.row.id)
+                    this.$refs.zzsfForm.resetFields();
+                  }
+                }
+              }, '终止随访')
+							// h('Button', {
+							// 	props: {
+							// 		type: 'warning',
+							// 		size: 'small'
+							// 	},
+							// 	style: {
+
+							// 	},
+							// 	 'class':{
+							// 		menuHide:this.menuShow(this.AM.FollowBussiness.delLog)
+							// 	},
+							// 	on: {
+							// 		click: () => {
+							// 			this.deletResult(params.row.id);
+							// 		}
+							// 	}
+							// }, '删除')
 						]);
 					}
 				}],
@@ -398,6 +468,23 @@ export default {
       zyData: [],
       //详情模态框
       patientDetail: false,
+      //终止随访
+      zzsfModel: false,//弹框
+      sfrName: '',//终止随访人姓名
+      nowId: '',//终止随访人数据id
+      zzsfForm: {
+        select: '',//终止随访原因
+        textarea: '',//终止随访备注
+        radio: '0',
+      },
+      zzsfFormRule: {//终止随访form验证
+        select: [
+          { required: true, message: '请选择不通过原因', trigger: 'change' }
+        ],
+        textarea: [
+          { required: true, message: '请输入详情', trigger: 'blur' },
+        ]
+      },
 		}
 	},
 	methods: {
@@ -430,6 +517,13 @@ export default {
 				id: id
 			}).then((res) => {
 				this.planInfo = res.data;
+				if(res.data.notPassReason !='') {
+					this.zzsfForm.radio = 1;
+					this.zzsfForm.select = res.data.notPassReason;
+					this.zzsfForm.textarea = res.data.notPassRemark;
+				}else {
+					this.zzsfForm.radio = 0;
+				}
 			}).catch((err) => {
 
 			});
@@ -473,6 +567,48 @@ export default {
 
       });
     },
+    /**
+       * 终止随访按钮
+       */
+      zzsfFun(name, id) {
+        this.zzsfModel = true;
+        this.sfrName = name;
+        this.nowId = id;
+      },
+      //选择终止随访的原因
+      xzReason(value) {
+        this.zzsfForm.select = value
+      },
+      /**
+       * 终止随访取消按钮
+       */
+      zzsfCancel (name) {
+        this.$refs[name].resetFields();
+        this.zzsfModel = false;
+      },
+      /**
+       * 终止随访确定按钮
+       */
+      zzsfOk (name) {
+        this.$refs[name].validate((valid) => {
+          if (valid) {
+            API.Dataaudit.cancelall({
+                id:this.nowId,
+                notPassReason:this.zzsfForm.select,
+                notPassRemark:this.zzsfForm.textarea,
+            }).then((res)=>{
+              console.log(res)
+              this.$Message.success('成功!');
+              this.zzsfModel = false;
+               
+            }).catch((err)=>{
+
+            });
+          } else {
+              this.$Message.error('失败');
+          }
+        })
+      },
 
 	},
 	mounted() {

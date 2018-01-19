@@ -25,14 +25,14 @@
 			</span>
 			<Input type="text" v-model="searchParams.schemeName" placeholder="请输入随访方案"></Input>
 			</Col>
-			<Col span="6">
+			<!-- <Col span="6">
 			<span>
 				审核状态
 			</span>
 			<Select v-model="searchParams.status">
 				<Option v-for="item in statusList" :value="item.id" :key="item.id">{{item.name}}</Option>
 			</Select>
-			</Col>
+			</Col> -->
 			<Col span="6">
 			<span>
 				医生
@@ -88,15 +88,19 @@ export default {
 					}
 				},
 				{
-					title: '姓名',
+					title: '患者姓名',
 					key: 'brxm',
+				},
+				{
+					title: '疾病诊断',
+					key: 'icdName',
 				},
 				{
 					title: '随访方案',
 					key: 'schemeName',
 				},
 				{
-					title: '状态',
+					title: '随访状态',
 					key: 'statusStr',
 				},
 				{

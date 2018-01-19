@@ -98,7 +98,7 @@
                     </CheckboxGroup>
                 </FormItem>
                 <h5>数据权限</h5>
-                <FormItem label="所属部门" prop="adId" style="width:450px;">
+                <!-- <FormItem label="所属部门" prop="adId" style="width:450px;">
                     <Select @on-change="getPosition" v-model="formData.adId" style="width:200px">
                         <Option v-for="item in departList" :value="item.id" :key="item.id">{{ item.name }}</Option>
                     </Select>
@@ -107,7 +107,7 @@
                     <Select v-model="formData.apId" style="width:200px">
                         <Option v-for="item in positionList" :value="item.id" :key="item.id">{{ item.name }}</Option>
                     </Select>
-                </FormItem>
+                </FormItem> -->
                 <FormItem label="所属科室" prop="dpId">
                     <Select v-model="formData.dpId" style="width:200px">
                         <Option v-for="item in officeList" :value="item.id" :key="item.id">{{ item.name }}</Option>

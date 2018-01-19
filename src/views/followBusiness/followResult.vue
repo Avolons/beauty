@@ -17,11 +17,19 @@
 			</Col>
 			<Col span="6">
 			<span>
+				随访状态
+			</span>
+			<Select v-model="searchParams.status">
+				<Option v-for="item in statusList" :value="item.id" :key="item.id">{{item.name}}</Option>
+			</Select>
+			</Col>
+			<Col span="6">
+			<span>
 				随访方案
 			</span>
 			<Input type="text" v-model="searchParams.schemeName" placeholder="请输入随访方案"></Input>
 			</Col>
-			<Col span="6">
+			<Col span="6" style="margin-top:10px">
 			<Button @click="searchParams.pager=1;getData()" type="primary">查询</Button>
 			</Col>
 		</Row>
@@ -326,8 +334,28 @@ export default {
 				limit: 10,//每页条数
 				schemeName: "",//方案名称（可选）
 				orderNo: "",//编码（可选）
-				brxm: "" //患者姓名（可选）
+				brxm: "", //患者姓名（可选）
+				status:"",
 			},
+			statusList: [{
+				name: "全部",
+				id: ""
+			}, {
+				name: "等待随访",
+				id: 0
+			}, {
+				name: "随访中",
+				id: 1
+			}, {
+				name: "已随访",
+				id: 2
+			}, {
+				name: "已停止",
+				id: 3
+			}, {
+				name: "配置错误",
+				id: 4
+			},],//审核状态选项列表
 			totalPage: 100,//总页数
 			//随访记录详情
 			planInfo: {
@@ -378,6 +406,11 @@ export default {
 				{
 					title: '随访状态',
 					key: 'statusStr',
+					align: 'center'
+				},
+				{
+					title: '通话状态',
+					key: 'remark',
 					align: 'center'
 				},
 				{

@@ -15,14 +15,14 @@
 			</span>
 			<Input type="text" v-model="searchParams.schemeName" placeholder="请输入随访方案"></Input>
 			</Col>
-			<Col span="6">
+			<!-- <Col span="6">
 			<span>
 				审核状态
 			</span>
 			<Select v-model="searchParams.status">
 				<Option v-for="item in statusList" :value="item.id" :key="item.id">{{item.name}}</Option>
 			</Select>
-			</Col>
+			</Col> -->
 			<Col span="6">
 			<span>
 				医生

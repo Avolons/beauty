@@ -69,7 +69,7 @@
       </Col>
       <Col span="6">
       <Button type="primary" style="margin-right:10px" @click="handleSearch('IndexSearch')">查询</Button>
-      <Upload style="margin-right:10px" :show-upload-list='false' :action="API.Data.temImport" name="xmlFile">
+      <Upload :on-success="handleSuccess" style="margin-right:10px" :show-upload-list='false' :action="API.Data.temImport" name="xmlFile">
         <Button type="primary" icon="ios-cloud-upload-outline">导入模板</Button>
       </Upload>
       <Button type="info" v-if="!menuShow(this.AM.FollowSetting.addTem)" @click="addBtn">添加模板</Button>
@@ -101,7 +101,7 @@ export default {
 
     };
     return {
-      API:API,
+      API: API,
       IndexSearch: {
         name: '',
         diseaseName: ''
@@ -165,10 +165,17 @@ export default {
                       id: params.row.id,
                     }).then((content) => {
                       var aLink = document.createElement('a');
-                      var blob = new Blob([content],{type : 'application/xml'});
+                      var blob = new Blob([content], { type: 'application/xml' });
                       aLink.download = params.row.name;
                       aLink.href = URL.createObjectURL(blob);
-                      aLink.click();
+                      if (document.all) {
+                        aLink.click();
+                      }
+                      else {
+                        var evt = document.createEvent("MouseEvents");
+                        evt.initEvent("click", true, true);
+                        aLink.dispatchEvent(evt);
+                      }
                     }).catch((error) => {
                     });
                   }
@@ -229,8 +236,20 @@ export default {
     this.list(1);
   },
   methods: {
-    importXml(){
-
+    handleSuccess(res, file) {
+      res = JSON.parse(res);
+      if (res.code == 0) {
+        this.$Message.success({
+          content: '上传成功',
+          top: 500
+        });
+        this.list(1);
+      } else {
+        this.$Message.cancel({
+          content: res.msg,
+          top: 500
+        });
+      }
     },
     /*
     *获取list列表数据

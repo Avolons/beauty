@@ -69,6 +69,9 @@
       </Col>
       <Col span="6">
       <Button type="primary" style="margin-right:10px" @click="handleSearch('IndexSearch')">查询</Button>
+      <Upload style="margin-right:10px" :show-upload-list='false' :action="API.Data.temImport" name="xmlFile">
+        <Button type="primary" icon="ios-cloud-upload-outline">导入模板</Button>
+      </Upload>
       <Button type="info" v-if="!menuShow(this.AM.FollowSetting.addTem)" @click="addBtn">添加模板</Button>
       </Col>
     </Row>
@@ -98,11 +101,12 @@ export default {
 
     };
     return {
+      API:API,
       IndexSearch: {
         name: '',
         diseaseName: ''
       },
-      page:1,
+      page: 1,
       columns7: [//表格栏
         {
           title: 'id',
@@ -135,9 +139,9 @@ export default {
                 style: {
                   marginRight: '5px'
                 },
-                'class':{
-									menuHide:this.menuShow(this.AM.FollowSetting.editTem)
-								},
+                'class': {
+                  menuHide: this.menuShow(this.AM.FollowSetting.editTem)
+                },
                 on: {
                   click: () => {
                     this.$router.push({ path: `/followSetting/template/template/${params.row.id}` });
@@ -146,15 +150,41 @@ export default {
               }, '编辑'),
               h('Button', {
                 props: {
+                  type: 'info',
+                  size: 'small'
+                },
+                style: {
+                  marginRight: '5px'
+                },
+                'class': {
+                  /* menuHide:this.menuShow(this.AM.FollowSetting.editTem) */
+                },
+                on: {
+                  click: () => {
+                    API.followTemplate.export({
+                      id: params.row.id,
+                    }).then((content) => {
+                      var aLink = document.createElement('a');
+                      var blob = new Blob([content],{type : 'application/xml'});
+                      aLink.download = params.row.name;
+                      aLink.href = URL.createObjectURL(blob);
+                      aLink.click();
+                    }).catch((error) => {
+                    });
+                  }
+                }
+              }, '下载'),
+              h('Button', {
+                props: {
                   type: 'warning',
                   size: 'small'
                 },
                 style: {
 
                 },
-                'class':{
-									menuHide:this.menuShow(this.AM.FollowSetting.delTem)
-								},
+                'class': {
+                  menuHide: this.menuShow(this.AM.FollowSetting.delTem)
+                },
                 on: {
                   click: () => {
                     this.deleteRow(params.row.id)
@@ -199,6 +229,9 @@ export default {
     this.list(1);
   },
   methods: {
+    importXml(){
+
+    },
     /*
     *获取list列表数据
     */
@@ -223,7 +256,7 @@ export default {
      *获取分页列表数据
      */
     currentPage: function(page) {
-      this.page=page;
+      this.page = page;
       API.followTemplate.list({
         pager: page,
         limit: '10',
@@ -244,7 +277,7 @@ export default {
     *查询
     */
     handleSearch() {
-      this.page=1;
+      this.page = 1;
       API.followTemplate.list({
         pager: 1,
         limit: '10',
@@ -272,11 +305,11 @@ export default {
           API.followTemplate.deleteList({
             id: id
           }).then((res) => {
-              this.list(1)
-              this.$Message.success({
-                content: '删除成功',
-                top: 500
-              });
+            this.list(1)
+            this.$Message.success({
+              content: '删除成功',
+              top: 500
+            });
           }).catch((error) => {
             console.log(error)
           })

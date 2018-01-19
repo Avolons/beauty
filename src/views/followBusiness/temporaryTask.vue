@@ -468,15 +468,7 @@ export default {
 		 * 发起随访
 		 */
 		handleSave() {
-			this.$refs["sendData"].validate((valid) => {
-				if (!valid) {
-					return false;
-				}
-				/* if (this.timeobj.date == "" || this.timeobj.time == "") {
-					this.$Message.warning("请填写具体随访发起时间");
-					return false;
-				} */
-				this.$Modal.confirm({
+			this.$Modal.confirm({
 					title: '发起随访',
 					content: '确定要发起随访吗?',
 					onOk: () => {
@@ -495,6 +487,15 @@ export default {
 
 					},
 				})
+			this.$refs["sendData"].validate((valid) => {
+				if (!valid) {
+					return false;
+				}
+				/* if (this.timeobj.date == "" || this.timeobj.time == "") {
+					this.$Message.warning("请填写具体随访发起时间");
+					return false;
+				} */
+				
 			});
 		},
 		// submitCeshi() {

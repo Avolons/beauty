@@ -58,7 +58,12 @@ function fetch (type, url, params) {
                 params: params
             })
                 .then(response => {
-                    let code = JSON.parse(response.data).code;
+                    let code;
+                    try {
+                        code = JSON.parse(response.data).code;
+                    } catch (error) {
+                        resolve(response.data);
+                    }
                     if (code === 2 || code === 21) {
                         window.RSYS.$router.push('/login');
                     } else if (code === 0) {
@@ -104,7 +109,8 @@ export const Data = {
      * @returns
      */
     doctorImport: axios.defaults.baseURL || '' + '/visit/excel/adminImport',
-    PatImport: axios.defaults.baseURL || '' + '/visit/excel/import'
+    PatImport: axios.defaults.baseURL || '' + '/visit/excel/import',
+    temImport: axios.defaults.baseURL || '' + 'visit/questiontemple/import'
 };
 
 /* 首页接口 *****/
@@ -908,6 +914,19 @@ export const followTemplate = {
      */
     questionList (data) {
         return fetch('get', 'visit/questiontemple/question/list', data);
+    },
+    /*
+     *模板导出接口
+     */
+    export (data) {
+        return fetch('get', 'visit/questiontemple/export', data);
+    },
+    /*
+     *模板导入接口
+     xmlFile:文件
+     */
+    import (data) {
+        return fetch('post', 'visit/questiontemple/import', data);
     }
 
 };

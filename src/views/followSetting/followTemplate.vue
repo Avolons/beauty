@@ -181,7 +181,7 @@ export default {
                   }
                 }
               }, '下载'),
-              h('Button', {
+             /*  h('Button', {
                 props: {
                   type: 'warning',
                   size: 'small'
@@ -197,7 +197,7 @@ export default {
                     this.deleteRow(params.row.id)
                   }
                 }
-              }, '删除')
+              }, '删除') */
             ]);
           }
         }

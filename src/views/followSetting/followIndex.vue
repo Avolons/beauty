@@ -281,7 +281,7 @@ export default {
 									}
 								}
 							}, '编辑'),
-							h('Button', {
+							/* h('Button', {
 								props: {
 									type: 'warning',
 									size: 'small'
@@ -305,7 +305,7 @@ export default {
 										})
 									}
 								}
-							}, '删除')
+							}, '删除') */
 						]);
 					}
 				}

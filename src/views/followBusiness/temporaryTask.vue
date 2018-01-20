@@ -185,7 +185,7 @@
 							</Col>
 						</Row>
 						<div class="creatNotice_main_add">
-							<Badge :count="isAll==0?addList.length:totalPage" overflow-count="10000">
+							<Badge :count="addList.length">
 								<Button @click="patModal=true" type="info">已添加患者</Button>
 							</Badge>
 						</div>
@@ -259,7 +259,6 @@
 				</Tabs>
 			</div>
 		</div>
-		<Spin></Spin>
 	</div>
 </template>
 
@@ -327,6 +326,9 @@ export default {
 				visitStartTime: "",//随访起始时间
 				hzxxIds: [],  //患者id
 				isAll: '',//是否选择全部人数
+				beginTime:'',//导入开始时间：年月日时分秒(可选)
+				endTime:'',//导入结束时间：年月日时分秒（可选）
+				brxm:'',//病人姓名（可选）
 			},
 			departList: [],//科室选项列表
 			doctorList: [],//医生选项列表
@@ -489,8 +491,11 @@ export default {
 							}
 							this.sendData.isAll = 0
 						}else if(this.isAll == 1) {
-							this.sendData.hzxxIds = []
+							//this.sendData.hzxxIds = []
 							this.sendData.isAll = 1
+							this.sendData.brxm = this.searchParams.brxm
+							this.sendData.beginTime = this.searchParams.beginTime
+							this.sendData.endTime = this.searchParams.endTime
 						}
 						this.sendData.visitStartTime = this.timeobj.date + " " + this.timeobj.time;
 						API.FollowBussiness.patSubmit(this.sendData).then((res) => {
@@ -584,24 +589,6 @@ export default {
 
 			});
 		},
-		getData2() {
-			/** 
-			 * id 赋值
-			 */
-			this.searchParams.limit = 100000;
-			if(this.searchParams.admin) {
-				this.sendData.admin = this.searchParams.admin.split(",")[0];
-				this.sendData.adminId = this.searchParams.admin.split(",")[1];
-			}
-			this.searchParams.adminId = this.sendData.adminId;
-			this.searchParams.beginTime = this.timeobj1.date + " " + this.timeobj1.time;
-			this.searchParams.endTime = this.timeobj2.date + " " + this.timeobj2.time;
-			API.FollowBussiness.patList(this.searchParams).then((res) => {
-				this.addList = this.formData(res.data);
-			}).catch((err) => {
-
-			});
-		},
 
 		/** 
 		 * 数据格式化
@@ -630,18 +617,10 @@ export default {
 		 * 全选或者全部取消-
 		 */
 		addAll() {
-			console.log(this.addList.length)
-			if(this.isAll==0) {
-				for (let index = 0; index < this.dataList.length; index++) {
-				if (this.dataList[index].isAdd != 1) {
-						this.addPat(this.dataList[index], index);
-					}
+			for (let index = 0; index < this.dataList.length; index++) {
+			if (this.dataList[index].isAdd != 1) {
+					this.addPat(this.dataList[index], index);
 				}
-			}else if(this.isAll==1) {
-				this.isAll = 0;
-				this.getData()
-				this.addList = []
-				this.addList = this.addList.concat(this.dataList);
 			}
 		},
 		/**
@@ -649,14 +628,11 @@ export default {
 		 */
 		addAllPages() {
 			this.isAll = 1;
-			this.getData2()
-			this.searchParams.pager = 1;
-			for (let index = 0; index < this.dataList.length; index++) {
-				if (this.dataList[index].isAdd != 1) {
-					this.addPat(this.dataList[index], index);
-				}
+			if (this.dataList.length == 0) {
+				this.$Message.warning("您尚未添加任何患者");
+				return false;
 			}
-			console.log(this.isAll)
+			this.step = "step_two";
 		},
 		/** ylTimeChange
 		 * 日期改变

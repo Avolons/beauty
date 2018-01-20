@@ -211,6 +211,7 @@
 						</div>
 						<Row class="creatNotice_main_page">
 							<Button @click="addAll">添加当前页</Button>
+							<Button @click="addAllPages">添加所有页</Button>
 							<Button @click="nextStep" type="primary">下一步选择方案</Button>
 							<Page :total="totalPage" :current="searchParams.pager" show-elevator style="float:right" @on-change="changePage"></Page>
 						</Row>
@@ -301,7 +302,7 @@ export default {
 				diseaseId:[],//疾病id，多个用英文逗号分开（可选）
 				brxb:"",     //性别：男,女
 				ageBegin:0, //年龄开始（可选）
-    			ageEnd:200   //年龄结束（可选）
+    		ageEnd:200   //年龄结束（可选）
 			},
 			/** 
 			 * 方案请求数据
@@ -321,7 +322,13 @@ export default {
 				visitEndTime:"",//通知结束时间
 				taskName:"", //通知计划名称 
 				hzxxIds: [],  //患者id
-				remark:""    
+				remark:"",
+				isAll: '',//是否全选  
+				brxb: '',//性别
+				ageBegin: '',//开始年龄
+				ageEnd: '',//结束年龄
+				diseaseId: '',//疾病
+
 			},
 			departList: [],//科室选项列表
 			doctorList: [],//医生选项列表
@@ -474,6 +481,7 @@ export default {
 			],
 			//列表数据,必须使用缓存数据方式
 			dataList: [],
+			isAll: 0,//是否选择当前时间段的所有病人
 		}
 	},
 	methods: {
@@ -496,6 +504,16 @@ export default {
 						for (let item of this.addList) {
 							this.sendData.hzxxIds.push(item.id);
 						}
+						if(this.isAll == 0) {
+							this.sendData.isAll =0
+						}else if(this.isAll == 1) {
+							this.sendData.isAll =1
+							this.sendData.diseaseId =this.searchParams.diseaseId
+							this.sendData.brxb =this.searchParams.brxb
+							this.sendData.ageBegin =this.searchParams.ageBegin
+							this.sendData.ageEnd =this.searchParams.ageEnd
+
+						} 
 						let ajaxData=JSON.parse(JSON.stringify(this.sendData));
 						/* delete ajaxData.admin;
 						delete ajaxData.adminId; */
@@ -571,6 +589,7 @@ export default {
 
 			});
 		},
+
 		/** 
 		 * 数据格式化
 		 */
@@ -608,6 +627,18 @@ export default {
 					this.addPat(this.dataList[index], index);
 				}
 			}
+		},
+		/**
+		 * 添加所有页
+		 */
+		addAllPages() {
+			this.isAll = 1;
+			if (this.sendData.admin == "") {
+				this.$Message.warning("您未选择默认发起人");
+				return false;
+			}
+			this.$Message.success("您已选择当前搜索到的全部患者!");
+			this.step = "step_two";
 		},
 		/** 
 		 * 日期改变
@@ -686,7 +717,7 @@ export default {
 		 * 疾病远程搜索
 		 */
 		remoteMethod(query) {
-			if (query.trim() == "") {
+			if (query == "") {
 				return false;
 			}
 			API.followProblems.disease({

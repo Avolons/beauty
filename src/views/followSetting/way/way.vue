@@ -312,7 +312,7 @@
 			<Row style="margin:10px 0;">
 				<Col span="8" offset="8">
 				  <Button class="way_main_saveButton" type="primary" @click="saveChange">保存</Button>
-					<Button class="way_main_saveButton" type="info" @click="submitCeshi" v-if="this.templateId">预览计划</Button>
+					<Button class="way_main_saveButton" type="info" @click="submitCeshi" v-if="templateId!='new'">预览计划</Button>
 					<Button class="way_main_saveButton" type="success" @click="backWay">返回随访方案</Button>
 				</Col>
 				<Col span="8">
@@ -321,7 +321,7 @@
 		</Col>
 		<h2 class="way_main_commonTitle" v-if="this.templateId">预览随访方案:</h2>
 		<!-- 预览方案时间 -->
-		<Table border :columns="timeConfig" :data="timeList" v-if="this.templateId"></Table>
+		<Table border :columns="timeConfig" :data="timeList" v-if="templateId!='new'"></Table>
 		<!-- model -->
 		<Modal v-model="timemodal" title="新增随访时间段">
 			<TimePicker @on-change="timeChange" class="way_main_timePicker" format="HH:mm:ss" type="timerange" placement="bottom-end" placeholder="请选择随访时间段" style="width: 168px"></TimePicker>
@@ -530,14 +530,23 @@ export default {
 		 */
 		submitCeshi() {
 			this.wayForm.visitStartTime = this.timeobj.date + " " + this.timeobj.time;
-				console.log(this.wayForm.visitStartTime.toString().length)
-			if(this.wayForm.visitStartTime.toString().length < 18) {
-				this.$Message.error('请选择随访开始时间!')
-			}else {
+				if(this.wayForm.visitStartTime=='') {
+					let param = {
+						schemeId: this.templateId,
+						schemeName: this.wayForm.name,
+					}
+				}else {
+					let param = {
+						schemeId: this.templateId,
+						schemeName: this.wayForm.name,
+						visitStartTime: this.wayForm.visitStartTime,
+					}
+				}
+				this.wayForm.visitStartTime == ''?'':this.wayForm.visitStartTime
 				API.FollowBussiness.patCeshi({
 					schemeId: this.templateId,
 					schemeName: this.wayForm.name,
-					visitStartTime: this.wayForm.visitStartTime,
+					// visitStartTime: this.wayForm.visitStartTime,
 				}).then((res) => {
 					this.timeList=res.data;
 					/* this.$Message.success("发起成功");
@@ -547,7 +556,7 @@ export default {
 				}).catch((err) => {
 					console.log(err)
 				});
-			}
+			// }
 		},
 		/**
 		 * 返回随访方案页

@@ -185,7 +185,7 @@
 							</Col>
 						</Row>
 						<div class="creatNotice_main_add">
-							<Badge :count="addList.length">
+							<Badge :count="isAll==0?addList.length:totalPage" overflow-count="10000">
 								<Button @click="patModal=true" type="info">已添加患者</Button>
 							</Badge>
 						</div>
@@ -195,6 +195,7 @@
 						</div>
 						<Row class="creatNotice_main_page">
 							<Button @click="addAll">添加当前页</Button>
+							<Button @click="addAllPages">添加所有页</Button>
 							<Button @click="nextStep" type="primary">下一步选择方案</Button>
 							<Page :total="totalPage" :current="searchParams.pager" show-elevator style="float:right" @on-change="changePage"></Page>
 						</Row>
@@ -235,7 +236,7 @@
 							<FormItem label="已选计划" style="width:450px;">
 								<Input disabled v-model="sendData.schemeName" style="width: 435px" placeholder="请选择计划"></Input>
 							</FormItem>
-							<FormItem label="发起人服务号码"  style="width:450px;">
+							<FormItem label="发起人服务号码" prop="mobile" style="width:450px;">
 								<Input v-model="sendData.mobile" style="width: 435px" placeholder="请填写发起人号码"></Input>
 							</FormItem>
 							<FormItem label="随访开始时间" style="width:450px;">
@@ -258,6 +259,7 @@
 				</Tabs>
 			</div>
 		</div>
+		<Spin></Spin>
 	</div>
 </template>
 
@@ -323,7 +325,8 @@ export default {
 				admin: "",
 				mobile: "",  //发起人专属服务号码
 				visitStartTime: "",//随访起始时间
-				hzxxIds: []  //患者id
+				hzxxIds: [],  //患者id
+				isAll: '',//是否选择全部人数
 			},
 			departList: [],//科室选项列表
 			doctorList: [],//医生选项列表
@@ -456,11 +459,10 @@ export default {
 						]);
 					}
 				}
-
-
 			],
 			//列表数据,必须使用缓存数据方式
 			dataList: [],
+			isAll: 0,//是否选择当前时间段的所有病人
 		}
 	},
 	methods: {
@@ -468,25 +470,6 @@ export default {
 		 * 发起随访
 		 */
 		handleSave() {
-			this.$Modal.confirm({
-					title: '发起随访',
-					content: '确定要发起随访吗?',
-					onOk: () => {
-						for (let item of this.addList) {
-							this.sendData.hzxxIds.push(item.id);
-						}
-						this.sendData.visitStartTime = this.timeobj.date + " " + this.timeobj.time;
-						API.FollowBussiness.patSubmit(this.sendData).then((res) => {
-							this.$Message.success("发起成功");
-							setTimeout(() => {
-								this.$router.push("/followBusiness/followPlan");
-							}, 1000);
-						}).catch((err) => {
-
-						});
-
-					},
-				})
 			this.$refs["sendData"].validate((valid) => {
 				if (!valid) {
 					return false;
@@ -495,7 +478,33 @@ export default {
 					this.$Message.warning("请填写具体随访发起时间");
 					return false;
 				} */
-				
+				this.$Modal.confirm({
+					title: '发起随访',
+					content: '确定要发起随访吗?',
+					onOk: () => {
+						this.$Spin.show();
+						if(this.isAll == 0) {
+							for (let item of this.addList) {
+								this.sendData.hzxxIds.push(item.id);
+							}
+							this.sendData.isAll = 0
+						}else if(this.isAll == 1) {
+							this.sendData.hzxxIds = []
+							this.sendData.isAll = 1
+						}
+						this.sendData.visitStartTime = this.timeobj.date + " " + this.timeobj.time;
+						API.FollowBussiness.patSubmit(this.sendData).then((res) => {
+							this.$Spin.hide();
+							this.$Message.success("发起成功");
+							setTimeout(() => {
+								this.$router.push("/followBusiness/followPlan");
+							}, 1000);
+						}).catch((err) => {
+							this.$Spin.hide();
+						});
+
+					},
+				})
 			});
 		},
 		// submitCeshi() {
@@ -561,7 +570,6 @@ export default {
 			/** 
 			 * id 赋值
 			 */
-			/* console.log(this.searchParams.admin) */
 			if(this.searchParams.admin) {
 				this.sendData.admin = this.searchParams.admin.split(",")[0];
 				this.sendData.adminId = this.searchParams.admin.split(",")[1];
@@ -569,8 +577,6 @@ export default {
 			this.searchParams.adminId = this.sendData.adminId;
 			this.searchParams.beginTime = this.timeobj1.date + " " + this.timeobj1.time;
 			this.searchParams.endTime = this.timeobj2.date + " " + this.timeobj2.time;
-			/* console.log(this.searchParams.beginTime)
-			console.log(this.searchParams.endTime) */
 			API.FollowBussiness.patList(this.searchParams).then((res) => {
 				this.dataList = this.formData(res.data);
 				this.totalPage = res.total;
@@ -578,6 +584,25 @@ export default {
 
 			});
 		},
+		getData2() {
+			/** 
+			 * id 赋值
+			 */
+			this.searchParams.limit = 100000;
+			if(this.searchParams.admin) {
+				this.sendData.admin = this.searchParams.admin.split(",")[0];
+				this.sendData.adminId = this.searchParams.admin.split(",")[1];
+			}
+			this.searchParams.adminId = this.sendData.adminId;
+			this.searchParams.beginTime = this.timeobj1.date + " " + this.timeobj1.time;
+			this.searchParams.endTime = this.timeobj2.date + " " + this.timeobj2.time;
+			API.FollowBussiness.patList(this.searchParams).then((res) => {
+				this.addList = this.formData(res.data);
+			}).catch((err) => {
+
+			});
+		},
+
 		/** 
 		 * 数据格式化
 		 */
@@ -605,11 +630,33 @@ export default {
 		 * 全选或者全部取消-
 		 */
 		addAll() {
+			console.log(this.addList.length)
+			if(this.isAll==0) {
+				for (let index = 0; index < this.dataList.length; index++) {
+				if (this.dataList[index].isAdd != 1) {
+						this.addPat(this.dataList[index], index);
+					}
+				}
+			}else if(this.isAll==1) {
+				this.isAll = 0;
+				this.getData()
+				this.addList = []
+				this.addList = this.addList.concat(this.dataList);
+			}
+		},
+		/**
+		 * 添加所有页
+		 */
+		addAllPages() {
+			this.isAll = 1;
+			this.getData2()
+			this.searchParams.pager = 1;
 			for (let index = 0; index < this.dataList.length; index++) {
 				if (this.dataList[index].isAdd != 1) {
 					this.addPat(this.dataList[index], index);
 				}
 			}
+			console.log(this.isAll)
 		},
 		/** ylTimeChange
 		 * 日期改变
@@ -680,7 +727,15 @@ export default {
 		 */
 		changePage(index) {
 			this.searchParams.pager = index;
+			if(this.isAll == 1) {
+				this.searchParams.limit = 10
+			}else if(this.isAll == 0) {
+				//this.addList = []
+				this.searchParams.limit = 10
+			}
+			console.log(this.dataList)
 			this.getData();
+			console.log(this.dataList)
 		},
 		/** 
 		 * 患者列表页码更改

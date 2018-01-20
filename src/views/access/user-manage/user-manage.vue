@@ -53,13 +53,13 @@
                 <span>
                     所属科室
                 </span>
-                <Select v-model="searchParam.dpId" style="width:200px">
+                <Select :filterable="true" v-model="searchParam.dpId" style="width:200px">
                     <Option v-for="item in departList" :value="item.id" :key="item.id">{{ item.name }}</Option>
                 </Select>
                 </Col>
                 <Col span="6">
                 <span>
-                    姓名
+                    真实姓名
                 </span>
                 <Input v-model="searchParam.yhName" placeholder="请输入用户名"></Input>
                 </Col>

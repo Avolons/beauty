@@ -140,7 +140,7 @@
 							<span>
 								科室名称：
 							</span>
-							<Select @on-change="getDoctorList" v-model="departId">
+							<Select :filterable="true" @on-change="getDoctorList" v-model="departId">
 								<Option v-for="item in departList" :value="item.id" :key="item.id">{{item.name}}</Option>
 							</Select>
 							</Col>
@@ -148,7 +148,7 @@
 							<span>
 								医生：
 							</span>
-							<Select @on-change="getData" v-model="searchParams.admin">
+							<Select :filterable="true" @on-change="getData" v-model="searchParams.admin">
 								<!-- <Select @on-change="getData" v-model="doctorobj"> -->
 								<Option v-for="item in doctorList" :value="item.realname+','+item.id" :key="item.id">{{item.realname}}</Option>
 							</Select>
@@ -207,7 +207,7 @@
 								<span>
 									科室名称：
 								</span>
-								<Select v-model="patParams.departmentId">
+								<Select :filterable="true" v-model="patParams.departmentId">
 									<Option v-for="item in departList" :value="item.id" :key="item.id">{{item.name}}</Option>
 								</Select>
 								</Col>

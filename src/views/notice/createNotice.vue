@@ -149,7 +149,7 @@
 							<span>
 								科室名称：
 							</span>
-							<Select @on-change="getDoctorList" v-model="departId">
+							<Select :filterable="true" @on-change="getDoctorList" v-model="departId">
 								<Option v-for="item in departList" :value="item.id" :key="item.id">{{item.name}}</Option>
 							</Select>
 							</Col>
@@ -157,7 +157,7 @@
 							<span>
 								医生：
 							</span>
-							<Select @on-change="doctorChange" v-model="doctorobj">
+							<Select :filterable="true" @on-change="doctorChange" v-model="doctorobj">
 								<Option v-for="item in doctorList" :value="item.realname+','+item.id" :key="item.id">{{item.realname}}</Option>
 							</Select>
 							</Col>

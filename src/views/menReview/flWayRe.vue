@@ -197,7 +197,7 @@
 				<span>
 					科室名称：
 				</span>
-				<Select @on-change="getDoctorList" v-model="departId">
+				<Select :filterable="true" @on-change="getDoctorList" v-model="departId">
 					<Option v-for="item in departList" :value="item.id" :key="item.id">{{item.name}}</Option>
 				</Select>
 				</Col>
@@ -205,7 +205,7 @@
 				<span>
 					医生：
 				</span>
-				<Select @on-change="getPlan" v-model="searchParam.adminId">
+				<Select :filterable="true" @on-change="getPlan" v-model="searchParam.adminId">
 					<Option v-for="item in doctorList" :value="item.id" :key="item.id">{{item.realname}}</Option>
 				</Select>
 				</Col>
@@ -213,7 +213,7 @@
 				<span>
 					方案匹配：
 				</span>
-				<Select v-model="searchParam.schemeId" placeholder="请选择方案" style="width:200px">
+				<Select :filterable="true" v-model="searchParam.schemeId" placeholder="请选择方案" style="width:200px">
 					<Option v-for="item in actionList" :value="item.id" :key="item.id">{{ item.name }}</Option>
 				</Select>
 				</Col>

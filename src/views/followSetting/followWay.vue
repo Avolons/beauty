@@ -49,7 +49,7 @@
 				<span>
 					科室类别
 				</span>
-			<Select v-model="waySearch.departmentId" clearable @on-change="handleDeparment">
+			<Select :filterable="true" v-model="waySearch.departmentId" clearable @on-change="handleDeparment">
           <Option v-for="(option, index) in deparmentSelect" :value="option.value" :key="index">{{option.label}}</Option>
         </Select>
 				</Col>

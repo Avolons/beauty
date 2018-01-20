@@ -165,7 +165,7 @@
 				<Input v-model="wayForm.name" placeholder="请输入方案名称"></Input>
 			</FormItem>
 			<FormItem label="科室类别" prop="departmentId">
-				<Select v-model="wayForm.departmentId" placeholder="情选择科室类别">
+				<Select :filterable="true" v-model="wayForm.departmentId" placeholder="情选择科室类别">
 					<Option v-for="item in departmentList" :value="item.id" :key="item.id">{{item.name}}</Option>
 				</Select>
 			</FormItem>

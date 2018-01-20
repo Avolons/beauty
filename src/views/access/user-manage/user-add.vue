@@ -109,7 +109,7 @@
                     </Select>
                 </FormItem> -->
                 <FormItem label="所属科室" prop="dpId">
-                    <Select v-model="formData.dpId" style="width:200px">
+                    <Select :filterable="true" v-model="formData.dpId" style="width:200px">
                         <Option v-for="item in officeList" :value="item.id" :key="item.id">{{ item.name }}</Option>
                     </Select>
                 </FormItem>

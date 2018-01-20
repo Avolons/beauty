@@ -501,6 +501,7 @@ export default {
 					title: '发起随访',
 					content: '确定要发起随访吗?',
 					onOk: () => {
+						this.$Spin.show();
 						for (let item of this.addList) {
 							this.sendData.hzxxIds.push(item.id);
 						}
@@ -519,11 +520,12 @@ export default {
 						delete ajaxData.adminId; */
 						API.Notice.createNotice(ajaxData).then((res) => {
 							this.$Message.success("发起成功");
+							this.$Spin.hide();
 							setTimeout(()=> {
 								this.$router.push("/notice/viewNotice");
 							}, 1000);
 						}).catch((err) => {
-
+							this.$Spin.hide();
 						});
 
 					},

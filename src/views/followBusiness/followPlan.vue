@@ -508,12 +508,12 @@ export default {
 		 * 获取列表数据,搜索接口
 		 */
         getData() {
-            API.FollowBussiness.listPlan(this.searchParams).then((res)=>{
-				this.dataList=res.data;
-				this.totalPage=res.total;
-			}).catch((err)=>{
+          API.FollowBussiness.listPlan(this.searchParams).then((res)=>{
+            this.dataList=res.data;
+            this.totalPage=res.total;
+          }).catch((err)=>{
 
-			});
+			    });
         },
 		/** 
 		 * 页码改变
@@ -632,7 +632,7 @@ export default {
        */
       zzsfCancel (name) {
         this.$refs[name].resetFields();
-        this.$Message.success('取消按钮');
+        this.zzsfModel = false;
       },
       /**
        * 终止随访取消按钮
@@ -645,10 +645,9 @@ export default {
                 notPassReason:this.zzsfForm.select,
                 notPassRemark:this.zzsfForm.textarea,
             }).then((res)=>{
-              console.log(res)
               this.$Message.success('成功!');
               this.zzsfModel = false;
-               
+              this.$refs[name].resetFields();
             }).catch((err)=>{
 
             });

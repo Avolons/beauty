@@ -11,10 +11,11 @@ import App from './app.vue';
 import '@/locale';
 import 'iview/dist/styles/iview.css';
 import VueI18n from 'vue-i18n';
-import util from '@/libs/util';
 import validate from './validate.js';
 import promise from 'es6-promise';
-import {AM } from './accessMenu.js';
+import {
+    AM
+} from './accessMenu.js';
 
 Vue.prototype.AM = AM;
 

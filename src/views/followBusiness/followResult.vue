@@ -461,7 +461,7 @@ export default {
 
                 },
                 'class':{
-                  menuHide:this.menuShow(this.AM.FollowBussiness.delPlan)
+                  menuHide:this.menuShow(this.AM.FollowBussiness.cancleall)
                 },
                 on: {
                   click: () => {

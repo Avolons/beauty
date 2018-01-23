@@ -382,6 +382,9 @@ export default {
                           type: 'primary',
                           size: 'small'
                       },
+                      'class':{
+                         menuHide:this.menuShow(this.AM.FollowBussiness.startPlan)
+                       },
                       style: {
                           marginRight: '5px'
                       },
@@ -395,15 +398,15 @@ export default {
                     }, '随访'),
                     h('Button', {
                       props: {
-                        type: 'success',
+                        type: 'info',
                         size: 'small'
                       },
                       style: {
                         marginRight: '5px'
                       },
-                      // 'class':{
-                      //   menuHide:this.menuShow(this.AM.FollowBussiness.delPlan)
-                      // },
+                      'class':{
+                         menuHide:this.menuShow(this.AM.FollowBussiness.detail)
+                       },
                       on: {
                         click: () => {
                           this.sfjhModel = true;
@@ -424,7 +427,7 @@ export default {
 
                       },
                       'class':{
-                        menuHide:this.menuShow(this.AM.FollowBussiness.delPlan)
+                        menuHide:this.menuShow(this.AM.FollowBussiness.cancleall)
                       },
                       on: {
                         click: () => {

@@ -118,22 +118,23 @@
 			}
 		}
 		&_questSize {
-			height: 35px;
-			width: 35px;
+			height: 30px;
+			width: 30px;
 			border-radius: 50%;
 			background: #2d8cf0;
-			line-height: 35px;
+			line-height: 30px;
 			text-align: center;
 			color: #fff;
-			font-size: 12px;
+			font-size: 10px;
 			display: block;
 			margin: 0 auto;
+			margin-top: 4px;
 		}
 		&_timeSection {
 			text-align: center;
 			border-radius: 5px;
 			display: block;
-			background-color: #f1f1f1;
+			background-color: #fff;
 			margin-right: 10px;
 			height: 25px;
 			line-height: 25px;
@@ -149,13 +150,13 @@
 			cursor: pointer;
 		}
 		&_temIndex {
-			height: 25px;
-			width: 25px;
+			height: 30px;
+			width: 30px;
 			border-radius: 50%;
 			border: 2px solid #2d8cf0;
 			text-align: center;
-			line-height: 21px;
-			margin-top: 5px;
+			line-height: 26px;
+			color: #666;
 		}
 		&_innerBox {
 			.ivu-form-item {
@@ -193,6 +194,18 @@
 		&_timePicker {
 			display: block;
 			margin: 0 auto;
+		}
+		&_planSingle {
+			margin-bottom: 10px;
+			border: 1px solid #dedede;
+			padding: 10px;
+			padding-right: 0;
+			box-sizing: border-box;
+			border-radius: 5px;
+			background-color: #f5f5f5;
+			.wayIndex {
+				margin-bottom: 5px;
+			}
 		}
 	}
 }
@@ -256,35 +269,40 @@
 					<!-- 模板名称&&随访周期 -->
 					<Row>
 						<Col span="2" class="lineheight32">
-							<h3 class="way_main_temIndex">{{index+1}}</h3>
+						<h3 class="way_main_temIndex">{{index+1}}</h3>
 						</Col>
 						<Col span="4" style="max-width:70px" class="lineheight32 way_main_commonTemTitle">
-							<strong>模板名称:</strong>
+						<strong>模板名称:</strong>
 						</Col>
 						<Col span="14" class="lineheight32 way_main_commonTemTitle">
-							<strong>{{item.name}}</strong>
+						<strong>{{item.name}}</strong>
 						</Col>
-						<Col span="4" class="lineheight32 " >
-							<Button size="small" v-show="followId!='new'" style="float:right" type="primary" @click="updateTemp(item,index)">更新</Button>
+						<Col span="4" class="lineheight32 ">
+						<Button size="small" v-show="followId!='new'" style="float:right" type="info" @click="updateTemp(item,index)">更新</Button>
 						</Col>
-						<Col span="24" style="margin-top:10px" class="lineheight32 " >
+						<Col span="24" style="margin-top:10px" class="lineheight32 ">
+						<Row>
+							<Col span="4" style="max-width:65px" offset="1" class="lineheight32 ">
+							<strong>随访周期:</strong>
+							</Col>
+							<Col span="20" class="lineheight32">
 							<Row>
-								<Col span="4" style="max-width:65px" offset="1" class="lineheight32 " >
-									<strong>随访周期:</strong>
+								<Col span="3">
+								<span>随访次数:</span>
 								</Col>
-								<Col span="20" class="lineheight32">
-									<Row>
-										<Col span="3">
-											<span>随访次数:</span>
-										</Col>
-										<Col span="21">
-											<InputNumber size="small" :max="100" :min="1" v-model="item.questionTemples.questionTempleFrequency.number"></InputNumber>次, 第
-											<InputNumber v-if="index==0" size="small" :min="0" v-model="item.questionTemples.questionTempleFrequency.firstday"></InputNumber> 天,第一次随访,每隔
-											<InputNumber size="small" :max="100" :min="1" v-model="item.questionTemples.questionTempleFrequency.intervalDays"></InputNumber> 天，随访一次。
-										</Col>
-									</Row>
+								<Col span="21">
+								<InputNumber size="small" :max="100" :min="1" v-model="item.questionTemples.questionTempleFrequency.number"></InputNumber>次,
+								<template v-if="index==0">
+									第
+									<InputNumber size="small" :min="0" v-model="item.questionTemples.questionTempleFrequency.firstday"></InputNumber>
+									天第一次随访,
+								</template>
+								每隔
+								<InputNumber size="small" :max="100" :min="1" v-model="item.questionTemples.questionTempleFrequency.intervalDays"></InputNumber> 天，随访一次。
 								</Col>
 							</Row>
+							</Col>
+						</Row>
 						</Col>
 					</Row>
 					<!-- 随访区间 -->
@@ -315,7 +333,7 @@
 					</Row>
 					<Row style="margin-top:10px;">
 						<Col style="max-width:65px" span="4" offset="1">
-							<strong style="margin-top:5px;display:block">语音配置:</strong>
+						<strong style="margin-top:5px;display:block">语音配置:</strong>
 						</Col>
 						<Col span="20">
 						<!-- title和只能语音单独处理 -->
@@ -557,43 +575,46 @@ export default {
 		/** 
 		 * 更新模板
 		 */
-		updateTemp(item,index){
+		updateTemp(item, index) {
 			API.followTemplate.questionList({
 				id: item.id,
 			}).then((res) => {
-				this.temList[index].questionTemples.questionSchemeWavs=this.differData(res.data,this.temList[index].questionTemples.questionSchemeWavs)
-				let obj=JSON.parse(JSON.stringify(this.temList[index]));
-				this.temList.splice(index,1,obj);
+				this.temList[index].questionTemples.questionSchemeWavs = this.differData(res.data, this.temList[index].questionTemples.questionSchemeWavs)
+				let obj = JSON.parse(JSON.stringify(this.temList[index]));
+				this.temList.splice(index, 1, obj);
 			}).catch((error) => {
 			})
 		},
-		differData(newdata,old){
+		/** 
+		 * 数据更新
+		 */
+		differData(newdata, old) {
 			for (let item of newdata) {
 				for (let ite of old) {
-					if(item.questionId==ite.questionId){
+					if (item.questionId == ite.questionId) {
 						/** 
 						 * 循环之前初始默认节点
 						 */
 						item.questionTempleQuestionJumps.splice(0, 0, {
-								switchId: "",
-								switchWav: "",
+							switchId: "",
+							switchWav: "",
 						});
 						for (let it of item.questionTempleQuestionJumps) {
 							for (let i of ite.questionTempleQuestionJumps) {
-								if(it.switchId==i.switchId){
-									if(i.outRptSwitchID){
-										it.outRptSwitchID=i.outRptSwitchID;
+								if (it.switchId == i.switchId) {
+									if (i.outRptSwitchID) {
+										it.outRptSwitchID = i.outRptSwitchID;
 									}
-									if(i.silenceWav){
-										it.silenceWav=i.silenceWav;
+									if (i.silenceWav) {
+										it.silenceWav = i.silenceWav;
 									}
-									if(i.switchWav){
-										it.switchWav=i.switchWav;
+									if (i.switchWav) {
+										it.switchWav = i.switchWav;
 									}
 								}
 							}
 						}
-					}	
+					}
 				}
 			}
 			return newdata;
@@ -686,8 +707,14 @@ export default {
 		 * 方案编辑模板重组
 		 */
 		wavForm() {
+			/** 
+			 * 格式化获取到的模板列表
+			 */
 			for (const item of this.editList) {
 				let arr = [];
+				/** 
+				 * 循环问题列表
+				 */
 				for (const ite of item.questionSchemeWavs) {
 					if (arr.length == 0) {
 						arr.push({
@@ -717,11 +744,17 @@ export default {
 					}
 				}
 				item.questionSchemeWavs = arr;
+				/** 
+				 * 格式重组
+				 */
 				item.questionTemples = {
 					questionSchemeWavs: item.questionSchemeWavs,
 					questionTempleFrequency: item.questionTempleFrequency,
 					questionTempleTimeRanges: item.questionTempleTimeRanges
 				}
+				/** 
+				 * 删除多余的属性
+				 */
 				delete item.questionSchemeWavs;
 				delete item.questionTempleFrequency;
 				delete item.questionTempleTimeRanges;
@@ -857,31 +890,33 @@ export default {
 			 * 根据item的id获取对应的模板
 			 * 根据模板id获取获取问题模板
 			 */
-			let id = item[item.length - 1].value;
-			API.followTemplate.list({
-				diseaseId: id,
-				pager: 1, //当前页码
-				limit: 999999, //每页条数
-			}).then((res) => {
-				/** 
-				 * 数据筛选
-				 */
-				for (const item of res.data) {
-					let flag = 0
-					for (const ite of this.tableList) {
-						if (ite.id == item.id) {
-							flag++
+			if (item.length > 0) {
+				let id = item[item.length - 1].value;
+				API.followTemplate.list({
+					diseaseId: id,
+					pager: 1, //当前页码
+					limit: 999999, //每页条数
+				}).then((res) => {
+					/** 
+					 * 数据筛选
+					 */
+					for (const item of res.data) {
+						let flag = 0
+						for (const ite of this.tableList) {
+							if (ite.id == item.id) {
+								flag++
+							}
+						}
+						if (flag == 0) {
+							this.tableList.push(item);
 						}
 					}
-					if (flag == 0) {
-						this.tableList.push(item);
-					}
-				}
-			}, err => {
+				}, err => {
 
-			}).catch((error) => {
+				}).catch((error) => {
 
-			})
+				})
+			}
 		},
 		/**@argument
 		获取所有科室

@@ -12,6 +12,7 @@
 	height: 100%;
 	>.ivu-col {
 		height: 100%;
+		position: static;
 		&:first-of-type {
 			display: flex;
 			flex-direction: column;
@@ -198,6 +199,18 @@
 		&_btnCollect{
 			text-align: center;
 		}
+		&_allQuery{
+			margin-left: 10px;
+			color: #2d8cf0;
+			cursor: pointer;
+		}
+		&_allWindow{
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			z-index: 555;
+		}
 		&_planSingle {
 			margin-bottom: 10px;
 			border: 1px solid #dedede;
@@ -262,10 +275,13 @@
 		</Col>
 		<!-- 配置随访方案 -->
 		<Col span="14" >
-		<Card style="height:863px">
+		<Card :class="{'way_main_allWindow':isWindow}" style="height:863px">
 			<p slot="title" style="position:relative;overflow:auto">
 				<Icon type="android-list"></Icon>
 				配置随访方案
+				<span class="way_main_allQuery" @click="checkWindow">
+					<Icon type="qr-scanner"></Icon>
+				</span>
 				<Button size="small" @click="seeModal=true" type="primary" style="position:absolute;top:0;right:0;padding:0 7px">预览方案</Button>
 			</p>
 			<ul class="way_main_planList">
@@ -424,6 +440,7 @@ import { API } from '@/services';
 export default {
 	data() {
 		return {
+			isWindow:false,
 			/** 
 			 * 基础数据，
 			 */
@@ -553,6 +570,9 @@ export default {
 		}
 	},
 	methods: {
+		checkWindow(){
+			this.isWindow=!this.isWindow;
+		},
 		/** 
 		 * 预览随访方案
 		 */

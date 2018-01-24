@@ -36,7 +36,7 @@
                 <Card style="height:370px" class="doctorSort">
                     <p slot="title" class="card-title">
                         <Icon type="map"></Icon>
-                        医生接症量排行
+                        医生接诊量排行
                         <Select @on-change="getSortList" v-model="doctorParams.type" style="width:70px">
                             <Option value="1">七天</Option>
                             <Option value="2">一个月</Option>

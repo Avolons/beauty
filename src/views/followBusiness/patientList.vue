@@ -498,22 +498,26 @@ export default {
 				{
 					title: '民族',
 					key: 'mz',
-					align: 'center'
+					align: 'center',
+					width:"70px"
 				},
 				{
 					title: '出生年月',
 					key: 'csny',
-					align: 'center'
+					align: 'center',
+					width:"100px"
 				},
 				{
 					title: '性别',
 					key: 'brxb',
-					align: 'center'
+					align: 'center',
+					width:"70px"
 				},
 				{
 					title: '家庭电话',
 					key: 'jtdh',
-					align: 'center'
+					align: 'center',
+					width:"120px"
 				},
 				{
 					title: '居住地址',

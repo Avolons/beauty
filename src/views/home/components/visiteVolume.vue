@@ -26,7 +26,7 @@ export default {
             const option = {
                 color: ['#3398DB'],
                 title: {
-                    text: '每日就诊患者',
+                    text: '每日呼出量',
                     textStyle: {
                         fontWeight: 'normal',
                         fontSize: 16,
@@ -64,7 +64,7 @@ export default {
                 ],
                 series: [
                     {
-                        name: '直接访问',
+                        name: '实际呼出数量',
                         type: 'bar',
                         barWidth: '60%',
                         data: numList

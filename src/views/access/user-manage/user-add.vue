@@ -85,6 +85,9 @@
                 <FormItem label="手机号码" prop="tel" style="width:450px;">
                     <Input v-model="formData.tel" placeholder="请输入手机号码"></Input>
                 </FormItem>
+                <FormItem label="专属号码"  style="width:450px;">
+                    <Input v-model="formData.mobile" placeholder="请输入手机号码"></Input>
+                </FormItem>
                 <FormItem label="身份"  style="width:450px;">
                     <Select  v-model="formData.types" style="width:200px">
                         <Option value="0" >管理员</Option>
@@ -137,7 +140,8 @@ export default {
                 tel: null, // 电话号码
                 rIds: [],//权限Id（可多选）
                 adId: "",//部门id
-                apId: ""//职位Id
+                apId: "",//职位Id
+                mobile:"",
             },
             departList: [],//部门列表
             officeList: [],//科室列表
@@ -213,10 +217,11 @@ export default {
                 uName: data.username,//用户名
                 password: data.pwd,//密码
                 reName: data.realname,//姓名
-                tel: data.mobile, // 电话号码
+                tel: data.tel, // 电话号码
                 rIds: roles,//权限Id（可多选）
                 adId: data.adminDepartmentId,//部门id
-                apId: data.adminPositionId//职位Id  
+                apId: data.adminPositionId,//职位Id  
+                mobile:data.mobile
             }
         },
         /** 

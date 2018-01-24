@@ -15,6 +15,7 @@ Vue.prototype.$http = axios;
 // axios.defaults.timeout = 5000;
 /* 默认的接口地址 */
 /* axios.defaults.baseURL = 'http://192.168.1.100:8080'; */
+/* axios.defaults.baseURL = 'http://192.168.1.166:8080'; */
 /* axios.defaults.baseURL = 'http://61.153.232.58:9998'; */
 
 let JsonData = ['/order/temp/testvisit', '/order/temp/visit', '/visit/order/vet/save', '/visit/order/notice', '/ordertask/vet', '/question/script/save', '/questionscheme/save', '/questiontemple/save', '/questiontarget/save'];

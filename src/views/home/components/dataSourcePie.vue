@@ -78,7 +78,7 @@ export default {
                 }, {
                     center: ['50%', '120px'],
                     type: 'pie',
-                    radius: ['58%', '83%'],
+                    radius: ['58%', '78%'],
                     itemStyle: {
                         normal: {
                             color: '#F2F2F2'

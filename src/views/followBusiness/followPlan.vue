@@ -236,7 +236,7 @@
             <Input v-model="zzsfForm.textarea" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="请详细说明情况" style="width: 80%;"></Input>
           </FormItem>
           <FormItem>
-            <Button type="primary" @click="zzsfCancel('zzsfForm')">取消</Button>
+            <Button type="primary" style="margin-left:-80px" @click="zzsfCancel('zzsfForm')">取消</Button>
             <Button type="ghost" @click="zzsfOk('zzsfForm')" style="margin-left: 8px">提交</Button>
           </FormItem>
         </Form>
@@ -635,7 +635,7 @@ export default {
        */
       zzsfCancel (name) {
         this.$refs[name].resetFields();
-        this.$Message.success('取消按钮');
+        this.zzsfModel=false;
       },
       /**
        * 终止随访取消按钮

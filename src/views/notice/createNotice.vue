@@ -207,7 +207,7 @@
 						</div>
 						<Alert show-icon>已添加过的患者无法重复添加，您可在已添加患者列表里进行删除操作</Alert>
 						<div class="creatNotice_main_list">
-							<Table border ref="selection" :columns="config" :data="dataList"></Table>
+							<Table border ref="selection" :columns="config" :data="dataList" :loading="createLoading"></Table>
 						</div>
 						<Row class="creatNotice_main_page">
 							<Button @click="addAll">添加当前页</Button>
@@ -482,6 +482,7 @@ export default {
 			//列表数据,必须使用缓存数据方式
 			dataList: [],
 			isAll: 0,//是否选择当前时间段的所有病人
+			createLoading: false,
 		}
 	},
 	methods: {
@@ -584,11 +585,13 @@ export default {
 			/** 
 			 * id 赋值
 			 */
+			this.createLoading = true;
 			API.Notice.listPlan(this.searchParams).then((res) => {
 				this.dataList = this.formData(res.data);
 				this.totalPage = res.total;
+				this.createLoading = false;
 			}).catch((err) => {
-
+				this.createLoading = false;
 			});
 		},
 

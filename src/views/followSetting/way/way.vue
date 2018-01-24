@@ -364,7 +364,7 @@
 							</span>
 							</Col>
 							<Col span="20">
-							<Collapse v-model="ite.questionId">
+							<Collapse>
 								<Panel name="1">
 									<span class="way_main_nowarp">问题:{{ite.questionName}}</span>
 									<Icon type="chevron-right" size="14" color="#999" style="line-height: 35px; float:right; margin-right:10px"></Icon>
@@ -652,12 +652,14 @@ export default {
 		 * 更新模板
 		 */
 		updateTemp(item, index) {
+			this.$Spin.show();
 			API.followTemplate.questionList({
 				id: item.id,
 			}).then((res) => {
 				this.temList[index].questionTemples.questionSchemeWavs = this.differData(res.data, this.temList[index].questionTemples.questionSchemeWavs)
 				let obj = JSON.parse(JSON.stringify(this.temList[index]));
 				this.temList.splice(index, 1, obj);
+			this.$Spin.hide();
 			}).catch((error) => {
 			})
 		},
@@ -747,7 +749,7 @@ export default {
 				this.$Message.success("保存成功");
 				setTimeout(() => {
 					this.$router.push("/followSetting/followWay");
-				}, 1500);
+				}, 500);
 			}).catch((error) => {
 			})
 		},
@@ -842,6 +844,7 @@ export default {
 
 			}
 			this.temList = this.editList;
+			this.$Spin.hide();
 		},
 		/** 
 		 * 根据方案id获取语音等信息
@@ -1019,10 +1022,12 @@ export default {
 		 */
 		this.followId = this.$route.params.id
 		if (this.followId != "new") {
+			this.$Spin.show();
 			this.getvoiceList();
 		}
 		//获取所有科室
 		this.getDepartment();
+		
 	}
  }
 

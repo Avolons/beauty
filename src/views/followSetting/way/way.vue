@@ -420,6 +420,7 @@
 
 <script>
 import { API } from '@/services';
+
 export default {
 	data() {
 		return {
@@ -497,7 +498,8 @@ export default {
 			timemodal: false,//时间切换显示
 			editList: [],//被编辑的数据
 			seeModal: false,//预览显示
-			timeConfig: [{
+			timeConfig: [
+				{
 				title: '计划序号',
 				key: 'index',
 				align: 'center',
@@ -506,17 +508,18 @@ export default {
 						h('strong', '第' + Number(params.index + 1) + '次')
 					]);
 				}
-			},
-			{
-				title: '模板名称',
-				key: 'schemeName',
-				align: 'center'
-			},
-			{
-				title: '随访时间',
-				key: 'dateBegin',
-				align: 'center'
-			},],//时间配置
+				},
+				{
+					title: '模板名称',
+					key: 'schemeName',
+					align: 'center'
+				},
+				{
+					title: '随访时间',
+					key: 'dateBegin',
+					align: 'center'
+				},
+			],//时间配置
 			timeData: [],//时间数据列表
 			timeobj: {//随访时间
 				date: "",
@@ -572,7 +575,6 @@ export default {
 				}).catch((err) => {
 					console.log(err)
 				});
-			// }
 		},
 		/** 
 		 * 日期改变
@@ -729,7 +731,6 @@ export default {
 			}).catch((error) => {
 			})
 		},
-
 		/*
 		*通过方案id获取方案信息
 		*/
@@ -901,7 +902,6 @@ export default {
 			};
 			return data;
 		},
-
 		/*
 		* 疾病类型--智能匹配
 		*/
@@ -990,10 +990,10 @@ export default {
 			}).catch((error) => {
 
 			})
+		
 		},
-
 	},
-	mounted() {
+	mounted(){
 		/** 
 		 * 方案id赋值
 		 */
@@ -1003,8 +1003,8 @@ export default {
 		}
 		//获取所有科室
 		this.getDepartment();
-
 	}
-}
+ }
+
 </script>
 

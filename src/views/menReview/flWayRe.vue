@@ -844,6 +844,10 @@ export default {
 					/** 用户选项列表 */
 					if (item.fieldValue) {
 						item.fieldValue = item.fieldValue.split(",");
+					} else {
+						item.abnormal = true;
+						item.isNormal = 1;
+						item.fieldValue = [];
 					}
 					let flag = 0;
 					for (const ite of item.optionValues) {
@@ -871,11 +875,6 @@ export default {
 						item.isNormal = 1;
 					}
 				}
-				if (!item.fieldValue) {
-					item.abnormal = true;
-					item.isNormal = 1;
-				}
-
 			}
 			return data;
 		},

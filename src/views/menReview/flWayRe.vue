@@ -824,11 +824,24 @@ export default {
 		 * 数据格式化
 		 */
 		dataForm(data) {
+			/** 
+			 * 遍历所有数据
+			 */
 			for (const item of data.orderReplyQuestions) {
+				/** 
+				 * 格式化正常值
+				 */
 				item.isNormal = item.isNormal == false ? "0" : "1";
+				let flag = 0;
+				/** 
+				 * 判断是否属于采集指标类型
+				 */
 				if (item.optionValues) {
+					/** 指标选项列表 */
 					item.optionValues = item.optionValues.split(",");
+					/* 阈值列表 */
 					item.thresholdValue = item.thresholdValue.split(",");
+					/** 用户选项列表 */
 					if (item.fieldValue) {
 						item.fieldValue = item.fieldValue.split(",");
 					}
@@ -841,10 +854,28 @@ export default {
 					if (flag == 0) {
 						item.abnormal = true;
 					}
+					/** 
+					 * 只要用户已选选项中存在指标阈值列表中的数据，就认为数据不正常
+					 */
+					let flags = 0;
+					for (let ite of item.thresholdValue) {
+						for (let it of item.fieldValue) {
+							if (it == ite) {
+								flags++;
+							}
+						}
+					}
+					if (flags > 0) {
+						item.isNormal = 0;
+					} else {
+						item.isNormal = 1;
+					}
 				}
 				if (!item.fieldValue) {
 					item.abnormal = true;
+					item.isNormal = 1;
 				}
+
 			}
 			return data;
 		},
@@ -988,9 +1019,9 @@ export default {
 			}).catch((err) => {
 			});
 		},
-    /**
-       * 终止随访按钮
-       */
+		/**
+		   * 终止随访按钮
+		   */
 		zzsfFun(name, id) {
 			this.zzsfModel = true;
 			this.sfrName = name;

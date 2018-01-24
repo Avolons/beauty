@@ -195,6 +195,9 @@
 			display: block;
 			margin: 0 auto;
 		}
+		&_btnCollect{
+			text-align: center;
+		}
 		&_planSingle {
 			margin-bottom: 10px;
 			border: 1px solid #dedede;
@@ -258,11 +261,12 @@
 		</Card>
 		</Col>
 		<!-- 配置随访方案 -->
-		<Col span="14">
-		<Card>
-			<p slot="title">
+		<Col span="14" >
+		<Card style="height:863px">
+			<p slot="title" style="position:relative;overflow:auto">
 				<Icon type="android-list"></Icon>
 				配置随访方案
+				<Button size="small" @click="seeModal=true" type="primary" style="position:absolute;top:0;right:0;padding:0 7px">预览方案</Button>
 			</p>
 			<ul class="way_main_planList">
 				<li class="way_main_planSingle" v-for="(item,index) in showList" :key="item.id">
@@ -390,9 +394,21 @@
 					</Row>
 				</li>
 			</ul>
-			<Button v-show="temList.length>0" class="way_main_saveButton" type="primary" @click="saveChange">保存</Button>
+			<div class="way_main_btnCollect">
+				<Button v-show="temList.length>0"  type="primary" @click="saveChange">保存</Button>
+				<Button v-show="temList.length>0" style="margin-left:30px" type="info" @click="saveChange(1)">另存为新方案</Button>
+			</div>
 		</Card>
 		</Col>
+
+		<Modal v-model="seeModal" title="预览计划">
+			<DatePicker type="datetime" @on-change="dateChange" format="yyyy-MM-dd HH:mm"  placeholder="请选择随访发起时间" style="width: 200px"></DatePicker>
+			<Button style="margin-left:20px" type="primary" @click="submitCeshi">预览方案</Button>
+			<Table style="margin-top:15px" height="400" border :columns="timeConfig" :data="timeData" v-if="followId!='new'"></Table>
+			<div slot="footer">
+			</div>
+		</Modal>
+
 		<Modal v-model="timemodal" title="新增随访时间段">
 			<TimePicker @on-change="timeChange" class="way_main_timePicker" format="HH:mm:ss" type="timerange" placement="bottom-end" placeholder="请选择随访时间段" style="width: 168px"></TimePicker>
 			<div slot="footer" class="sys-sysset_main_btnList">
@@ -417,6 +433,7 @@ export default {
 				diseaseId: [],    //疾病类型id,多个之间用英文逗号分开
 				activeType: 0,    //方案类型：0代表随访，1代表通知
 				status: 0,        //状态：0，启用；1，禁用
+				visitStartTime:""
 			},
 			labelobj: [],//疾病多选初始化名称
 			departmentList: [],//科室列表
@@ -474,30 +491,37 @@ export default {
 			formData: {},
 			followId: '',//模板id
 			//最终提交数据数据头部
-			wayForm: {
-				/* id:"",//id不传代表新增 */
-				name: '',//方案名称
-				diseaseId: [],//疾病类型id
-				departmentId: '', //科室类型id
-				activeType: '0',//方案类型：0代表随访，1代表通知
-				status: 0,//状态：0，启用；1，禁用
-				wayTem: [],
-				tagCount: [],//疾病标签列表
-			},
+
 			creatTime: [],//生成的时间
 			clickTime: {},//被选中的对象
-			timemodal: false,
-
-
-			selectList: [],//已选择模板列表
-			normaldata: {
-			},//默认数据
+			timemodal: false,//时间切换显示
 			editList: [],//被编辑的数据
-			actionTime: 0,//剩余操作次数
-			selectItem: {},//被选中的疾病列表
-			targetShow: true,//判断是否疾病标签是否展示
-			targetTag: '',//指标标签
-			tagShow: false,//标签是否展示,
+			seeModal: false,//预览显示
+			timeConfig: [{
+				title: '计划序号',
+				key: 'index',
+				align: 'center',
+				render: (h, params) => {
+					return h('div', [
+						h('strong', '第' + Number(params.index + 1) + '次')
+					]);
+				}
+			},
+			{
+				title: '模板名称',
+				key: 'schemeName',
+				align: 'center'
+			},
+			{
+				title: '随访时间',
+				key: 'dateBegin',
+				align: 'center'
+			},],//时间配置
+			timeData: [],//时间数据列表
+			timeobj: {//随访时间
+				date: "",
+				time: "",
+			},
 		}
 	},
 	computed: {
@@ -526,6 +550,36 @@ export default {
 		}
 	},
 	methods: {
+		/** 
+		 * 预览随访方案
+		 */
+		submitCeshi() {
+			let param;
+				if(this.baseData.visitStartTime=='') {
+					param = {
+						schemeId: this.followId,
+						schemeName: this.baseData.name,
+					}
+				}else {
+					param = {
+						schemeId: this.followId,
+						schemeName: this.baseData.name,
+						/* visitStartTime: this.timeobj.date */
+					}
+				}
+				API.FollowBussiness.patCeshi(param).then((res) => {
+					this.timeData=res.data;
+				}).catch((err) => {
+					console.log(err)
+				});
+			// }
+		},
+		/** 
+		 * 日期改变
+		 */
+		dateChange(date) {
+			this.timeobj.date = date;
+		},
 		/** 
 		 * 删除时间段
 		 */
@@ -622,7 +676,7 @@ export default {
 		/** 
 		 * 最终的数据保存操作
 		 */
-		saveChange() {
+		saveChange(type=0) {
 			let flag = 0;
 			this.$refs.wayForms.validate((valid) => {
 				if (valid) {
@@ -660,6 +714,12 @@ export default {
 					}
 				}
 				sendData.questionTemples.push(copyItem);
+			}
+			/**
+			 * 另存为新方案
+			 */
+			if(type==1){
+				delete sendData.id;
 			}
 			API.followWay.addList(sendData).then((res) => {
 				this.$Message.success("保存成功");

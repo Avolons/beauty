@@ -585,7 +585,7 @@ export default {
 			/** 
 			 * id 赋值
 			 */
-			this.createLoading = true;
+			this.createLoading = true
 			API.Notice.listPlan(this.searchParams).then((res) => {
 				this.dataList = this.formData(res.data);
 				this.totalPage = res.total;

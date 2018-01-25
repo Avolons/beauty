@@ -468,6 +468,7 @@ export default {
 			patientText: false,
 			//编辑功能form数据,暂时未知必填信息，字段未知
 			formCustom: {
+				id: '',
 				brxm: '',//姓名
 				brxb: '',//性别
 				mz: '',//民族
@@ -620,7 +621,18 @@ export default {
 			/** 
 			 * 此处填写具体的ajax请求
 			 */
-			API.FollowBussiness.savePat(this.formCustom).then((res) => {
+			console.log(this.formCustom)
+			API.FollowBussiness.savePat({
+				id: this.formCustom.id,
+				jtdh: this.formCustom.jtdh,
+				xzzQtdz: this.formCustom.xzzQtdz,
+				lxrm: this.formCustom.lxrm,
+				lxdh: this.formCustom.lxdh,
+				lxgx: this.formCustom.lxgx,
+				lxdz: this.formCustom.lxdz,
+				dwmc: this.formCustom.dwmc,
+				csny: this.formCustom.csny,
+			}).then((res) => {
 				this.$Message.success("编辑成功");
 				this.getData();
 				this.patientText = false;

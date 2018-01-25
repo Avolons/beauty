@@ -923,6 +923,10 @@ export default {
 		radioChange(value) {
 			if (value == 1) {//清空
 				this.$refs.zzsfForm.resetFields();
+			}else if(value == 0) {//清空
+				this.$refs.zzsfForm.resetFields();
+				this.zzsfForm.select = '';
+				this.zzsfForm.textarea = '';
 			}
 		},
 		/**

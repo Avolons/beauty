@@ -921,11 +921,7 @@ export default {
 		 * 审核是否终止随访
 		 */
 		radioChange(value) {
-<<<<<<< HEAD
-			if(value == 1) {//清空
-=======
 			if (value == 1) {//清空
->>>>>>> master
 				this.$refs.zzsfForm.resetFields();
 			}else if(value == 0) {//清空
 				this.$refs.zzsfForm.resetFields();

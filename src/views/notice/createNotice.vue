@@ -589,18 +589,9 @@ export default {
 			API.Notice.listPlan(this.searchParams).then((res) => {
 				this.dataList = this.formData(res.data);
 				this.totalPage = res.total;
-				this.createLoading = false
-			}).catch((err) => {
-				this.createLoading = false
-=======
-			this.createLoading = true;
-			API.Notice.listPlan(this.searchParams).then((res) => {
-				this.dataList = this.formData(res.data);
-				this.totalPage = res.total;
 				this.createLoading = false;
 			}).catch((err) => {
 				this.createLoading = false;
->>>>>>> master
 			});
 		},
 

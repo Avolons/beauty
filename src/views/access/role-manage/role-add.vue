@@ -34,14 +34,14 @@
                 transform: translateY(-50%);
             }
         }
-        &_form{
+        &_form {
             height: calc(~"100% - 80px");
         }
-        &_treebox{
+        &_treebox {
             height: calc(~'100% - 150px');
             overflow-y: auto;
         }
-        &_treeinner{
+        &_treeinner {
             height: 100%;
             overflow-y: auto;
         }
@@ -55,11 +55,11 @@
             }
             display: flex;
             .ivu-tree {
-                .ivu-tree-title{
+                .ivu-tree-title {
                     border: 1px solid #dadada;
                 }
                 font-size: 14px;
-                ul{
+                ul {
                     font-size: 14px;
                 }
                 >ul {
@@ -100,7 +100,7 @@
             </Form>
             <div class="roleAdd_main_btnList">
                 <Button type="primary" @click="saveRole()">保存</Button>
-                
+
             </div>
         </div>
     </div>
@@ -108,18 +108,18 @@
 
 
 <script>
-import {API} from '../../../services';
+import { API } from '../../../services';
 export default {
     data() {
         return {
-            type:0,
-            id:-1,
+            type: 0,
+            id: -1,
             title: "编辑角色",
             modal: false,
             //添加的数据
             formData: {
-                name: "", 
-                profile: "", 
+                name: "",
+                profile: "",
                 actionsIds: []
             },
             //权限列表
@@ -130,7 +130,7 @@ export default {
                     title: '认识医生',
                     expand: true,
                     /* selected: true, */
-                     render: (h, { root, node, data }) => {
+                    render: (h, { root, node, data }) => {
                         return h('span', {
                             style: {
                                 display: 'inline-block',
@@ -178,7 +178,7 @@ export default {
                     }, [
                             h('Icon', {
                                 props: {
-                                    type: data.children.length>0?'ios-folder-outline':'ios-paper-outline'
+                                    type: data.children.length > 0 ? 'ios-folder-outline' : 'ios-paper-outline'
                                 },
                                 style: {
                                     marginRight: '8px'
@@ -189,13 +189,13 @@ export default {
                         ])
                 ]);
         },
-          //编辑角色
+        //编辑角色
         editRole() {
             API.Jurisdiction.infoRoles({
                 id: this.id
             }).then((res) => {
-                this.formData.name=res.bean.name;
-                this.formData.profile=res.bean.profile;
+                this.formData.name = res.bean.name;
+                this.formData.profile = res.bean.profile;
                 this.treeData = res.data;
                 this.treeList[0].children = this.dataFormat(res.data, res.beanAction);
             }).catch((err) => {
@@ -209,7 +209,7 @@ export default {
         treeInit() {
             API.Jurisdiction.listFun().then((res) => {
                 this.treeData = res.data;
-                this.treeList[0].children = this.dataFormat(res.data,[]);
+                this.treeList[0].children = this.dataFormat(res.data, []);
             }).catch((err) => {
 
             });
@@ -266,52 +266,81 @@ export default {
         /** 
          * 最终的数据保存，首先进行数据分层
          */
-        saveRole(){
-             let arrList=[];
-             let data=this.$refs.tree.getCheckedNodes();
-             /* for (let item of data) {
-                if (!arrList[item.level]) {
-                    arrList[item.level] = [];
-                }
-                arrList[item.level].push(item);
-            }
-            for (let i = arrList.length-1; i >0 ; i--) {
-                for (let j = 0; j < arrList[i-1].length; j++) {
-                    for (let k = 0; k < arrList[i].length; k++) {
-                        if(arrList[i-1][j].id==arrList[i][k].pid){
-                            arrList[i].splice(k,1);
-                            k--;
+        saveRole() {
+            let arrList = [];
+            let data = this.$refs.tree.getCheckedNodes();
+            /* for (let item of data) {
+               if (!arrList[item.level]) {
+                   arrList[item.level] = [];
+               }
+               arrList[item.level].push(item);
+           }
+           for (let i = arrList.length-1; i >0 ; i--) {
+               for (let j = 0; j < arrList[i-1].length; j++) {
+                   for (let k = 0; k < arrList[i].length; k++) {
+                       if(arrList[i-1][j].id==arrList[i][k].pid){
+                           arrList[i].splice(k,1);
+                           k--;
+                       }
+                   }
+               }
+           } */
+            let getItem = (id, arrList) => {
+                for (const item of this.treeData) {
+                    if (item.id == id) {
+                        if (arrList.length > 0) {
+                            let flag = 0;
+                            for (const ite of arrList) {
+                                if (ite.id == item.id) {
+                                    flag++;
+                                }
+                            }
+                            if (flag == 0) {
+                                arrList.push(item.id);
+                                if (item.pid) {
+                                    getItem(item.pid, arrList);
+                                }
+                            }
+                        } else {
+                            arrList.push(item.id);
+                            if (item.pid) {
+                                getItem(item.pid, arrList);
+                            }
                         }
+
                     }
                 }
-            } */
-            for (let item of data) {
+            }
+            for (const item of data) {
+                if (item.pid) {
+                    getItem(item.pid, arrList);
+                } 
                 arrList.push(item.id);
             }
-            if(this.type==1){
-                this.formData.id=this.id;
+
+            if (this.type == 1) {
+                this.formData.id = this.id;
             }
-            this.formData.actionsIds=arrList;
-            API.Jurisdiction.editRoles(this.formData).then((res)=>{
-                    this.$Message.success("编辑成功");
-            }).catch((err)=>{
+            this.formData.actionsIds = arrList;
+            API.Jurisdiction.editRoles(this.formData).then((res) => {
+                this.$Message.success("编辑成功");
+            }).catch((err) => {
 
             });
-            console.log(data);
 
         }
     },
-    mounted () {
-        this.formData= {
-                name: "", 
-                profile: "", 
-                actionsIds: []
-            };
-        this.type=this.$route.query.type;
-        this.id=this.$route.query.id;
-        if(this.type==0){
+    mounted() {
+        this.formData = {
+            name: "",
+            profile: "",
+            actionsIds: []
+        };
+        this.type = this.$route.query.type;
+        this.id = this.$route.query.id;
+        if (this.type == 0) {
             this.treeInit();
-        }else{
+        } else {
             this.editRole();
         }
     }

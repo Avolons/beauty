@@ -107,7 +107,7 @@ export default {
                                 if(item.isMenu){
                                  menuList.push(item);
                                 }else{
-                                    funList.push(item);
+                                 funList.push(item);
                                 }
                             }
                             /** 
@@ -137,6 +137,7 @@ export default {
                                 Cookies.set('access', 1);
                             } */
                             /** 页面跳转 */
+                            
                             this.$router.push({
                                 name: 'home_index'
                             });

@@ -89,6 +89,7 @@ export default {
 	},
 	mounted() {
 		this.uploadList = this.$refs.upload.fileList;
+		console.log(API.Data.doctorImport);
 	}
 }
 </script>

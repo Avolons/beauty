@@ -410,7 +410,9 @@ export default {
                   type: 'success',
                   size: 'small'
                 },
-                'class':{},
+                'class':{
+									menuHide: this.menuShow(this.AM.Data.passPlan)
+								},
                 on: {
                   click: () => {
                     this.sfjhModel = true;

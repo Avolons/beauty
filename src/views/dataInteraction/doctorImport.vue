@@ -58,6 +58,7 @@ export default {
 			this.$refs.upload.fileList.splice(fileList.indexOf(file), 1);
 		},
 		handleSuccess(res, file) {
+			res=JSON.parse(res);
 			if(res.code==0){
 				this.$Message.success("上传成功");
 			}else{

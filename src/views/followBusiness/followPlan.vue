@@ -236,7 +236,7 @@
             <Input v-model="zzsfForm.textarea" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="请详细说明情况" style="width: 80%;"></Input>
           </FormItem>
           <FormItem>
-            <Button type="primary" @click="zzsfCancel('zzsfForm')">取消</Button>
+            <Button type="primary" style="margin-left:-80px" @click="zzsfCancel('zzsfForm')">取消</Button>
             <Button type="ghost" @click="zzsfOk('zzsfForm')" style="margin-left: 8px">提交</Button>
           </FormItem>
         </Form>
@@ -382,6 +382,9 @@ export default {
                           type: 'primary',
                           size: 'small'
                       },
+                      'class':{
+                         menuHide:this.menuShow(this.AM.FollowBussiness.startPlan)
+                       },
                       style: {
                           marginRight: '5px'
                       },
@@ -395,15 +398,15 @@ export default {
                     }, '随访'),
                     h('Button', {
                       props: {
-                        type: 'success',
+                        type: 'info',
                         size: 'small'
                       },
                       style: {
                         marginRight: '5px'
                       },
-                      // 'class':{
-                      //   menuHide:this.menuShow(this.AM.FollowBussiness.delPlan)
-                      // },
+                      'class':{
+                         menuHide:this.menuShow(this.AM.FollowBussiness.detail)
+                       },
                       on: {
                         click: () => {
                           this.sfjhModel = true;
@@ -424,7 +427,7 @@ export default {
 
                       },
                       'class':{
-                        menuHide:this.menuShow(this.AM.FollowBussiness.delPlan)
+                        menuHide:this.menuShow(this.AM.FollowBussiness.cancleall)
                       },
                       on: {
                         click: () => {
@@ -632,7 +635,7 @@ export default {
        */
       zzsfCancel (name) {
         this.$refs[name].resetFields();
-        this.zzsfModel = false;
+        this.zzsfModel=false;
       },
       /**
        * 终止随访取消按钮

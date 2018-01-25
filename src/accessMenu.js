@@ -17,6 +17,9 @@ export const AM = {
         /** 取消随访 */
         cancelPlan: '/visit/ordertask/cancel',
 
+        /** 随访计划详情 */
+        detail: '/visit/ordertask/detail',
+
         /** 发起随访计划  */
         startPlan: '/visit/ordertask/visit',
 
@@ -25,6 +28,9 @@ export const AM = {
 
         /** 随访记录详情  */
         detailLog: '/visit/order/view',
+
+        /** 终止随访 */
+        cancleall: '/visit/ordertask/cancleall',
 
         /** 添加临时随访任务 */
         patSubmit: '/visit/order/temp/visit'
@@ -63,6 +69,12 @@ export const AM = {
         /** 编辑模板 */
         editTem: '/visit/questiontemple/get',
 
+        /** 导入模板 */
+        importTem: '/visit/questiontemple/import',
+
+        /** 导出模板 */
+        exportTem: '/visit/questiontemple/export',
+
         /** 删除方案 */
         delDep: '/visit/questionscheme/delete',
 
@@ -94,7 +106,10 @@ export const AM = {
         delResult: '/visit/order/delete',
 
         /** 重复匹配审核  */
-        listSame: '/visit/ordertask/list'
+        listSame: '/visit/ordertask/list',
+
+        /** 终止随访  */
+        cancelall: '/visit/order/cancelall'
     },
     /** 权限管理 */
     Jur: {

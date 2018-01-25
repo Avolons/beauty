@@ -166,21 +166,19 @@
 							</span>
 							<Input type="text" v-model="searchParams.brxm" placeholder="请输入患者姓名"></Input>
 							</Col>
-							<Col span="6">
-								<p :style="{lineHeight:'32px'}">
+							<Col span="7" style="min-width:285px">
+								<p style="line-height:32px;width:85px">
 									导入开始时间：
 								</p>
-								<DatePicker @on-change="dateChange1" format="yyyy-MM-dd" placement="bottom-end" placeholder="请选择随访发起时间" style="width:45%"></DatePicker>
-								<TimePicker @on-change="timeChange1" format="HH:mm:ss" placeholder="请选择时间" style="width: 112px;margin-left:10px;"></TimePicker>
+								<DatePicker @on-change="timeChange_import()" type="datetime" format="yyyy-MM-dd HH:mm" placeholder="请选择数据导入时间" style="width:200px"></DatePicker>
 							</Col>
-							<Col span="6">
-								<p :style="{lineHeight:'32px'}">
+							<Col span="7" style="min-width:285px">
+								<p style="line-height:32px;width:85px">
 									导入结束时间：
 								</p>
-								<DatePicker @on-change="dateChange2" format="yyyy-MM-dd" placement="bottom-end" placeholder="请选择随访发起时间" style="width:45%"></DatePicker>
-								<TimePicker @on-change="timeChange2" format="HH:mm:ss" placeholder="请选择时间" style="width: 112px;margin-left:10px;"></TimePicker>
+								<DatePicker @on-change="timeChange_export()" type="datetime" format="yyyy-MM-dd HH:mm"  placeholder="请选择数据导出时间" style="width:200px"></DatePicker>
 							</Col>
-							<Col span="6">
+							<Col span="2">
 								<Button @click="searchParams.pager=1;getData()" type="primary">搜索</Button>
 							</Col>
 						</Row>
@@ -580,8 +578,8 @@ export default {
 				this.sendData.adminId = this.searchParams.admin.split(",")[1];
 			}
 			this.searchParams.adminId = this.sendData.adminId;
-			this.searchParams.beginTime = this.timeobj1.date + " " + this.timeobj1.time;
-			this.searchParams.endTime = this.timeobj2.date + " " + this.timeobj2.time;
+			this.searchParams.beginTime = this.timeobj1.date;
+			this.searchParams.endTime = this.timeobj2.date;
 			API.FollowBussiness.patList(this.searchParams).then((res) => {
 				this.dataList = this.formData(res.data);
 				this.totalPage = res.total;
@@ -649,26 +647,11 @@ export default {
 		/** 
 		 * 患者导入开始时间
 		 */
-		dateChange1(date) {
+		timeChange_import(date) {
 			this.timeobj1.date = date;
 		},
-		/** 
-		 * 患者导入开始时间
-		 */
-		timeChange1(date) {
-			this.timeobj1.time = date;
-		},
-		/** 
-		 * 患者导入结束时间
-		 */
-		dateChange2(date) {
+		timeChange_export(date) {
 			this.timeobj2.date = date;
-		},
-		/** 
-		 * 患者导入结束时间
-		 */
-		timeChange2(date) {
-			this.timeobj2.time = date;
 		},
 		/** 
 		 * 添加患者

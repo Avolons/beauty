@@ -69,7 +69,7 @@
       </Col>
       <Col span="6">
       <Button type="primary" style="margin-right:10px" @click="handleSearch('IndexSearch')">查询</Button>
-      <Upload :on-success="handleSuccess" style="margin-right:10px" :show-upload-list='false' :action="API.Data.temImport" name="xmlFile">
+      <Upload v-if="!menuShow(this.AM.FollowSetting.importTem)" :on-success="handleSuccess" style="margin-right:10px" :show-upload-list='false' :action="API.Data.temImport" name="xmlFile">
         <Button type="primary" icon="ios-cloud-upload-outline">导入模板</Button>
       </Upload>
       <Button type="info" v-if="!menuShow(this.AM.FollowSetting.addTem)" @click="addBtn">添加模板</Button>
@@ -157,7 +157,7 @@ export default {
                   marginRight: '5px'
                 },
                 'class': {
-                  /* menuHide:this.menuShow(this.AM.FollowSetting.editTem) */
+                  menuHide:this.menuShow(this.AM.FollowSetting.exportTem)
                 },
                 on: {
                   click: () => {
@@ -462,13 +462,16 @@ export default {
 
       let p1 = new Point(this.formItem.indexName, this.formItem.indexName)
       this.optionList.push(p1)
-      this.formItem.indexName = ''
+      this.formItem.indexName = '';
       console.log(this.optionList)
     },
     /*
     *疾病类型--远程搜索
     */
     remoteMethod2(query) {
+      if(query==""){
+        return false;
+      }
       API.followProblems.disease({
         'zjm': query
       }).then((res) => {

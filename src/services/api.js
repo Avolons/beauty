@@ -15,6 +15,8 @@ Vue.prototype.$http = axios;
 // axios.defaults.timeout = 5000;
 /* 默认的接口地址 */
 /* axios.defaults.baseURL = 'http://192.168.1.100:8080'; */
+/* axios.defaults.baseURL = 'http://192.168.1.166:8080'; */
+/* axios.defaults.baseURL = 'http://61.153.232.58:9998'; */
 
 let JsonData = ['/order/temp/testvisit', '/order/temp/visit', '/visit/order/vet/save', '/visit/order/notice', '/ordertask/vet', '/question/script/save', '/questionscheme/save', '/questiontemple/save', '/questiontarget/save'];
 // 添加请求拦截器
@@ -888,45 +890,45 @@ export const followTemplate = {
      * 随访模板所有信息展示
      */
     list (data) {
-        return fetch('get', 'visit/questiontemple/list', data);
+        return fetch('get', '/visit/questiontemple/list', data);
     },
     /*
      *删除
      */
     deleteList (data) {
-        return fetch('get', 'visit/questiontemple/delete', data);
+        return fetch('get', '/visit/questiontemple/delete', data);
     },
     /*
      *添加/修改
      *json格式
      */
     addList (data) {
-        return fetch('post', 'visit/questiontemple/save', data);
+        return fetch('post', '/visit/questiontemple/save', data);
     },
     /*
      *获取模板基本信息
      */
     editList (data) {
-        return fetch('get', 'visit/questiontemple/get', data);
+        return fetch('get', '/visit/questiontemple/get', data);
     },
     /*
      *根据模板id获取模板问题接口
      */
     questionList (data) {
-        return fetch('get', 'visit/questiontemple/question/list', data);
+        return fetch('get', '/visit/questiontemple/question/list', data);
     },
     /*
      *模板导出接口
      */
     export (data) {
-        return fetch('get', 'visit/questiontemple/export', data);
+        return fetch('get', '/visit/questiontemple/export', data);
     },
     /*
      *模板导入接口
      xmlFile:文件
      */
     import (data) {
-        return fetch('post', 'visit/questiontemple/import', data);
+        return fetch('post', '/visit/questiontemple/import', data);
     }
 
 };

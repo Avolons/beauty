@@ -14,7 +14,6 @@
 		</div>
 		<Upload ref="upload" 
 				:show-upload-list="false" 
-				:default-file-list="defaultList" 
 				:on-success="handleSuccess" 
 				:format="['xml','xls','png']" 
 				:max-size="2048" 
@@ -98,8 +97,7 @@ export default {
 			}else{
 				this.$Message.warning(res.msg);
 			}
-			/* file.url = 'https://o5wwk8baw.qnssl.com/7eb99afb9d5f317c912f08b5212fd69a/avatar';
-			file.name = '7eb99afb9d5f317c912f08b5212fd69a'; */
+			
 		},
 		handleFormatError(file) {
 			this.$Notice.warning({

@@ -14,7 +14,7 @@
     <div class="user">
         <div class="sys-task_main">
             <div class="sys-task_main_list">
-                <Table border :columns="config" :data="dataList"></Table>
+                <Table border :columns="config" :data="dataList" :loading="createLoading"></Table>
             </div>
             <Row class="sys-task_main_page">
                     <Page :total="totalPage" :current="page" show-elevator style="float:right" @on-change="changePage"></Page>
@@ -28,6 +28,7 @@ import { API } from '../../services/index.js';
 export default {
     data() {
         return {
+            createLoading:true,    //loading 动画加载中
             value: "",//备注内容
             currentId: -1,//当前被点击的id
             page: 1,//当前页码
@@ -158,6 +159,7 @@ export default {
             }).then((res) => {
                 this.dataList = res.data;
                 this.totalPage=res.total;
+                this.createLoading = false;
             }).catch((err) => {
 
             });

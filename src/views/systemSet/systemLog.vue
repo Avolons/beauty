@@ -69,7 +69,7 @@
                 </Col>
             </Row>
             <div class="sys-syslog_main_list">
-                <Table border :columns="config" :data="dataList"></Table>
+                <Table border :columns="config" :data="dataList"  :loading="createLoading"></Table>
             </div>
             <Row class="sys-syslog_main_page">
                 <Page :page-size="pageSize"  :total="totalPage" :current="searchParam.page" show-elevator style="float:right" @on-change="changePage"></Page>
@@ -83,6 +83,7 @@ import { API } from '../../services/index.js';
 export default {
     data() {
         return {
+            createLoading:true,		//loading 动画加载中
             pageSize:10,
             totalPage: 10,//总页码
             //当前被点击触发的数据
@@ -169,6 +170,7 @@ export default {
                 this.dataList = this.dataForm(res.data);
                 this.totalPage = res.totalRow;
                 this.pageSize=res.pageSize;
+                this.createLoading = false;
             }).catch((err) => {
 
             });

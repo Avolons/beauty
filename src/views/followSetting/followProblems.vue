@@ -207,7 +207,7 @@
     </Col>
     <!-- 表格 -->
     <Col span="24">
-    <Table border :columns="config" :data="pardata"></Table>
+    <Table border :columns="config" :data="pardata" :loading="createLoading"></Table>
     </Col>
     <!-- 分页 -->
     <Col span="24" style="margin-top:10px;">
@@ -274,6 +274,7 @@ import { API } from '@/services';
 export default {
   data() {
     return {
+      createLoading:true,  //默认加载
       page:1,
       taglabel: "",
       //指标筛选
@@ -508,6 +509,7 @@ export default {
   },
   mounted() {
     this.list(1)
+      //this.$Spin.show();
   },
 
   methods: {
@@ -530,6 +532,8 @@ export default {
           // console.log(res)
           this.pardata = res.data
           this.pageTotal = res.total
+          this.createLoading = false;
+          //this.$Spin.hide();
         } else {
           console.log(res.code)
         }
@@ -617,6 +621,7 @@ export default {
         if (res.code == 0) {
           this.pardata = res.data
           this.pageTotal = res.total
+
         } else {
           console.log(res.message)
         }
@@ -645,7 +650,7 @@ export default {
     *确定添加
     */
     addModel(name) {
-
+      this.createLoading = true;
       let jbnam = this.tagCount.join(',')
       let addPram = {
         "id": this.formItem.id,
@@ -658,6 +663,7 @@ export default {
         "status": 0,
         /* "otype": this.search.otype */
       }
+      //this.$Spin.show();
       this.$refs[name].validate((valid) => {
         if (valid) {
           API.followProblems.addList(addPram).then((res) => {
@@ -670,7 +676,9 @@ export default {
             this.formItem.textarea = ''
             this.patientText = false;
             this.tagCount = []//清空疾病标签
+
             this.list(this.page);
+
             this.$Message.success("提交成功");
           }).catch((error) => {
             console.log(error)

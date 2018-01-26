@@ -69,7 +69,7 @@
                 </Col>
             </Row>
             <div class="sys-dis_main_list">
-                <Table border :columns="config" :data="dataList"></Table>
+                <Table border :columns="config" :data="dataList" :loading="createLoading"></Table>
             </div>
             <Row class="sys-dis_main_page">
                 <Page :page-size="pageSize" :total="totalPage" :current="searchParam.page" show-elevator style="float:right" @on-change="changePage"></Page>
@@ -156,6 +156,7 @@ import { API } from '../../services';
 export default {
     data() {
         return {
+            createLoading:true,		//loading 动画加载中
             totalPage: 10,//总页码
             pageSize: 10,
             diseaseId:11,//被选中的疾病id
@@ -333,6 +334,7 @@ export default {
                 this.dataList = res.data;
                 this.totalPage = res.totalRow;
                 this.pageSize = res.pageSize;
+                this.createLoading = false;
             }).catch((err) => {
 
             });

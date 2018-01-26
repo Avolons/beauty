@@ -69,7 +69,7 @@
     </Col>
     <!-- 表格 -->
     <Col span="24" class="patientList">
-    <Table border :columns="columns7" :data="pardata"></Table>
+    <Table border :columns="columns7" :data="pardata" :loading="createLoading"></Table>
     </Col>
     <!-- 分页 -->
     <Col span="24" class="pages">
@@ -129,6 +129,7 @@ import { API } from '@/services';
 export default {
   data() {
     return {
+      createLoading:true,           //默认显示为true
       waySearch: {//搜索框
         name: '',
         diseaseId: '',
@@ -285,6 +286,7 @@ export default {
         if (res.code == 0) {
           this.pardata = res.data
           this.pageTotal = res.total
+          this.createLoading = false;
         } else {
           console.log(res.code)
         }

@@ -77,7 +77,7 @@
     </Row>
     </Col>
     <Col span="24" class="fpTable">
-    <Table border :columns="columns7" :data="datalist" class="margin-bottom-10"></Table>
+    <Table border :columns="columns7" :data="datalist" class="margin-bottom-10" :loading="createLoading"></Table>
     <Row>
       <Page :current="page" style="margin-top:10px;float:right" :total="pageTotal" @on-change="currentPage" show-elevator show-total></Page>
     </Row>
@@ -106,6 +106,7 @@ export default {
         name: '',
         diseaseName: ''
       },
+      createLoading:true,
       page: 1,
       columns7: [//表格栏
         {
@@ -264,6 +265,7 @@ export default {
         if (res.code == 0) {
           this.datalist = res.data
           this.pageTotal = res.total
+            this.createLoading = false;
         } else {
           console.log(res.message)
         }

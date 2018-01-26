@@ -89,7 +89,7 @@
                 <Button @click="editUser(-1)" v-if="!menuShow(this.AM.Jur.addUser)" type="primary">新增用户</Button>
             </div>
             <div class="user_main_list">
-                <Table border :columns="config" :data="dataList"></Table>
+                <Table border :columns="config" :data="dataList" :loading="createLoading"></Table>
             </div>
             <Row class="user_main_page">
                 <Page :total="totalPage" :page-size="pageSize" :current="searchParam.page" style="float:right" @on-change="changePage"></Page>
@@ -138,6 +138,7 @@ export default {
             selectList:[],//已选方案tag
             //当前用户id
             UserId: 0,
+            createLoading:true,   //loading动画加载中
             //新密码
             newPassword: "",
             actionList: {
@@ -413,6 +414,7 @@ export default {
                 this.dataList = res.data;
                 this.totalPage = res.totalRow;
                 this.pageSize = res.pageSize;
+                this.createLoading = false;
             }).catch((err) => {
 
             });
@@ -421,6 +423,7 @@ export default {
          * 搜索数据
          */
         searchUser() {
+            this.createLoading = true;
             this.searchParam.page = 1;
             this.getData();
         },
@@ -519,6 +522,7 @@ export default {
          * 删除用户
          */
         delUser(id) {
+            this.createLoading = true;
             let self = this;
             this.$Modal.confirm({
                 title: '删除用户',
@@ -589,6 +593,7 @@ export default {
          * 保存方案
          */
         saveDisAction() {
+            this.createLoading = true;
             let idArray=[];
             for (const item of this.selectList) {
                 idArray.push(item.id);

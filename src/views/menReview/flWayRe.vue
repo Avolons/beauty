@@ -224,7 +224,7 @@
 			</Row>
 			<!-- 表格 -->
 			<div class="sys-depart_main_list">
-				<Table border :columns="config" :data="dataList"></Table>
+				<Table border :columns="config" :data="dataList" :loading="createLoading"></Table>
 			</div>
 			<!-- 分页 -->
 			<Row class="sys-depart_main_page">
@@ -579,6 +579,7 @@ export default {
 				status: 2,  //状态为2（必传）
 				isConceal: 1
 			},
+            createLoading:true,		//默认为true
 			//随访结果详情
 			planInfo: {
 				orderReplyQuestions: [],
@@ -816,6 +817,7 @@ export default {
 			API.Dataaudit.listResult(this.searchParam).then((res) => {
 				this.totalPage = res.total;
 				this.dataList = res.data;
+				this.createLoading = false;
 			}).catch((err) => {
 
 			});
@@ -933,6 +935,7 @@ export default {
 		 * 判断是否终止随访
 		 */
 		submit1() {
+
 			if (this.zzsfForm.radio == 1) {
 				this.qdqx = true;
 			} else {
@@ -943,6 +946,7 @@ export default {
 			/**
 			 * 发送数据
 			 */
+            this.createLoading = true;
 			let ajaxDa = {
 				id: this.planInfo.id,
 				dateEnd: this.planInfo.dateEnd,
@@ -967,9 +971,11 @@ export default {
 				})
 			}
 			if (this.zzsfForm.radio == 1) {
+
 				if (this.zzsfForm.select == '' || this.zzsfForm.textarea.toString().length < 1) {
 					this.$Message.error('请填写终止随访的原因')
 				} else {
+
 					API.Dataaudit.saveResult(
 						ajaxDa
 					).then((res) => {

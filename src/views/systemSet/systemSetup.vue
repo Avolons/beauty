@@ -17,7 +17,7 @@
         <div class="sys-sysset_main">
             <Button @click="modal=true;formData.sort=0" v-if="!menuShow(this.AM.Systems.addSystem)" type="primary">添加</Button>
             <div class="sys-sysset_main_list">
-                <Table border :columns="config" :data="dataList"></Table>
+                <Table border :columns="config" :data="dataList" :loading="createLoading"></Table>
             </div>
             <Row class="sys-sysset_main_page">
                 <Page :page-size="pageSize" :total="totalPage" :current="page" show-elevator style="float:right" @on-change="changePage"></Page>
@@ -74,6 +74,7 @@ import { API } from '../../services/index.js';
 export default {
     data() {
         return {
+            createLoading:true,    //loading 动画加载中
             page: 1,//当前页码
             totalPage: 0,//总页码
             pageSize:10,
@@ -84,6 +85,7 @@ export default {
                 value: "",
                 remark: "",  
             },
+
             //添加的数据
             formData: {
                 type: "",
@@ -201,6 +203,7 @@ export default {
                 this.dataList=res.data;
                 this.totalPage = res.totleRow;
 				this.pageSize=res.pageSize;
+				this.createLoading = false;
             }).catch((err) => {
 
             });
@@ -209,6 +212,7 @@ export default {
          * 新增系统设置
          */
         addSetting() {
+            this.createLoading = true;
             this.$refs['addData'].validate((valid) => {
                 if (valid) {
                     API.Systems.addSystem(this.formData).then((res) => {
@@ -235,6 +239,7 @@ export default {
          * 删除系统设置
          */
         delSetting(id) {
+            this.createLoading = true;
             let self = this;
             this.$Modal.confirm({
                 title: '删除设置',
@@ -263,6 +268,7 @@ export default {
          * 提交修改
          */
         submitSetting() {
+            this.createLoading = true;
             this.$refs['editData'].validate((valid) => {
                 if (valid) {
                     API.Systems.editSystem({

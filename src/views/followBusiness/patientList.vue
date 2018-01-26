@@ -112,7 +112,7 @@
 		</Row>
 		<!-- 表格 -->
 		<Col span="24" >
-		<Table border :columns="config" :data="dataList"></Table>
+		<Table border :columns="config" :data="dataList" :loading="createLoading"></Table>
 		</Col>
 		<!-- 分页 -->
 		<Col span="24" class="pages">
@@ -448,6 +448,7 @@ import { API } from '@/services';
 export default {
 	data() {
 		return {
+            createLoading:true,			//loading动画 加载中
 			//搜索条件对象
 			searchParams: {
 				brid: '',//患者编号
@@ -621,6 +622,7 @@ export default {
 			/** 
 			 * 此处填写具体的ajax请求
 			 */
+            this.$Spin.show();
 			console.log(this.formCustom)
 			API.FollowBussiness.savePat({
 				id: this.formCustom.id,
@@ -636,6 +638,7 @@ export default {
 				this.$Message.success("编辑成功");
 				this.getData();
 				this.patientText = false;
+                this.$Spin.hide();
 			}).catch((err) => {
 
 			});
@@ -647,6 +650,7 @@ export default {
 			API.FollowBussiness.listPat(this.searchParams).then((res) => {
 				this.dataList = res.data;
 				this.totalPage = res.total;
+				this.createLoading = false;
 			}).catch((err) => {
 
 			});

@@ -281,7 +281,7 @@ export default {
 									}
 								}
 							}, '编辑'),
-							/* h('Button', {
+							h('Button', {
 								props: {
 									type: 'warning',
 									size: 'small'
@@ -290,7 +290,7 @@ export default {
 
 								},
 								'class': {
-									menuHide: this.menuShow(this.AM.FollowSetting.delIndex)
+									menuHide:  true //this.menuShow(this.AM.FollowSetting.delIndex)
 								},
 								on: {
 									click: () => {
@@ -305,7 +305,7 @@ export default {
 										})
 									}
 								}
-							}, '删除') */
+							}, '删除')
 						]);
 					}
 				}

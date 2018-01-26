@@ -108,7 +108,7 @@ export default {
         endVal(val) {
             let res = transformValue(val);
             let endVal = res;
-            this.demo.update(endVal);
+            /* this.demo.update(endVal); */
         }
     }
 };

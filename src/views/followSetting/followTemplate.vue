@@ -181,7 +181,7 @@ export default {
                   }
                 }
               }, '下载'),
-             /*  h('Button', {
+              h('Button', {
                 props: {
                   type: 'warning',
                   size: 'small'
@@ -190,14 +190,14 @@ export default {
 
                 },
                 'class': {
-                  menuHide: this.menuShow(this.AM.FollowSetting.delTem)
+                  menuHide: true//this.menuShow(this.AM.FollowSetting.delTem)
                 },
                 on: {
                   click: () => {
                     this.deleteRow(params.row.id)
                   }
                 }
-              }, '删除') */
+              }, '删除')
             ]);
           }
         }

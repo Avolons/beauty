@@ -232,7 +232,11 @@ export const common = {
      */
     login (data) {
         return fetch('post', '/visit/admin/login/check', data);
+    },
+    change (data) {
+        return fetch('post', '/wechat/login/pceditPassword', data);
     }
+
 };
 
 /* 权限管理相关接口 *****/

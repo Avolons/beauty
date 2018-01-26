@@ -427,13 +427,13 @@ export default {
                   }
                 }
               }, '编辑话述'),
-             /*  h('Button', {
+              h('Button', {
                 props: {
                   type: 'warning',
                   size: 'small'
                 },
                 'class':{
-									menuHide:this.menuShow(this.AM.FollowSetting.delPro)
+									menuHide: true//this.menuShow(this.AM.FollowSetting.delPro)
 								},
                 on: {
                   click: () => {
@@ -448,7 +448,7 @@ export default {
                     });
                   }
                 }
-              }, '删除'), */
+              }, '删除'),
             ]);
           }
         }],

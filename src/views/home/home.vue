@@ -12,7 +12,7 @@
                     <Row type="flex" class="user-infor">
                         <Col span="8">
                         <Row class-name="made-child-con-middle" type="flex" align="middle">
-                            <img class="avator-img" :src="avatorPath" />
+                            <img class="avator-img" src="../../images/asset.png" />
                         </Row>
                         </Col>
                         <Col span="16" style="padding-left:6px;">
@@ -257,19 +257,25 @@ export default {
          */
         getBaseData() {
             API.Home.orderList().then((res) => {
-                this.count.createUser = [res.data.noDoNum, res.data.doNum];
+                if(res.data){
+                    this.count.createUser = [res.data.noDoNum, res.data.doNum];
+                }
             }).catch((err) => {
 
             });
             API.Home.tasklist().then((res) => {
+                if(res.data){
                 this.count.visit = [res.data.noDoNum, res.data.doNum];
+                }
             }).catch((err) => {
 
             });
             API.Home.taskList({
                 type: 2
             }).then((res) => {
+                if(res.data){
                 this.count.collection = [res.data.noDoNum, res.data.doNum];
+                }
             }).catch((err) => {
 
             });

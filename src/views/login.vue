@@ -122,9 +122,12 @@ export default {
                             Cookies.set('password', this.form.password);
 
                             Cookies.set('baseData', JSON.stringify({
+                                adminId:res.admin.id,
                                 name:res.admin.username,
                                 type:res.admin.typeStr,
                                 loginTime:res.admin.dateLogin,
+                                relname:res.admin.realname,
+                                tel:res.admin.tel
                             }));
                             /** 
                              * 登录后设置头像

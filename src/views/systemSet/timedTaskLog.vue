@@ -65,7 +65,7 @@
                 
             </Row>
             <div class="sys-tasklog_main_list">
-                <Table border :columns="config" :data="dataList"></Table>
+                <Table border :columns="config" :data="dataList" :loading="createLoading"></Table>
             </div>
             <Row class="sys-tasklog_main_page">
             <Page   :total="totalPage" :current="searchParam.page" show-elevator style="float:right" @on-change="changePage"></Page>
@@ -79,6 +79,7 @@ import { API } from '../../services/index.js';
 export default {
     data() {
         return {
+            createLoading:true,    //loading 动画加载中
             searchParam:{
                  page: 1,//当前页码
                  namelk:"",
@@ -158,6 +159,7 @@ export default {
             API.Systems.listTimeLog(this.searchParam).then((res) => {
                 this.totalPage=res.total;
                 this.dataList=res.data;
+                this.createLoading = false;
             }).catch((err) => {
 
             });

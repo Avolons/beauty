@@ -30,7 +30,7 @@
     </Col>
     <!-- 表格 -->
     <Col span="24" class="fpTable">
-    <Table border :columns="config" :data="dataList" class="margin-bottom-10"></Table>
+    <Table border :columns="config" :data="dataList" class="margin-bottom-10" :loading="createLoading">></Table>
     <Row>
         <Page style="float:right" :current="searchParams.pager" :total="totalPage" @on-change="changePage" show-elevator show-total></Page>
     </Row>
@@ -293,6 +293,7 @@ import { API } from '@/services/index.js';
 export default {
     data() {
       return {
+        createLoading:true,     //loading 动画加载中
         //搜索选项
         searchParams: {
           brxm: '',//患者姓名
@@ -514,6 +515,7 @@ export default {
           API.FollowBussiness.listPlan(this.searchParams).then((res)=>{
             this.dataList=res.data;
             this.totalPage=res.total;
+            this.createLoading = false;
           }).catch((err)=>{
 
 			    });

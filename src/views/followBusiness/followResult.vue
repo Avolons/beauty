@@ -36,7 +36,7 @@
 		</Col>
 		<!-- 表格 -->
 		<Col span="24" class="fpTable">
-		<Table border :columns="config" :data="dataList" class="margin-bottom-10"></Table>
+		<Table border :columns="config" :data="dataList" class="margin-bottom-10" :loading="createLoading"></Table>
 		<Row>
 			<Page style="float:right" :current="searchParams.pager"  :total="totalPage" @on-change="changePage" show-elevator show-total></Page>
 		</Row>
@@ -329,6 +329,7 @@ export default {
 	data() {
 		return {
 			//搜索选项
+            createLoading:true,   //loading动画加载
 			searchParams: {
 				pager: 1, //当前页码
 				limit: 10,//每页条数
@@ -528,6 +529,7 @@ export default {
 			API.FollowBussiness.listLog(this.searchParams).then((res) => {
 				this.dataList = res.data;
 				this.totalPage = res.total;
+                this.createLoading =false;
 			}).catch((err) => {
 
 			});

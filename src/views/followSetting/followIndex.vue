@@ -114,7 +114,7 @@
 		</Row>
 		</Col>
 		<Col span="24" class="fpTable">
-		<Table border :columns="config" :data="datalist" class="margin-bottom-10"></Table>
+		<Table border :columns="config" :data="datalist" class="margin-bottom-10" :loading="createLoading"></Table>
 		<Row>
 			<Page style="float:right" :current="IndexSearch.pager" :total="pageTotal" @on-change="currentPage" show-elevator show-total></Page>
 		</Row>
@@ -181,6 +181,7 @@ import { API } from '@/services';
 export default {
 	data() {
 		return {
+            createLoading:true,	//loading 动画加载中
 			//搜索数据
 			IndexSearch: {
 				pager: 1,
@@ -435,6 +436,7 @@ export default {
 			API.follSetting.list(this.IndexSearch).then((res) => {
 				this.datalist = res.data;
 				this.pageTotal = res.total;
+				this.createLoading = false;
 			}).catch((error) => {
 			})
 		},

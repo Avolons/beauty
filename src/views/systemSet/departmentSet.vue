@@ -82,7 +82,7 @@
 				<Button v-if="!menuShow(this.AM.Systems.addDepart)" @click="addData" type="info">新增科室</Button>
 			</div>
 			<div class="sys-depart_main_list">
-				<Table border :columns="config" :data="dataList"></Table>
+				<Table border :columns="config" :data="dataList" :loading="createLoading"></Table>
 			</div>
 			<Row class="sys-depart_main_page">
 				<Page :page-size="pageSize" :total="totalPage" :current="searchParam.page" show-elevator style="float:right" @on-change="changePage"></Page>
@@ -164,6 +164,7 @@ import { API } from '../../services/index.js';
 export default {
 	data() {
 		return {
+            createLoading:true,		//loading 动画加载中
 			//搜索参数
 			searchParam: {
 				page: 1,//当前页码
@@ -334,6 +335,7 @@ export default {
 		 */
 		addData() {
 			this.modal = true;
+
 		},
 		/** 
          * 获取所有数据
@@ -343,6 +345,7 @@ export default {
 				this.totalPage = res.data.totalRow;
 				this.pageSize=res.data.pageSize;
 				this.dataList = res.data.result;
+				this.createLoading = false;
 			}).catch((err) => {
 
 			});
@@ -396,6 +399,7 @@ export default {
          * 提交添加
          */
 		submitDepart() {
+		    this.createLoading = true;
 			this.$refs['formData'].validate((valid) => {
 				if (valid) {
 					API.Systems.addDepart(this.formData).then((res) => {
@@ -415,6 +419,7 @@ export default {
 		 * 提交修改
 		 */
 		changeDepart(){
+            this.createLoading = true;
 			this.$refs['currentData'].validate((valid) => {
 				if (valid) {
 					API.Systems.editDepart({

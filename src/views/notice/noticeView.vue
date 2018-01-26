@@ -81,7 +81,7 @@
                 </Col>
             </Row>
             <div class="inter-down_main_list">
-                <Table border :columns="config" :data="dataList"></Table>
+                <Table border :columns="config" :data="dataList" :loading="createLoading">></Table>
             </div>
             <Row class="inter-down_main_page">
                 <Page style="float:right" :total="totalPage" :current="searchParams.pager" @on-change="changePage" show-elevator show-total></Page>
@@ -95,6 +95,7 @@ import { API } from '@/services/index.js';
 export default {
     data() {
         return {
+            createLoading:true,    //默认为显示loading
             //搜索选项
             searchParams: {
                 pager: 1, //当前页码
@@ -199,6 +200,7 @@ export default {
             API.Notice.listNotice(this.searchParams).then((res) => {
                 this.dataList = res.data;
                 this.totalPage = res.total;
+                this.createLoading = false;
             }).catch((err) => {
 
             });

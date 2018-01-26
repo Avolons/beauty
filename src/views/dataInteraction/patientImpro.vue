@@ -36,6 +36,9 @@
 		<Modal title="View Image" v-model="visible">
 			<img :src="'https://o5wwk8baw.qnssl.com/' + imgName + '/large'" v-if="visible" style="width: 100%">
 		</Modal>
+		<Modal title="上传错误" v-model="errorMsg">
+			<Table border :columns="config" :data="dataList" ></Table>
+		</Modal>
 	</div>
 </template>
 <script>
@@ -48,6 +51,27 @@ export default {
 
 			],
 			imgName: '',
+			dataList:[],
+			errorMsg:false,
+			config: [
+				{
+					title: '错误行',
+					key: 'rowNum',
+					align: 'center',
+					width:100
+				},
+				{
+					title: '错误列',
+					key: 'lieNum',
+					align: 'center',
+					width:100
+				},
+				{
+					title: '错误信息',
+					key: 'errMsg',
+					align: 'center',
+				},
+			],
 			visible: false,
 			uploadList: []
 		}
@@ -64,7 +88,13 @@ export default {
 		handleSuccess(res, file) {
 			res=JSON.parse(res);
 			if(res.code==0){
-				this.$Message.success("上传成功");
+				if(res.data.length>0){
+					this.errorMsg=true;
+					this.dataList=res.data;
+					this.$Message.success("上传失败");
+				}else{
+					this.$Message.success("上传成功");
+				}
 			}else{
 				this.$Message.warning(res.msg);
 			}

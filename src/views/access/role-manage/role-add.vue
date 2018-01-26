@@ -197,7 +197,32 @@ export default {
                 this.formData.name = res.bean.name;
                 this.formData.profile = res.bean.profile;
                 this.treeData = res.data;
-                this.treeList[0].children = this.dataFormat(res.data, res.beanAction);
+                let access=res.beanAction;
+                for (let item of access) {
+                    for (const ite of res.data) {
+                        if(item.aid==ite.id){
+                            item.lv=ite.level;
+                            item.pid=ite.pid;
+                            break;
+                        }
+                    }
+                }
+                access=access.sort((a,b)=>{
+                    return b.lv-a.lv;     
+                });
+                let afterAccess=[];
+                for (let item of access) {
+                    let flag=0;
+                    for (let ite of access) {
+                        if(item.aid==ite.pid){
+                            flag++;
+                        }
+                    }
+                    if(flag==0){
+                        afterAccess.push(item);
+                    }
+                }
+                this.treeList[0].children = this.dataFormat(res.data, afterAccess);
             }).catch((err) => {
 
             });

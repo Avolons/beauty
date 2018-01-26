@@ -298,6 +298,7 @@
 						<strong>{{item.name}}</strong>
 						</Col>
 						<Col span="4" class="lineheight32 ">
+						<Button size="small" style="float:right;margin-left:10px" type="warning" @click="deleteTemp(index)">删除</Button>
 						<Button size="small" v-show="followId!='new'" style="float:right" type="info" @click="updateTemp(item,index)">更新</Button>
 						</Col>
 						<Col span="24" style="margin-top:10px" class="lineheight32 ">
@@ -574,6 +575,19 @@ export default {
 			this.isWindow=!this.isWindow;
 		},
 		/** 
+		 * 删除模板
+		 */
+		deleteTemp(index){
+			this.$Modal.confirm({
+				title: '删除该模板',
+				content: '确定删除该模板？',
+				onOk: () => {
+					this.temList.splice(index, 1);
+					/* this.$Message.success("删除成功"); */
+				}
+			});
+		},
+		/** 
 		 * 预览随访方案
 		 */
 		submitCeshi() {
@@ -701,6 +715,7 @@ export default {
 		 * 最终的数据保存操作
 		 */
 		saveChange(type=0) {
+			this.$Spin.show();
 			let flag = 0;
 			this.$refs.wayForms.validate((valid) => {
 				if (valid) {
@@ -747,6 +762,7 @@ export default {
 			}
 			API.followWay.addList(sendData).then((res) => {
 				this.$Message.success("保存成功");
+				this.$Spin.hide();
 				setTimeout(() => {
 					this.$router.push("/followSetting/followWay");
 				}, 500);

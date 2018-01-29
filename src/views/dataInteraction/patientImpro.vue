@@ -87,14 +87,13 @@ export default {
 		handleSuccess(res, file) {
 			res=JSON.parse(res);
 			if(res.code==0){
+				this.$Message.success("上传成功");
+			}else{
 				if(res.data.length>0){
 					this.errorMsg=true;
 					this.dataList=res.data;
 					this.$Message.success("上传失败");
-				}else{
-					this.$Message.success("上传成功");
 				}
-			}else{
 				this.$Message.warning(res.msg);
 			}
 			

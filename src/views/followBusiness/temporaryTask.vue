@@ -114,8 +114,6 @@
 	}
 }
 </style>
-
-
 <template>
 	<div class="creatNotice">
 		<Modal width="700" class="creatNotice_main_modal" :styles="{height:'500px', overflowY:'auto'}" v-model="patModal" title="已选患者列表">
@@ -244,15 +242,9 @@
 							<FormItem>
 								<Button @click="returnStep(2)" style="margin-right:10px">返回上一步</Button>
 								<Button type="primary" @click="handleSave()">发起随访</Button>
-								<!-- <Button type="info" @click="submitCeshi">查看时间</Button> -->
 							</FormItem>
 						</Form>
-						<!-- <Table border :columns="timeConfig" :data="timeList"></Table> -->
-						<!-- <div class="creatNotice_main_success">
-									<Icon type="checkmark-circled"></Icon>
-									<Alert type="success">恭喜你，发起通知成功</Alert>
-									<Button type="success">查看通知进度</Button>
-								</div> -->
+
 					</TabPane>
 				</Tabs>
 			</div>
@@ -265,22 +257,6 @@ import { API } from '@/services';
 export default {
 	data() {
 		return {
-			//用来测试的，没几把用
-			// timeList: [],
-			// timeConfig: [
-			// 	{
-			// 		title: '方案名称',
-			// 		key: 'schemeName'
-			// 	},
-			// 	{
-			// 		title: '编号',
-			// 		key: 'orderNo'
-			// 	},
-			// 	{
-			// 		title: '随访时间',
-			// 		key: 'dateBegin'
-			// 	},
-			// ],
 			timeobj: {//发起随访时间
 				date: "",
 				time: "",
@@ -474,10 +450,6 @@ export default {
 				if (!valid) {
 					return false;
 				}
-				/* if (this.timeobj.date == "" || this.timeobj.time == "") {
-					this.$Message.warning("请填写具体随访发起时间");
-					return false;
-				} */
 				this.$Modal.confirm({
 					title: '发起随访',
 					content: '确定要发起随访吗?',
@@ -510,21 +482,6 @@ export default {
 				})
 			});
 		},
-		// submitCeshi() {
-		// 	API.FollowBussiness.patCeshi({
-		// 		schemeId: this.sendData.schemeId,
-		// 		schemeName: this.sendData.schemeName,
-		// 		visitStartTime: this.sendData.visitStartTime,
-		// 	}).then((res) => {
-		// 		this.timeList=res.data;
-		// 		/* this.$Message.success("发起成功");
-		// 		setTimeout(()=> {
-		// 			this.$router.push("/followBusiness/followPlan");
-		// 		}, 1000); */
-		// 	}).catch((err) => {
-
-		// 	});
-		// },
 		/** 
 		 * 获取随访方案
 		 */
@@ -532,8 +489,9 @@ export default {
 			API.followWay.list(this.patParams).then((res) => {
 				this.planList = res.data
 				this.patTotalPage = res.total
-			}).catch((error) => {
-				console.log(error)
+			}).catch((err) => {
+                //弹出错误信息
+                this.$Message.error(err);
 			})
 		},
 		/** 
@@ -548,7 +506,8 @@ export default {
 				});
 				this.getDoctorList();
 			}).catch((err) => {
-
+                //弹出错误信息
+                this.$Message.error(err);
 			});
 		},
 		/** 
@@ -563,7 +522,8 @@ export default {
 			}).then((res) => {
 				this.doctorList = res.data;
 			}).catch((err) => {
-
+                //弹出错误信息
+                this.$Message.error(err);
 			});
 		},
 		/** 
@@ -584,10 +544,10 @@ export default {
 				this.dataList = this.formData(res.data);
 				this.totalPage = res.total;
 			}).catch((err) => {
-
+                //弹出错误信息
+                this.$Message.error(err);
 			});
 		},
-
 		/** 
 		 * 数据格式化
 		 */
@@ -732,8 +692,9 @@ export default {
 				zjm: query
 			}).then((res) => {
 				this.diseaseList = res.data;
-			}).catch((error) => {
-				console.log(error)
+			}).catch((err) => {
+                //弹出错误信息
+                this.$Message.error(err);
 			})
 		},
 	},

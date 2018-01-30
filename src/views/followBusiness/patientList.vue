@@ -1,7 +1,6 @@
 <style lang="less">
 @import "../../styles/jzda.less";
 .patientSearch {
-
 	border-radius: 5px;
 	form {
 		.ivu-form-item {
@@ -121,88 +120,88 @@
 		<!-- 详情模态框 -->
 		<Modal v-model="patientDetail" title="患者信息" class-name="patientInfo" :styles="{top: '36px'}" width="1000">
 			<Row class="infoRow">
-				<Col span="12" class="infoCol12 mb12">
+				<Col span="12" class="info-col mb12">
 					<div class="info">
 						<div class="info-row">
-							<div class="info1 bb1">姓名</div>
-							<div class="info2 bdx1">{{currentData.brxm}}</div>
+							<div class="info-one bb1">姓名</div>
+							<div class="info-two bdx1">{{currentData.brxm}}</div>
 						</div>
 						<div class="info-row">
-							<div class="info1">性别</div>
-							<div class="info2">{{currentData.brxb}}</div>
+							<div class="info-one">性别</div>
+							<div class="info-two">{{currentData.brxb}}</div>
 						</div>
 					</div>
 				</Col>
-				<Col span="12" class="infoCol12 mb12">
+				<Col span="12" class="info-col mb12">
 					<div class="info">
 						<div class="info-row">
-							<div class="info1 bb1">电话</div>
-							<div class="info2 bdx1">{{currentData.jtdh}}</div>
+							<div class="info-one bb1">电话</div>
+							<div class="info-two bdx1">{{currentData.jtdh}}</div>
 						</div>
 						<div class="info-row">
-							<div class="info1">地址</div>
-							<div class="info2">{{currentData.xzzQtdz}}</div>
+							<div class="info-one">地址</div>
+							<div class="info-two">{{currentData.xzzQtdz}}</div>
 						</div>
 					</div>
 				</Col>
-				<Col span="12" class="infoCol12 mb12">
+				<Col span="12" class="info-col mb12">
 					<div class="info">
 						<div class="info-row">
-							<div class="info1 bb1">年龄</div>
-							<div class="info2 bdx1">{{currentData.age}}</div>
+							<div class="info-one bb1">年龄</div>
+							<div class="info-two bdx1">{{currentData.age}}</div>
 						</div>
 						<div class="info-row">
-							<div class="info1">民族</div>
-							<div class="info2">{{currentData.mz}}</div>
+							<div class="info-one">民族</div>
+							<div class="info-two">{{currentData.mz}}</div>
 						</div>
 					</div>
 				</Col>
-				<Col span="12" class="infoCol12 mb12">
+				<Col span="12" class="info-col mb12">
 					<div class="info">
 						<div class="info-row">
-							<div class="info1 bb1">出生年月</div>
-							<div class="info2 bdx1">{{currentData.csny}}</div>
+							<div class="info-one bb1">出生年月</div>
+							<div class="info-two bdx1">{{currentData.csny}}</div>
 						</div>
 						<div class="info-row">
-							<div class="info1">身份证号</div>
-							<div class="info2">{{currentData.sfzh}}</div>
+							<div class="info-one">身份证号</div>
+							<div class="info-two">{{currentData.sfzh}}</div>
 						</div>
 					</div>
 				</Col>
-				<Col span="12" class="infoCol12 mb12">
+				<Col span="12" class="info-col mb12">
 					<div class="info">
 						<div class="info-row">
-							<div class="info1 bb1">紧急联系人</div>
-							<div class="info2 bdx1">{{currentData.lxrm}}</div>
+							<div class="info-one bb1">紧急联系人</div>
+							<div class="info-two bdx1">{{currentData.lxrm}}</div>
 						</div>
 						<div class="info-row">
-							<div class="info1">关系</div>
-							<div class="info2">{{currentData.lxgx}}</div>
+							<div class="info-one">关系</div>
+							<div class="info-two">{{currentData.lxgx}}</div>
 						</div>
 					</div>
 				</Col>
-				<Col span="12" class="infoCol12 mb12">
+				<Col span="12" class="info-col mb12">
 					<div class="info">
 						<div class="info-row">
-							<div class="info1 bb1">联系地址</div>
-							<div class="info2 bdx1">{{currentData.lxdz}}</div>
+							<div class="info-one bb1">联系地址</div>
+							<div class="info-two bdx1">{{currentData.lxdz}}</div>
 						</div>
 						<div class="info-row">
-							<div class="info1">联系电话</div>
-							<div class="info2">{{currentData.lxdh}}</div>
+							<div class="info-one">联系电话</div>
+							<div class="info-two">{{currentData.lxdh}}</div>
 						</div>
 					</div>
 				</Col>
-				<Col span="12" class="infoCol12 mb12">
+				<Col span="12" class="info-col mb12">
 					<div class="info" style="height: 32px;">
 						<div class="info-row">
-							<div class="info1 bdx1">单位</div>
-							<div class="info2 bdx1">{{currentData.dwmc}}</div>
+							<div class="info-one bdx1">单位</div>
+							<div class="info-two bdx1">{{currentData.dwmc}}</div>
 						</div>
 					</div>
 				</Col>
 				<!-- 门诊 -->
-				<Col span="24" class="infoCol24" v-if="mjzData.length" v-for="item,index in mjzData" :key="index">
+				<Col span="24" class="info-co-public" v-if="mjzData.length" v-for="item,index in mjzData" :key="index">
 					<Row class="infoRow2">
 						<Col span="4" class="sfCol4">
 						<div class="counts">
@@ -241,7 +240,7 @@
 					</Row>
 				</Col>
 				<!-- 住院 -->
-				<Col span="24" class="infoCol24" v-if="zyData.length" v-for="item1,index1 in zyData" :key="index1">
+				<Col span="24" class="info-co-public" v-if="zyData.length" v-for="item1,index1 in zyData" :key="index1">
 					<Row class="infoRow2">
 
 						<Col span="4" class="sfCol4">
@@ -355,7 +354,7 @@
 					</Col>
 					<Col span="24" :style="{textAlign:'right',margin: '10px 0'}"><Button type="primary" @click="submitData('formCustom')">保存</Button></Col>
 				</Form>
-				<Col span="24" class="infoCol24" v-if="mjzData.length" v-for="item,index in mjzData" :key="index">
+				<Col span="24" class="info-co-public" v-if="mjzData.length" v-for="item,index in mjzData" :key="index">
 					<Row class="infoRow2">
 						<Col span="4" class="sfCol4">
 						<div class="counts">
@@ -394,7 +393,7 @@
 					</Row>
 				</Col>
 				<!-- 住院 -->
-				<Col span="24" class="infoCol24" v-if="zyData.length" v-for="item1,index1 in zyData" :key="index1">
+				<Col span="24" class="info-co-public" v-if="zyData.length" v-for="item1,index1 in zyData" :key="index1">
 					<Row class="infoRow2">
 						<Col span="4" class="sfCol4">
 							<div class="counts">
@@ -457,20 +456,14 @@ export default {
 				limit: 10,//每页条数
 			},
 			totalPage: 100,//总页数
-			//当前被点击患者，编辑和详情按钮触发时更换数据
-			currentData: {},
-			//门急诊信息
-			mjzData: [],
-			//住院信息
-			zyData: [],
-			//详情模态框
-			patientDetail: false,
-			//编辑模态框
-			patientText: false,
-			//编辑功能form数据,暂时未知必填信息，字段未知
-			formCustom: {
+			currentData: {}, //当前被点击患者，编辑和详情按钮触发时更换数据
+			mjzData: [],//门急诊信息
+			zyData: [],//住院信息
+			patientDetail: false,//详情模态框
+			patientText: false,//编辑模态框
+			formCustom: { //编辑功能form数据,暂时未知必填信息，字段未知
 				id: '',
-				brxm: '',//姓名
+				brxm: '', //姓名
 				brxb: '',//性别
 				mz: '',//民族
 				sfzh: '',//身份证号
@@ -483,10 +476,8 @@ export default {
 				dwmc: '',//单位名称
 				csny: '',//出生年月
 			},
-			//表格数据
-			dataList: [],
-			//表格配置
-			config: [
+			dataList: [], //表格数据
+			config: [     //表格配置
 				{
 					title: '患者编号',
 					key: 'brid',
@@ -541,7 +532,7 @@ export default {
 					key: 'action',
 					width: 150,
 					align: 'center',
-					render: (h, params) => {
+					render: (h, params) => {   // render函数
 						return h('div', [
 							h('Button', {
 								props: {
@@ -586,6 +577,9 @@ export default {
 		}
 	},
 	methods: {
+        /**
+         * 点击编辑按钮
+         */
 		editPat(data) {
 			this.formCustom = JSON.parse(JSON.stringify(data));
 			this.patientText = true;
@@ -611,7 +605,8 @@ export default {
 				} 
 				this.currentData = res.data;
 			}).catch((err) => {
-				console.log(err)
+                //弹出错误信息
+                this.$Message.error(err);
 
 			});
 		},
@@ -640,7 +635,8 @@ export default {
 				this.patientText = false;
                 this.$Spin.hide();
 			}).catch((err) => {
-
+			    //弹出错误信息
+                this.$Message.error(err);
 			});
 		},
 		/** 
@@ -652,7 +648,8 @@ export default {
 				this.totalPage = res.total;
 				this.createLoading = false;
 			}).catch((err) => {
-
+                //弹出错误信息
+                this.$Message.error(err);
 			});
 		},
 		/** 

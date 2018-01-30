@@ -291,7 +291,7 @@ export default {
             trigger: 'change'
         }],
         diseaseId: [{
-            type: Array,
+            type: 'array',
             required: true,
             message: '请选择疾病类型',
             trigger: 'blur'

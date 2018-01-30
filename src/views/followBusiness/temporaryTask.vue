@@ -166,21 +166,18 @@
 							</span>
 							<Input type="text" v-model="searchParams.brxm" placeholder="请输入患者姓名"></Input>
 							</Col>
-							<Col span="7" style="min-width:285px">
-								<p style="line-height:32px;width:85px">
+							<Col span="18" style="min-width:285px;height:32px">
+								<span style="width:105px;height:32px;">
 									导入开始时间：
-								</p>
+								</span>
 								<DatePicker @on-change="timeChange_import()" type="datetime" format="yyyy-MM-dd HH:mm" placeholder="请选择数据导入时间" style="width:200px"></DatePicker>
-							</Col>
-							<Col span="7" style="min-width:285px">
-								<p style="line-height:32px;width:85px">
+								<span style="width:105px;height:32px;margin-left:15px">
 									导入结束时间：
-								</p>
+								</span>
 								<DatePicker @on-change="timeChange_export()" type="datetime" format="yyyy-MM-dd HH:mm"  placeholder="请选择数据导出时间" style="width:200px"></DatePicker>
+								<Button style="margin-left:15px" @click="searchParams.pager=1;getData()" type="primary">搜索</Button>
 							</Col>
-							<Col span="2">
-								<Button @click="searchParams.pager=1;getData()" type="primary">搜索</Button>
-							</Col>
+								
 						</Row>
 						<div class="creatNotice_main_add">
 							<Badge :count="addList.length">
@@ -474,16 +471,17 @@ export default {
 				if (!valid) {
 					return false;
 				}
-				/* if (this.timeobj.date == "" || this.timeobj.time == "") {
+				if (this.timeobj.date == "" || this.timeobj.time == "") {
 					this.$Message.warning("请填写具体随访发起时间");
 					return false;
-				} */
+				}
 				this.$Modal.confirm({
 					title: '发起随访',
 					content: '确定要发起随访吗?',
 					onOk: () => {
 						this.$Spin.show();
 						if(this.isAll == 0) {
+							this.sendData.hzxxIds=[];
 							for (let item of this.addList) {
 								this.sendData.hzxxIds.push(item.id);
 							}

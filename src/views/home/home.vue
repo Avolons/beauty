@@ -234,9 +234,9 @@ export default {
             },
             /** 随访情况 */
             countvisitorder: {
-                doNum: "43",      //随访任务完成量
-                noDoNum: "156",   //随访任务失败量
-                totalNum: "204"   //随访任务量
+                doNum: "0",      //随访任务完成量
+                noDoNum: "0",   //随访任务失败量
+                totalNum: "0"   //随访任务量
             },
             hccount: [],
             countvisitfinish: [],

@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<div class="demo-upload-list" v-for="item in uploadList">
+		<!-- <div class="demo-upload-list" v-for="item in uploadList">
 			<template v-if="item.status === 'finished'">
 				<img :src="item.url">
 				<div class="demo-upload-list-cover">
@@ -11,12 +11,13 @@
 			<template v-else>
 				<Progress v-if="item.showProgress" :percent="item.percentage" hide-info></Progress>
 			</template>
-		</div>
+		</div> -->
 		<Upload ref="upload" 
 				:format="['xml','xls','png']" 
 				:on-format-error="handleFormatError" 
 				:on-exceeded-size="handleMaxSize" 
 				:before-upload="handleBeforeUpload" 
+				:on-success="handleSuccess" 
 				multiple 
                 name="upfile"
 				type="drag" 
@@ -29,9 +30,9 @@
 			</div>
 		</Upload>
 		 <Button style="display:block;margin-top:20px;" type="primary"><a style="color:#fff" href="/assets/templatedoc/doctors.xls">下载医生模板</a></Button>
-		<!-- <Modal title="View Image" v-model="visible">
-			<img :src="'https://o5wwk8baw.qnssl.com/' + imgName + '/large'" v-if="visible" style="width: 100%">
-		</Modal> -->
+		<Modal title="上传错误" v-model="errorMsg">
+			<Table border :columns="config" :data="dataList" ></Table>
+		</Modal>
 	</div>
 </template>
 <script>
@@ -45,6 +46,27 @@ export default {
 			],
 			imgName: '',
 			visible: false,
+			dataList:[],
+			errorMsg:false,
+			config: [
+				{
+					title: '错误行',
+					key: 'rowNum',
+					align: 'center',
+					width:100
+				},
+				{
+					title: '错误列',
+					key: 'lieNum',
+					align: 'center',
+					width:100
+				},
+				{
+					title: '错误信息',
+					key: 'errMsg',
+					align: 'center',
+				},
+			],
 			uploadList: []
 		}
 	},
@@ -62,7 +84,17 @@ export default {
 			if(res.code==0){
 				this.$Message.success("上传成功");
 			}else{
-				this.$Message.warning(res.msg);
+				if(res.data){
+					if(res.data.length>0){
+						this.errorMsg=true;
+						this.dataList=res.data;
+						this.$Message.warning("上传失败");
+					}else{
+						this.$Message.warning("上传失败");	
+					}
+				}else{
+					this.$Message.warning("上传失败");
+				}
 			}
 		},
 		handleFormatError(file) {

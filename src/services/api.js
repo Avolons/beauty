@@ -15,6 +15,7 @@ Vue.prototype.$http = axios;
 // axios.defaults.timeout = 5000;
 /* 默认的接口地址 */
 /* axios.defaults.baseURL = 'http://192.168.1.100:8080'; */
+/* axios.defaults.baseURL = 'http://192.168.1.32:8081'; */
 /* axios.defaults.baseURL = 'http://192.168.1.166:8080'; */
 /* axios.defaults.baseURL = 'http://61.153.232.58:9998'; */
 
@@ -71,7 +72,9 @@ function fetch (type, url, params) {
                     } else if (code === 0) {
                         resolve(JSON.parse(response.data));
                     } else {
+                        window.RSYS.$Spin.hide();
                         window.RSYS.$Message.warning(JSON.parse(response.data).message);
+                        reject(new Error('fail'));
                     }
                 }, err => {
                     reject(err);
@@ -88,7 +91,9 @@ function fetch (type, url, params) {
                     } else if (code === 0) {
                         resolve(JSON.parse(response.data));
                     } else {
+                        window.RSYS.$Spin.hide();
                         window.RSYS.$Message.warning(JSON.parse(response.data).message);
+                        reject(new Error('fail'));
                     }
                 }, err => {
                     reject(err);

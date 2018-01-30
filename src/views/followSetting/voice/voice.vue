@@ -1,5 +1,52 @@
 <style lang="less">
 @import "../../../styles/common.less";
+.iview-admin-draggable-list {
+	height: 100%;
+}
+
+.iview-admin-draggable-list li {
+	padding: 9px;
+	border: 1px solid #e7ebee;
+	border-radius: 3px;
+	margin-bottom: 5px;
+	cursor: pointer;
+	position: relative;
+	transition: all .2s;
+}
+
+.iview-admin-draggable-list li:hover {
+	color: #87b4ee;
+	border-color: #87b4ee;
+	transition: all .2s;
+}
+
+.iview-admin-draggable-delete {
+	height: 100%;
+	position: absolute;
+	right: -8px;
+	top: 0px;
+	display: none;
+}
+
+.iview-admin-draggable-list li:hover .iview-admin-draggable-delete {
+	display: block;
+}
+
+.placeholder-style {
+	display: block !important;
+	color: transparent;
+	border-style: dashed !important;
+}
+
+.delte-item-animation {
+	opacity: 0;
+	transition: all .2s;
+}
+
+.iview-admin-draggable-list {
+	overflow: auto
+}
+
 .fontvoice {
 	font-size: 14px;
 	box-sizing: border-box;
@@ -14,7 +61,6 @@
 .voice {
 	background: #fff;
 	border-radius: 5px;
-	.sfproblem {}
 	.voicepz {
 		.voicetitle {
 			margin: 20px 10px;
@@ -28,19 +74,17 @@
 
 .followVoice {
 	box-sizing: border-box;
-	padding: 10px;
 	border-radius: 5px;
-	padding-left: 25px;
-	background-color: #fff;
+	height: 100%;
+	/* background-color: #fff; */
+	.ivu-card-body{
+		height: calc(~"100% - 51px");
+		overflow-y: auto;
+	}
 	.itemli {
 		height: 40px;
 		line-height: 40px;
 		position: relative;
-	}
-	li {
-		border: 1px solid #e7e7e7;
-		margin-bottom: 10px;
-		padding-bottom: 15px;
 	}
 	&_main {
 		&_title {
@@ -49,6 +93,15 @@
 			font-size: 15px;
 			color: #2d8cf0;
 		}
+		&_single {
+			border: 1px solid #e7e7e7;
+			margin-bottom: 10px;
+			padding-bottom: 15px;
+			border-radius: 5px;
+		}
+		&_voiceList{
+
+		}
 		&_commonTitle {
 			font-size: 16px;
 			line-height: 45px;
@@ -56,6 +109,7 @@
 		}
 		&_config {
 			max-width: 900px;
+
 		}
 		&_content {
 			box-sizing: border-box;
@@ -64,109 +118,127 @@
 		&_icon {
 			position: absolute;
 			right: 5px;
-			top: 5px;
-			color: rgb(242, 94, 67);
+			top: 7px;
+			color: #666;
 			cursor: pointer;
 		}
 	}
 }
 </style>
 <template>
-	<Row class="followVoice">
-		<h3 class="followVoice_main_commonTitle">基本信息</h3>
-		<Col span="24" class="sfzhibaio">
-		<Row class="fontvoice">
-			<span class="followVoice_main_title">随访问题:</span>
-			<Col span="20">
-			<span>{{questionName}}</span>
-			</Col>
-		</Row>
-		</Col>
-		<Col span="24" class="sfzhibaio">
-		<Row class="fontvoice">
-			<span class="followVoice_main_title">采集指标:</span>
-			<Col span="20">
-			<span>{{questionTargetName}}</span>
-			</Col>
-		</Row>
-		</Col>
-		<Col span="24" class="sfzhibaio">
-		<Row class="fontvoice">
-			<span class="followVoice_main_title">指标类型:</span>
-			<Col span="20">
-			<span>{{questionTargetStyle}}</span>
-			</Col>
-		</Row>
-		</Col>
-		<Col span="24" class="sfzhibaio">
-		<Row class="fontvoice">
-			<span class="followVoice_main_title">指标阀值:</span>
-			<Col span="20">
-			<span>{{questionTargetfz}}</span>
-			</Col>
-		</Row>
-		</Col>
-		<h3 class="followVoice_main_commonTitle">话术配置</h3>
-		<Col span="24" class="voicepz">
-		<ul class="followVoice_main_config">
-			<!-- 话术列表 -->
-			<li v-for="(item,index) in switchArr">
-				<Row class="itemli" style="background:#f7f7f7">
-					<Col span="4" class="textCenter">处理</Col>
-					<Col span="12">
-					</Input>
-					<span>{{item.switchID==-1?"无匹配":item.switchID==-2?"无声音":item.switchID==-3?"通用处理":item.switchID}}</span>
-					</Col>
-					<Col span="2" offset="6" @click.native="removequestion(index)">
-					<Icon class="followVoice_main_icon" type="close-circled" size="22"></Icon>
+	<div class="followVoice">
+		<Card>
+			<p slot="title">
+				<Icon type="android-list"></Icon>
+				基本信息
+			</p>
+			<Row>
+				<Col span="24" class="sfzhibaio">
+				<Row class="fontvoice">
+					<span class="followVoice_main_title">随访问题:</span>
+					<Col span="20">
+					<span>{{questionName}}</span>
 					</Col>
 				</Row>
-				<div class="followVoice_main_content">
-					<Row class="itemli">
-						<Col span="4" class="textCenter">话术名称</Col>
-						<Col span="20">
-						<Input v-model="item.switchText" placeholder="请输入话术名称"></Input>
-						</Col>
-					</Row>
-					<Row class="itemli">
-						<Col span="4" class="textCenter">判别规则</Col>
-						<Col span="20">
-						<Input v-model="item.switchRegexText" placeholder="请填写判别规则"></Input>
-						</Col>
-					</Row>
-					<Row class="itemli" v-show="false">
-						<Col span="4" class="textCenter">超时跳转</Col>
-						<Col span="20">
-						<Input v-model="item.outRptSwitchID" placeholder="请填写超时跳转问题编号"></Input>
-						</Col>
-					</Row>
-					<Row class="itemli" v-show="false">
-						<Col span="4" class="textCenter">指标名称</Col>
-						<Col span="20">
-						<span>
-								{{item.keyname}}
-						</span>
-						
-						</Col>
-					</Row>
-					<Row class="itemli">
-						<Col span="4" class="textCenter">指标值</Col>
-						<Col span="20">
-						<Input v-model="item.keyvalue" placeholder="请填写指标值"></Input>
-						</Col>
-					</Row>
-				</div>
-			</li>
-		</ul>
-		</Col>
-		<Col span="24">
-		<Button type="primary" style="margin: 10px 20px;" @click="addVoice()">添加话术</Button>
-		<Button style="margin: 10px 20px;" type="primary" @click="handleSubmit()">保存</Button>
-		</Col>
-	</Row>
+				</Col>
+				<Col span="24" class="sfzhibaio">
+				<Row class="fontvoice">
+					<span class="followVoice_main_title">采集指标:</span>
+					<Col span="20">
+					<span>{{questionTargetName}}</span>
+					</Col>
+				</Row>
+				</Col>
+				<Col span="24" class="sfzhibaio">
+				<Row class="fontvoice">
+					<span class="followVoice_main_title">指标类型:</span>
+					<Col span="20">
+					<span>{{questionTargetStyle}}</span>
+					</Col>
+				</Row>
+				</Col>
+				<Col span="24" class="sfzhibaio">
+				<Row class="fontvoice">
+					<span class="followVoice_main_title">指标阀值:</span>
+					<Col span="20">
+					<span>{{questionTargetfz}}</span>
+					</Col>
+				</Row>
+				</Col>
+			</Row>
+		</Card>
+		<Card style="margin-top:10px;height:calc(100% - 215px);overflow-y:auto">
+			<p slot="title">
+				<Icon type="social-buffer"></Icon>
+				话术配置
+			</p>
+			<Row class="followVoice_main_voiceList">
+				<Col span="24" class="voicepz">
+				<ul  class="followVoice_main_config">
+						<li v-for="item,index in switchArr" :key="index" class="followVoice_main_single">
+							<Row class="itemli" style="background:#f7f7f7">
+								<Col span="4" class="textCenter">处理</Col>
+								<Col span="12">
+								</Input>
+								<span>{{index+1}}</span>
+								</Col>
+								<Col span="2" offset="6" @click.native="removequestion(index)">
+								<Icon class="followVoice_main_icon" type="close-circled" size="22"></Icon>
+								</Col>
+							</Row>
+							<div class="followVoice_main_content">
+								<Row class="itemli">
+									<Col span="4" class="textCenter">话术名称</Col>
+									<Col span="20">
+									<Input v-model="item.switchText" placeholder="请输入话术名称"></Input>
+									</Col>
+								</Row>
+								<Row class="itemli">
+									<Col span="4" class="textCenter">判别规则</Col>
+									<Col span="20">
+									<Input v-model="item.switchRegexText" placeholder="请填写判别规则"></Input>
+									</Col>
+								</Row>
+								<Row class="itemli" v-show="false">
+									<Col span="4" class="textCenter">超时跳转</Col>
+									<Col span="20">
+									<Input v-model="item.outRptSwitchID" placeholder="请填写超时跳转问题编号"></Input>
+									</Col>
+								</Row>
+								<Row class="itemli" v-show="false">
+									<Col span="4" class="textCenter">指标名称</Col>
+									<Col span="20">
+									<span>
+										{{item.keyname}}
+									</span>
+									</Col>
+								</Row>
+								<Row class="itemli">
+									<Col span="4" class="textCenter">指标值</Col>
+									<Col span="20">
+									<Input v-model="item.keyvalue" placeholder="请填写指标值"></Input>
+									</Col>
+								</Row>
+							</div>
+						</li>
+				</ul>
+				<!-- <ul id="shopList" >
+						<li v-for="(item,index) in switchArr" :key="index" :data-index="index">
+							
+						</li>
+					</ul> -->
+				</Col>
+				<Col span="24">
+				<Button type="primary" style="margin: 10px 20px;" @click="addVoice()">添加话术</Button>
+				<Button style="margin: 10px 20px;" type="primary" @click="handleSubmit()">保存</Button>
+				</Col>
+			</Row>
+		</Card>
+	</div>
 </template>
 
 <script>
+import draggable from 'vuedraggable'
 import { API } from '@/services';
 export default {
 	data() {
@@ -183,11 +255,37 @@ export default {
 			switchInfo: '',
 		}
 	},
+	components: {
+		draggable,
+	},
 	created() {
 		this.fetchData()
 	},
 	mounted() {
-		this.questionInfo()
+		/** 
+		 * 拖拽功能初始化
+		 */
+		//全局拖动事件，阻止默认行为，阻止冒泡
+		document.body.ondrop = function(event) {
+			event.preventDefault();
+			event.stopPropagation();
+		};
+		/* let vm = this;
+		let shoppingList = document.getElementById('shopList');
+		Sortable.create(shoppingList, {
+			group: {
+				name: 'list',
+				pull: true
+			},
+			animation: 120,
+			ghostClass: 'placeholder-style',
+			fallbackClass: 'iview-admin-cloned-item',
+			onRemove(event) {
+				vm.affordList.splice(event.newIndex, 0, vm.shoppingList[event.item.getAttribute('data-index')]);
+			}
+		}); */
+
+		this.questionInfo();
 	},
 	methods: {
 		/*
@@ -339,10 +437,10 @@ export default {
 				}).then((res) => {
 					this.$Message.success('添加成功!');
 					this.questionInfo();
-					setTimeout(()=> {
+					setTimeout(() => {
 						this.$router.push('/followSetting/followProblems');
 					}, 1500);
-					
+
 				}).catch((error) => {
 
 				});

@@ -15,6 +15,7 @@ Vue.prototype.$http = axios;
 // axios.defaults.timeout = 5000;
 /* 默认的接口地址 */
 /* axios.defaults.baseURL = 'http://192.168.1.100:8080'; */
+/* axios.defaults.baseURL = 'http://60.190.86.50:6016'; */
 /* axios.defaults.baseURL = 'http://192.168.1.32:8081'; */
 /* axios.defaults.baseURL = 'http://192.168.1.166:8080'; */
 /* axios.defaults.baseURL = 'http://61.153.232.58:9998'; */
@@ -62,6 +63,7 @@ function fetch (type, url, params) {
             })
                 .then(response => {
                     let code;
+                    window.RSYS.$Spin.hide();
                     try {
                         code = JSON.parse(response.data).code;
                     } catch (error) {
@@ -72,7 +74,6 @@ function fetch (type, url, params) {
                     } else if (code === 0) {
                         resolve(JSON.parse(response.data));
                     } else {
-                        window.RSYS.$Spin.hide();
                         window.RSYS.$Message.warning(JSON.parse(response.data).message);
                         reject(new Error('fail'));
                     }
@@ -85,13 +86,13 @@ function fetch (type, url, params) {
         } else {
             axios.post(url, params)
                 .then(response => {
+                    window.RSYS.$Spin.hide();
                     let code = JSON.parse(response.data).code;
                     if (code === 2 || code === 21) {
                         window.RSYS.$router.push('/login');
                     } else if (code === 0) {
                         resolve(JSON.parse(response.data));
                     } else {
-                        window.RSYS.$Spin.hide();
                         window.RSYS.$Message.warning(JSON.parse(response.data).message);
                         reject(new Error('fail'));
                     }

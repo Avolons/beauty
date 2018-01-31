@@ -197,7 +197,7 @@
 								<Select v-model="searchParams.diseaseId" filterable remote not-found-text="" :remote-method="remoteMethod" clearable>
 									<Option v-for="(item, index) in diseaseList" :value="item.id" :key="index">{{item.name}}</Option>
 								</Select>
-								</Col>
+							</Col>
 						</Row>
 						<div class="creatNotice_main_add">
 							<Button @click="searchParams.pager=1;getData()" style="margin-right:10px" type="primary">搜索</Button>

@@ -284,9 +284,8 @@
 				</span>
 				<Button size="small" @click="seeModal=true" type="primary" style="position:absolute;top:0;right:0;padding:0 7px">预览方案</Button>
 			</p>
-			<draggable element="ul" v-model="temList" class="way_main_planList">
-				<transition-group>
-					<li class="way_main_planSingle" v-for="(item,index) in temList" :key="item.id">
+			<ul  class="way_main_planList">
+					<li class="way_main_planSingle" v-for="(item,index) in showList" :key="item.id">
 						<!-- 模板名称&&随访周期 -->
 						<Row>
 							<Col span="2" class="lineheight32">
@@ -411,8 +410,7 @@
 							</Col>
 						</Row>
 					</li>
-				</transition-group>
-			</draggable>
+			</ul>
 			<div class="way_main_btnCollect">
 				<Button v-show="temList.length>0" type="primary" @click="saveChange">保存</Button>
 				<Button v-show="temList.length>0" style="margin-left:30px" type="info" @click="saveChange(1)">另存为新方案</Button>
@@ -730,7 +728,7 @@ export default {
 		 * 最终的数据保存操作
 		 */
 		saveChange(type = 0) {
-			this.$Spin.show();
+			
 			let flag = 0;
 			this.$refs.wayForms.validate((valid) => {
 				if (!valid) {
@@ -750,7 +748,7 @@ export default {
 			 */
 			sendData.questionTemples = [];
 			let flags = 0;
-			for (let item of this.temList) {
+			for (let item of this.showList) {
 				let copyItem = JSON.parse(JSON.stringify(item.questionTemples));
 				copyItem.questionSchemeWavs = [];
 				if (flags > 0) {
@@ -778,6 +776,7 @@ export default {
 			if (type == 1) {
 				delete sendData.id;
 			}
+			this.$Spin.show();
 			API.followWay.addList(sendData).then((res) => {
 				this.$Message.success("保存成功");
 				this.$Spin.hide();

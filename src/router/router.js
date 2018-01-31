@@ -205,6 +205,46 @@ export const appRouter = [{
     ]
 },
 {
+    path: '/menReview',
+    icon: 'social-buffer',
+    name: 'menReview',
+    title: '人工审核',
+    access: '/menReview', // access已经添加
+    component: Main,
+    children: [
+        {
+            path: '/menReview/planRe',
+            icon: 'podium',
+            name: 'planRe',
+            title: '随访计划审核',
+            access: '/menReview/planRe', // access已经添加
+            component: resolve => {
+                require(['@/views/menReview/planRe.vue'], resolve);
+            }
+        },
+        {
+            path: '/menReview/wayRe',
+            icon: 'disc',
+            name: 'wayRe',
+            title: '计划匹配重复审核',
+            access: '/menReview/wayRe', // access已经添加
+            component: resolve => {
+                require(['@/views/menReview/wayRe.vue'], resolve);
+            }
+        },
+        {
+            path: '/menReview/flWayRe',
+            icon: 'pricetags',
+            name: 'flWayRe',
+            title: '随访记录审核',
+            access: '/menReview/flWayRe', // access已经添加
+            component: resolve => {
+                require(['@/views/menReview/flWayRe.vue'], resolve);
+            }
+        }
+    ]
+},
+{
     path: '/followSetting',
     icon: 'paintbucket',
     name: 'followSetting',
@@ -251,46 +291,6 @@ export const appRouter = [{
             require(['@/views/followSetting/followWay.vue'], resolve);
         }
     }
-    ]
-},
-{
-    path: '/menReview',
-    icon: 'social-buffer',
-    name: 'menReview',
-    title: '人工数据审核',
-    access: '/menReview', // access已经添加
-    component: Main,
-    children: [
-        {
-            path: '/menReview/planRe',
-            icon: 'podium',
-            name: 'planRe',
-            title: '随访计划审核',
-            access: '/menReview/planRe', // access已经添加
-            component: resolve => {
-                require(['@/views/menReview/planRe.vue'], resolve);
-            }
-        },
-        {
-            path: '/menReview/wayRe',
-            icon: 'disc',
-            name: 'wayRe',
-            title: '计划匹配重复审核',
-            access: '/menReview/wayRe', // access已经添加
-            component: resolve => {
-                require(['@/views/menReview/wayRe.vue'], resolve);
-            }
-        },
-        {
-            path: '/menReview/flWayRe',
-            icon: 'pricetags',
-            name: 'flWayRe',
-            title: '随访结果审核',
-            access: '/menReview/flWayRe', // access已经添加
-            component: resolve => {
-                require(['@/views/menReview/flWayRe.vue'], resolve);
-            }
-        }
     ]
 },
 {

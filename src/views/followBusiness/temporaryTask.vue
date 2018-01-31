@@ -159,27 +159,35 @@
 							选择接收随访患者
 						</h3>
 						<Row class="creatNotice_main_search" :gutter="15">
-
 							<Col span="6">
 							<span>
 								患者姓名：
 							</span>
 							<Input type="text" v-model="searchParams.brxm" placeholder="请输入患者姓名"></Input>
 							</Col>
-							<Col span="18" style="min-width:285px;height:32px">
+							<Col span="6">
+							<span>
+									疾病类型
+								</span>
+								<Select v-model="searchParams.diseaseId" filterable remote not-found-text="" :remote-method="remoteMethod" clearable>
+									<Option v-for="(item, index) in diseaseList" :value="item.id" :key="index">{{item.name}}</Option>
+								</Select>
+							</Col>
+							<Col span="6" style="height:32px">
 								<span style="width:105px;height:32px;">
 									导入开始时间：
 								</span>
-								<DatePicker @on-change="timeChange_import()" type="datetime" format="yyyy-MM-dd HH:mm" placeholder="请选择数据导入时间" style="width:200px"></DatePicker>
+								<DatePicker  @on-change="timeChange_import()" type="datetime" format="yyyy-MM-dd HH:mm" placeholder="请选择数据导入时间" style="width:calc(100% - 105px)"></DatePicker>
+							</Col>
+							<Col span="6" style="height:32px">	
 								<span style="width:105px;height:32px;margin-left:15px">
 									导入结束时间：
 								</span>
-								<DatePicker @on-change="timeChange_export()" type="datetime" format="yyyy-MM-dd HH:mm"  placeholder="请选择数据导出时间" style="width:200px"></DatePicker>
-								<Button style="margin-left:15px" @click="searchParams.pager=1;getData()" type="primary">搜索</Button>
+								<DatePicker  @on-change="timeChange_export()" type="datetime" format="yyyy-MM-dd HH:mm"  placeholder="请选择数据导出时间" style="width:calc(100% - 105px)"></DatePicker>
 							</Col>
-								
 						</Row>
 						<div class="creatNotice_main_add">
+							<Button style="margin-right:15px" @click="searchParams.pager=1;getData()" type="primary">搜索</Button>
 							<Badge :count="addList.length">
 								<Button @click="patModal=true" type="info">已添加患者</Button>
 							</Badge>
@@ -297,6 +305,7 @@ export default {
 			searchParams: {
 				pager: 1,//当前页码
 				brxm: '',//患者姓名
+				diseaseId:'',
 				limit: 10,//每页条数
 				adminId: "",
 				beginTime: '',//导入开始时间：年月日时分秒(可选)
@@ -422,12 +431,16 @@ export default {
 					key: 'brxb'
 				},
 				{
-					title: '居住地址',
-					key: 'xzzQtdz'
-				},
-				{
 					title: '民族',
 					key: 'mz'
+				},
+				{
+					title: '疾病类型',
+					key: 'diseaseName'
+				},
+				{
+					title: '居住地址',
+					key: 'xzzQtdz'
 				},
 				{
 					title: '家庭电话',

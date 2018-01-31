@@ -10,8 +10,7 @@ let util = {
  * 设置页面title值，没有的话默认显示
  */
 util.title = function (title) {
-    title = title || 'myAiDoctor';
-    window.document.title = title;
+   /*  window.document.title = window.document.titletitle; */
 };
 
 const ajaxUrl = env === 'development'

@@ -53,88 +53,88 @@
 		<!-- 就诊档案模态框 -->
     <Modal v-model="patientDetail" title="患者信息" class-name="patientInfo" :styles="{top: '36px'}" width="1000">
       <Row class="infoRow">
-        <Col span="12" class="infoCol12 mb12">
+        <Col span="12" class="info-col mb12">
           <div class="info">
             <div class="info-row">
-              <div class="info1 bb1">姓名</div>
-              <div class="info2 bdx1">{{currentData.brxm}}</div>
+              <div class="info-one bb1">姓名</div>
+              <div class="info-two bdx1">{{currentData.brxm}}</div>
             </div>
             <div class="info-row">
-              <div class="info1">性别</div>
-              <div class="info2">{{currentData.brxb}}</div>
+              <div class="info-one">性别</div>
+              <div class="info-two">{{currentData.brxb}}</div>
             </div>
           </div>
         </Col>
-        <Col span="12" class="infoCol12 mb12">
+        <Col span="12" class="info-col mb12">
           <div class="info">
             <div class="info-row">
-              <div class="info1 bb1">电话</div>
-              <div class="info2 bdx1">{{currentData.jtdh}}</div>
+              <div class="info-one bb1">电话</div>
+              <div class="info-two bdx1">{{currentData.jtdh}}</div>
             </div>
             <div class="info-row">
-              <div class="info1">地址</div>
-              <div class="info2">{{currentData.xzzQtdz}}</div>
+              <div class="info-one">地址</div>
+              <div class="info-two">{{currentData.xzzQtdz}}</div>
             </div>
           </div>
         </Col>
-        <Col span="12" class="infoCol12 mb12">
+        <Col span="12" class="info-col mb12">
           <div class="info">
             <div class="info-row">
-              <div class="info1 bb1">年龄</div>
-              <div class="info2 bdx1">{{currentData.age}}</div>
+              <div class="info-one bb1">年龄</div>
+              <div class="info-two bdx1">{{currentData.age}}</div>
             </div>
             <div class="info-row">
-              <div class="info1">民族</div>
-              <div class="info2">{{currentData.mz}}</div>
+              <div class="info-one">民族</div>
+              <div class="info-two">{{currentData.mz}}</div>
             </div>
           </div>
         </Col>
-        <Col span="12" class="infoCol12 mb12">
+        <Col span="12" class="info-col mb12">
           <div class="info">
             <div class="info-row">
-              <div class="info1 bb1">出生年月</div>
-              <div class="info2 bdx1">{{currentData.csny}}</div>
+              <div class="info-one bb1">出生年月</div>
+              <div class="info-two bdx1">{{currentData.csny}}</div>
             </div>
             <div class="info-row">
-              <div class="info1">身份证号</div>
-              <div class="info2">{{currentData.sfzh}}</div>
+              <div class="info-one">身份证号</div>
+              <div class="info-two">{{currentData.sfzh}}</div>
             </div>
           </div>
         </Col>
-        <Col span="12" class="infoCol12 mb12">
+        <Col span="12" class="info-col mb12">
           <div class="info">
             <div class="info-row">
-              <div class="info1 bb1">紧急联系人</div>
-              <div class="info2 bdx1">{{currentData.lxrm}}</div>
+              <div class="info-one bb1">紧急联系人</div>
+              <div class="info-two bdx1">{{currentData.lxrm}}</div>
             </div>
             <div class="info-row">
-              <div class="info1">关系</div>
-              <div class="info2">{{currentData.lxgx}}</div>
+              <div class="info-one">关系</div>
+              <div class="info-two">{{currentData.lxgx}}</div>
             </div>
           </div>
         </Col>
-        <Col span="12" class="infoCol12 mb12">
+        <Col span="12" class="info-col mb12">
           <div class="info">
             <div class="info-row">
-              <div class="info1 bb1">联系地址</div>
-              <div class="info2 bdx1">{{currentData.lxdz}}</div>
+              <div class="info-one bb1">联系地址</div>
+              <div class="info-two bdx1">{{currentData.lxdz}}</div>
             </div>
             <div class="info-row">
-              <div class="info1">联系电话</div>
-              <div class="info2">{{currentData.lxdh}}</div>
+              <div class="info-one">联系电话</div>
+              <div class="info-two">{{currentData.lxdh}}</div>
             </div>
           </div>
         </Col>
-        <Col span="12" class="infoCol12 mb12">
+        <Col span="12" class="info-col mb12">
           <div class="info" style="height: 32px;">
             <div class="info-row">
-              <div class="info1 bdx1">单位</div>
-              <div class="info2 bdx1">{{currentData.dwmc}}</div>
+              <div class="info-one bdx1">单位</div>
+              <div class="info-two bdx1">{{currentData.dwmc}}</div>
             </div>
           </div>
         </Col>
         <!-- 门诊 -->
-        <Col span="24" class="infoCol24" v-if="mjzData.length" v-for="item,index in mjzData" :key="index">
+        <Col span="24" class="info-co-public" v-if="mjzData.length" v-for="item,index in mjzData" :key="index">
           <Row class="infoRow2">
             <Col span="4" class="sfCol4">
             <div class="counts">
@@ -173,7 +173,7 @@
           </Row>
         </Col>
         <!-- 住院 -->
-        <Col span="24" class="infoCol24" v-if="zyData.length" v-for="item1,index1 in zyData" :key="index1">
+        <Col span="24" class="info-co-public" v-if="zyData.length" v-for="item1,index1 in zyData" :key="index1">
           <Row class="infoRow2">
 
             <Col span="4" class="sfCol4">

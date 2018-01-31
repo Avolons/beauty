@@ -75,7 +75,7 @@ module.exports = merge(webpackBaseConfig, {
             ]
         }),
         new HtmlWebpackPlugin({
-            title: 'myAiDoctor v' + package.version,
+            title: '上海十院',
             favicon: './td_icon.ico',
             filename: '../index.html',
             template: './src/template/index.ejs',

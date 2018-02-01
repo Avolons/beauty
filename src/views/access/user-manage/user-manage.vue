@@ -132,6 +132,7 @@
 
 <script>
 import { API } from '../../../services';
+import {mapGetters, mapActions} from 'vuex';
 export default {
     data() {
         return {
@@ -259,6 +260,12 @@ export default {
                                 on: {
                                     click: () => {
                                         this.editUser(params.row.admin.id);
+                                        //保存数据  当再次返回的时候进行重新赋值
+                                        this.saveAccessUse({
+                                                "page":this.searchParam.page,       //页码
+                                        });
+
+
                                     }
                                 }
                             }, '编辑'),
@@ -376,7 +383,14 @@ export default {
             actionTree: [],//方案列表
         }
     },
+    computed:{
+        ...mapGetters([
+            'authorToken'
+        ]),
+
+    },
     methods: {
+        ...mapActions(['saveAccessUse']),
         /** 
          * 获取所有部门
          */
@@ -426,6 +440,18 @@ export default {
             this.createLoading = true;
             this.searchParam.page = 1;
             this.getData();
+
+
+
+            //保存数据  当再次返回的时候进行重新赋值
+            this.saveAccessUse({
+                dpId: this.searchParam.dpId||'',//科室Id
+                yhName:this.searchParam.yhName||'', //用户名
+                types:this.searchParam.types||-1,//角色（0管理员，1医生）
+                state:this.searchParam.state||"-1" //状态（0锁定，1正常）
+            });
+
+
         },
         /** 
          * 设置默认模板
@@ -567,6 +593,8 @@ export default {
                 UserId: this.actionList.UserId == -1 ? null : this.actionList.UserId
             }).then((res) => {
                 this.actionTree = res.data;
+
+
             }).catch((err) => {
 
             });
@@ -617,7 +645,17 @@ export default {
             this.searchParam.page = page;
             this.getData();
         }
-    }, mounted() {
+    },
+    mounted() {
+        /**
+         * 获取页面 page 为Number
+         * @type {number}
+         */
+        this.searchParam.page =Number(this.authorToken.accessUser.page);
+        this.searchParam.dpId = this.authorToken.accessUser.dpId,//科室Id
+        this.searchParam.yhName = this.authorToken.accessUser.yhName, //用户名
+        this.searchParam.types = this.authorToken.accessUser.types//角色（0管理员，1医生）
+        this.searchParam.state = this.authorToken.accessUser.state //状态（0锁定，1正常）
         this.getDepart();
         this.getData();
     }

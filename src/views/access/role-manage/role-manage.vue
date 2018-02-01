@@ -53,6 +53,7 @@
 
 <script>
 import { API } from '../../../services';
+import {mapGetters, mapActions} from 'vuex';
 export default {
     data() {
         return {
@@ -100,7 +101,12 @@ export default {
 								},
                                 on: {
                                     click: () => {
-                                        this.editRole(params.row.id,1)
+                                        this.editRole(params.row.id,1);
+//                                        //保存数据  当再次返回的时候进行重新赋值
+//                                        this.saveRoleManageRecord({
+//                                            "page":this.searchParam.page,       //页码
+//                                        });
+
                                     }
                                 }
                             }, '编辑'),
@@ -136,7 +142,13 @@ export default {
             ]
         }
     },
+    computed:{
+        ...mapGetters([
+            'authorToken'
+        ]),
+    },
     methods: {
+        ...mapActions(['saveRoleManageRecord']),
         submitRole() {
             this.$refs['addData'].validate((valid) => {
                 if (valid) {

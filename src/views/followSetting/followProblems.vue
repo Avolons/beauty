@@ -195,8 +195,8 @@
       <span>
         疾病类型
       </span>
-      <Select v-model="proSearch.diseaseName" filterable remote not-found-text="" :remote-method="remoteMethod2" clearable placeholder="请输入疾病类型">
-        <Option v-for="(option, index) in diseaseList" :value="option.value" :key="index">{{option.label}}</Option>
+      <Select :label="modelTre"  v-model="proSearch.diseaseName" filterable remote not-found-text=""  :remote-method="remoteMethod2" clearable placeholder="请输入疾病类型">
+        <Option v-for="(option, index) in diseaseList" :value="option.value" :key="index" :label="option.label">{{option.label}}</Option>
       </Select>
       </Col>
       <Col span="6">
@@ -271,12 +271,14 @@
 
 <script>
 import { API } from '@/services';
+import {mapGetters, mapActions} from 'vuex';
 export default {
   data() {
     return {
       createLoading:true,  //默认加载
       page:1,
       taglabel: "",
+       modelTre:"",
       //指标筛选
       search: {
         pager: 1,
@@ -423,6 +425,13 @@ export default {
                     if(params.row.playWavOnly!=1){
                       let id = params.row.id
                       this.$router.push({ path: `/followSetting/voice/voice/${params.row.id}` });
+                      //保存数据  当再次返回的时候进行重新赋值
+                      this.FollowProblePage({
+                          "followProble":{
+                              "followProblePage":this.page,       //页码
+                          }
+
+                      });
                     }
                     
                   }
@@ -507,12 +516,45 @@ export default {
       selectOtype: ''//模态框选中的指标类型
     }
   },
+  computed:{
+      ...mapGetters([
+          'authorToken'
+      ]),
+
+  },
   mounted() {
-    this.list(1)
+
+      /**
+       * 获取页面 page 为Number
+        * @type {number}
+       */
+      this.page =Number(this.authorToken.followProble.followProblePage) ;
+      this.proSearch.title = this.authorToken.title||'';   //获取搜索标题
+      this.proSearch.diseaseName =this.authorToken.diseaseId!==''?this.authorToken.diseaseId:'';
+      console.log(this.authorToken.diseaseId)
+      this.diseaseList =this.authorToken.diseaseList||[];
+      if(this.diseaseList){
+          for(const item of this.diseaseList){
+              if(this.authorToken.diseaseId == item.value){
+                  this.modelTre = item.label
+              }
+          }
+      }
+
+
+
+
+    this.list(this.authorToken.followProble.followProblePage);
+
+
       //this.$Spin.show();
+
   },
 
   methods: {
+      ...mapActions([
+          'FollowProblePage'
+      ]),
     /** 
      * 清空所有数据
      */
@@ -527,6 +569,8 @@ export default {
       API.followProblems.list({
         'pager': pager,
         'limit': '10',
+         "title": this.proSearch.title,
+         "diseaseId": this.proSearch.diseaseName
       }).then((res) => {
         if (res.code == 0) {
           // console.log(res)
@@ -612,6 +656,7 @@ export default {
     *查询功能
     */
     handleSearch() {
+        console.log()
       API.followProblems.list({
         'pager': 1,
         'limit': '10',
@@ -621,6 +666,11 @@ export default {
         if (res.code == 0) {
           this.pardata = res.data
           this.pageTotal = res.total
+            this.FollowProblePage({
+                    "title": this.proSearch.title,      //问题标题
+                    "diseaseId": this.proSearch.diseaseName, //疾病类型
+                    "diseaseList":this.diseaseList.concat()   //疾病类型数组
+            });
 
         } else {
           console.log(res.message)
@@ -784,7 +834,7 @@ export default {
       }).catch((error) => {
         console.log(error)
       })
-    },
+    }
   }
 }
 </script>

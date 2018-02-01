@@ -63,7 +63,7 @@
       <span>
         疾病类型
       </span>
-      <Select v-model="IndexSearch.diseaseName" filterable remote not-found-text="" :remote-method="remoteMethod2" placeholder="请输入疾病类型" clearable>
+      <Select :label="modelTre" v-model="IndexSearch.diseaseName" filterable remote not-found-text="" :remote-method="remoteMethod2" placeholder="请输入疾病类型" clearable>
         <Option v-for="(option, index) in options2" :value="option.value" :key="index">{{option.label}}</Option>
       </Select>
       </Col>
@@ -87,6 +87,8 @@
 
 <script>
 import { API } from '@/services';
+import {mapGetters, mapActions} from 'vuex';
+
 export default {
   data() {
     const validateAge = (rule, value, callback) => {
@@ -101,6 +103,7 @@ export default {
 
     };
     return {
+       modelTre:"",  //记录值
       API: API,
       IndexSearch: {
         name: '',
@@ -146,6 +149,11 @@ export default {
                 on: {
                   click: () => {
                     this.$router.push({ path: `/followSetting/template/template/${params.row.id}` });
+                      //保存数据  当再次返回的时候进行重新赋值
+                      this.saveFollowTemplate({
+                          "page":this.page,       //页码
+                      });
+
                   }
                 }
               }, '编辑'),
@@ -233,10 +241,34 @@ export default {
       options2: [],
     }
   },
+  computed:{
+      ...mapGetters([
+          'authorToken'
+      ]),
+  },
   mounted() {
-    this.list(1);
+    /**
+     * 获取页面 page 为Number   进入页面进行再一次赋值
+     * @type {number}
+     */
+    this.page =Number(this.authorToken.followTempRecord.page) ;     //页码
+    this.IndexSearch.name = this.authorToken.followTempRecord.name||'';            //方案名称
+    this.IndexSearch.diseaseName = this.authorToken.followTempRecord.diseaseId!==''?this.authorToken.followTempRecord.diseaseId:'';
+    this.options2 = this.authorToken.followTempRecord.diseaseList||[];
+    if(this.options2) {
+        for (const item of this.options2) {
+            if (this.authorToken.followTempRecord.diseaseId == item.value) {
+                this.modelTre = item.label
+            }
+        }
+    }
+
+
+
+    this.list( this.page);
   },
   methods: {
+    ...mapActions(['saveFollowTemplate']),
     handleSuccess(res, file) {
       res = JSON.parse(res);
       if (res.code == 0) {
@@ -308,6 +340,14 @@ export default {
         if (res.code == 0) {
           this.datalist = res.data
           this.pageTotal = res.total
+
+          //保存数据  当再次返回的时候进行重新赋值
+          this.saveFollowTemplate({
+              "name":this.IndexSearch.name,       //页码
+              'diseaseId': this.IndexSearch.diseaseName,
+              "diseaseList":this.options2
+          });
+
         } else {
           console.log(res.message)
         }

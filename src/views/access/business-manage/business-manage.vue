@@ -37,6 +37,7 @@
 
 <script>
 import {API} from '../../../services';
+import {mapGetters, mapActions} from 'vuex';
 export default {
         data () {
             return {
@@ -75,7 +76,11 @@ export default {
                                     },
                                     on: {
                                         click: () => {
-                                            this.edit(1,params.row.id,params.row.name)
+                                            this.edit(1,params.row.id,params.row.name);
+                                            //保存数据  当再次返回的时候进行重新赋值
+                                            this.saveAccessBusines({
+                                                "page":this.page,       //页码
+                                            });
                                         }
                                     }
                                 }, '编辑'),
@@ -135,7 +140,14 @@ export default {
                 totalPage:100//总数据条数
             }
         },
+        computed:{
+            ...mapGetters([
+                'authorToken'
+            ]),
+
+        },
         methods: {
+            ...mapActions(['saveAccessBusines']),
             /**
              * 编辑企业/进入企业编辑
              * type 0添加企业 1编辑企业
@@ -198,9 +210,14 @@ export default {
                 if(!this.searchResult.trim()){
                     this.$Message.error('请输入搜索条件');
                     this.searchResult="";
+
                 }else{
                     this.page=1;
                     this.getList();
+                    //保存数据  当再次返回的时候进行重新赋值
+                    this.saveAccessBusines({
+                        "searchResult":this.searchResult,       //
+                    });
                 }
             },
             /** 
@@ -221,8 +238,8 @@ export default {
              */
             initData(){
                 /* 重置所有条件 */
-                this.page=1;
-                this.searchResult="";
+                this.page=this.authorToken.accessBusiness.page;
+                this.searchResult=this.authorToken.accessBusiness.searchResult;
                 this.getList();
             },
             /** 
@@ -233,6 +250,7 @@ export default {
             }
         },
         mounted () {
+
            this.initData(); 
         }
     }

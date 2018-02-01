@@ -57,7 +57,7 @@
 				<span>
 					疾病类型
 				</span>
-			 <Select v-model="waySearch.diseaseId" filterable remote not-found-text="" :remote-method="remoteMethod2" :loading="loading2" placeholder="请输入疾病类型" clearable>
+			 <Select :label="modelTre" v-model="waySearch.diseaseId" filterable remote not-found-text="" :remote-method="remoteMethod2" :loading="loading2" placeholder="请输入疾病类型" clearable>
           <Option v-for="(option, index) in options2" :value="option.value" :key="index">{{option.label}}</Option>
         </Select>
 				</Col>
@@ -126,6 +126,8 @@
 
 <script>
 import { API } from '@/services';
+import {mapGetters, mapActions} from 'vuex';
+
 export default {
   data() {
     return {
@@ -135,6 +137,7 @@ export default {
         diseaseId: '',
         departmentId: '',
       },
+        modelTre:"", //记录疾病类型值
       page:1,
       deparmentSelect: [],//科室列表
       columns7: [//表格栏
@@ -180,6 +183,10 @@ export default {
                 on: {
                   click: () => {
                     this.$router.push({ path: `/followSetting/way/way/${params.row.id}` });
+                      //保存数据  当再次返回的时候进行重新赋值
+                      this.saveFollowWay({
+                              "page":this.page,       //页码
+                      });
                   }
                 }
               }, '编辑'),
@@ -266,12 +273,36 @@ export default {
       targetSelectId: '',//选中指标的id
     }
   },
+    computed:{
+        ...mapGetters([
+            'authorToken'
+        ]),
+    },
   mounted() {
-    this.list(1)
-    this.departmentList()
+      /**
+       * 获取页面 page 为Number   进入页面进行再一次赋值
+       * @type {number}
+       */
+        this.page =Number(this.authorToken.followWayRecord.page) ;     //页码
+        this.waySearch.name = this.authorToken.followWayRecord.name||'';            //方案名称
+        this.waySearch.departmentId = this.authorToken.followWayRecord.departmentId||'';  //类别
+        this.waySearch.diseaseId =this.authorToken.followWayRecord.diseaseId!==''?this.authorToken.followWayRecord.diseaseId:'';
+          this.options2 = this.authorToken.followWayRecord.diseaseList||[];
+            if(this.options2) {
+                for (const item of this.options2) {
+                    if (this.authorToken.followWayRecord.diseaseId == item.value) {
+                        this.modelTre = item.label
+                    }
+                }
+            }
+        this.list(this.page)
+        this.departmentList();
   },
 
   methods: {
+      ...mapActions([
+          'saveFollowWay'
+      ]),
     /*
     *获取prolist列表数据
     */
@@ -415,6 +446,15 @@ export default {
         if (res.code == 0) {
           this.pardata = res.data
           this.pageTotal = res.total
+
+            //保存数据  当再次返回的时候进行重新赋值
+            this.saveFollowWay({
+                "name":this.waySearch.name,       //页码
+                'diseaseId': this.waySearch.diseaseId,
+                'departmentId': this.waySearch.departmentId,
+                "diseaseList":this.options2
+            });
+
         } else {
           console.log(res.message)
         }

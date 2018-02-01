@@ -76,6 +76,7 @@
     import themeSwitch from './main-components/theme-switch/theme-switch.vue';
     import Cookies from 'js-cookie';
     import util from '@/libs/util.js';
+    import {mapGetters, mapActions} from 'vuex';
     
     export default {
         components: {
@@ -122,6 +123,7 @@
             }
         },
         methods: {
+            ...mapActions(['FollowProblePage','saveFollowWay','saveAccessUse','saveFollowTemplate','saveAccessBusines']),
             init () {
                 let pathArr = util.setCurrentPath(this, this.$route.name);
                 this.$store.commit('updateMenulist');
@@ -186,6 +188,72 @@
                 }
                 this.checkTag(to.name);
                 localStorage.currentPageName = to.name;
+
+                //清空缓存  再次进入页面清空 随访问题缓存的内容
+                if(to.name!='voice'&&to.name!='followProblems'){
+                    console.log("9999999999999999")
+                    this.FollowProblePage({
+                        title:'',
+                        diseaseList:[],
+                        followProble:{
+                            followProblePage:1
+                        }
+                    });
+                }
+
+
+                //清空随访方案  再次进入页面清空 随访问题缓存的内容
+                if(to.name!='way'&&to.name!='followWay'){
+                    this.saveFollowWay({
+                        name:'',
+                        page:1,
+                        departmentId:'',
+                        diseaseId:"",
+                        diseaseList:[]
+                    });
+                };
+
+                //清空随访模板 再次进入页面清空 随访问题缓存的内容
+                if(to.name!='template'&&to.name!='followTemplate'){
+                    this.saveFollowTemplate({
+                        name:'',
+                        page:1,
+                        diseaseId:'',
+                        diseaseList:[]
+                    });
+                };
+
+
+
+                ///清空用户列表 再次进入页面清空 随访问题缓存的内容
+                if(to.name!='user_manage'&&to.name!='user_add'){
+                    this.saveAccessUse({
+                        page: 1,//当前页码
+                        dpId: "",//科室Id
+                        yhName: "", //用户名
+                        types: "-1",//角色（0管理员，1医生）
+                        state: "-1" //状态（0锁定，1正常）
+                    });
+                };
+
+
+                console.log(to.name)
+                //清空企业管理 再次进入页面清空 随访问题缓存的内容
+                if(to.name!='access_business'&&to.name!='business_add'){
+                    this.saveAccessBusines({
+                        page:1,
+                        searchResult:'',
+                    });
+                };
+
+
+
+
+
+
+
+
+
             },
             lang () {
                 util.setCurrentPath(this, this.$route.name);  // 在切换语言时用于刷新面包屑

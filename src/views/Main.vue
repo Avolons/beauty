@@ -12,7 +12,7 @@
                 :before-push="beforePush"
                 :open-names="openedSubmenuArr"
                 :menu-list="menuList">
-                <div slot="top" class="logo-con">
+                <div style="cursor:pointer" slot="top" class="logo-con" @click="$router.push('/')">
                     <img v-show="!shrink"  src="../images/logo.png" key="max-logo" />
                     <img v-show="shrink" src="../images/logo-min.png" key="min-logo" />
                 </div>

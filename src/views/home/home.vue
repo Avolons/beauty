@@ -186,11 +186,12 @@ export default {
             /** 表格文件 */
             config: [
                 {
-                    title: '医生id',
-                    key: 'id',
+                    title: '排名',
+                    type: 'index',
+                    align: 'center',
                 },
                 {
-                    title: '医生名字',
+                    title: '姓名',
                     key: 'realname'
                 },
                 {

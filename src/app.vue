@@ -5,6 +5,7 @@
 </template>
 
 <script>
+import { API } from '@/services';
     export default {
         data () {
             return {
@@ -12,8 +13,11 @@
             };
         },
         mounted () {
+            API.common.getNmae().then((res)=>{
+                console.log(res);
+            }).catch((err)=>{
 
-
+            });
         },
         beforeDestroy () {
 

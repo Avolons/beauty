@@ -470,10 +470,13 @@ export default {
 				newdata.push(
 					{
 						switchId: -1,
+						questionIdXml:quesobj.questionIdXml
 					}, {
 						switchId: -2,
+						questionIdXml:quesobj.questionIdXml
 					}, {
 						switchId: -3,
+						questionIdXml:quesobj.questionIdXml
 					});
 			
 				saveSwitch.forEach((item) => {
@@ -484,6 +487,7 @@ export default {
 						keyname: item.keyname,
 						outRptSwitchID: item.outRptSwitchID,
 						keyvalue: item.keyvalue,
+						questionIdXml:quesobj.questionIdXml
 					}
 					)
 				})
@@ -492,7 +496,6 @@ export default {
 						if(item.switchId==ite.switchId){
 							item.outRptSwitchID=ite.outRptSwitchID;
 							item.nextQuestionId=ite.nextQuestionId;
-							item.questionIdXml=ite.questionIdXml;
 						}
 					}
 				}

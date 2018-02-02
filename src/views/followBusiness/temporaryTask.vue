@@ -19,7 +19,7 @@
 			padding-bottom: 15px;
 		}
 		&_form {
-			width: 520px;
+			width: 545px;
 			height: 600px;
 		}
 		&_success {
@@ -167,23 +167,23 @@
 							</Col>
 							<Col span="6">
 							<span>
-									疾病类型
-								</span>
-								<Select v-model="searchParams.diseaseId" filterable remote not-found-text="" :remote-method="remoteMethod" clearable>
-									<Option v-for="(item, index) in diseaseList" :value="item.id" :key="index">{{item.name}}</Option>
-								</Select>
+								疾病类型
+							</span>
+							<Select v-model="searchParams.diseaseId" filterable remote not-found-text="" :remote-method="remoteMethod" clearable>
+								<Option v-for="(item, index) in diseaseList" :value="item.id" :key="index">{{item.name}}</Option>
+							</Select>
 							</Col>
 							<Col span="6" style="height:32px">
-								<span style="width:105px;height:32px;">
-									导入开始时间：
-								</span>
-								<DatePicker  @on-change="timeChange_import()" type="datetime" format="yyyy-MM-dd HH:mm" placeholder="请选择数据导入时间" style="width:calc(100% - 105px)"></DatePicker>
+							<span style="width:105px;height:32px;">
+								导入开始时间：
+							</span>
+							<DatePicker @on-change="timeChange_import()" type="datetime" format="yyyy-MM-dd HH:mm" placeholder="请选择数据导入时间" style="width:calc(100% - 105px)"></DatePicker>
 							</Col>
-							<Col span="6" style="height:32px">	
-								<span style="width:105px;height:32px;margin-left:15px">
-									导入结束时间：
-								</span>
-								<DatePicker  @on-change="timeChange_export()" type="datetime" format="yyyy-MM-dd HH:mm"  placeholder="请选择数据导出时间" style="width:calc(100% - 105px)"></DatePicker>
+							<Col span="6" style="height:32px">
+							<span style="width:105px;height:32px;margin-left:15px">
+								导入结束时间：
+							</span>
+							<DatePicker @on-change="timeChange_export()" type="datetime" format="yyyy-MM-dd HH:mm" placeholder="请选择数据导出时间" style="width:calc(100% - 105px)"></DatePicker>
 							</Col>
 						</Row>
 						<div class="creatNotice_main_add">
@@ -232,7 +232,7 @@
 						<Button @click="returnStep(1)" style="margin-right:10px">返回上一步</Button>
 					</TabPane>
 					<TabPane label="标签三" name="step_three">
-						<Form ref="sendData" class="creatNotice_main_form" :model="sendData" :rules="validate.sendData" :label-width="110">
+						<Form  ref="sendData" class="creatNotice_main_form" :model="sendData" :rules="validate.sendData" :label-width="110">
 							<FormItem label="医生" style="width:450px;">
 								<Input disabled v-model="sendData.admin" style="width: 435px"></Input>
 							</FormItem>
@@ -242,6 +242,7 @@
 							<FormItem label="发起人服务号码" prop="mobile" style="width:450px;">
 								<Input v-model="sendData.mobile" style="width: 435px" placeholder="请填写发起人号码"></Input>
 							</FormItem>
+							<Alert show-icon>选择具体医生作为随访发起人后，患者列表将只展示该医生所服务的患者</Alert>
 							<FormItem label="随访开始时间" style="width:450px;">
 								<DatePicker @on-change="dateChange" format="yyyy-MM-dd" placement="bottom-end" placeholder="请选择随访发起时间" style="width:50%"></DatePicker>
 								<TimePicker @on-change="timeChange" format="HH:mm:ss" placeholder="请选择时间" style="width: 112px"></TimePicker>
@@ -254,10 +255,10 @@
 						</Form>
 						<!-- <Table border :columns="timeConfig" :data="timeList"></Table> -->
 						<!-- <div class="creatNotice_main_success">
-									<Icon type="checkmark-circled"></Icon>
-									<Alert type="success">恭喜你，发起通知成功</Alert>
-									<Button type="success">查看通知进度</Button>
-								</div> -->
+										<Icon type="checkmark-circled"></Icon>
+										<Alert type="success">恭喜你，发起通知成功</Alert>
+										<Button type="success">查看通知进度</Button>
+									</div> -->
 					</TabPane>
 				</Tabs>
 			</div>
@@ -305,7 +306,7 @@ export default {
 			searchParams: {
 				pager: 1,//当前页码
 				brxm: '',//患者姓名
-				diseaseId:'',
+				diseaseId: '',
 				limit: 10,//每页条数
 				adminId: "",
 				beginTime: '',//导入开始时间：年月日时分秒(可选)
@@ -330,9 +331,9 @@ export default {
 				visitStartTime: "",//随访起始时间
 				hzxxIds: [],  //患者id
 				isAll: '',//是否选择全部人数
-				beginTime:'',//导入开始时间：年月日时分秒(可选)
-				endTime:'',//导入结束时间：年月日时分秒（可选）
-				brxm:'',//病人姓名（可选）
+				beginTime: '',//导入开始时间：年月日时分秒(可选)
+				endTime: '',//导入结束时间：年月日时分秒（可选）
+				brxm: '',//病人姓名（可选）
 			},
 			departList: [],//科室选项列表
 			doctorList: [],//医生选项列表
@@ -493,13 +494,13 @@ export default {
 					content: '确定要发起随访吗?',
 					onOk: () => {
 						this.$Spin.show();
-						if(this.isAll == 0) {
-							this.sendData.hzxxIds=[];
+						if (this.isAll == 0) {
+							this.sendData.hzxxIds = [];
 							for (let item of this.addList) {
 								this.sendData.hzxxIds.push(item.id);
 							}
 							this.sendData.isAll = 0
-						}else if(this.isAll == 1) {
+						} else if (this.isAll == 1) {
 							//this.sendData.hzxxIds = []
 							this.sendData.isAll = 1
 							this.sendData.brxm = this.searchParams.brxm
@@ -584,7 +585,7 @@ export default {
 			/** 
 			 * id 赋值
 			 */
-			if(this.searchParams.admin) {
+			if (this.searchParams.admin) {
 				this.sendData.admin = this.searchParams.admin.split(",")[0];
 				this.sendData.adminId = this.searchParams.admin.split(",")[1];
 			}
@@ -627,7 +628,7 @@ export default {
 		 */
 		addAll() {
 			for (let index = 0; index < this.dataList.length; index++) {
-			if (this.dataList[index].isAdd != 1) {
+				if (this.dataList[index].isAdd != 1) {
 					this.addPat(this.dataList[index], index);
 				}
 			}
@@ -697,9 +698,9 @@ export default {
 		 */
 		changePage(index) {
 			this.searchParams.pager = index;
-			if(this.isAll == 1) {
+			if (this.isAll == 1) {
 				this.searchParams.limit = 10
-			}else if(this.isAll == 0) {
+			} else if (this.isAll == 0) {
 				//this.addList = []
 				this.searchParams.limit = 10
 			}

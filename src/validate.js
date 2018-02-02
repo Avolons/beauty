@@ -308,8 +308,8 @@ export default {
     sendData: {
         mobile: [{
             required: true,
-            message: '请输入正确的手机号码',
-            pattern: ruleList.code,
+            message: '请输入正确的服务号码',
+           /*  pattern: ruleList.code, */
             trigger: 'blur'
         }],
         taskName: [{

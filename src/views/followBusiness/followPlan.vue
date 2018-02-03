@@ -425,7 +425,7 @@ export default {
                         size: 'small'
                       },
                       style: {
-
+                        marginRight: '5px'
                       },
                       'class':{
                         menuHide:this.menuShow(this.AM.FollowBussiness.cancleall)
@@ -435,7 +435,24 @@ export default {
                           this.zzsfFun(params.row.brxm, params.row.id)
                         }
                       }
-                    }, '终止随访')
+                    }, '终止随访'),
+                    h('Button', {
+                      props: {
+                        type: 'warning',
+                        size: 'small'
+                      },
+                      style: {
+
+                      },
+                      'class':{
+                        menuHide:this.menuShow(this.AM.FollowBussiness.delPlan)
+                      },
+                      on: {
+                        click: () => {
+                          this.deletPlan(params.row.id)
+                        }
+                      }
+                    }, '删除')
                   ]);
                 }
             }],

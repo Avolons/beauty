@@ -120,7 +120,7 @@
 		</Row>
 		</Col>
 		<!-- 编辑功能模态框 -->
-		<Modal v-model="patientText" title="添加指标 / 编辑指标" width="650" class-name="patientInfo">
+		<Modal :closable="false" :mask-closable="false" v-model="patientText" title="添加指标 / 编辑指标" width="650" class-name="patientInfo">
 			<Form :model="formItem" :label-width="100" ref="formValidate" :rules="followIndexVal">
 				<input type="hidden" v-model="formItem.id" placeholder="id">
 				<FormItem label="指标名称" prop="name">
@@ -169,6 +169,7 @@
 					<Input v-model="formItem.textarea" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="添加备注"></Input>
 				</FormItem>
 				<FormItem>
+					<Button style="margin-right:30px" type="default" @click="cancelModel">取消</Button>
 					<Button type="primary" @click="addModel('formValidate')">保存</Button>
 				</FormItem>
 			</Form>
@@ -462,6 +463,20 @@ export default {
 			}).catch((error) => {
 				console.log(error)
 			})
+		},
+		/** 
+		 * 取消弹框
+		 */
+		cancelModel(){
+			 this.$Modal.confirm({
+                      title: '退出编辑',
+                      content: '<p>您还有内容未保存，确定要退出?</p>',
+                      onOk: () => {
+                        this.patientText=false;
+                      },
+                      onCancel: () => {
+                      }
+                    });
 		},
 		clearAll() {
 			this.formItem.id = ''

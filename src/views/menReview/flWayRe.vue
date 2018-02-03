@@ -579,7 +579,7 @@ export default {
 				status: 2,  //状态为2（必传）
 				isConceal: 1
 			},
-            createLoading:true,		//默认为true
+			createLoading: true,		//默认为true
 			//随访结果详情
 			planInfo: {
 				orderReplyQuestions: [],
@@ -658,7 +658,7 @@ export default {
 				{
 					title: '操作',
 					key: 'action',
-					width: 200,
+					width: 220,
 					align: 'center',
 					render: (h, params) => {
 						return h('div', [
@@ -679,30 +679,13 @@ export default {
 									}
 								}
 							}, params.row.vetStatus == 0 ? '审核' : '重新审核'),
-							// h('Button', {
-							// 	props: {
-							// 		type: 'warning',
-							// 		size: 'small'
-							// 	},
-							// 	style: {
-							// 		marginRight: '5px'
-							// 	},
-							// 	 'class': {
-							// 	menuHide: this.menuShow(this.AM.Data.delResult)
-							// 	},
-							// 	on: {
-							// 		click: () => {
-							// 			this.delDepart(params.row.id)
-							// 		}
-							// 	}
-							// }, '删除'),
 							h('Button', {
 								props: {
 									type: 'warning',
 									size: 'small'
 								},
 								style: {
-
+									marginRight: '5px'
 								},
 								'class': {
 									menuHide: this.menuShow(this.AM.Data.cancelall)
@@ -713,7 +696,24 @@ export default {
 										this.$refs.zzsfForm.resetFields();
 									}
 								}
-							}, '终止随访')
+							}, '终止随访'),
+							h('Button', {
+								props: {
+									type: 'warning',
+									size: 'small'
+								},
+								style: {
+									
+								},
+								'class': {
+									menuHide: this.menuShow(this.AM.Data.delResult)
+								},
+								on: {
+									click: () => {
+										this.delDepart(params.row.id)
+									}
+								}
+							}, '删除'),
 						]);
 					}
 				}
@@ -925,7 +925,7 @@ export default {
 		radioChange(value) {
 			if (value == 1) {//清空
 				this.$refs.zzsfForm.resetFields();
-			}else if(value == 0) {//清空
+			} else if (value == 0) {//清空
 				this.$refs.zzsfForm.resetFields();
 				this.zzsfForm.select = '';
 				this.zzsfForm.textarea = '';
@@ -946,7 +946,7 @@ export default {
 			/**
 			 * 发送数据
 			 */
-            this.createLoading = true;
+			this.createLoading = true;
 			let ajaxDa = {
 				id: this.planInfo.id,
 				dateEnd: this.planInfo.dateEnd,

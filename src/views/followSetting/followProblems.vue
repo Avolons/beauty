@@ -195,13 +195,13 @@
       <span>
         疾病类型
       </span>
-      <Select :label="modelTre"  v-model="proSearch.diseaseName" filterable remote not-found-text=""  :remote-method="remoteMethod2" clearable placeholder="请输入疾病类型">
+      <Select :label="modelTre" v-model="proSearch.diseaseName" filterable remote not-found-text="" :remote-method="remoteMethod2" clearable placeholder="请输入疾病类型">
         <Option v-for="(option, index) in diseaseList" :value="option.value" :key="index" :label="option.label">{{option.label}}</Option>
       </Select>
       </Col>
       <Col span="6">
       <Button style="margin-right:10px" type="primary" @click="handleSearch('proSearch')">查询</Button>
-      <Button type="info"  v-if="!menuShow(this.AM.FollowSetting.addPro)"  @click="addBtn('proRuleModel')">添加问题</Button>
+      <Button type="info" v-if="!menuShow(this.AM.FollowSetting.addPro)" @click="addBtn('proRuleModel')">添加问题</Button>
       </Col>
     </Row>
     </Col>
@@ -211,10 +211,10 @@
     </Col>
     <!-- 分页 -->
     <Col span="24" style="margin-top:10px;">
-    <Page style="float:right" :total="pageTotal" :current="page"  @on-change="currentPage" show-elevator show-total></Page>
+    <Page style="float:right" :total="pageTotal" :current="page" @on-change="currentPage" show-elevator show-total></Page>
     </Col>
     <!-- 详情模态框 -->
-    <Modal v-model="patientText" title="添加问题 / 编辑问题" width="650">
+    <Modal :closable="false" :mask-closable="false" v-model="patientText" title="添加问题 / 编辑问题" width="650">
       <Form :model="formItem" :label-width="100" ref="proRuleModel" :rules="proRuleModel">
         <input type="hidden" v-model="formItem.id" placeholder="id">
         <FormItem label="问题标题" prop="title">
@@ -251,18 +251,19 @@
           </Select>
         </FormItem>
         <FormItem label="关联指标" prop="targetName1" v-show="targetShow">
-          <Select :label="taglabel" v-model="formItem.targetName1" filterable remote :remote-method="remoteMethod1" :loading="loading1" clearable :label-in-value="true"  not-found-text="">
+          <Select :label="taglabel" v-model="formItem.targetName1" filterable remote :remote-method="remoteMethod1" :loading="loading1" clearable :label-in-value="true" not-found-text="">
             <Option v-for="(option, index) in options1" :value="option.value" :key="index">{{option.label}}</Option>
           </Select>
         </FormItem>
         <FormItem label="纯放音">
-          <RadioGroup v-model="formItem.playWavOnly" >
+          <RadioGroup v-model="formItem.playWavOnly">
             <Radio label="1">是</Radio>
             <Radio label="0">否</Radio>
           </RadioGroup>
         </FormItem>
       </Form>
       <div slot="footer">
+        <Button style="margin-right:15px" type="default" @click="cancelModel">取消</Button>
         <Button type="primary" @click="addModel('proRuleModel')">保存</Button>
       </div>
     </Modal>
@@ -271,14 +272,14 @@
 
 <script>
 import { API } from '@/services';
-import {mapGetters, mapActions} from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 export default {
   data() {
     return {
-      createLoading:true,  //默认加载
-      page:1,
+      createLoading: true,  //默认加载
+      page: 1,
       taglabel: "",
-       modelTre:"",
+      modelTre: "",
       //指标筛选
       search: {
         pager: 1,
@@ -350,9 +351,9 @@ export default {
                   type: 'primary',
                   size: 'small'
                 },
-                'class':{
-									menuHide:this.menuShow(this.AM.FollowSetting.editPro)
-								},
+                'class': {
+                  menuHide: this.menuShow(this.AM.FollowSetting.editPro)
+                },
                 style: {
                   marginRight: '5px'
                 },
@@ -365,44 +366,44 @@ export default {
                     API.followProblems.editList({
                       "id": params.row.id
                     }).then((res) => {
-                        this.formItem.id = res.data.id
-                        this.formItem.title = res.data.title
-                        this.formItem.content = res.data.content
-                        this.formItem.playWavOnly = res.data.playWavOnly
-                        this.formItem.isTarget = res.data.isTarget
-                        let arr = [];
-                        res.data.diseaseId = res.data.diseaseId.split(",");
-                        res.data.diseaseName = res.data.diseaseName.split(",");
-                        res.data.diseaseId.forEach((item, index) => {
-                          arr.push({
-                            value: item,
-                            label: res.data.diseaseName[index]
-                          })
+                      this.formItem.id = res.data.id
+                      this.formItem.title = res.data.title
+                      this.formItem.content = res.data.content
+                      this.formItem.playWavOnly = res.data.playWavOnly
+                      this.formItem.isTarget = res.data.isTarget
+                      let arr = [];
+                      res.data.diseaseId = res.data.diseaseId.split(",");
+                      res.data.diseaseName = res.data.diseaseName.split(",");
+                      res.data.diseaseId.forEach((item, index) => {
+                        arr.push({
+                          value: item,
+                          label: res.data.diseaseName[index]
                         })
-                        this.diseaseList = arr;
-                        let result = [];
-                        this.labelobj = [];
-                        for (const item of arr) {
-                          result.push(item.value);
-                          this.labelobj.push(item.label);
-                        }
-                        this.formItem.diseaseId = result;
-                        if (res.data.isTarget == '0') {
-                          this.targetShow = true
-                          this.tagShow = true
-                        } else {
-                          this.targetShow = false
-                          this.tagShow = false
-                          this.targetTag = ''
-                        }
-                        this.options1 = [];
-                        this.options1.push({
-                          label: res.data.targetName,
-                          value: res.data.targetId,
-                        })
-                        this.taglabel = res.data.targetName;
-                        this.formItem.targetName1 = res.data.targetId
-                    
+                      })
+                      this.diseaseList = arr;
+                      let result = [];
+                      this.labelobj = [];
+                      for (const item of arr) {
+                        result.push(item.value);
+                        this.labelobj.push(item.label);
+                      }
+                      this.formItem.diseaseId = result;
+                      if (res.data.isTarget == '0') {
+                        this.targetShow = true
+                        this.tagShow = true
+                      } else {
+                        this.targetShow = false
+                        this.tagShow = false
+                        this.targetTag = ''
+                      }
+                      this.options1 = [];
+                      this.options1.push({
+                        label: res.data.targetName,
+                        value: res.data.targetId,
+                      })
+                      this.taglabel = res.data.targetName;
+                      this.formItem.targetName1 = res.data.targetId
+
                     }).catch((error) => {
                       console.log(error)
                     })
@@ -411,29 +412,29 @@ export default {
               }, '编辑'),
               h('Button', {
                 props: {
-                  type: params.row.playWavOnly==1?'dashed':'info',
+                  type: params.row.playWavOnly == 1 ? 'dashed' : 'info',
                   size: 'small'
                 },
                 style: {
                   marginRight: '5px'
                 },
-                'class':{
-									menuHide:this.menuShow(this.AM.FollowSetting.editVoice) 
-								},
+                'class': {
+                  menuHide: this.menuShow(this.AM.FollowSetting.editVoice)
+                },
                 on: {
                   click: () => {
-                    if(params.row.playWavOnly!=1){
+                    if (params.row.playWavOnly != 1) {
                       let id = params.row.id
                       this.$router.push({ path: `/followSetting/voice/voice/${params.row.id}` });
                       //保存数据  当再次返回的时候进行重新赋值
                       this.FollowProblePage({
-                          "followProble":{
-                              "followProblePage":this.page,       //页码
-                          }
+                        "followProble": {
+                          "followProblePage": this.page,       //页码
+                        }
 
                       });
                     }
-                    
+
                   }
                 }
               }, '编辑话述'),
@@ -442,9 +443,9 @@ export default {
                   type: 'warning',
                   size: 'small'
                 },
-                'class':{
-									menuHide: true//this.menuShow(this.AM.FollowSetting.delPro)
-								},
+                'class': {
+                  menuHide: true//this.menuShow(this.AM.FollowSetting.delPro)
+                },
                 on: {
                   click: () => {
                     this.$Modal.confirm({
@@ -516,30 +517,30 @@ export default {
       selectOtype: ''//模态框选中的指标类型
     }
   },
-  computed:{
-      ...mapGetters([
-          'authorToken'
-      ]),
+  computed: {
+    ...mapGetters([
+      'authorToken'
+    ]),
 
   },
   mounted() {
 
-      /**
-       * 获取页面 page 为Number
-        * @type {number}
-       */
-      this.page =Number(this.authorToken.followProble.followProblePage) ;
-      this.proSearch.title = this.authorToken.title||'';   //获取搜索标题
-      this.proSearch.diseaseName =this.authorToken.diseaseId!==''?this.authorToken.diseaseId:'';
-      console.log(this.authorToken.diseaseId)
-      this.diseaseList =this.authorToken.diseaseList||[];
-      if(this.diseaseList){
-          for(const item of this.diseaseList){
-              if(this.authorToken.diseaseId == item.value){
-                  this.modelTre = item.label
-              }
-          }
+    /**
+     * 获取页面 page 为Number
+      * @type {number}
+     */
+    this.page = Number(this.authorToken.followProble.followProblePage);
+    this.proSearch.title = this.authorToken.title || '';   //获取搜索标题
+    this.proSearch.diseaseName = this.authorToken.diseaseId !== '' ? this.authorToken.diseaseId : '';
+    console.log(this.authorToken.diseaseId)
+    this.diseaseList = this.authorToken.diseaseList || [];
+    if (this.diseaseList) {
+      for (const item of this.diseaseList) {
+        if (this.authorToken.diseaseId == item.value) {
+          this.modelTre = item.label
+        }
       }
+    }
 
 
 
@@ -547,14 +548,28 @@ export default {
     this.list(this.authorToken.followProble.followProblePage);
 
 
-      //this.$Spin.show();
+    //this.$Spin.show();
 
   },
 
   methods: {
-      ...mapActions([
-          'FollowProblePage'
-      ]),
+    ...mapActions([
+      'FollowProblePage'
+    ]),
+    /** 
+   * 取消弹框
+   */
+    cancelModel() {
+      this.$Modal.confirm({
+        title: '退出编辑',
+        content: '<p>您还有内容未保存，确定要退出?</p>',
+        onOk: () => {
+          this.patientText = false;
+        },
+        onCancel: () => {
+        }
+      });
+    },
     /** 
      * 清空所有数据
      */
@@ -565,12 +580,11 @@ export default {
    *获取prolist列表数据
    */
     list(pager) {
-   
       API.followProblems.list({
         'pager': pager,
         'limit': '10',
-         "title": this.proSearch.title,
-         "diseaseId": this.proSearch.diseaseName
+        "title": this.proSearch.title,
+        "diseaseId": this.proSearch.diseaseName
       }).then((res) => {
         if (res.code == 0) {
           // console.log(res)
@@ -589,7 +603,7 @@ export default {
     *获取分页列表数据
     */
     currentPage: function(page) {
-      this.page=page;
+      this.page = page;
       API.followProblems.list({
         pager: page,
         limit: '10',
@@ -656,7 +670,7 @@ export default {
     *查询功能
     */
     handleSearch() {
-        console.log()
+      console.log()
       API.followProblems.list({
         'pager': 1,
         'limit': '10',
@@ -666,11 +680,11 @@ export default {
         if (res.code == 0) {
           this.pardata = res.data
           this.pageTotal = res.total
-            this.FollowProblePage({
-                    "title": this.proSearch.title,      //问题标题
-                    "diseaseId": this.proSearch.diseaseName, //疾病类型
-                    "diseaseList":this.diseaseList.concat()   //疾病类型数组
-            });
+          this.FollowProblePage({
+            "title": this.proSearch.title,      //问题标题
+            "diseaseId": this.proSearch.diseaseName, //疾病类型
+            "diseaseList": this.diseaseList.concat()   //疾病类型数组
+          });
 
         } else {
           console.log(res.message)
@@ -683,7 +697,7 @@ export default {
     *添加指标
     */
     addBtn(name) {
-      this.formItem.targetName1="";
+      this.formItem.targetName1 = "";
       this.formItem.id = "";
       this.patientText = true;//打开模态框
       this.$refs[name].resetFields();//清空表单
@@ -766,7 +780,7 @@ export default {
       if (value == '0') {
         this.targetShow = true;
       } else {
-        this.formItem.targetName1="";
+        this.formItem.targetName1 = "";
         this.targetShow = false;
       }
     },

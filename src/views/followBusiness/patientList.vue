@@ -288,7 +288,7 @@
 			</Row>
 		</Modal>
 		<!-- 编辑功能模态框 -->
-		<Modal v-model="patientText" title="编辑患者信息" class-name="patientInfo" :styles="{top: '36px'}" width="1000">
+		<Modal v-model="patientText" :mask-closable="false" title="编辑患者信息" class-name="patientInfo" :styles="{top: '36px'}" width="1000">
 			<!-- 门诊 -->
 			<Row class="infoRow">
 				<Form ref="formCustom" :model="formCustom" :label-width="80">

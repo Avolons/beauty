@@ -17,7 +17,7 @@
                 <Table border :columns="config" :data="dataList" :loading="createLoading"></Table>
             </div>
             <Row class="sys-task_main_page">
-                    <Page :total="totalPage" :current="page" show-elevator style="float:right" @on-change="changePage"></Page>
+                    <Page :total="totalPage" show-total :current="page" show-elevator style="float:right" @on-change="changePage"></Page>
                 </Row>
         </div>
     </div>

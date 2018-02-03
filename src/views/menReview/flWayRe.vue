@@ -228,10 +228,10 @@
 			</div>
 			<!-- 分页 -->
 			<Row class="sys-depart_main_page">
-				<Page :page-size="pageSize" :total="totalPage" :current="searchParam.pager" show-elevator style="float:right" @on-change="changePage"></Page>
+				<Page :page-size="pageSize" :total="totalPage" :current="searchParam.pager" show-elevator show-total style="float:right" @on-change="changePage"></Page>
 			</Row>
 			<!-- 随访模态框 -->
-			<Modal v-model="modal" title="随访详情" width="950" class-name="" :styles="{top:'50px'}">
+			<Modal :mask-closable="false" v-model="modal" title="随访详情" width="950" class-name="" :styles="{top:'50px'}">
 				<Collapse v-model="showAll">
 					<Panel name="1">
 						随访结果
@@ -645,7 +645,7 @@ export default {
 				},
 				{
 					title: '执行日期',
-					key: 'dateBegin'
+					key: 'dateUpdate'
 				},
 				{
 					title: '审核人',

@@ -213,7 +213,7 @@
 							<Button @click="addAll">添加当前页</Button>
 							<Button @click="addAllPages">添加所有页</Button>
 							<Button @click="nextStep" type="primary">下一步选择方案</Button>
-							<Page :total="totalPage" :current="searchParams.pager" show-elevator style="float:right" @on-change="changePage"></Page>
+							<Page :total="totalPage" :current="searchParams.pager" show-elevator style="float:right" @on-change="changePage" show-total></Page>
 						</Row>
 					</TabPane>
 					<TabPane label="标签二" name="step_two">
@@ -240,7 +240,7 @@
 								</Col>
 							</Row>
 							<Table border :columns="planConfig" :data="planList"></Table>
-							<Page :total="patTotalPage" :current="patParams.pager" show-elevator style="float:right;margin-top:10px;" @on-change="patChangePage"></Page>
+							<Page show-total :total="patTotalPage" :current="patParams.pager" show-elevator style="float:right;margin-top:10px;" @on-change="patChangePage"></Page>
 						</div>
 						<Button @click="returnStep(1)" style="margin-right:10px">返回上一步</Button>
 					</TabPane>

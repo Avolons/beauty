@@ -92,7 +92,7 @@
                 <Table border :columns="config" :data="dataList" :loading="createLoading"></Table>
             </div>
             <Row class="user_main_page">
-                <Page :total="totalPage" :page-size="pageSize" :current="searchParam.page" style="float:right" @on-change="changePage"></Page>
+                <Page :total="totalPage" :page-size="pageSize" show-total :current="searchParam.page" style="float:right" @on-change="changePage"></Page>
             </Row>
             <Modal v-model="actionmodal" title="选择默认方案" width=650>
                 <Row class="" :gutter="15">

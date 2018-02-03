@@ -28,7 +28,7 @@
              <Table border :columns="tableHeader" :data="tableData"></Table>
           </Row>
          <Row class="business_main_page">
-            <Page :total="totalPage" show-elevator :current="page" style="float:right" @on-change="changePage"></Page>
+            <Page show-total :total="totalPage" show-elevator :current="page" style="float:right" @on-change="changePage"></Page>
          </Row>
          
       </div>

@@ -14,7 +14,7 @@ import { API } from '@/services';
         },
         mounted () {
             API.common.getNmae().then((res)=>{
-                console.log(res);
+                document.title=res.data;
             }).catch((err)=>{
 
             });

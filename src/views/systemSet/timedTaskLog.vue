@@ -68,7 +68,7 @@
                 <Table border :columns="config" :data="dataList" :loading="createLoading"></Table>
             </div>
             <Row class="sys-tasklog_main_page">
-            <Page   :total="totalPage" :current="searchParam.page" show-elevator style="float:right" @on-change="changePage"></Page>
+            <Page show-total  :total="totalPage" :current="searchParam.page" show-elevator style="float:right" @on-change="changePage"></Page>
             </Row>
         </div>
     </div>

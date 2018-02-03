@@ -17,7 +17,7 @@
                 <Table border :columns="columns7" :data="data6"></Table>
             </div>
             <Row class="sys-follow_main_page">
-            <Page :total="100" :current="1" show-elevator style="float:right" @on-change="changePage"></Page>
+            <Page :total="100" :current="1" show-elevator show-total style="float:right" @on-change="changePage"></Page>
             </Row>
         </div>
     </div>

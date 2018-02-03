@@ -20,7 +20,7 @@
                 <Table border :columns="config" :data="dataList" :loading="createLoading"></Table>
             </div>
             <Row class="sys-sysset_main_page">
-                <Page :page-size="pageSize" :total="totalPage" :current="page" show-elevator style="float:right" @on-change="changePage"></Page>
+                <Page :page-size="pageSize" :total="totalPage" :current="page" show-elevator style="float:right" show-total  @on-change="changePage"></Page>
             </Row>
         </div>
         <Modal v-model="modal" title="添加参数" >

@@ -200,7 +200,7 @@
 							<Button @click="addAll">添加当前页</Button>
 							<Button @click="addAllPages">添加所有页</Button>
 							<Button @click="nextStep" type="primary">下一步选择方案</Button>
-							<Page :total="totalPage" :current="searchParams.pager" show-elevator style="float:right" @on-change="changePage"></Page>
+							<Page show-total :total="totalPage" :current="searchParams.pager" show-elevator style="float:right" @on-change="changePage"></Page>
 						</Row>
 					</TabPane>
 					<TabPane label="标签二" name="step_two">
@@ -227,7 +227,7 @@
 								</Col>
 							</Row>
 							<Table border :columns="planConfig" :data="planList"></Table>
-							<Page :total="patTotalPage" :current="patParams.pager" show-elevator style="float:right;margin-top:10px;" @on-change="patChangePage"></Page>
+							<Page show-total :total="patTotalPage" :current="patParams.pager" show-elevator style="float:right;margin-top:10px;" @on-change="patChangePage"></Page>
 						</div>
 						<Button @click="returnStep(1)" style="margin-right:10px">返回上一步</Button>
 					</TabPane>
@@ -242,7 +242,7 @@
 							<FormItem label="发起人服务号码" prop="mobile" style="width:450px;">
 								<Input v-model="sendData.mobile" style="width: 435px" placeholder="请填写发起人号码"></Input>
 							</FormItem>
-							<Alert show-icon>选择具体医生作为随访发起人后，患者列表将只展示该医生所服务的患者</Alert>
+							<Alert show-icon>如果不选择具体发起时间，系统会立即发起随访并且只会执行方案中的第一个模板。如果选择具体发起时间，系统将按照计划执行所有模板</Alert>
 							<FormItem label="随访开始时间" style="width:450px;">
 								<DatePicker @on-change="dateChange" format="yyyy-MM-dd" placement="bottom-end" placeholder="请选择随访发起时间" style="width:50%"></DatePicker>
 								<TimePicker @on-change="timeChange" format="HH:mm:ss" placeholder="请选择时间" style="width: 112px"></TimePicker>

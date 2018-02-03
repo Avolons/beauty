@@ -885,6 +885,9 @@ export default {
 		 */
 		editDepart(id) {
 			this.modal = true;
+			// this.$refs.zzsfForm.resetFields();
+			this.zzsfForm.select = '';
+			this.zzsfForm.textarea = '';
 			API.Dataaudit.infoResult({
 				id: id
 			}).then((res) => {
@@ -1035,6 +1038,9 @@ export default {
 			this.zzsfModel = true;
 			this.sfrName = name;
 			this.nowId = id;
+			//清空终止随访的旧值
+      this.zzsfForm.select = '';
+      this.zzsfForm.textarea = '';
 		},
 		//选择终止随访的原因
 		xzReason(value) {

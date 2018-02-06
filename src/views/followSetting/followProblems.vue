@@ -195,23 +195,23 @@
       <span>
         疾病类型
       </span>
-      <Select :label="modelTre" v-model="proSearch.diseaseName" filterable remote not-found-text="" :remote-method="remoteMethod2" clearable placeholder="请输入疾病类型">
+      <Select :label="modelTre" v-model="proSearch.diseaseId" filterable remote not-found-text="" :remote-method="remoteMethod2" clearable placeholder="请输入疾病类型">
         <Option v-for="(option, index) in diseaseList" :value="option.value" :key="index" :label="option.label">{{option.label}}</Option>
       </Select>
       </Col>
       <Col span="6">
-      <Button style="margin-right:10px" type="primary" @click="handleSearch('proSearch')">查询</Button>
+      <Button style="margin-right:10px" type="primary" @click="handleSearch">查询</Button>
       <Button type="info" v-if="!menuShow(this.AM.FollowSetting.addPro)" @click="addBtn('proRuleModel')">添加问题</Button>
       </Col>
     </Row>
     </Col>
     <!-- 表格 -->
     <Col span="24">
-    <Table border :columns="config" :data="pardata" :loading="createLoading"></Table>
+    <Table border :columns="config" :data="dataList" :loading="createLoading"></Table>
     </Col>
     <!-- 分页 -->
     <Col span="24" style="margin-top:10px;">
-    <Page style="float:right" :total="pageTotal" :current="page" @on-change="currentPage" show-elevator show-total></Page>
+    <Page style="float:right" :total="pageTotal" :current="page" @on-change="changePage" show-elevator show-total></Page>
     </Col>
     <!-- 详情模态框 -->
     <Modal :closable="false" :mask-closable="false" v-model="patientText" title="添加问题 / 编辑问题" width="650">
@@ -235,7 +235,7 @@
           </RadioGroup>
         </FormItem>
         <FormItem label="指标类型" v-show="targetShow">
-          <Select @on-change="remoteMethod1()" v-model="search.otype">
+          <Select @on-change="remoteMethod1()" v-model="indexParams.otype">
             <Option value="01">症状</Option>
             <Option value="02">体征</Option>
             <Option value="03">生活方式指导</Option>
@@ -246,13 +246,13 @@
           </Select>
         </FormItem>
         <FormItem label="疾病类型" v-show="targetShow">
-          <Select @on-change="remoteMethod1()" clearable v-model="search.diseaseId" filterable remote :remote-method="remoteMethod" not-found-text="" placeholder="搜索疾病类型添加至疾病标签">
-            <Option v-for="(option, index) in options3" :value="option.value" :key="index">{{option.label}}</Option>
+          <Select @on-change="remoteMethod1()" clearable v-model="indexParams.diseaseId" filterable remote :remote-method="remoteMethod" not-found-text="" placeholder="搜索疾病类型添加至疾病标签">
+            <Option v-for="(option, index) in netDisList" :value="option.value" :key="index">{{option.label}}</Option>
           </Select>
         </FormItem>
-        <FormItem label="关联指标" prop="targetName1" v-show="targetShow">
-          <Select :label="taglabel" v-model="formItem.targetName1" filterable remote :remote-method="remoteMethod1" :loading="loading1" clearable :label-in-value="true" not-found-text="">
-            <Option v-for="(option, index) in options1" :value="option.value" :key="index">{{option.label}}</Option>
+        <FormItem label="关联指标" prop="targetId" v-show="targetShow">
+          <Select :label="taglabel" v-model="formItem.targetId" filterable remote :remote-method="remoteMethod1" clearable :label-in-value="true" not-found-text="">
+            <Option v-for="(option, index) in indexOptions" :value="option.value" :key="index">{{option.label}}</Option>
           </Select>
         </FormItem>
         <FormItem label="纯放音">
@@ -278,23 +278,30 @@ export default {
     return {
       createLoading: true,  //默认加载
       page: 1,
-      taglabel: "",
-      modelTre: "",
-      //指标筛选
-      search: {
+      taglabel: "",//关联指标的taglabel
+      modelTre: "",//疾病类型的label
+      //指标筛选条件集合
+      indexParams: {
         pager: 1,
         limit: 999999,
         otype: "",
         diseaseId: "",
         zjm: ""
       },
-      labelobj: [],
-      options3: [],
+      labelobj: [],//疾病编辑疾病类型label
+      netDisList: [],//远程搜索疾病列表
       proSearch: {//搜索框
+        pager: 1,
+        limit: 10,
         title: '',
-        diseaseName: '',
+        diseaseId: '',
       },
-      config: [//表格栏
+      //表格data
+      dataList: [],
+      //数据总计
+      pageTotal: 0,
+      //表格栏
+      config: [
         {
           title: '问题标题',
           key: 'title',
@@ -360,17 +367,16 @@ export default {
                 on: {
                   click: () => {
                     this.patientText = true;
-                    this.search.otype = "";
-                    this.search.diseaseId = "";
-                    /* this.formItem.targetName1 =""; */
+                    this.indexParams.otype = "";
+                    this.indexParams.diseaseId = "";
                     API.followProblems.editList({
-                      "id": params.row.id
+                      id: params.row.id
                     }).then((res) => {
-                      this.formItem.id = res.data.id
-                      this.formItem.title = res.data.title
-                      this.formItem.content = res.data.content
-                      this.formItem.playWavOnly = res.data.playWavOnly
-                      this.formItem.isTarget = res.data.isTarget
+                      this.formItem.id = res.data.id;
+                      this.formItem.title = res.data.title;
+                      this.formItem.content = res.data.content;
+                      this.formItem.playWavOnly = res.data.playWavOnly;
+                      this.formItem.isTarget = res.data.isTarget;
                       let arr = [];
                       res.data.diseaseId = res.data.diseaseId.split(",");
                       res.data.diseaseName = res.data.diseaseName.split(",");
@@ -396,13 +402,13 @@ export default {
                         this.tagShow = false
                         this.targetTag = ''
                       }
-                      this.options1 = [];
-                      this.options1.push({
+                      this.indexOptions = [];
+                      this.indexOptions.push({
                         label: res.data.targetName,
                         value: res.data.targetId,
                       })
                       this.taglabel = res.data.targetName;
-                      this.formItem.targetName1 = res.data.targetId
+                      this.formItem.targetId = res.data.targetId
 
                     }).catch((error) => {
                       console.log(error)
@@ -463,8 +469,8 @@ export default {
             ]);
           }
         }],
-      pardata: [],//表格data
-      pageTotal: 0,//数据总计
+
+
       patientText: false,//编辑模态框
       diseaseIdInp: '',//疾病id隐藏域
       formItem: {
@@ -472,13 +478,21 @@ export default {
         title: '',
         content: '',
         targetId: '',
-        targetName1: '',
         diseaseName: [],
         diseaseId: [],
-        model10: [],
         playWavOnly: '0',
         isTarget: '0'//是否采集指标
       },
+      indexOptions: [],//关联指标数组
+      diseaseList: [],//疾病远程所有列表
+      diseasedata: [],
+      selectLabel: '',
+      selectValue: '',
+      targetShow: true,//判断是否疾病标签是否展示
+      targetTag: '',//指标标签
+      tagShow: false,//标签是否展示,
+      targetSelectId: '',//选中指标的id
+      selectOtype: '',//模态框选中的指标类型
       proRuleModel: {//模态框校验
         title: [
           { required: true, message: '问题标题问题标题不能为空', trigger: 'blur' },
@@ -495,26 +509,6 @@ export default {
           { type: 'string', min: 6, message: 'The password length cannot be less than 6 bits', trigger: 'blur' }
         ]
       },
-      tagCount: [],
-      tagCount2: [],
-      tagCountId: [],
-      editRules: {
-      },
-      zjmdata: [],//助记码array
-      loading1: false,
-      options1: [],
-      listdata: [],
-      loading2: false,
-      diseaseList: [],
-      listdata2: [],
-      diseasedata: [],
-      selectLabel: '',
-      selectValue: '',
-      targetShow: true,//判断是否疾病标签是否展示
-      targetTag: '',//指标标签
-      tagShow: false,//标签是否展示,
-      targetSelectId: '',//选中指标的id
-      selectOtype: ''//模态框选中的指标类型
     }
   },
   computed: {
@@ -524,15 +518,13 @@ export default {
 
   },
   mounted() {
-
     /**
      * 获取页面 page 为Number
       * @type {number}
      */
     this.page = Number(this.authorToken.followProble.followProblePage);
     this.proSearch.title = this.authorToken.title || '';   //获取搜索标题
-    this.proSearch.diseaseName = this.authorToken.diseaseId !== '' ? this.authorToken.diseaseId : '';
-    console.log(this.authorToken.diseaseId)
+    this.proSearch.diseaseId = this.authorToken.diseaseId !== '' ? this.authorToken.diseaseId : '';
     this.diseaseList = this.authorToken.diseaseList || [];
     if (this.diseaseList) {
       for (const item of this.diseaseList) {
@@ -541,15 +533,8 @@ export default {
         }
       }
     }
-
-
-
-
-    this.list(this.authorToken.followProble.followProblePage);
-
-
+    this.listRefresh(this.authorToken.followProble.followProblePage);
     //this.$Spin.show();
-
   },
 
   methods: {
@@ -579,22 +564,16 @@ export default {
     /*
    *获取prolist列表数据
    */
-    list(pager) {
+    listRefresh(pager) {
       API.followProblems.list({
-        'pager': pager,
-        'limit': '10',
-        "title": this.proSearch.title,
-        "diseaseId": this.proSearch.diseaseName
+        pager: pager,
+        limit: 10,
+        title: this.proSearch.title,
+        diseaseId: this.proSearch.diseaseId
       }).then((res) => {
-        if (res.code == 0) {
-          // console.log(res)
-          this.pardata = res.data
-          this.pageTotal = res.total
-          this.createLoading = false;
-          //this.$Spin.hide();
-        } else {
-          console.log(res.code)
-        }
+        this.dataList = res.data;
+        this.pageTotal = res.total;
+        this.createLoading = false;
       }).catch((error) => {
         console.log(error)
       })
@@ -602,102 +581,40 @@ export default {
     /*
     *获取分页列表数据
     */
-    currentPage: function(page) {
+    changePage(page) {
       this.page = page;
       API.followProblems.list({
         pager: page,
         limit: '10',
         title: this.proSearch.title,
-        diseaseId: this.proSearch.diseaseName
+        diseaseId: this.proSearch.diseaseId
       }).then((res) => {
-        if (res.code == 0) {
-          this.pardata = res.data
-          this.pageTotal = res.total
-        } else {
-          console.log(res.message)
-        }
+        this.dataList = res.data;
+        this.pageTotal = res.total;
       }).catch((error) => {
         console.log(error)
       })
     },
     /*
-    *获取选中的指标value
-    */
-    targetRadio(value) {
-      /* console.log(value)
-
-      API.follSetting.list({
-        pager: 1,
-        limit: '10',
-        name: value.label,
-      }).then((res) => {
-        if (res.code == 0) {
-          console.log(res)
-          this.selectOtype = res.data[0].otype
-          let otypeName
-          if (res.data[0].otype == '01') {
-            otypeName = '症状'
-          } else if (res.data[0].otype == '02') {
-            otypeName = '体征'
-          } else if (res.data[0].otype == '03') {
-            otypeName = '生活方式指导'
-          } else if (res.data[0].otype == '04') {
-            otypeName = '辅助检查'
-          } else if (res.data[0].otype == '05') {
-            otypeName = '用药反馈'
-          } else if (res.data[0].otype == '06') {
-            otypeName = '转诊情况'
-          } else if (res.data[0].otype == '07') {
-            otypeName = '通用'
-          }
-          if (this.formItem.targetName1 != '') {
-            this.tagShow = true
-            this.targetTag = otypeName
-            this.targetSelectId = res.data[0].id
-          } else {
-            this.tagShow = false
-            this.targetTag = ''
-          }
-          // console.log('this.targetTag='+this.targetTag)
-        } else {
-          console.log(res.message)
-        }
-      }).catch((error) => {
-        console.log(error)
-      }) */
-    },
-    /*
     *查询功能
     */
     handleSearch() {
-      console.log()
-      API.followProblems.list({
-        'pager': 1,
-        'limit': '10',
-        'title': this.proSearch.title,
-        'diseaseId': this.proSearch.diseaseName
-      }).then((res) => {
-        if (res.code == 0) {
-          this.pardata = res.data
-          this.pageTotal = res.total
-          this.FollowProblePage({
-            "title": this.proSearch.title,      //问题标题
-            "diseaseId": this.proSearch.diseaseName, //疾病类型
-            "diseaseList": this.diseaseList.concat()   //疾病类型数组
-          });
-
-        } else {
-          console.log(res.message)
-        }
+      API.followProblems.list(this.proSearch).then((res) => {
+        this.dataList = res.data;
+        this.pageTotal = res.total;
+        this.FollowProblePage({
+          title: this.proSearch.title,      //问题标题
+          diseaseId: this.proSearch.diseaseId, //疾病类型
+          diseaseList: this.diseaseList.concat()   //疾病类型数组
+        });
       }).catch((error) => {
-        console.log(error)
       })
     },
     /*
     *添加指标
     */
     addBtn(name) {
-      this.formItem.targetName1 = "";
+      this.formItem.targetId = "";
       this.formItem.id = "";
       this.patientText = true;//打开模态框
       this.$refs[name].resetFields();//清空表单
@@ -706,46 +623,35 @@ export default {
     *获取选中的疾病标签列value
     */
     selectChange(value) {
-      console.log(value.label)
-      this.selectLabel = value.label
-      this.selectValue = value.value
+      this.selectLabel = value.label;
+      this.selectValue = value.value;
     },
     /*
     *确定添加
     */
     addModel(name) {
-      this.createLoading = true;
-      let jbnam = this.tagCount.join(',')
       let addPram = {
-        "id": this.formItem.id,
-        "title": this.formItem.title,
-        "isTarget": this.formItem.isTarget,
-        "content": this.formItem.content,
-        "targetId": this.formItem.targetName1,
-        "diseaseId": JSON.parse(JSON.stringify(this.formItem.diseaseId)).join(','),
-        "playWavOnly": this.formItem.playWavOnly,
-        "status": 0,
-        /* "otype": this.search.otype */
+        id: this.formItem.id,
+        title: this.formItem.title,
+        isTarget: this.formItem.isTarget,
+        content: this.formItem.content,
+        targetId: this.formItem.targetId,
+        diseaseId: JSON.parse(JSON.stringify(this.formItem.diseaseId)).join(','),
+        playWavOnly: this.formItem.playWavOnly,
+        status: 0,
       }
-      //this.$Spin.show();
       this.$refs[name].validate((valid) => {
         if (valid) {
           API.followProblems.addList(addPram).then((res) => {
-            this.search.otype = "";
-            this.search.diseaseId = "";
+            this.indexParams.otype = "";
+            this.indexParams.diseaseId = "";
             this.formItem.name = ''
-            this.formItem.select2 = ''
-            this.formItem.select = ''
             this.formItem.radio = 'string'
             this.formItem.textarea = ''
             this.patientText = false;
-            this.tagCount = []//清空疾病标签
-
-            this.list(this.page);
-
+            this.listRefresh(this.page);
             this.$Message.success("提交成功");
           }).catch((error) => {
-            console.log(error)
           })
         } else {
           this.$Message.error('Fail!');
@@ -756,22 +662,22 @@ export default {
     *删除
     */
     deleteRow(id) {
-      API.followProblems.deleteList({
-        id: id
-      }).then((res) => {
-        if (res.code == 0) {
-          console.log(res.message)
-          this.list(1)
-          this.$Message.success({
-            content: '删除成功',
-            top: 500
-          });
-        } else {
-          alert(res.message)
-        }
-      }).catch((error) => {
-        console.log(error)
-      })
+      this.$Modal.confirm({
+        title: '删除问题',
+        content: '是否确认删除该问题?',
+        onOk: () => {
+          API.followProblems.deleteList({
+            id: id
+          }).then((res) => {
+            this.listRefresh(1);
+            this.$Message.success({
+              content: '删除成功',
+              top: 500
+            });
+          }).catch((error) => {
+          })
+        },
+      });
     },
     /*
     *监听是否采集指标
@@ -780,13 +686,10 @@ export default {
       if (value == '0') {
         this.targetShow = true;
       } else {
-        this.formItem.targetName1 = "";
+        this.formItem.targetId = "";
         this.targetShow = false;
       }
     },
-    /* remove(index) {
-      this.pardata.splice(index, 1);
-    }, */
     /*
     *指标类型--远程搜索
     */
@@ -794,11 +697,11 @@ export default {
       if (query == "") {
         return false;
       }
-      this.options1 = [];
-      this.search.zjm = query;
-      API.follSetting.list(this.search).then((res) => {
+      this.indexOptions = [];
+      this.indexParams.zjm = query;
+      API.follSetting.list(this.indexParams).then((res) => {
         res.data.forEach((item) => {
-          this.options1.push({
+          this.indexOptions.push({
             value: item.id,
             label: item.name
           });
@@ -814,18 +717,17 @@ export default {
       if (query == "") {
         return false;
       }
-      this.options3 = [];
+      this.netDisList = [];
       API.followProblems.disease({
         'zjm': query
       }).then((res) => {
         res.data.forEach((item) => {
-          this.options3.push({
+          this.netDisList.push({
             value: item.id,
             label: item.value
           })
         })
       }).catch((error) => {
-        console.log(error)
       })
     },
     /*

@@ -17,7 +17,7 @@
         </Col>
         <Col span="6">
           <span>
-            审核状态
+            状态
           </span>
           <Select v-model="searchParams.status">
             <Option v-for="item in statusList" :value="item.id" :key="item.id">{{item.name}}</Option>
@@ -340,7 +340,7 @@ export default {
                 align: 'center'
             },
             {
-                title: '审核状态',
+                title: '状态',
                 key: 'statusStr',
                 align: 'center'
             },

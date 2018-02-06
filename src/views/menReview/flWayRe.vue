@@ -1,5 +1,8 @@
 <style lang="less">
 @import "../../styles/jzda.less";
+#audioObj{
+	display: none;
+}
 .follPass {
 	&_message {
 		height: 450px;
@@ -286,6 +289,7 @@
 					</Panel>
 					<Panel name="2">
 						记录详情
+						<Button style="margin:7px 15px 0 0;float:right" @click.stop="allAudio" size="small" icon="volume-medium" type="primary">一键播放所有语音</Button>
 						<ul slot="content" class="follPass_message">
 							<template v-for="item in planInfo.orderReplyQuestions">
 								<li class="follPass_single_ai">
@@ -552,6 +556,7 @@
 			<div slot="footer">
 			</div>
 		</Modal>
+		<audio id="audioObj" src="http://192.168.1.100:8080/AIVoc/2018-01-26/20180126090634_12.wav"></audio>
 		<!-- 确定终止随访计划 -->
 		<Modal v-model="qdqx" title="提示" @on-ok="submitData">
 			<div style="text-align:center;line-height:30px;font-size:16px;">
@@ -566,6 +571,7 @@ import { API } from '../../services/index.js';
 export default {
 	data() {
 		return {
+			audioObj:document.querySelector('#audioObj'),
 			showAll: ["1", "2"],
 			hzxxId: "",//患者id
 			//搜索参数
@@ -748,7 +754,21 @@ export default {
 			qdqx: false,//确定终止随访？Model
 		}
 	},
+	mounted() {
+		this.getDepartList();
+		this.getData();
+		audioObj.addEventListener("ended",()=>{
+				console.log(1);
+			});
+	},
 	methods: {
+		/** 
+		 * 一键播放所有语音
+		 */
+		allAudio(){
+			this.audioObj.src="http://192.168.1.100:8080/AIVoc/2018-01-26/20180126090634_12.wav"
+			this.audioObj.play();
+		},
 		/** 
 		 * 获取方案
 		 */
@@ -1075,10 +1095,7 @@ export default {
 			})
 		},
 	},
-	mounted() {
-		this.getDepartList();
-		this.getData();
-	}
+	
 }
 </script>
 

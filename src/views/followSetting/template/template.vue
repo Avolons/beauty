@@ -336,9 +336,9 @@
 												</Col>
 											</Row>
 											<Row class="padleft40 mb5" v-show="item1.keyname">
-												<Col span="4" style="width:105px" class="lineheight32">指标值:</Col>
+												<Col span="4" style="width:105px" class="lineheight32">指标名称/值：</Col>
 												<Col span="20" style="width:calc(100% - 105px)" class="lineheight32">
-												<span>{{item1.keyname}}{{item1.keyvalue}}</span>
+												<span>{{item1.keyname}} / {{item1.keyvalue}}</span>
 												</Col>
 											</Row>
 											<Row class="padleft40 mb5">

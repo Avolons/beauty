@@ -593,7 +593,6 @@ export default {
 				content: '确定删除该模板？',
 				onOk: () => {
 					this.temList.splice(index, 1);
-					/* this.$Message.success("删除成功"); */
 				}
 			});
 		},

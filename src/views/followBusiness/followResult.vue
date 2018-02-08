@@ -17,7 +17,7 @@
 			</Col>
 			<Col span="6">
 			<span>
-				随访状态
+				状态
 			</span>
 			<Select v-model="searchParams.status">
 				<Option v-for="item in statusList" :value="item.id" :key="item.id">{{item.name}}</Option>
@@ -28,6 +28,30 @@
 				随访方案
 			</span>
 			<Input type="text" v-model="searchParams.schemeName" placeholder="请输入随访方案"></Input>
+			</Col>
+			<Col span="6" style="height:32px;margin-top:10px">
+			<span>
+				生成日期：
+			</span>
+			<DatePicker @on-change="timeChange_one" type="daterange" placeholder="请选择生成日期"></DatePicker>
+			</Col>
+			<Col span="6" style="height:32px;margin-top:10px">
+			<span>
+				执行日期：
+			</span>
+			<DatePicker @on-change="timeChange_two" type="daterange" placeholder="请选择执行日期"></DatePicker>
+			</Col>
+			<Col span="6" style="height:32px;margin-top:10px">
+			<span>
+				审核日期：
+			</span>
+			<DatePicker @on-change="timeChange_three" type="daterange" placeholder="请选择审核日期"></DatePicker>
+			</Col>
+			<Col span="6" style="height:32px;margin-top:10px">
+			<span style="width:105px;height:32px;">
+				计划执行日期：
+			</span>
+			<DatePicker @on-change="timeChange_four" type="daterange" placement="bottom-end" placeholder="请选择计划执行日期" style="width:calc(100% - 105px)"></DatePicker>
 			</Col>
 			<Col span="6" style="margin-top:10px">
 			<Button @click="searchParams.pager=1;getData()" type="primary">查询</Button>
@@ -355,6 +379,15 @@ export default {
 				orderNo: "",//编码（可选）
 				brxm: "", //患者姓名（可选）
 				status: "",
+				dateAddBegin: "",  //生成开始日期（可选）
+				dateAddEnd: "",  //生成结束日期（可选）
+				dateEndBegin: "", //执行开始日期（可选）
+				dateEndEnd: "",    //执行结束日期（可选）
+				dateVetBegin: "",         //审核开始日期（可选）
+				dateVetEnd: "",         //审核结束日期（可选）
+				dateBeginBegin: "",         //计划开始日期（可选）
+				dateBeginEnd: ""           //计划结束日期（可选）
+
 			},
 			statusList: [{
 				name: "全部",
@@ -382,6 +415,12 @@ export default {
 			},
 			//表格配置
 			config: [
+				{
+					title: '序号',
+					type: 'index',
+					align: 'center',
+					width: 70,
+				},
 				{
 					title: '随访编号',
 					key: 'orderNo',
@@ -423,7 +462,7 @@ export default {
 					align: 'center'
 				},
 				{
-					title: '随访状态',
+					title: '状态',
 					key: 'statusStr',
 					align: 'center'
 				},
@@ -439,13 +478,23 @@ export default {
 				},
 				{
 					title: '执行日期',
-					key: 'dateUpdate',
+					key: 'dateEnd',
 					align: 'center'
+				},
+				{
+					title: '审核日期',
+					key: 'vetDate',
+					align: 'center'
+				},
+				{
+					title: '计划执行日期',
+					key: 'dateBegin',
+					align: 'center',
 				},
 				{
 					title: '操作',
 					key: 'action',
-					width: 250,
+					width: 220,
 					align: 'center',
 					render: (h, params) => {
 						return h('div', [
@@ -489,7 +538,7 @@ export default {
 									}
 								}
 							}, '终止随访'),
-							 h('Button', {
+							h('Button', {
 								props: {
 									type: 'warning',
 									size: 'small'
@@ -540,6 +589,23 @@ export default {
 		}
 	},
 	methods: {
+		timeChange_one(date) {
+			this.searchParams.dateAddBegin = date[0];
+			this.searchParams.dateAddEnd = date[1];
+		},
+		timeChange_two(date) {
+			this.searchParams.dateEndBegin = date[0];
+			this.searchParams.dateEndEnd = date[1];
+
+		},
+		timeChange_three(date) {
+			this.searchParams.dateVetBegin = date[0];
+			this.searchParams.dateVetEnd = date[1];
+		},
+		timeChange_four(date) {
+			this.searchParams.dateBeginBegin = date[0];
+			this.searchParams.dateBeginEnd = date[1];
+		},
 		/** 
 		 * 获取列表数据,搜索接口
 		 */
@@ -624,16 +690,16 @@ export default {
 
 			});
 		},
-    /**
-       * 终止随访按钮
-       */
+		/**
+		   * 终止随访按钮
+		   */
 		zzsfFun(name, id) {
 			this.zzsfModel = true;
 			this.sfrName = name;
 			this.nowId = id;
 			//清空终止随访的旧值
-      this.zzsfForm.select = '';
-      this.zzsfForm.textarea = '';
+			this.zzsfForm.select = '';
+			this.zzsfForm.textarea = '';
 		},
 		//选择终止随访的原因
 		xzReason(value) {

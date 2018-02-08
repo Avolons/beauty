@@ -465,7 +465,9 @@ export default {
 				questionId: quesobj.questionId
 			}).then((res) => {
 				let saveSwitch = res.data;//临时数据
-				quesobj.questionName=saveSwitch[0].questionName;
+				if(saveSwitch.length>0){
+					quesobj.questionName=saveSwitch[0].questionName;
+				}
 				let newdata=[];
 				newdata.push(
 					{

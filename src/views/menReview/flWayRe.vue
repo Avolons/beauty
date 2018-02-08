@@ -549,7 +549,7 @@
 					</FormItem>
 					<FormItem>
 						<Button type="primary" style="margin-left:-80px" @click="zzsfCancel('zzsfForm')">取消</Button>
-						<Button type="ghost" @click="zzsfOk('zzsfForm')" style="margin-left: 8px">提交</Button>
+						<Button type="ghost" @click="zzsfOk('zzsfForm')" style="margin-left: 8px" ref="sfStatusBtn">提交</Button>
 					</FormItem>
 				</Form>
 			</div>
@@ -698,8 +698,9 @@ export default {
 								},
 								on: {
 									click: () => {
-										this.zzsfFun(params.row.brxm, params.row.id)
 										this.$refs.zzsfForm.resetFields();
+										this.zzsfFun(params.row.brxm, params.row.id, params.row.notPassReason, params.row.notPassRemark)
+										// this.$refs.zzsfForm.resetFields();
 									}
 								}
 							}, '终止随访'),
@@ -958,7 +959,6 @@ export default {
 		 * 判断是否终止随访
 		 */
 		submit1() {
-
 			if (this.zzsfForm.radio == 1) {
 				this.qdqx = true;
 			} else {
@@ -1054,13 +1054,23 @@ export default {
 		/**
 		   * 终止随访按钮
 		   */
-		zzsfFun(name, id) {
+		zzsfFun(name, id, notPassReason, notPassRemark) {
 			this.zzsfModel = true;
 			this.sfrName = name;
 			this.nowId = id;
-			//清空终止随访的旧值
-      this.zzsfForm.select = '';
-      this.zzsfForm.textarea = '';
+			console.log(notPassReason,notPassRemark)
+      //清空终止随访的旧值
+      if(notPassReason !='') {
+      	this.zzsfForm.radio = 1;
+        this.zzsfForm.select = notPassReason;
+        this.zzsfForm.textarea = notPassRemark;
+        this.$refs.sfStatusBtn.$el.setAttribute('disabled',true)
+      }else {
+      	this.zzsfForm.radio = 0;
+        this.zzsfForm.select = '';
+        this.zzsfForm.textarea = '';
+        this.$refs.sfStatusBtn.$el.removeAttribute('disabled')
+      }    
 		},
 		//选择终止随访的原因
 		xzReason(value) {
@@ -1086,6 +1096,7 @@ export default {
 					}).then((res) => {
 						this.$Message.success('成功!');
 						this.zzsfModel = false;
+						this.getData(this.searchParams.pager)
 					}).catch((err) => {
 
 					});

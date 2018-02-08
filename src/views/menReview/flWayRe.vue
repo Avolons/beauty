@@ -1,5 +1,8 @@
 <style lang="less">
 @import "../../styles/jzda.less";
+#audioObj{
+	display: none;
+}
 .follPass {
 	&_message {
 		height: 450px;
@@ -286,6 +289,7 @@
 					</Panel>
 					<Panel name="2">
 						记录详情
+						<Button style="margin:7px 15px 0 0;float:right" @click.stop="allAudio" size="small" icon="volume-medium" type="primary">一键播放所有语音</Button>
 						<ul slot="content" class="follPass_message">
 							<template v-for="item in planInfo.orderReplyQuestions">
 								<li class="follPass_single_ai">
@@ -552,6 +556,7 @@
 			<div slot="footer">
 			</div>
 		</Modal>
+		<audio id="audioObj" src="http://192.168.1.100:8080/AIVoc/2018-01-26/20180126090634_12.wav"></audio>
 		<!-- 确定终止随访计划 -->
 		<Modal v-model="qdqx" title="提示" @on-ok="submitData">
 			<div style="text-align:center;line-height:30px;font-size:16px;">
@@ -566,6 +571,7 @@ import { API } from '../../services/index.js';
 export default {
 	data() {
 		return {
+			audioObj:document.querySelector('#audioObj'),
 			showAll: ["1", "2"],
 			hzxxId: "",//患者id
 			//搜索参数
@@ -579,7 +585,7 @@ export default {
 				status: 2,  //状态为2（必传）
 				isConceal: 1
 			},
-            createLoading:true,		//默认为true
+			createLoading: true,		//默认为true
 			//随访结果详情
 			planInfo: {
 				orderReplyQuestions: [],
@@ -658,7 +664,7 @@ export default {
 				{
 					title: '操作',
 					key: 'action',
-					width: 200,
+					width: 220,
 					align: 'center',
 					render: (h, params) => {
 						return h('div', [
@@ -679,30 +685,13 @@ export default {
 									}
 								}
 							}, params.row.vetStatus == 0 ? '审核' : '重新审核'),
-							// h('Button', {
-							// 	props: {
-							// 		type: 'warning',
-							// 		size: 'small'
-							// 	},
-							// 	style: {
-							// 		marginRight: '5px'
-							// 	},
-							// 	 'class': {
-							// 	menuHide: this.menuShow(this.AM.Data.delResult)
-							// 	},
-							// 	on: {
-							// 		click: () => {
-							// 			this.delDepart(params.row.id)
-							// 		}
-							// 	}
-							// }, '删除'),
 							h('Button', {
 								props: {
 									type: 'warning',
 									size: 'small'
 								},
 								style: {
-
+									marginRight: '5px'
 								},
 								'class': {
 									menuHide: this.menuShow(this.AM.Data.cancelall)
@@ -713,7 +702,24 @@ export default {
 										this.$refs.zzsfForm.resetFields();
 									}
 								}
-							}, '终止随访')
+							}, '终止随访'),
+							h('Button', {
+								props: {
+									type: 'warning',
+									size: 'small'
+								},
+								style: {
+									
+								},
+								'class': {
+									menuHide: this.menuShow(this.AM.Data.delResult)
+								},
+								on: {
+									click: () => {
+										this.delDepart(params.row.id)
+									}
+								}
+							}, '删除'),
 						]);
 					}
 				}
@@ -748,7 +754,21 @@ export default {
 			qdqx: false,//确定终止随访？Model
 		}
 	},
+	mounted() {
+		this.getDepartList();
+		this.getData();
+		audioObj.addEventListener("ended",()=>{
+				console.log(1);
+			});
+	},
 	methods: {
+		/** 
+		 * 一键播放所有语音
+		 */
+		allAudio(){
+			this.audioObj.src="http://192.168.1.100:8080/AIVoc/2018-01-26/20180126090634_12.wav"
+			this.audioObj.play();
+		},
 		/** 
 		 * 获取方案
 		 */
@@ -928,7 +948,7 @@ export default {
 		radioChange(value) {
 			if (value == 1) {//清空
 				this.$refs.zzsfForm.resetFields();
-			}else if(value == 0) {//清空
+			} else if (value == 0) {//清空
 				this.$refs.zzsfForm.resetFields();
 				this.zzsfForm.select = '';
 				this.zzsfForm.textarea = '';
@@ -949,7 +969,7 @@ export default {
 			/**
 			 * 发送数据
 			 */
-            this.createLoading = true;
+			this.createLoading = true;
 			let ajaxDa = {
 				id: this.planInfo.id,
 				dateEnd: this.planInfo.dateEnd,
@@ -1075,10 +1095,7 @@ export default {
 			})
 		},
 	},
-	mounted() {
-		this.getDepartList();
-		this.getData();
-	}
+	
 }
 </script>
 

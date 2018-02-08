@@ -77,7 +77,7 @@
 	border-radius: 5px;
 	height: 100%;
 	/* background-color: #fff; */
-	.ivu-card-body{
+	.ivu-card-body {
 		height: calc(~"100% - 51px");
 		overflow-y: auto;
 	}
@@ -99,9 +99,7 @@
 			padding-bottom: 15px;
 			border-radius: 5px;
 		}
-		&_voiceList{
-
-		}
+		&_voiceList {}
 		&_commonTitle {
 			font-size: 16px;
 			line-height: 45px;
@@ -109,7 +107,6 @@
 		}
 		&_config {
 			max-width: 900px;
-
 		}
 		&_content {
 			box-sizing: border-box;
@@ -174,59 +171,59 @@
 			</p>
 			<Row class="followVoice_main_voiceList">
 				<Col span="24" class="voicepz">
-				<ul  class="followVoice_main_config">
-						<li v-for="item,index in switchArr" :key="index" class="followVoice_main_single">
-							<Row class="itemli" style="background:#f7f7f7">
-								<Col span="4" class="textCenter">处理</Col>
-								<Col span="12">
-								</Input>
-								<span>{{index+1}}</span>
-								</Col>
-								<Col span="2" offset="6" @click.native="removequestion(index)">
-								<Icon class="followVoice_main_icon" type="close-circled" size="22"></Icon>
+				<ul class="followVoice_main_config">
+					<li v-for="item,index in switchArr" :key="index" class="followVoice_main_single">
+						<Row class="itemli" style="background:#f7f7f7">
+							<Col span="4" class="textCenter">处理</Col>
+							<Col span="12">
+							</Input>
+							<span>{{index+1}}</span>
+							</Col>
+							<Col span="2" offset="6" @click.native="removequestion(index)">
+							<Icon class="followVoice_main_icon" type="close-circled" size="22"></Icon>
+							</Col>
+						</Row>
+						<div class="followVoice_main_content">
+							<Row class="itemli">
+								<Col span="4" class="textCenter">话术名称</Col>
+								<Col span="20">
+								<Input v-model="item.switchText" placeholder="请输入话术名称"></Input>
 								</Col>
 							</Row>
-							<div class="followVoice_main_content">
-								<Row class="itemli">
-									<Col span="4" class="textCenter">话术名称</Col>
-									<Col span="20">
-									<Input v-model="item.switchText" placeholder="请输入话术名称"></Input>
-									</Col>
-								</Row>
-								<Row class="itemli">
-									<Col span="4" class="textCenter">判别规则</Col>
-									<Col span="20">
-									<Input v-model="item.switchRegexText" placeholder="请填写判别规则"></Input>
-									</Col>
-								</Row>
-								<Row class="itemli" v-show="false">
-									<Col span="4" class="textCenter">超时跳转</Col>
-									<Col span="20">
-									<Input v-model="item.outRptSwitchID" placeholder="请填写超时跳转问题编号"></Input>
-									</Col>
-								</Row>
-								<Row class="itemli" v-show="false">
-									<Col span="4" class="textCenter">指标名称</Col>
-									<Col span="20">
-									<span>
-										{{item.keyname}}
-									</span>
-									</Col>
-								</Row>
-								<Row class="itemli">
-									<Col span="4" class="textCenter">指标值</Col>
-									<Col span="20">
-									<Input v-model="item.keyvalue" placeholder="请填写指标值"></Input>
-									</Col>
-								</Row>
-							</div>
-						</li>
+							<Row class="itemli">
+								<Col span="4" class="textCenter">判别规则</Col>
+								<Col span="20">
+								<Input v-model="item.switchRegexText" placeholder="请填写判别规则"></Input>
+								</Col>
+							</Row>
+							<Row class="itemli" v-show="false">
+								<Col span="4" class="textCenter">超时跳转</Col>
+								<Col span="20">
+								<Input v-model="item.outRptSwitchID" placeholder="请填写超时跳转问题编号"></Input>
+								</Col>
+							</Row>
+							<Row class="itemli" v-show="false">
+								<Col span="4" class="textCenter">指标名称</Col>
+								<Col span="20">
+								<span>
+									{{item.keyname}}
+								</span>
+								</Col>
+							</Row>
+							<Row class="itemli">
+								<Col span="4" class="textCenter">指标值</Col>
+								<Col span="20">
+								<Input v-model="item.keyvalue" placeholder="请填写指标值"></Input>
+								</Col>
+							</Row>
+						</div>
+					</li>
 				</ul>
 				<!-- <ul id="shopList" >
-						<li v-for="(item,index) in switchArr" :key="index" :data-index="index">
-							
-						</li>
-					</ul> -->
+										<li v-for="(item,index) in switchArr" :key="index" :data-index="index">
+											
+										</li>
+									</ul> -->
 				</Col>
 				<Col span="24">
 				<Button type="primary" style="margin: 10px 20px;" @click="addVoice()">添加话术</Button>
@@ -262,29 +259,6 @@ export default {
 		this.fetchData()
 	},
 	mounted() {
-		/** 
-		 * 拖拽功能初始化
-		 */
-		//全局拖动事件，阻止默认行为，阻止冒泡
-		document.body.ondrop = function(event) {
-			event.preventDefault();
-			event.stopPropagation();
-		};
-		/* let vm = this;
-		let shoppingList = document.getElementById('shopList');
-		Sortable.create(shoppingList, {
-			group: {
-				name: 'list',
-				pull: true
-			},
-			animation: 120,
-			ghostClass: 'placeholder-style',
-			fallbackClass: 'iview-admin-cloned-item',
-			onRemove(event) {
-				vm.affordList.splice(event.newIndex, 0, vm.shoppingList[event.item.getAttribute('data-index')]);
-			}
-		}); */
-
 		this.questionInfo();
 	},
 	methods: {
@@ -312,65 +286,56 @@ export default {
 			API.followProblems.editList({
 				"id": this.questionId
 			}).then((res) => {
-				if (res.code == 0) {
-					this.questionName = res.data.title
-					/*
-					*根据指标id，获取指标阀值等信息
-					*/
-					let getTargetIDVoice = res.data.targetId//指标id
-					if (getTargetIDVoice) {
-						API.follSetting.editList({
-							id: getTargetIDVoice
-						}).then((res) => {
-							if (res.code == 0) {
-								this.questionTargetName = res.data.name
-								//获取指标类型，阀值
-								if (res.data.type == 'digit') {
-									this.questionTargetStyle = '数值'
-								} else if (res.data.type == 'select') {
-									this.questionTargetStyle = '选项'
-								} else if (res.data.type == 'string') {
-									this.questionTargetStyle = '文本'
-								}
-								//获取指标阀值
-								this.questionTargetfz = res.data.optionValues
-								this.fzArray = this.questionTargetfz.split(',')
-								/*switch信息*/
-								class Point {
-									constructor(item) {
-										this.switchID = item.switchID
-										this.switchText = item.switchText
-										this.switchRegexText = item.switchRegexText
-										this.keyname = item.keyname
-										this.outRptSwitchID = item.outRptSwitchID
-										this.keyvalue = item.keyvalue
-									}
-								}
-								if (this.switchArr.length == 0) {
-									this.fzArray.forEach((item, index) => {
-										this.switchArr.push(new Point({
-											switchID: index + 1,
-											// switchText : '',
-											switchRegexText: '',
-											keyname: '',
-											outRptSwitchID: '',
-											keyvalue: item
-										}))
-									})
-									this.switchArr.forEach((item, index) => {
-										item.keyname = this.questionTargetName
-									})
-								}
-
-								console.log(this.switchArr)
-							} else {
-								console.log('指标id=' + res.code)
+				this.questionName = res.data.title
+				/*
+				*根据指标id，获取指标阀值等信息
+				*/
+				let getTargetIDVoice = res.data.targetId//指标id
+				if (getTargetIDVoice) {
+					API.follSetting.editList({
+						id: getTargetIDVoice
+					}).then((res) => {
+						this.questionTargetName = res.data.name
+						//获取指标类型，阀值
+						if (res.data.type == 'digit') {
+							this.questionTargetStyle = '数值'
+						} else if (res.data.type == 'select') {
+							this.questionTargetStyle = '选项'
+						} else if (res.data.type == 'string') {
+							this.questionTargetStyle = '文本'
+						}
+						//获取指标阀值
+						this.questionTargetfz = res.data.optionValues;
+						this.fzArray = this.questionTargetfz.split(',');
+						/*switch信息*/
+						class Point {
+							constructor(item) {
+								this.switchID = item.switchID
+								this.switchText = item.switchText
+								this.switchRegexText = item.switchRegexText
+								this.keyname = item.keyname
+								this.outRptSwitchID = item.outRptSwitchID
+								this.keyvalue = item.keyvalue
 							}
-						}).catch((error) => {
-							//alert('error')
-							console.log(error)
-						})
-					}
+						}
+						if (this.switchArr.length == 0) {
+							this.fzArray.forEach((item, index) => {
+								this.switchArr.push(new Point({
+									switchID: index + 1,
+									// switchText : '',
+									switchRegexText: '',
+									keyname: '',
+									outRptSwitchID: '',
+									keyvalue: item
+								}))
+							})
+							this.switchArr.forEach((item, index) => {
+								item.keyname = this.questionTargetName
+							})
+						}
+
+					}).catch((error) => {
+					})
 				}
 			}).catch((error) => {
 
@@ -386,7 +351,9 @@ export default {
 		*添加话术
 		*/
 		addVoice() {
-			this.switchArr.push({})
+			this.switchArr.push({
+
+			})
 			this.switchArr.forEach((item, index) => {
 				item.switchID = index + 1
 			})

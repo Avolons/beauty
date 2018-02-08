@@ -27,19 +27,19 @@
       <span>
         生成日期：
       </span>
-      <DatePicker @on-change="timeChange_one" type="daterange" placement="bottom-end"  placeholder="请选择生成日期"></DatePicker>
+      <DatePicker @on-change="timeChange_one" type="daterange" placement="bottom-end" placeholder="请选择生成日期"></DatePicker>
       </Col>
       <Col span="6" style="height:32px;margin-top:10px">
       <span style="width:105px;height:32px;">
         计划开始日期：
       </span>
-      <DatePicker @on-change="timeChange_two" type="daterange"  placeholder="请选择计划开始日期" style="width:calc(100% - 105px)"></DatePicker>
+      <DatePicker @on-change="timeChange_two" type="daterange" placeholder="请选择计划开始日期" style="width:calc(100% - 105px)"></DatePicker>
       </Col>
       <Col span="6" style="height:32px;margin-top:10px">
       <span>
         审核日期：
       </span>
-      <DatePicker @on-change="timeChange_three" type="daterange"  placeholder="请选择审核日期"></DatePicker>
+      <DatePicker @on-change="timeChange_three" type="daterange" placeholder="请选择审核日期"></DatePicker>
       </Col>
       <Col span="6" style="margin-top:10px">
       <Button type="primary" @click="searchParams.pager=1;getData()">查询</Button>
@@ -273,7 +273,7 @@
           </FormItem>
           <FormItem>
             <Button type="primary" style="margin-left:-80px" @click="zzsfCancel('zzsfForm')">取消</Button>
-            <Button type="ghost" @click="zzsfOk('zzsfForm')" style="margin-left: 8px">提交</Button>
+            <Button type="ghost" @click="zzsfOk('zzsfForm')" style="margin-left: 8px" ref="sfStatusBtn">提交</Button>
           </FormItem>
         </Form>
       </div>
@@ -477,11 +477,11 @@ export default {
                   marginRight: '5px'
                 },
                 'class': {
-                  menuHide: this.menuShow(this.AM.FollowBussiness.cancleall)
+                  menuHide: this.menuShow(this.AM.FollowBussiness.cancleall);
                 },
                 on: {
                   click: () => {
-                    this.zzsfFun(params.row.brxm, params.row.id)
+                    this.zzsfFun(params.row.brxm, params.row.id, params.row.status, params.row.notPassReason, params.row.notPassRemark)
                   }
                 }
               }, '终止随访'),
@@ -571,21 +571,22 @@ export default {
           brxm: '',
         },
       },//随访计划详情
+      sfStatus: '',//当前患者的随访状态
     }
   },
   methods: {
     timeChange_one(date) {
-      this.searchParams.dateAddBegin=date[0];
-      this.searchParams.dateAddEnd=date[1];
+      this.searchParams.dateAddBegin = date[0];
+      this.searchParams.dateAddEnd = date[1];
     },
     timeChange_two(date) {
-      this.searchParams.VisitStartTimeBegin=date[0];
-      this.searchParams.VisitStartTimeEnd=date[1];
+      this.searchParams.VisitStartTimeBegin = date[0];
+      this.searchParams.VisitStartTimeEnd = date[1];
 
     },
     timeChange_three(date) {
-      this.searchParams.dateVetBegin=date[0];
-      this.searchParams.dateVetEnd=date[1];
+      this.searchParams.dateVetBegin = date[0];
+      this.searchParams.dateVetEnd = date[1];
     },
     /** 
  * 获取列表数据,搜索接口
@@ -708,27 +709,40 @@ export default {
     /**
      * 终止随访按钮
      */
-    zzsfFun(name, id) {
+    zzsfFun(name, id, sfStatus, notPassReason, notPassRemark) {
       this.zzsfModel = true;
       this.sfrName = name;
       this.nowId = id;
+      this.sfStatus = sfStatus; //获取当前的随访状态,4=已取消
+      if (sfStatus == '4') {
+        this.$refs.sfStatusBtn.$el.setAttribute('disabled', true)
+      } else {
+        this.$refs.sfStatusBtn.$el.removeAttribute('disabled')
+      }
+
       //清空终止随访的旧值
-      this.zzsfForm.select = '';
-      this.zzsfForm.textarea = '';
+      if (notPassReason != '') {
+        this.zzsfForm.select = notPassReason;
+        this.zzsfForm.textarea = notPassRemark;
+      } else {
+        this.zzsfForm.select = '';
+        this.zzsfForm.textarea = '';
+      }
+
     },
     //选择终止随访的原因
     xzReason(value) {
       this.zzsfForm.select = value
     },
     /**
-     * 终止随访确定按钮
+     * 终止随访取消按钮
      */
     zzsfCancel(name) {
       this.$refs[name].resetFields();
       this.zzsfModel = false;
     },
     /**
-     * 终止随访取消按钮
+     * 终止随访确定按钮
      */
     zzsfOk(name) {
       this.$refs[name].validate((valid) => {
@@ -741,9 +755,9 @@ export default {
             this.$Message.success('成功!');
             this.zzsfModel = false;
             this.$refs[name].resetFields();
+            this.getData(this.searchParams.pager)
           }).catch((err) => {
             //弹出错误信息
-            this.$Message.error(err);
           });
         } else {
           this.$Message.error('失败');

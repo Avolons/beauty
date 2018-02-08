@@ -355,7 +355,7 @@
 					</FormItem>
 					<FormItem>
 						<Button type="primary" style="margin-left:-80px" @click="zzsfCancel('zzsfForm')">取消</Button>
-						<Button type="ghost" @click="zzsfOk('zzsfForm')" style="margin-left: 8px">提交</Button>
+						<Button type="ghost" @click="zzsfOk('zzsfForm')" style="margin-left: 8px" ref="sfStatusBtn">提交</Button>
 					</FormItem>
 				</Form>
 			</div>
@@ -533,8 +533,8 @@ export default {
 								},
 								on: {
 									click: () => {
-										this.zzsfFun(params.row.brxm, params.row.id)
 										this.$refs.zzsfForm.resetFields();
+										this.zzsfFun(params.row.brxm, params.row.id, params.row.status, params.row.notPassReason, params.row.notPassRemark)
 									}
 								}
 							}, '终止随访'),
@@ -586,6 +586,7 @@ export default {
 					{ required: true, message: '请输入详情', trigger: 'blur' },
 				]
 			},
+			sfStatus: '',//当前患者的随访状态
 		}
 	},
 	methods: {
@@ -690,16 +691,27 @@ export default {
 
 			});
 		},
-		/**
-		   * 终止随访按钮
-		   */
-		zzsfFun(name, id) {
+    /**
+       * 终止随访按钮
+       */
+		zzsfFun(name, id, sfStatus, notPassReason, notPassRemark) {
 			this.zzsfModel = true;
 			this.sfrName = name;
 			this.nowId = id;
-			//清空终止随访的旧值
-			this.zzsfForm.select = '';
-			this.zzsfForm.textarea = '';
+			this.sfStatus = sfStatus; //获取当前的随访状态,3=停止
+      if(sfStatus == '3') {
+        this.$refs.sfStatusBtn.$el.setAttribute('disabled',true)
+      }else {
+        this.$refs.sfStatusBtn.$el.removeAttribute('disabled')
+      }
+      //清空终止随访的旧值
+      if(notPassReason !='') {
+        this.zzsfForm.select = notPassReason;
+        this.zzsfForm.textarea = notPassRemark;
+      }else {
+        this.zzsfForm.select = '';
+        this.zzsfForm.textarea = '';
+      }
 		},
 		//选择终止随访的原因
 		xzReason(value) {
@@ -726,7 +738,7 @@ export default {
 						console.log(res)
 						this.$Message.success('成功!');
 						this.zzsfModel = false;
-
+						this.getData(this.searchParams.pager)
 					}).catch((err) => {
 						//弹出错误信息
 						this.$Message.error(err);

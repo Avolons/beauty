@@ -191,7 +191,6 @@
 
                 //清空缓存  再次进入页面清空 随访问题缓存的内容
                 if(to.name!='voice'&&to.name!='followProblems'){
-                    console.log("9999999999999999")
                     this.FollowProblePage({
                         title:'',
                         diseaseList:[],
@@ -235,9 +234,7 @@
                         state: "-1" //状态（0锁定，1正常）
                     });
                 };
-
-
-                console.log(to.name)
+               
                 //清空企业管理 再次进入页面清空 随访问题缓存的内容
                 if(to.name!='access_business'&&to.name!='business_add'){
                     this.saveAccessBusines({

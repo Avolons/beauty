@@ -516,10 +516,12 @@ export default {
 							this.sendData.isAll = 0
 						} else if (this.isAll == 1) {
 							//this.sendData.hzxxIds = []
-							this.sendData.isAll = 1
-							this.sendData.brxm = this.searchParams.brxm
-							this.sendData.beginTime = this.searchParams.beginTime
-							this.sendData.endTime = this.searchParams.endTime
+							this.sendData.isAll = 1;
+							this.sendData.brxm = this.searchParams.brxm;
+							this.sendData.beginTime = this.searchParams.beginTime;
+							this.sendData.endTime = this.searchParams.endTime;
+							this.sendData.diagnoseTimeBegin = this.searchParams.diagnoseTimeBegin;
+							this.sendData.diagnoseTimeEnd = this.searchParams.diagnoseTimeEnd;
 						}
 						this.sendData.visitStartTime = this.timeobj.date + " " + this.timeobj.time;
 						API.FollowBussiness.patSubmit(this.sendData).then((res) => {
@@ -581,6 +583,7 @@ export default {
 		 * 获取医生列表
 		 */
 		getDoctorList() {
+			this.searchParams.admin="";
 			API.FollowBussiness.listDoctor({
 				pager: 1,
 				limit: 100000,

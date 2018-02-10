@@ -14,12 +14,12 @@ Vue.prototype.$http = axios;
 /* 默认最长响应时间 */
 // axios.defaults.timeout = 5000;
 /* 默认的接口地址 */
-/* axios.defaults.baseURL = 'http://192.168.1.100:8080'; */
+axios.defaults.baseURL = 'http://192.168.1.215:8080';
 /* axios.defaults.baseURL = 'http://60.190.86.50:6016'; */
 /* axios.defaults.baseURL = 'http://192.168.1.32:8081'; */
 /* axios.defaults.baseURL = 'http://192.168.1.166:8080'; */
 /* 海宁 */
-axios.defaults.baseURL = 'http://61.153.232.58:9998';
+/* axios.defaults.baseURL = 'http://61.153.232.58:9998'; */
 /* 仁济 */
 /* axios.defaults.baseURL = 'http://180.168.200.207:6016/'; */
 

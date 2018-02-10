@@ -17,11 +17,13 @@ export default {
     },
     methods: {
         init() {
-            let dateList=[];
-            let numList=[];
+            let dateList = [];
+            let numList = [];
+            let planList = [];
             for (const item of this.data) {
                 dateList.push(item.dateBegin);
                 numList.push(item.doNum);
+                planList.push(item.totalNum);
             }
             const option = {
                 color: ['#3398DB'],
@@ -68,6 +70,25 @@ export default {
                         type: 'bar',
                         barWidth: '60%',
                         data: numList
+                    },
+                    {
+                        name: '计划呼出量',
+                        type: 'line',
+                        /* barWidth: '60%', */
+                        data: planList,
+                        "itemStyle": {
+                            "normal": {
+                                "color": "rgba(0,191,183,1)",
+                                "barBorderRadius": 0,
+                                "label": {
+                                    "show": true,
+                                    "position": "top",
+                                    formatter: function(p) {
+                                        return p.value > 0 ? (p.value) : '';
+                                    }
+                                }
+                            }
+                        },
                     }
                 ]
             };

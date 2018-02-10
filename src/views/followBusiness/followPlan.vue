@@ -477,7 +477,7 @@ export default {
                   marginRight: '5px'
                 },
                 'class': {
-                  menuHide: this.menuShow(this.AM.FollowBussiness.cancleall);
+                  menuHide: this.menuShow(this.AM.FollowBussiness.cancleall)
                 },
                 on: {
                   click: () => {

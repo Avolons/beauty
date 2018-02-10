@@ -1109,11 +1109,6 @@ export default {
 			this.zzsfModel = true;
 			this.sfrName = name;
 			this.nowId = id;
-<<<<<<< HEAD
-			//清空终止随访的旧值
-			this.zzsfForm.select = '';
-			this.zzsfForm.textarea = '';
-=======
 			console.log(notPassReason,notPassRemark)
       //清空终止随访的旧值
       if(notPassReason !='') {
@@ -1127,7 +1122,6 @@ export default {
         this.zzsfForm.textarea = '';
         this.$refs.sfStatusBtn.$el.removeAttribute('disabled')
       }    
->>>>>>> dev_xuji
 		},
 		//选择终止随访的原因
 		xzReason(value) {

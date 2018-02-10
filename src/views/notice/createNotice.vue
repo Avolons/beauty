@@ -309,7 +309,7 @@ export default {
 				brxm: '',//患者姓名
 				limit: 10,//每页条数
 				adminId: "",
-				diseaseId: [],//疾病id，多个用英文逗号分开（可选）
+				diseaseId: "",//疾病id，多个用英文逗号分开（可选）
 				brxb: "",     //性别：男,女
 				ageBegin: 0, //年龄开始（可选）
 				ageEnd: 200 ,  //年龄结束（可选）
@@ -530,14 +530,16 @@ export default {
 						if (this.isAll == 0) {
 							this.sendData.isAll = 0
 						} else if (this.isAll == 1) {
-							this.sendData.isAll = 1
-							this.sendData.diseaseId = this.searchParams.diseaseId
-							this.sendData.brxb = this.searchParams.brxb
-							this.sendData.ageBegin = this.searchParams.ageBegin
-							this.sendData.ageEnd = this.searchParams.ageEnd
-
+							this.sendData.isAll = 1;
+							this.sendData.diseaseId = this.searchParams.diseaseId;
+							this.sendData.brxb = this.searchParams.brxb;
+							this.sendData.ageBegin = this.searchParams.ageBegin;
+							this.sendData.ageEnd = this.searchParams.ageEnd;
+							this.sendData.diagnoseTimeBegin = this.searchParams.diagnoseTimeBegin;
+							this.sendData.diagnoseTimeEnd = this.searchParams.diagnoseTimeEnd;
 						}
 						let ajaxData = JSON.parse(JSON.stringify(this.sendData));
+						
 						/* delete ajaxData.admin;
 						delete ajaxData.adminId; */
 						API.Notice.createNotice(ajaxData).then((res) => {
@@ -584,6 +586,7 @@ export default {
 		 * 获取医生列表
 		 */
 		getDoctorList() {
+			this.doctorobj="";
 			API.FollowBussiness.listDoctor({
 				pager: 1,
 				limit: 100000,

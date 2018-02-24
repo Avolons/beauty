@@ -280,6 +280,7 @@ export default {
       page: 1,
       taglabel: "",
       modelTre: "",
+      editorDate:{},   //记录编辑数据  确认是否改变
       //指标筛选
       search: {
         pager: 1,
@@ -320,21 +321,31 @@ export default {
           key: 'otype',
           align: 'center',
           render: (h, params) => {
-            if (params.row.otype == '01') {
-              return params.row.type = '症状'
-            } else if (params.row.otype == '02') {
-              return params.row.type = '体征'
-            } else if (params.row.otype == '03') {
-              return params.row.type = '生活方式指导'
-            } else if (params.row.otype == '04') {
-              return params.row.type = '辅助检查'
-            } else if (params.row.otype == '05') {
-              return params.row.type = '用药反馈'
-            } else if (params.row.otype == '06') {
-              return params.row.type = '转诊情况'
-            } else if (params.row.otype == '07') {
-              return params.row.type = '通用'
-            }
+             switch (params.row.otype){
+                 case "01":
+                     return params.row.type = '症状'
+                     break;
+                 case "02":
+                     return params.row.type = '体征'
+                     break;
+                 case "03":
+                     return params.row.type = '生活方式指导'
+                     break;
+                 case "04":
+                     return params.row.type = '辅助检查'
+                     break;
+                 case "05":
+                     return params.row.type = '用药反馈'
+                     break;
+                 case "06":
+                     return params.row.type = '转诊情况'
+                     break;
+                 case "07":
+                     return params.row.type = '通用'
+                     break;
+                 default:
+                     return false
+             }
             return h('div', {
             }, params.row.type);
           }
@@ -366,11 +377,24 @@ export default {
                     API.followProblems.editList({
                       "id": params.row.id
                     }).then((res) => {
-                      this.formItem.id = res.data.id
-                      this.formItem.title = res.data.title
-                      this.formItem.content = res.data.content
-                      this.formItem.playWavOnly = res.data.playWavOnly
-                      this.formItem.isTarget = res.data.isTarget
+                       //用来记录上一次的值 看是否改变
+                       this.editorDate = {
+                           id: res.data.id,
+                           title: res.data.title,
+                           isTarget: res.data.isTarget,
+                           content: res.data.content,
+                           targetId: res.data.targetId,
+                           diseaseId: res.data.diseaseId,
+                           playWavOnly: res.data.playWavOnly,
+                           status: res.data.status
+                      }
+                      this.formItem = {
+                          id: res.data.id,
+                          title: res.data.title,
+                          content: res.data.content,
+                          playWavOnly: res.data.playWavOnly,
+                          isTarget: res.data.isTarget
+                      }
                       let arr = [];
                       res.data.diseaseId = res.data.diseaseId.split(",");
                       res.data.diseaseName = res.data.diseaseName.split(",");
@@ -402,8 +426,8 @@ export default {
                         value: res.data.targetId,
                       })
                       this.taglabel = res.data.targetName;
-                      this.formItem.targetName1 = res.data.targetId
-
+                      this.formItem.targetName1 = res.data.targetId;
+//                      this.search.otype = res.data.otype
                     }).catch((error) => {
                       console.log(error)
                     })
@@ -430,7 +454,7 @@ export default {
                       this.FollowProblePage({
                         "followProble": {
                           "followProblePage": this.page,       //页码
-                        }
+                      }
 
                       });
                     }
@@ -542,11 +566,7 @@ export default {
       }
     }
 
-
-
-
     this.list(this.authorToken.followProble.followProblePage);
-
 
     //this.$Spin.show();
 
@@ -587,13 +607,13 @@ export default {
         "diseaseId": this.proSearch.diseaseName
       }).then((res) => {
         if (res.code == 0) {
-          // console.log(res)
+          console.log(res)
           this.pardata = res.data
           this.pageTotal = res.total
           this.createLoading = false;
           //this.$Spin.hide();
         } else {
-          console.log(res.code)
+          (res.code)
         }
       }).catch((error) => {
         console.log(error)
@@ -624,53 +644,11 @@ export default {
     *获取选中的指标value
     */
     targetRadio(value) {
-      /* console.log(value)
-
-      API.follSetting.list({
-        pager: 1,
-        limit: '10',
-        name: value.label,
-      }).then((res) => {
-        if (res.code == 0) {
-          console.log(res)
-          this.selectOtype = res.data[0].otype
-          let otypeName
-          if (res.data[0].otype == '01') {
-            otypeName = '症状'
-          } else if (res.data[0].otype == '02') {
-            otypeName = '体征'
-          } else if (res.data[0].otype == '03') {
-            otypeName = '生活方式指导'
-          } else if (res.data[0].otype == '04') {
-            otypeName = '辅助检查'
-          } else if (res.data[0].otype == '05') {
-            otypeName = '用药反馈'
-          } else if (res.data[0].otype == '06') {
-            otypeName = '转诊情况'
-          } else if (res.data[0].otype == '07') {
-            otypeName = '通用'
-          }
-          if (this.formItem.targetName1 != '') {
-            this.tagShow = true
-            this.targetTag = otypeName
-            this.targetSelectId = res.data[0].id
-          } else {
-            this.tagShow = false
-            this.targetTag = ''
-          }
-          // console.log('this.targetTag='+this.targetTag)
-        } else {
-          console.log(res.message)
-        }
-      }).catch((error) => {
-        console.log(error)
-      }) */
     },
     /*
     *查询功能
     */
     handleSearch() {
-      console.log()
       API.followProblems.list({
         'pager': 1,
         'limit': '10',
@@ -715,7 +693,7 @@ export default {
     */
     addModel(name) {
       this.createLoading = true;
-      let jbnam = this.tagCount.join(',')
+      let jbnam = this.tagCount.join(',');
       let addPram = {
         "id": this.formItem.id,
         "title": this.formItem.title,
@@ -725,7 +703,7 @@ export default {
         "diseaseId": JSON.parse(JSON.stringify(this.formItem.diseaseId)).join(','),
         "playWavOnly": this.formItem.playWavOnly,
         "status": 0,
-        /* "otype": this.search.otype */
+//       "otype": this.search.otype
       }
       //this.$Spin.show();
       this.$refs[name].validate((valid) => {
@@ -740,10 +718,17 @@ export default {
             this.formItem.textarea = ''
             this.patientText = false;
             this.tagCount = []//清空疾病标签
-
             this.list(this.page);
-
             this.$Message.success("提交成功");
+            if(JSON.stringify(addPram)!=JSON.stringify(this.editorDate)){
+                this.$router.push({ path: '/followSetting/voice/voice/'+this.formItem.id+''});
+                //保存数据  当再次返回的时候进行重新赋值
+                this.FollowProblePage({
+                    "followProble": {
+                        "followProblePage": this.page,       //页码
+                    }
+                });
+            }
           }).catch((error) => {
             console.log(error)
           })

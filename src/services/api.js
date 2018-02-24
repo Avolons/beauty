@@ -23,7 +23,7 @@ axios.defaults.baseURL = 'http://192.168.1.215:8080';
 /* 仁济 */
 /* axios.defaults.baseURL = 'http://180.168.200.207:6016/'; */
 
-let JsonData = ['/order/temp/testvisit', '/order/temp/visit', '/visit/order/vet/save', '/visit/order/notice', '/ordertask/vet', '/question/script/save', '/questionscheme/save', '/questiontemple/save', '/questiontarget/save'];
+let JsonData = ['/visit/order/batchcancelall', '/order/temp/testvisit', '/order/temp/visit', '/visit/order/vet/save', '/visit/order/notice', '/ordertask/vet', '/question/script/save', '/questionscheme/save', '/questiontemple/save', '/questiontarget/save'];
 // 添加请求拦截器
 axios.interceptors.request.use(function (config) {
     let flag = 0;
@@ -1043,6 +1043,15 @@ export const FollowBussiness = {
      */
     cancleall (data) {
         return fetch('post', '/visit/ordertask/cancleall', data);
+    },
+    /*
+     * 批量终止随访
+     * id:34259
+     * notPassReason:1,//未通过原因:1,患者已死亡;2,患者不接受随访;3,随访方案重复;4,方案不匹配;
+     * notPassRemark:人人健康活百岁
+     */
+    cancleAllResult (data) {
+        return fetch('post', '/visit/order/batchcancelall', data);
     },
     /*
      * 获取随访人的号码

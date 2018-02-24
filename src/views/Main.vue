@@ -169,7 +169,7 @@
             },
             beforePush (name) {
                 // if (name === 'accesstest_index') {
-                //     return false;
+                /* return false; */
                 // } else {
                 //     return true;
                 // }

@@ -327,23 +327,29 @@ export default {
           key: 'otype',
           align: 'center',
           render: (h, params) => {
-            if (params.row.otype == '01') {
-              return params.row.type = '症状'
-            } else if (params.row.otype == '02') {
-              return params.row.type = '体征'
-            } else if (params.row.otype == '03') {
-              return params.row.type = '生活方式指导'
-            } else if (params.row.otype == '04') {
-              return params.row.type = '辅助检查'
-            } else if (params.row.otype == '05') {
-              return params.row.type = '用药反馈'
-            } else if (params.row.otype == '06') {
-              return params.row.type = '转诊情况'
-            } else if (params.row.otype == '07') {
-              return params.row.type = '通用'
+            switch (params.row.otype) {
+              case '01':
+                return  '症状';
+                break;
+              case '02':
+                return  '体征';
+                break;
+              case '03':
+                return  '生活方式指导';
+                break;
+              case '04':
+                return  '辅助检查';
+                break;
+              case '05':
+                return  '用药反馈';
+                break;
+              case '06':
+                return  '转诊情况';
+                break;
+              default:
+                return  '通用';
+                break;
             }
-            return h('div', {
-            }, params.row.type);
           }
         },
         {
@@ -411,7 +417,6 @@ export default {
                       this.formItem.targetId = res.data.targetId
 
                     }).catch((error) => {
-                      console.log(error)
                     })
                   }
                 }

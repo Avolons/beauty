@@ -60,8 +60,9 @@
 		</Col>
 		<!-- 表格 -->
 		<Col span="24" class="fpTable">
-		<Table border :columns="config" :data="dataList" class="margin-bottom-10" :loading="createLoading"></Table>
+		<Table @on-selection-change="selectAll" border :columns="config" :data="dataList" class="margin-bottom-10" :loading="createLoading"></Table>
 		<Row>
+			<Button v-if="!menuShow(this.AM.FollowBussiness.cancleall)" @click="cancelAllResult" :type="haveSelect.length>0?'primary':'dashed'">批量终止随访</Button>
 			<Page style="float:right" :current="searchParams.pager" :total="totalPage" @on-change="changePage" show-elevator show-total></Page>
 		</Row>
 		</Col>
@@ -416,6 +417,11 @@ export default {
 			//表格配置
 			config: [
 				{
+					type: 'selection',
+					width: 60,
+					align: 'center'
+				},
+				{
 					title: '序号',
 					type: 'index',
 					align: 'center',
@@ -587,9 +593,28 @@ export default {
 				]
 			},
 			sfStatus: '',//当前患者的随访状态
+			haveSelect: [],
+			clickAll: false,//是否是批量选择
 		}
 	},
 	methods: {
+		/** 
+		 * 批量终止随访
+		 */
+		cancelAllResult() {
+			if (this.haveSelect.length == 0) {
+				return false;
+			}
+			this.$refs.zzsfForm.resetFields();
+			this.zzsfModel = true;
+			this.sfrName = "选中的";
+			this.zzsfForm.select = '';
+			this.zzsfForm.textarea = '';
+			this.clickAll = true;
+		},
+		selectAll(selection) {
+			this.haveSelect = selection;
+		},
 		timeChange_one(date) {
 			this.searchParams.dateAddBegin = date[0];
 			this.searchParams.dateAddEnd = date[1];
@@ -612,6 +637,11 @@ export default {
 		 */
 		getData() {
 			API.FollowBussiness.listLog(this.searchParams).then((res) => {
+				for (const item of res.data) {
+					if (item.status >= 2) {
+						item._disabled = true;
+					}
+				}
 				this.dataList = res.data;
 				this.totalPage = res.total;
 				this.createLoading = false;
@@ -691,27 +721,27 @@ export default {
 
 			});
 		},
-    /**
-       * 终止随访按钮
-       */
+		/**
+		   * 终止随访按钮
+		   */
 		zzsfFun(name, id, sfStatus, notPassReason, notPassRemark) {
 			this.zzsfModel = true;
 			this.sfrName = name;
 			this.nowId = id;
 			this.sfStatus = sfStatus; //获取当前的随访状态,3=停止
-      if(sfStatus == '3') {
-        this.$refs.sfStatusBtn.$el.setAttribute('disabled',true)
-      }else {
-        this.$refs.sfStatusBtn.$el.removeAttribute('disabled')
-      }
-      //清空终止随访的旧值
-      if(notPassReason !='') {
-        this.zzsfForm.select = notPassReason;
-        this.zzsfForm.textarea = notPassRemark;
-      }else {
-        this.zzsfForm.select = '';
-        this.zzsfForm.textarea = '';
-      }
+			if (sfStatus == '3') {
+				this.$refs.sfStatusBtn.$el.setAttribute('disabled', true)
+			} else {
+				this.$refs.sfStatusBtn.$el.removeAttribute('disabled')
+			}
+			//清空终止随访的旧值
+			if (notPassReason != '') {
+				this.zzsfForm.select = notPassReason;
+				this.zzsfForm.textarea = notPassRemark;
+			} else {
+				this.zzsfForm.select = '';
+				this.zzsfForm.textarea = '';
+			}
 		},
 		//选择终止随访的原因
 		xzReason(value) {
@@ -730,19 +760,42 @@ export default {
 		zzsfOk(name) {
 			this.$refs[name].validate((valid) => {
 				if (valid) {
-					API.Dataaudit.cancelall({
-						id: this.nowId,
-						notPassReason: this.zzsfForm.select,
-						notPassRemark: this.zzsfForm.textarea,
-					}).then((res) => {
-						console.log(res)
-						this.$Message.success('成功!');
-						this.zzsfModel = false;
-						this.getData(this.searchParams.pager)
-					}).catch((err) => {
-						//弹出错误信息
-						this.$Message.error(err);
-					});
+					if (this.selectAll) {
+						let ids=[];
+						for (const item of this.haveSelect) {
+							ids.push(item.id);
+						}
+						API.FollowBussiness.cancleAllResult({
+							ids: ids,
+							notPassReason: this.zzsfForm.select,
+							notPassRemark: this.zzsfForm.textarea,
+						}).then((res) => {
+							this.$Message.success('成功!');
+							this.zzsfModel = false;
+							this.selectAll = false;
+							this.zzsfForm.select = '';
+							this.zzsfForm.textarea = '';
+							this.getData(this.searchParams.pager);
+						}).catch((err) => {
+							//弹出错误信息
+							this.$Message.error(err);
+							this.selectAll = false;
+						});
+					} else {
+						API.Dataaudit.cancelall({
+							id: this.nowId,
+							notPassReason: this.zzsfForm.select,
+							notPassRemark: this.zzsfForm.textarea,
+						}).then((res) => {
+							this.$Message.success('成功!');
+							this.zzsfModel = false;
+							this.getData(this.searchParams.pager)
+						}).catch((err) => {
+							//弹出错误信息
+							this.$Message.error(err);
+						});
+					}
+
 				} else {
 					this.$Message.error('失败');
 				}

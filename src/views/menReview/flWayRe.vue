@@ -957,6 +957,8 @@ export default {
 		 */
 		editDepart(id) {
 			this.modal = true;
+			this.modal = false;
+			this.modal = true;
 			// this.$refs.zzsfForm.resetFields();
 			this.zzsfForm.select = '';
 			this.zzsfForm.textarea = '';

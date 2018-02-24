@@ -19,6 +19,19 @@
             :icon-color="shrinkIconColor"
             @on-change="handleChange"
         ></sidebar-menu-shrink>
+        <Modal v-model="modal" width="360">
+            <p slot="header" style="color:#f60;text-align:center">
+                <Icon type="information-circled"></Icon>
+                <span>确认离开</span>
+            </p>
+            <div style="text-align:center">
+                <p>您还有编辑中的内容未保存</p>
+                <p>是否确认离开?</p>
+            </div>
+            <div slot="footer">
+                <Button type="error" size="large" long @click="liveCurrent">离开</Button>
+            </div>
+        </Modal>
     </div>
 </template>
 
@@ -27,6 +40,13 @@ import sidebarMenu from './components/sidebarMenu.vue';
 import sidebarMenuShrink from './components/sidebarMenuShrink.vue';
 import util from '@/libs/util';
 export default {
+    data(){
+        return{
+            routeList: ['/followSetting/voice/voice', '/followSetting/template/template', '/followSetting/way/way',],
+            modal: false,
+            name:"",
+        }
+    },
     name: 'shrinkableMenu',
     components: {
         sidebarMenu,
@@ -71,12 +91,28 @@ export default {
                     willpush = false;
                 }
             }
+
+            let routePath = this.$route.path;
+            for (const ite of this.routeList) {
+                if (routePath.indexOf(ite) > -1) {
+                    this.modal = true;
+                    this.name=name;
+                    return false;
+                }
+            }
+            
             if (willpush) {
                 this.$router.push({
                     name: name
                 });
             }
             this.$emit('on-change', name);
+        },
+        liveCurrent(){
+            this.$router.push({
+                    name: this.name
+            });
+            this.modal = false;
         }
     }
 };

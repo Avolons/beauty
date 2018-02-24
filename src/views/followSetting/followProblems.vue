@@ -278,9 +278,10 @@ export default {
     return {
       createLoading: true,  //默认加载
       page: 1,
-      taglabel: "",//关联指标的taglabel
-      modelTre: "",//疾病类型的label
-      //指标筛选条件集合
+      taglabel: "",
+      modelTre: "",
+      editorDate:{},   //记录编辑数据  确认是否改变
+      //指标筛选
       indexParams: {
         pager: 1,
         limit: 999999,
@@ -378,11 +379,24 @@ export default {
                     API.followProblems.editList({
                       id: params.row.id
                     }).then((res) => {
-                      this.formItem.id = res.data.id;
-                      this.formItem.title = res.data.title;
-                      this.formItem.content = res.data.content;
-                      this.formItem.playWavOnly = res.data.playWavOnly;
-                      this.formItem.isTarget = res.data.isTarget;
+                       //用来记录上一次的值 看是否改变
+                       this.editorDate = {
+                           id: res.data.id,
+                           title: res.data.title,
+                           isTarget: res.data.isTarget,
+                           content: res.data.content,
+                           targetId: res.data.targetId,
+                           diseaseId: res.data.diseaseId,
+                           playWavOnly: res.data.playWavOnly,
+                           status: res.data.status
+                      }
+                      this.formItem = {
+                          id: res.data.id,
+                          title: res.data.title,
+                          content: res.data.content,
+                          playWavOnly: res.data.playWavOnly,
+                          isTarget: res.data.isTarget
+                      }
                       let arr = [];
                       res.data.diseaseId = res.data.diseaseId.split(",");
                       res.data.diseaseName = res.data.diseaseName.split(",");
@@ -414,8 +428,8 @@ export default {
                         value: res.data.targetId,
                       })
                       this.taglabel = res.data.targetName;
-                      this.formItem.targetId = res.data.targetId
-
+                      this.formItem.targetId = res.data.targetId;
+//                      this.search.otype = res.data.otype
                     }).catch((error) => {
                     })
                   }
@@ -441,7 +455,7 @@ export default {
                       this.FollowProblePage({
                         "followProble": {
                           "followProblePage": this.page,       //页码
-                        }
+                      }
 
                       });
                     }
@@ -656,6 +670,19 @@ export default {
             this.patientText = false;
             this.listRefresh(this.page);
             this.$Message.success("提交成功");
+            if(JSON.stringify(addPram)!=JSON.stringify(this.editorDate)){
+                console.log(this.formItem.playWavOnly)
+                if(this.formItem.playWavOnly=='0'){
+                    this.$router.push({ path: '/followSetting/voice/voice/'+this.formItem.id+''});
+                    //保存数据  当再次返回的时候进行重新赋值
+                    this.FollowProblePage({
+                        "followProble": {
+                            "followProblePage": this.page,       //页码
+                        }
+                    });
+                }
+
+            }
           }).catch((error) => {
           })
         } else {

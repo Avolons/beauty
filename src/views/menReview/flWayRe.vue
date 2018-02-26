@@ -1,8 +1,9 @@
 <style lang="less">
 @import "../../styles/jzda.less";
-#audioObj{
+#audioObj {
 	display: none;
 }
+
 .follPass {
 	&_message {
 		height: 450px;
@@ -162,6 +163,9 @@
 					border-top-left-radius: 0;
 					border-bottom-left-radius: 0;
 				}
+				.ivu-date-picker {
+					width: 100%;
+				}
 				.ivu-select {
 					flex-grow: 1;
 					flex-shrink: 1;
@@ -198,29 +202,36 @@
 				</Col>
 				<Col span="6">
 				<span>
-					科室名称：
+					审核状态
 				</span>
-				<Select :filterable="true" @on-change="getDoctorList" v-model="departId">
-					<Option v-for="item in departList" :value="item.id" :key="item.id">{{item.name}}</Option>
+				<Select v-model="searchParam.vetStatus">
+					<Option v-for="item in statusList" :value="item.id" :key="item.id">{{item.name}}</Option>
 				</Select>
 				</Col>
 				<Col span="6">
 				<span>
-					医生：
+					随访方案
 				</span>
-				<Select :filterable="true" @on-change="getPlan" v-model="searchParam.adminId">
-					<Option v-for="item in doctorList" :value="item.id" :key="item.id">{{item.realname}}</Option>
-				</Select>
+				<Input type="text" v-model="searchParam.schemeName" placeholder="请输入随访方案"></Input>
 				</Col>
 				<Col span="6">
 				<span>
-					方案匹配：
+					审核人
 				</span>
-				<Select :filterable="true" v-model="searchParam.schemeId" placeholder="请选择方案" style="width:200px">
-					<Option v-for="item in actionList" :value="item.id" :key="item.id">{{ item.name }}</Option>
-				</Select>
+				<Input type="text" v-model="searchParam.vetPerson" placeholder="请输入审核人"></Input>
 				</Col>
-
+				<Col span="6" style="height:32px;">
+				<span>
+					执行日期：
+				</span>
+				<DatePicker @on-change="timeChange_one" type="daterange" placeholder="请选择执行日期"></DatePicker>
+				</Col>
+				<Col span="6" style="height:32px;">
+				<span>
+					审核日期：
+				</span>
+				<DatePicker @on-change="timeChange_two"  placement="bottom-end" type="daterange" placeholder="请选择审核日期"></DatePicker>
+				</Col>
 				<Col span="6">
 				<Button @click="searchParam.pager=1;getData()" type="primary">查询</Button>
 				</Col>
@@ -289,7 +300,7 @@
 					</Panel>
 					<Panel name="2">
 						记录详情
-						<Button style="margin:7px 15px 0 0;float:right" @click.stop="allAudio" size="small" icon="volume-medium" type="primary">一键播放所有语音</Button>
+						<!-- <Button style="margin:7px 15px 0 0;float:right" @click.stop="allAudio" size="small" icon="volume-medium" type="primary">一键播放所有语音</Button> -->
 						<ul slot="content" class="follPass_message">
 							<template v-for="item in planInfo.orderReplyQuestions">
 								<li class="follPass_single_ai">
@@ -571,19 +582,45 @@ import { API } from '../../services/index.js';
 export default {
 	data() {
 		return {
-			audioObj:document.querySelector('#audioObj'),
+			statusList: [{
+				name: "全部",
+				id: ""
+			},{
+				name: "未审核",
+				id: 0
+			},{
+				name: "已审核",
+				id: 1
+			}, {
+				name: "未处理",
+				id: 10
+			}, {
+				name: "已处理",
+				id: 11
+			}, {
+				name: "已取消",
+				id: 12
+			}, ],//审核状态选项列表
+			audioObj: document.querySelector('#audioObj'),
 			showAll: ["1", "2"],
 			hzxxId: "",//患者id
 			//搜索参数
 			searchParam: {
 				pager: 1, //当前页码
 				limit: 10,//每页条数
-				schemeId: "",//方案id（可选）
+				schemeName: "",//方案id（可选）
 				orderNo: "",//编码（可选）
 				brxm: "", //患者姓名（可选）
 				adminId: "",  //医生id
 				status: 2,  //状态为2（必传）
-				isConceal: 1
+				isConceal: 1,
+				dateEndBegin: "", //执行开始日期（可选）
+				dateEndEnd: "",    //执行结束日期（可选）
+				dateVetBegin: "",         //审核开始日期（可选）
+				dateVetEnd: "",            //审核结束日期（可选）
+				vetStatus: "",                     //审核状态: 0 未审核，1 已审核,10 未处理,11 已处理,12 已取消
+				vetPerson: ""                  //审核人
+
 			},
 			createLoading: true,		//默认为true
 			//随访结果详情
@@ -609,6 +646,12 @@ export default {
 			modal: false,
 			//表格配置
 			config: [
+				{
+					title: '序号',
+					type: 'index',
+					align: 'center',
+					width: 70,
+				},
 				{
 					title: '随访编号',
 					key: 'orderNo',
@@ -651,7 +694,7 @@ export default {
 				},
 				{
 					title: '执行日期',
-					key: 'dateUpdate'
+					key: 'dateEnd'
 				},
 				{
 					title: '审核人',
@@ -710,7 +753,7 @@ export default {
 									size: 'small'
 								},
 								style: {
-									
+
 								},
 								'class': {
 									menuHide: this.menuShow(this.AM.Data.delResult)
@@ -758,16 +801,24 @@ export default {
 	mounted() {
 		this.getDepartList();
 		this.getData();
-		audioObj.addEventListener("ended",()=>{
-				console.log(1);
-			});
+		audioObj.addEventListener("ended", () => {
+		});
 	},
 	methods: {
+		timeChange_one(date) {
+			this.searchParam.dateEndBegin = date[0];
+			this.searchParam.dateEndEnd = date[1];
+			
+		},
+		timeChange_two(date) {
+			this.searchParam.dateVetBegin = date[0];
+			this.searchParam.dateVetEnd = date[1];
+		},
 		/** 
 		 * 一键播放所有语音
 		 */
-		allAudio(){
-			this.audioObj.src="http://192.168.1.100:8080/AIVoc/2018-01-26/20180126090634_12.wav"
+		allAudio() {
+			this.audioObj.src = "http://192.168.1.100:8080/AIVoc/2018-01-26/20180126090634_12.wav"
 			this.audioObj.play();
 		},
 		/** 
@@ -905,6 +956,8 @@ export default {
 		 * 审核结果
 		 */
 		editDepart(id) {
+			this.modal = true;
+			this.modal = false;
 			this.modal = true;
 			// this.$refs.zzsfForm.resetFields();
 			this.zzsfForm.select = '';
@@ -1106,7 +1159,7 @@ export default {
 			})
 		},
 	},
-	
+
 }
 </script>
 

@@ -69,6 +69,9 @@ export default {
         };
     },
     methods: {
+        /** 
+         * 
+         */
         setTheme (themeFile) {
             let menuTheme = themeFile.substr(0, 1);
             let mainTheme = themeFile.substr(-1, 1);

@@ -17,7 +17,7 @@
 			</Col>
 			<Col span="6">
 			<span>
-				随访状态
+				状态
 			</span>
 			<Select v-model="searchParams.status">
 				<Option v-for="item in statusList" :value="item.id" :key="item.id">{{item.name}}</Option>
@@ -29,6 +29,30 @@
 			</span>
 			<Input type="text" v-model="searchParams.schemeName" placeholder="请输入随访方案"></Input>
 			</Col>
+			<Col span="6" style="height:32px;margin-top:10px">
+			<span>
+				生成日期：
+			</span>
+			<DatePicker @on-change="timeChange_one" type="daterange" placeholder="请选择生成日期"></DatePicker>
+			</Col>
+			<Col span="6" style="height:32px;margin-top:10px">
+			<span>
+				执行日期：
+			</span>
+			<DatePicker @on-change="timeChange_two" type="daterange" placeholder="请选择执行日期"></DatePicker>
+			</Col>
+			<Col span="6" style="height:32px;margin-top:10px">
+			<span>
+				审核日期：
+			</span>
+			<DatePicker @on-change="timeChange_three" type="daterange" placeholder="请选择审核日期"></DatePicker>
+			</Col>
+			<Col span="6" style="height:32px;margin-top:10px">
+			<span style="width:105px;height:32px;">
+				计划执行日期：
+			</span>
+			<DatePicker @on-change="timeChange_four" type="daterange" placement="bottom-end" placeholder="请选择计划执行日期" style="width:calc(100% - 105px)"></DatePicker>
+			</Col>
 			<Col span="6" style="margin-top:10px">
 			<Button @click="searchParams.pager=1;getData()" type="primary">查询</Button>
 			</Col>
@@ -36,8 +60,9 @@
 		</Col>
 		<!-- 表格 -->
 		<Col span="24" class="fpTable">
-		<Table border :columns="config" :data="dataList" class="margin-bottom-10" :loading="createLoading"></Table>
+		<Table @on-selection-change="selectAll" border :columns="config" :data="dataList" class="margin-bottom-10" :loading="createLoading"></Table>
 		<Row>
+			<Button v-if="!menuShow(this.AM.FollowBussiness.cancleall)" @click="cancelAllResult" :type="haveSelect.length>0?'primary':'dashed'">批量终止随访</Button>
 			<Page style="float:right" :current="searchParams.pager" :total="totalPage" @on-change="changePage" show-elevator show-total></Page>
 		</Row>
 		</Col>
@@ -355,6 +380,15 @@ export default {
 				orderNo: "",//编码（可选）
 				brxm: "", //患者姓名（可选）
 				status: "",
+				dateAddBegin: "",  //生成开始日期（可选）
+				dateAddEnd: "",  //生成结束日期（可选）
+				dateEndBegin: "", //执行开始日期（可选）
+				dateEndEnd: "",    //执行结束日期（可选）
+				dateVetBegin: "",         //审核开始日期（可选）
+				dateVetEnd: "",         //审核结束日期（可选）
+				dateBeginBegin: "",         //计划开始日期（可选）
+				dateBeginEnd: ""           //计划结束日期（可选）
+
 			},
 			statusList: [{
 				name: "全部",
@@ -382,6 +416,17 @@ export default {
 			},
 			//表格配置
 			config: [
+				{
+					type: 'selection',
+					width: 60,
+					align: 'center'
+				},
+				{
+					title: '序号',
+					type: 'index',
+					align: 'center',
+					width: 70,
+				},
 				{
 					title: '随访编号',
 					key: 'orderNo',
@@ -423,7 +468,7 @@ export default {
 					align: 'center'
 				},
 				{
-					title: '随访状态',
+					title: '状态',
 					key: 'statusStr',
 					align: 'center'
 				},
@@ -439,13 +484,23 @@ export default {
 				},
 				{
 					title: '执行日期',
-					key: 'dateUpdate',
+					key: 'dateEnd',
 					align: 'center'
+				},
+				{
+					title: '审核日期',
+					key: 'vetDate',
+					align: 'center'
+				},
+				{
+					title: '计划执行日期',
+					key: 'dateBegin',
+					align: 'center',
 				},
 				{
 					title: '操作',
 					key: 'action',
-					width: 250,
+					width: 220,
 					align: 'center',
 					render: (h, params) => {
 						return h('div', [
@@ -489,7 +544,7 @@ export default {
 									}
 								}
 							}, '终止随访'),
-							 h('Button', {
+							h('Button', {
 								props: {
 									type: 'warning',
 									size: 'small'
@@ -538,14 +593,55 @@ export default {
 				]
 			},
 			sfStatus: '',//当前患者的随访状态
+			haveSelect: [],
+			clickAll: false,//是否是批量选择
 		}
 	},
 	methods: {
+		/** 
+		 * 批量终止随访
+		 */
+		cancelAllResult() {
+			if (this.haveSelect.length == 0) {
+				return false;
+			}
+			this.$refs.zzsfForm.resetFields();
+			this.zzsfModel = true;
+			this.sfrName = "选中的";
+			this.zzsfForm.select = '';
+			this.zzsfForm.textarea = '';
+			this.clickAll = true;
+		},
+		selectAll(selection) {
+			this.haveSelect = selection;
+		},
+		timeChange_one(date) {
+			this.searchParams.dateAddBegin = date[0];
+			this.searchParams.dateAddEnd = date[1];
+		},
+		timeChange_two(date) {
+			this.searchParams.dateEndBegin = date[0];
+			this.searchParams.dateEndEnd = date[1];
+
+		},
+		timeChange_three(date) {
+			this.searchParams.dateVetBegin = date[0];
+			this.searchParams.dateVetEnd = date[1];
+		},
+		timeChange_four(date) {
+			this.searchParams.dateBeginBegin = date[0];
+			this.searchParams.dateBeginEnd = date[1];
+		},
 		/** 
 		 * 获取列表数据,搜索接口
 		 */
 		getData() {
 			API.FollowBussiness.listLog(this.searchParams).then((res) => {
+				for (const item of res.data) {
+					if (item.status >= 2) {
+						item._disabled = true;
+					}
+				}
 				this.dataList = res.data;
 				this.totalPage = res.total;
 				this.createLoading = false;
@@ -625,27 +721,27 @@ export default {
 
 			});
 		},
-    /**
-       * 终止随访按钮
-       */
+		/**
+		   * 终止随访按钮
+		   */
 		zzsfFun(name, id, sfStatus, notPassReason, notPassRemark) {
 			this.zzsfModel = true;
 			this.sfrName = name;
 			this.nowId = id;
 			this.sfStatus = sfStatus; //获取当前的随访状态,3=停止
-      if(sfStatus == '3') {
-        this.$refs.sfStatusBtn.$el.setAttribute('disabled',true)
-      }else {
-        this.$refs.sfStatusBtn.$el.removeAttribute('disabled')
-      }
-      //清空终止随访的旧值
-      if(notPassReason !='') {
-        this.zzsfForm.select = notPassReason;
-        this.zzsfForm.textarea = notPassRemark;
-      }else {
-        this.zzsfForm.select = '';
-        this.zzsfForm.textarea = '';
-      }
+			if (sfStatus == '3') {
+				this.$refs.sfStatusBtn.$el.setAttribute('disabled', true)
+			} else {
+				this.$refs.sfStatusBtn.$el.removeAttribute('disabled')
+			}
+			//清空终止随访的旧值
+			if (notPassReason != '') {
+				this.zzsfForm.select = notPassReason;
+				this.zzsfForm.textarea = notPassRemark;
+			} else {
+				this.zzsfForm.select = '';
+				this.zzsfForm.textarea = '';
+			}
 		},
 		//选择终止随访的原因
 		xzReason(value) {
@@ -664,19 +760,42 @@ export default {
 		zzsfOk(name) {
 			this.$refs[name].validate((valid) => {
 				if (valid) {
-					API.Dataaudit.cancelall({
-						id: this.nowId,
-						notPassReason: this.zzsfForm.select,
-						notPassRemark: this.zzsfForm.textarea,
-					}).then((res) => {
-						console.log(res)
-						this.$Message.success('成功!');
-						this.zzsfModel = false;
-						this.getData(this.searchParams.pager)
-					}).catch((err) => {
-						//弹出错误信息
-						this.$Message.error(err);
-					});
+					if (this.selectAll) {
+						let ids=[];
+						for (const item of this.haveSelect) {
+							ids.push(item.id);
+						}
+						API.FollowBussiness.cancleAllResult({
+							ids: ids,
+							notPassReason: this.zzsfForm.select,
+							notPassRemark: this.zzsfForm.textarea,
+						}).then((res) => {
+							this.$Message.success('成功!');
+							this.zzsfModel = false;
+							this.selectAll = false;
+							this.zzsfForm.select = '';
+							this.zzsfForm.textarea = '';
+							this.getData(this.searchParams.pager);
+						}).catch((err) => {
+							//弹出错误信息
+							this.$Message.error(err);
+							this.selectAll = false;
+						});
+					} else {
+						API.Dataaudit.cancelall({
+							id: this.nowId,
+							notPassReason: this.zzsfForm.select,
+							notPassRemark: this.zzsfForm.textarea,
+						}).then((res) => {
+							this.$Message.success('成功!');
+							this.zzsfModel = false;
+							this.getData(this.searchParams.pager)
+						}).catch((err) => {
+							//弹出错误信息
+							this.$Message.error(err);
+						});
+					}
+
 				} else {
 					this.$Message.error('失败');
 				}

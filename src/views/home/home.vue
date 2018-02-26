@@ -189,18 +189,23 @@ export default {
                     title: '排名',
                     type: 'index',
                     align: 'center',
+                    width:70,
                 },
                 {
                     title: '姓名',
-                    key: 'realname'
+                    key: 'realname',
                 },
                 {
                     title: '接诊量',
                     key: 'jzNum',
+                    sortable: true,
+                    width:90,
+                    
                 },
                 {
                     title: '随访量',
-                    key: 'sfNum'
+                    key: 'sfNum',
+                    width:75,
                 }
             ],
             /** 
@@ -213,8 +218,16 @@ export default {
                 type: "1"   //类型(必传)：1表示7日，2表示30日
             },
             //科室列表
-            departList: [],//医生统计科室
-            departList_dis: [],//就诊累计情况科室
+            departList: [{
+                departmentName:"全部",
+                departmentId:-1,
+            }],//医生统计科室
+            departList_dis: [
+                {
+                departmentName:"全部",
+                departmentId:-1,
+            }
+            ],//就诊累计情况科室
             /** 基础数据列表 */
             count: {
                 createUser: [0, 0],
@@ -223,14 +236,14 @@ export default {
             },
             //就诊患者排行
             jzParams: {
-                departmentId: 821,   //科室(必传)
+                departmentId: "",   //科室(必传)
                 type: "1"
             },
             jzCount: 0,
             jzList: [],
             /** 随访情况数据 */
             followParams: {
-                departmentId: 17,   //科室(必传)
+                departmentId: "",   //科室(必传)
                 type: '1'           //类型(必传)：1表示7日，2表示30日
             },
             /** 随访情况 */
@@ -286,13 +299,14 @@ export default {
          */
         getDepartList() {
             API.Home.getdepartment().then((res) => {
-                this.departList = res.data;
+                this.departList = this.departList.concat(res.data);
                 /** 
                  * 统一数据赋值
                  * 
                  */
-                this.jzParams.departmentId = res.data[0].departmentId;
-                this.doctorParams.departmentId = res.data[0].departmentId;
+                this.jzParams.departmentId = this.departList[0].departmentId;
+                this.doctorParams.departmentId =this.departList[0].departmentId;
+
             }).catch((err) => {
 
             }).then(()=>{
@@ -301,12 +315,12 @@ export default {
                 this.getSortList(); */
             });
             API.Home.departList().then((res) => {
-                this.departList_dis = res.data;
+                this.departList_dis = this.departList_dis.concat(res.data);
                 /** 
                  * 统一数据赋值
                  * 
                  */
-                this.followParams.departmentId = res.data[0].departmentId;
+                this.followParams.departmentId = this.departList_dis[0].departmentId;
                 /* this.getFollowData(); */
             }).catch((err) => {
 
@@ -317,7 +331,9 @@ export default {
          * 获取医生排行数据
          */
         getSortList() {
-            API.Home.seniority(this.doctorParams).then((res) => {
+            let sendData=JSON.parse(JSON.stringify(this.doctorParams));
+            sendData.departmentId=sendData.departmentId==-1?"":sendData.departmentId;
+            API.Home.seniority(sendData).then((res) => {
                 this.dataList = res.data;
             }).catch((err) => {
 
@@ -327,7 +343,9 @@ export default {
          * 获取就诊患者排行数据
          */
         getjzcount() {
-            API.Home.jzcount(this.jzParams).then((res) => {
+            let sendData=JSON.parse(JSON.stringify(this.jzParams));
+            sendData.departmentId=sendData.departmentId==-1?"":sendData.departmentId;
+            API.Home.jzcount(sendData).then((res) => {
                 this.jzCount = res.total;
                 this.jzList = res.data;
                 setTimeout(()=> {
@@ -343,13 +361,15 @@ export default {
          */
         getFollowData() {
             // 随访情况接口
-            API.Home.countvisitorder(this.followParams).then((res) => {
+            let sendData=JSON.parse(JSON.stringify(this.followParams));
+            sendData.departmentId=sendData.departmentId==-1?"":sendData.departmentId;
+            API.Home.countvisitorder(sendData).then((res) => {
                 this.countvisitorder = res.data;
             }).catch((err) => {
 
             });
             // 每日随访任务量接口
-            API.Home.hccount(this.followParams).then((res) => {
+            API.Home.hccount(sendData).then((res) => {
                 this.followList=res.data;
                 setTimeout(()=> {
                 this.$refs.follow.init();
@@ -358,7 +378,7 @@ export default {
 
             });
             // 任务完成情况统计接口
-            API.Home.countvisitfinish(this.followParams).then((res) => {
+            API.Home.countvisitfinish(sendData).then((res) => {
                 let arr=[];
                 for (const item of res.data) {
                   arr.push({
@@ -374,7 +394,7 @@ export default {
 
             });
             // 任务失败情况统计接口
-            API.Home.countordercancel(this.followParams).then((res) => {
+            API.Home.countordercancel(sendData).then((res) => {
                let arr=[];
                for (const item of res.data) {
                    arr.push({
@@ -402,12 +422,7 @@ export default {
         this.getBaseData();
     },
     activated() {
-        for (const ite of [1,1,1,1]) {
-            for (const item of [1,1,1]) {
-                return 1;
-             } 
-        }
-        return(22);
+        
     }
 };
 </script>

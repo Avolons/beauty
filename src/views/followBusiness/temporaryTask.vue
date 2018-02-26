@@ -177,13 +177,25 @@
 							<span style="width:105px;height:32px;">
 								导入开始时间：
 							</span>
-							<DatePicker @on-change="timeChange_import()" type="datetime" format="yyyy-MM-dd HH:mm" placeholder="请选择数据导入时间" style="width:calc(100% - 105px)"></DatePicker>
+							<DatePicker @on-change="timeChange_import" type="datetime" format="yyyy-MM-dd HH:mm" placeholder="请选择数据导入时间" style="width:calc(100% - 105px)"></DatePicker>
 							</Col>
 							<Col span="6" style="height:32px">
 							<span style="width:105px;height:32px;margin-left:15px">
 								导入结束时间：
 							</span>
-							<DatePicker @on-change="timeChange_export()" type="datetime" format="yyyy-MM-dd HH:mm" placeholder="请选择数据导出时间" style="width:calc(100% - 105px)"></DatePicker>
+							<DatePicker @on-change="timeChange_export" type="datetime" format="yyyy-MM-dd HH:mm" placeholder="请选择数据导出时间" style="width:calc(100% - 105px)"></DatePicker>
+							</Col>
+							<Col span="6" style="height:32px;margin-top:10px">
+							<span style="width:105px;height:32px;">
+								就诊开始时间：
+							</span>
+							<DatePicker @on-change="timeChange_importElse" type="datetime" format="yyyy-MM-dd HH:mm" placeholder="请选择就诊开始时间" style="width:calc(100% - 105px)"></DatePicker>
+							</Col>
+							<Col span="6" style="height:32px;margin-top:10px">
+							<span style="width:105px;height:32px;">
+								就诊结束时间：
+							</span>
+							<DatePicker @on-change="timeChange_exportElse" type="datetime" format="yyyy-MM-dd HH:mm" placeholder="请选择就诊结束时间" style="width:calc(100% - 105px)"></DatePicker>
 							</Col>
 						</Row>
 						<div class="creatNotice_main_add">
@@ -311,6 +323,8 @@ export default {
 				adminId: "",
 				beginTime: '',//导入开始时间：年月日时分秒(可选)
 				endTime: '',//导入结束时间：年月日时分秒（可选）
+				diagnoseTimeBegin:"",
+				diagnoseTimeEnd:""
 			},
 			/** 
 			 * 方案请求数据
@@ -502,10 +516,12 @@ export default {
 							this.sendData.isAll = 0
 						} else if (this.isAll == 1) {
 							//this.sendData.hzxxIds = []
-							this.sendData.isAll = 1
-							this.sendData.brxm = this.searchParams.brxm
-							this.sendData.beginTime = this.searchParams.beginTime
-							this.sendData.endTime = this.searchParams.endTime
+							this.sendData.isAll = 1;
+							this.sendData.brxm = this.searchParams.brxm;
+							this.sendData.beginTime = this.searchParams.beginTime;
+							this.sendData.endTime = this.searchParams.endTime;
+							this.sendData.diagnoseTimeBegin = this.searchParams.diagnoseTimeBegin;
+							this.sendData.diagnoseTimeEnd = this.searchParams.diagnoseTimeEnd;
 						}
 						this.sendData.visitStartTime = this.timeobj.date + " " + this.timeobj.time;
 						API.FollowBussiness.patSubmit(this.sendData).then((res) => {
@@ -567,6 +583,7 @@ export default {
 		 * 获取医生列表
 		 */
 		getDoctorList() {
+			this.searchParams.admin="";
 			API.FollowBussiness.listDoctor({
 				pager: 1,
 				limit: 100000,
@@ -592,6 +609,7 @@ export default {
 			this.searchParams.adminId = this.sendData.adminId;
 			this.searchParams.beginTime = this.timeobj1.date;
 			this.searchParams.endTime = this.timeobj2.date;
+			console.log(this.searchParams);
 			API.FollowBussiness.patList(this.searchParams).then((res) => {
 				this.dataList = this.formData(res.data);
 				this.totalPage = res.total;
@@ -664,6 +682,12 @@ export default {
 		},
 		timeChange_export(date) {
 			this.timeobj2.date = date;
+		},
+		timeChange_importElse(date) {
+			this.searchParams.diagnoseTimeBegin = date;
+		},
+		timeChange_exportElse(date) {
+			this.searchParams.diagnoseTimeEnd = date;
 		},
 		/** 
 		 * 添加患者

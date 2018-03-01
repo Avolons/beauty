@@ -1,8 +1,46 @@
-<style lang="less">
+<style lang="less" scoped>
 .sys-task {
     &_main {
         &_list {}
         &_page {
+            margin-top: 10px;
+        }
+    }
+}
+.sys-tasklog {
+    &_main {
+
+        &_list {}
+        &_search{
+            box-sizing: border-box;
+            margin-bottom: 10px;
+            .ivu-col{
+                display: flex;
+                >span{
+                    background-color: #dadada;
+                    text-align: center;
+                    line-height: 32px;
+                    display: block;
+                    width: 80px;
+                    flex-shrink: 0;
+                    border-top-left-radius: 4px;
+                    border-bottom-left-radius: 4px;
+                }
+                .ivu-input{
+                    border-top-left-radius: 0;
+                    border-bottom-left-radius: 0;
+                }
+                .ivu-select{
+                    flex-grow: 1;
+                    flex-shrink: 1;
+                }
+                .ivu-select-selection{
+                    border-top-left-radius: 0;
+                    border-bottom-left-radius: 0;
+                }
+            }
+        }
+        &_page{
             margin-top: 10px;
         }
     }
@@ -13,12 +51,46 @@
 <template>
     <div class="user">
         <div class="sys-task_main">
+            <Row class="sys-tasklog_main_search" :gutter="15">
+                <Col span="6">
+                    <span>
+                        编号：
+                    </span>
+                    <Input   placeholder="请输入编号" v-model="searchParam.moduleName"></Input>
+                </Col>
+                <Col span="6">
+                <span>
+                            说明：
+                        </span>
+                <Input   placeholder="请输入说明" v-model="searchParam.remark"></Input>
+                </Col>
+                <Col span="6">
+                    <span>
+                            主机名：
+                        </span>
+                    <Input   placeholder="请输入主机名" v-model="searchParam.hostname"></Input>
+                </Col>
+                <Col span="6">
+                <span>
+                    状态：
+                </span>
+                <Select v-model="searchParam.state" style="width:200px">
+                    <Option value="" >全部</Option>
+                    <Option value=1 >禁用</Option>
+                    <Option value=0 >启用</Option>
+                </Select>
+                </Col>
+                <Col span="6">
+                    <Button  type="primary" style="margin-top: 10px;" @click="searchData">查询</Button>
+                </Col>
+
+            </Row>
             <div class="sys-task_main_list">
-                <Table border :columns="config" :data="dataList" :loading="createLoading"></Table>
+                    <Table border :columns="config" :data="dataList" :loading="createLoading" class="tablet"></Table>
             </div>
-            <Row class="sys-task_main_page">
+            <Row class="sys-task_main_page" v-if="totalPage>10">
                     <Page :total="totalPage" show-total :current="page" show-elevator style="float:right" @on-change="changePage"></Page>
-                </Row>
+            </Row>
         </div>
     </div>
 </template>
@@ -29,10 +101,16 @@ export default {
     data() {
         return {
             createLoading:true,    //loading 动画加载中
-            value: "",//备注内容
-            currentId: -1,//当前被点击的id
-            page: 1,//当前页码
-            totalPage: 10,//总页码
+            value: '', //备注内容
+            currentId: -1, //当前被点击的id
+            page: 1, //当前页码
+            totalPage: 10, //总页码
+            searchParam:{
+                state: '',       //状态
+                remark: '',     //说明
+                moduleName: '' , //编号
+                hostname: '' //主机名（可选）
+            },
             config: [
                 {
                     title: '编号',
@@ -149,13 +227,24 @@ export default {
         }
     },
     methods: {
+        /**
+         * 点击查询获取所有数据
+         */
+        searchData(){
+            this.page =1;
+            this.getData();
+        },
         /** 
          * 获取所有数据
          */
-        getData() {
+        getData () {
             API.Systems.listTime({
-                pager:this.page,
-                limit:10
+                pager: this.page,
+                remark: this.searchParam.remark,
+                moduleName: this.searchParam.moduleName,
+                hostname: this.searchParam.hostname,
+                state: this.searchParam.state,
+                limit: 10
             }).then((res) => {
                 this.dataList = res.data;
                 this.totalPage=res.total;

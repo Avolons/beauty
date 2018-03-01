@@ -33,6 +33,7 @@
 		<Button style="display:block;margin-top:20px;" type="primary"><a style="color:#fff" href="/assets/templatedoc/Patient.xls">下载患者模板</a></Button>
 		<Modal title="上传错误" v-model="errorMsg">
 			<Table border :columns="config" :data="dataList" ></Table>
+			<Button style="display:block;margin-top:20px;" type="primary"><a style="color:#fff" href="/assets/templatedoc/患者信息错误.xls">下载患者错误信息</a></Button>
 		</Modal>
 	</div>
 </template>

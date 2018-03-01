@@ -177,25 +177,25 @@
 							<span style="width:105px;height:32px;">
 								导入开始时间：
 							</span>
-							<DatePicker @on-change="timeChange_import" type="datetime" format="yyyy-MM-dd HH:mm" placeholder="请选择数据导入时间" style="width:calc(100% - 105px)"></DatePicker>
+							<DatePicker @on-change="timeChange_import" type="datetimerange"  placeholder="请选择数据导入时间" style="width:calc(100% - 105px)"></DatePicker>
 							</Col>
 							<Col span="6" style="height:32px">
 							<span style="width:105px;height:32px;margin-left:15px">
 								导入结束时间：
 							</span>
-							<DatePicker @on-change="timeChange_export" type="datetime" format="yyyy-MM-dd HH:mm" placeholder="请选择数据导出时间" style="width:calc(100% - 105px)"></DatePicker>
+							<DatePicker @on-change="timeChange_export" type="datetimerange"  placeholder="请选择数据导出时间" style="width:calc(100% - 105px)"></DatePicker>
 							</Col>
 							<Col span="6" style="height:32px;margin-top:10px">
 							<span style="width:105px;height:32px;">
 								就诊开始时间：
 							</span>
-							<DatePicker @on-change="timeChange_importElse" type="datetime" format="yyyy-MM-dd HH:mm" placeholder="请选择就诊开始时间" style="width:calc(100% - 105px)"></DatePicker>
+							<DatePicker @on-change="timeChange_importElse" type="datetimerange"  placeholder="请选择就诊开始时间" style="width:calc(100% - 105px)"></DatePicker>
 							</Col>
 							<Col span="6" style="height:32px;margin-top:10px">
 							<span style="width:105px;height:32px;">
 								就诊结束时间：
 							</span>
-							<DatePicker @on-change="timeChange_exportElse" type="datetime" format="yyyy-MM-dd HH:mm" placeholder="请选择就诊结束时间" style="width:calc(100% - 105px)"></DatePicker>
+							<DatePicker @on-change="timeChange_exportElse" type="datetimerange"  placeholder="请选择就诊结束时间" style="width:calc(100% - 105px)"></DatePicker>
 							</Col>
 						</Row>
 						<div class="creatNotice_main_add">

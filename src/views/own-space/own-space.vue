@@ -10,7 +10,7 @@
                 个人信息
             </p>
             <div>
-                <Form ref="userForm" :model="userForm" :label-width="100" label-position="right" :rules="inforValidate">
+                <Form ref="userForm" :model="userForm" :label-width="100" label-position="right" >
                     <FormItem label="用户姓名：" prop="name">
                         <div style="display:inline-block;width:300px;">
                             <Input v-model="userForm.name"></Input>
@@ -18,7 +18,7 @@
                     </FormItem>
                     <FormItem label="用户手机：" prop="cellphone">
                         <div style="display:inline-block;width:300px;">
-                            <Input v-model="userForm.cellphone" @on-keydown="hasChangePhone"></Input>
+                            <Input v-model="userForm.cellphone" ></Input>
                         </div>
                         <!-- <div style="display:inline-block;position:relative;">
                                             <Button @click="getIdentifyCode" :disabled="canGetIdentifyCode">{{ gettingIdentifyCodeBtnContent }}</Button>
@@ -40,11 +40,11 @@
                                         <span>{{ userForm.department }}</span>
                                     </FormItem> -->
                     <FormItem label="登录密码：">
-                        <Button type="text" size="small" @click="showEditPassword">修改密码</Button>
+                        <Button type="primary" size="small" @click="showEditPassword">修改密码</Button>
                     </FormItem>
                     <div>
-                        <Button type="text" style="width: 100px;" @click="cancelEditUserInfor">取消</Button>
-                        <Button type="primary" style="width: 100px;" :loading="save_loading" @click="saveEdit">保存</Button>
+                     <!--    <Button type="text" style="width: 100px;" @click="cancelEditUserInfor">取消</Button>
+                        <Button type="primary" style="width: 100px;" :loading="save_loading" @click="saveEdit">保存</Button> -->
                     </div>
                 </Form>
             </div>

@@ -200,13 +200,13 @@
 							<span style="width:105px;height:32px;">
 								就诊开始时间：
 							</span>
-							<DatePicker @on-change="timeChange_import" type="datetime" format="yyyy-MM-dd HH:mm:ss" placeholder="请选择就诊开始时间" style="width:calc(100% - 105px)"></DatePicker>
+							<DatePicker @on-change="timeChange_import" type="datetimerange"  placeholder="请选择就诊开始时间" style="width:calc(100% - 105px)"></DatePicker>
 							</Col>
 							<Col span="6" style="height:32px;margin-top:10px">
 							<span style="width:105px;height:32px;">
 								就诊结束时间：
 							</span>
-							<DatePicker @on-change="timeChange_export" type="datetime" format="yyyy-MM-dd HH:mm:ss" placeholder="请选择就诊结束时间" style="width:calc(100% - 105px)"></DatePicker>
+							<DatePicker @on-change="timeChange_export" type="datetimerange"  placeholder="请选择就诊结束时间" style="width:calc(100% - 105px)"></DatePicker>
 							</Col>
 						</Row>
 						<div class="creatNotice_main_add">

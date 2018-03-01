@@ -386,12 +386,28 @@ export default {
 								}
 							}, '通过'),
 							h('Button', {
-								props: {
-									type: 'warning',
-									size: 'small'
+                props: {
+                  type: 'info',
+                  size: 'small'
 								},
 								style: {
 									marginRight: '5px'
+								},
+                'class':{
+									menuHide: this.menuShow(this.AM.Data.passPlan)
+								},
+                on: {
+                  click: () => {
+                    this.sfjhModel = true;
+                    this.detailFun(params.row.id)
+                    
+                  }
+                }
+							}, '详情'),
+							h('Button', {
+								props: {
+									type: 'warning',
+									size: 'small'
 								},
 								'class': {
 								menuHide: this.menuShow(this.AM.Data.passPlan)
@@ -405,22 +421,6 @@ export default {
 									}
 								}
 							}, '不通过'),
-							h('Button', {
-                props: {
-                  type: 'success',
-                  size: 'small'
-                },
-                'class':{
-									menuHide: this.menuShow(this.AM.Data.passPlan)
-								},
-                on: {
-                  click: () => {
-                    this.sfjhModel = true;
-                    this.detailFun(params.row.id)
-                    
-                  }
-                }
-              }, '详情')
 						]);
 					}
 				}],

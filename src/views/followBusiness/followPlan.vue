@@ -27,19 +27,19 @@
       <span>
         生成日期：
       </span>
-      <DatePicker @on-change="timeChange_one" type="daterange" placement="bottom-end" placeholder="请选择生成日期"></DatePicker>
+      <DatePicker @on-change="timeChange_one" type="datetimerange" placement="bottom-end" placeholder="请选择生成日期"></DatePicker>
       </Col>
       <Col span="6" style="height:32px;margin-top:10px">
       <span style="width:105px;height:32px;">
         计划开始日期：
       </span>
-      <DatePicker @on-change="timeChange_two" type="daterange" placeholder="请选择计划开始日期" style="width:calc(100% - 105px)"></DatePicker>
+      <DatePicker @on-change="timeChange_two" type="datetimerange" placeholder="请选择计划开始日期" style="width:calc(100% - 105px)"></DatePicker>
       </Col>
       <Col span="6" style="height:32px;margin-top:10px">
       <span>
         审核日期：
       </span>
-      <DatePicker @on-change="timeChange_three" type="daterange" placeholder="请选择审核日期"></DatePicker>
+      <DatePicker @on-change="timeChange_three" type="datetimerange" placeholder="请选择审核日期"></DatePicker>
       </Col>
       <Col span="6" style="margin-top:10px">
       <Button type="primary" @click="searchParams.pager=1;getData()">查询</Button>

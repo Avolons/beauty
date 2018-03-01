@@ -14,7 +14,9 @@ Vue.prototype.$http = axios;
 /* 默认最长响应时间 */
 // axios.defaults.timeout = 5000;
 /* 默认的接口地址 */
-/* axios.defaults.baseURL = 'http://192.168.1.215:8080'; */
+
+// axios.defaults.baseURL = 'http://192.168.1.215:8080';
+axios.defaults.baseURL = 'http://192.168.3.24:8080';
 /* axios.defaults.baseURL = 'http://60.190.86.50:6016'; */
 /* axios.defaults.baseURL = 'http://192.168.1.32:8081'; */
 /* axios.defaults.baseURL = 'http://192.168.1.166:8080'; */
@@ -785,8 +787,56 @@ export const Systems = {
      */
     listDisTemp (data) {
         return fetch('get', '/visit/newDisease/findTemp', data);
+    },
+    /**
+     * 获取运营维护对应列表数据
+     * @param {any} data
+     * @returns
+     */
+    operateMaintainList (data) {
+        return fetch('get', '/visit/sysConfigOperation/list', data);
+    },
+    /**
+     * 运营维护数据删除
+     * id:14 //当前数据id
+     * @param {any} data
+     * @returns
+     */
+    delOperateMaDate (data) {
+        return fetch('post', '/visit/sysConfigOperation/del', data);
+    },
+    /**
+     * 添加运营数据
+     * trueName:aaa //名称
+     * phone:13355558888 //手机号码
+     * remark:ddd //备注
+     * @param {any} data
+     * @returns
+     */
+    addOperateMaDate (data) {
+        return fetch('post', '/visit/sysConfigOperation/save', data);
+    },
+    /**
+     * 得到单条数据列表
+     * id
+     * @param {any} data
+     * @returns
+     */
+    listGetOperaTList (data) {
+        return fetch('get', '/visit/sysConfigOperation/view', data);
+    },
+    /**
+     * 修改运营数据
+     * id:1
+     * trueName:aaa //名称
+     * phone:13355558888 //手机号码
+     * remark:ddd //备注
+     * @param {any} data
+     * @returns
+     */
+    modifyOperateMaDate (data) {
+        return fetch('post', '/visit/sysConfigOperation/save', data);
     }
-
 };
 
 /* 随访设置--随访指标接口 *****/

@@ -13,6 +13,17 @@
             overflow-y: auto; */
         }
     }
+
+}
+.business{
+    &_main{
+        &_header{
+            margin-bottom: 15px;
+        }
+        &_page{
+            margin-top: 15px;
+        }
+    }
 }
 </style>
 
@@ -20,15 +31,25 @@
 <template>
     <div class="role">
         <div class="role_main">
-            <div class="role_main_add">
-                <Button @click="addRole" v-if="!menuShow(this.AM.Jur.infoRoles)" type="primary">新增角色</Button>
-            </div>
+            <Row class="business_main_header">
+                <Col span="18">
+                <Input  placeholder="角色名称" style="width: 200px" v-model="roleName"/>
+                <span style="margin: 0 10px;" @click="searchBus"><Button type="primary" icon="search" >搜索</Button></span>
+                <Button  type="ghost" @click="initData">取消</Button>
+                </Col>
+                <Col span="6">
+                    <Button @click="addRole" v-if="!menuShow(this.AM.Jur.infoRoles)" type="primary" style="float: right;">新增角色</Button>
+                </Col>
+            </Row>
+            <!--<div class="role_main_add">-->
+
+            <!--</div>-->
             <div class="role_main_list">
                 <Table border :columns="config" :data="dataList"></Table>
             </div>
-            <!-- <Row class="role_main_page">
-                    <Page :total="100" :current="1" style="float:right" @on-change="changePage"></Page>
-                 </Row> -->
+            <Row class="role_main_page" v-if="totalPage>10">
+                    <Page :total="totalPage" :current="1" style="float:right" @on-change="changePage"></Page>
+            </Row>
             <Modal v-model="modal" :title="title" width="1000">
                 <Form ref="addData" class="role_main_form" :model="formData" :rules="validate.system" :label-width="80">
                     <FormItem label="名称" prop="key">
@@ -59,6 +80,9 @@ export default {
         return {
             title: "编辑参数",
             modal: false,
+            page: 1,
+            roleName:"",   //角色名称
+            totalPage:100,
             //添加的数据
             formData: {
                 type: "",
@@ -147,6 +171,7 @@ export default {
             'authorToken'
         ]),
     },
+
     methods: {
         ...mapActions(['saveRoleManageRecord']),
         submitRole() {
@@ -172,17 +197,43 @@ export default {
 
             })
         },
+        /**
+         * 获取数据 搜索角色名称
+         */
+        searchBus(){
+            this.getData();
+        },
+        /**
+         * 分页改变,返回点击后的分页代码
+         */
+        changePage(index){
+            this.page=index;
+            this.getList();
+        },
+        /**
+         * 点击取消  进行重置
+         */
+        initData(){
+            this.roleName ='';
+            this.page=1;
+            this.getData();
+        },
         /** 
          * 获取数据
          */
         getData() {
-            API.Jurisdiction.listRoles().then((res) => {
+            API.Jurisdiction.listRoles({
+                pager: this.page,
+                limit: 10,
+                name: this.roleName
+
+            }).then((res) => {
                 this.dataList = res.data;
+                this.totalPage=res.total;
             }).catch((err) => {
 
             });
         },
-
         /** 
         * 新增角色
         */

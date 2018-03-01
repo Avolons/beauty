@@ -59,34 +59,21 @@
             <Row class="sys-tasklog_main_search" :gutter="15">
                 <Col span="6">
                 <span>
-                        编码：
+                        名称：
                     </span>
-                <Input   placeholder="请输入编码" v-model="serchSyst.key"></Input>
+                <Input   placeholder="请输入名称" v-model="serchSyst.trueName"></Input>
                 </Col>
                 <Col span="6">
                 <span>
-                            值：
+                            手机号码：
                         </span>
-                <Input   placeholder="请输入值" v-model="serchSyst.value"></Input>
+                <Input   placeholder="请输入手机号码" v-model="serchSyst.phone"></Input>
                 </Col>
-                <Col span="6">
-                <span>
-                            备注：
-                        </span>
-                <Input   placeholder="请输入备注" v-model="serchSyst.remark"></Input>
-                </Col>
-                <Col span="6">
-                <span>
-                            分类信息：
-                        </span>
-                <Input   placeholder="请输入分类信息" v-model="serchSyst.mainType"></Input>
-                </Col>
-                <Col span="6" style="margin-top: 10px">
+
+                <Col span="6" style="">
                 <Button  type="primary" style="margin-right: 10px;" @click="searchData">查询</Button>
-                <Button @click="modal=true;formData.sort=0" v-if="!menuShow(this.AM.Systems.addSystem)" type="primary">添加</Button>
-
+                <Button @click="modal=true;formData.sort=0" v-if="!menuShow(this.AM.Systems.addMaintainDate)" type="primary">添加</Button>
                 </Col>
-
             </Row>
 
             <div class="sys-sysset_main_list">
@@ -97,24 +84,16 @@
             </Row>
         </div>
         <Modal v-model="modal" title="添加参数" >
-            <Form ref="addData" class="sys-sysset_main_form" :model="formData" :rules="validate.system" :label-width="80">
-                <FormItem label="类型" prop="type">
-                    <Select v-model="formData.type" placeholder="请选择类型">
-                        <Option v-for="item in typeList" :value="item.id" :key="item.id">{{ item.label }}</Option>
-                    </Select>
+            <Form ref="addData" class="sys-sysset_main_form" :model="formData" :rules="validate.operDate" :label-width="80">
+
+                <FormItem label="名称" prop="trueName">
+                    <Input v-model="formData.trueName" placeholder="请输入名称"></Input>
                 </FormItem>
-                <FormItem label="编码" prop="key">
-                    <Input v-model="formData.key" placeholder="请输入编码"></Input>
+                <FormItem label="手机号码" prop="phone">
+                    <Input v-model="formData.phone" placeholder="请输入手机号码"></Input>
                 </FormItem>
-                <FormItem label="分类信息" prop="mType">
-                    <Input v-model="formData.mType" placeholder="请输入分类信息"></Input>
-                </FormItem>
-                <FormItem label="排序字段" prop="sort">
-                  <InputNumber  :min="0"  v-model="formData.sort"></InputNumber>
-                </FormItem>
-                <FormItem label="参数值" prop="value">
-                    <Input v-model="formData.value" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="请填写参数值"></Input>
-                </FormItem>
+
+
                 <FormItem label="备注" prop="remark">
                     <Input v-model="formData.remark" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="请填写备注"></Input>
                 </FormItem>
@@ -124,12 +103,12 @@
             </div>
         </Modal>
         <Modal v-model="editmodal" title="编辑参数" >
-            <Form ref="editData" class="sys-sysset_main_form" :model="currentInfo" :rules="validate.system" :label-width="80">
-                <FormItem label="编码" prop="key">
-                    <Input disabled v-model="currentInfo.key" placeholder="请输入编码"></Input>
+            <Form ref="editData" class="sys-sysset_main_form" :model="currentInfo" :rules="validate.operDate" :label-width="80">
+                <FormItem label="名称" prop="trueName">
+                    <Input  v-model="currentInfo.trueName" placeholder="请输入名称"></Input>
                 </FormItem>
-                <FormItem label="参数值" prop="value">
-                    <Input v-model="currentInfo.value" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="请填写参数值"></Input>
+                <FormItem label="手机号码" prop="phone">
+                    <Input v-model="currentInfo.phone"  placeholder="请填写手机号码"></Input>
                 </FormItem>
                 <FormItem label="备注" prop="remark">
                     <Input v-model="currentInfo.remark" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="请填写备注"></Input>
@@ -152,75 +131,43 @@ export default {
             totalPage: 0,//总页码
             pageSize:10,
             //搜索数据
-            serchSyst:{
-                key: '',  //编码（可选）
-                value: '',   //值(可选)
-                remark: '',  //备注（可选）
-                mainType: '' //分类信息（可选）
+            serchSyst: {
+                trueName: '',  //名称（可选）
+                phone: '' //手机号码（可选）
             },
             //当前被点击触发的数据
             currentInfo: {
-                type: "",
-                key: "",
-                value: "",
-                remark: "",
+                trueName: '',  //名称
+                phone: '',           //手机号码
+                remark: ''                     //备注
             },
 
             //添加的数据
             formData: {
-                type: "",
-                key: "",
-                value: "",
-                remark: "",
-                mType:"",
-                sort:0,
+                trueName: '',  //名称
+                phone: '',           //手机号码
+                remark: ''                     //备注
+
             },
-            //类型选项列表
-            typeList: [
-                {
-                    id: 0,
-                    label: "文本字符串",
-                },
-                {
-                    id: 1,
-                    label: "开关",
-                },
-                {
-                    id: 2,
-                    label: "上传文件",
-                },
-            ],
             //添加的显示隐藏
             editmodal:false,
             modal: false,
             config: [
                 {
-                    title: '编码',
-                    key: 'key',
+                    title: '名称',
+                    key: 'trueName',
                 },
                 {
-                    title: '值',
-                    key: 'value'
+                    title: '手机号码',
+                    key: 'phone'
                 },
                 {
-                    title: '分类信息',
-                    key: 'mainType',
-                },
-                {
-                    title: '排序字段',
-                    key: 'sort'
+                    title: '创建时间',
+                    key: 'dateAdd',
                 },
                 {
                     title: '备注',
                     key: 'remark'
-                },
-                {
-                    title: '创建时间',
-                    key: 'creatAt'
-                },
-                {
-                    title: '修改时间',
-                    key: 'updateAt'
                 },
                 {
                     title: '操作',
@@ -237,8 +184,8 @@ export default {
                                 style: {
                                     marginRight: '5px'
                                 },
-                                'class':{
-									menuHide:this.menuShow(this.AM.Systems.editSystem)
+                                'class': {
+									menuHide:this.menuShow(this.AM.Systems.editorMaintainDate)
 								},
                                 on: {
                                     click: () => {
@@ -254,8 +201,8 @@ export default {
                                 style: {
                                     marginRight: '5px'
                                 },
-                                'class':{
-									menuHide:this.menuShow(this.AM.Systems.delSystem)
+                                'class': {
+									menuHide:this.menuShow(this.AM.Systems.MaintainDel)
 								},
                                 on: {
                                     click: () => {
@@ -283,13 +230,12 @@ export default {
         /** 
          * 获取所有数据
          */
-        getData() {
-            API.Systems.listSystem({
-                page: this.page,
-                key: this.serchSyst.key,
-                value: this.serchSyst.value,
-                remark: this.serchSyst.remark,
-                mainType: this.serchSyst.mainType
+        getData () {
+            API.Systems.operateMaintainList({
+                pager: this.page,
+                limit: 10,
+                trueName: this.serchSyst.trueName,
+                phone: this.serchSyst.phone,
             }).then((res) => {
                 this.dataList=res.data;
                 this.totalPage = res.totleRow;
@@ -306,15 +252,14 @@ export default {
             this.createLoading = true;
             this.$refs['addData'].validate((valid) => {
                 if (valid) {
-                    API.Systems.addSystem(this.formData).then((res) => {
+                    API.Systems.addOperateMaDate(this.formData).then((res) => {
                         this.$Message.success("新增成功");
                         this.modal=false;
                         this.getData();
                         this.formData= {
-                            type: "",
-                            key: "",
-                            value: "",
-                            remark: "",
+                            trueName: '',  //名称
+                            phone: '',           //手机号码
+                            remark: ''                     //备注
                         };
                     }).catch((err) => {
 
@@ -329,14 +274,14 @@ export default {
         /** 
          * 删除系统设置
          */
-        delSetting(id) {
+        delSetting (id) {
             this.createLoading = true;
             let self = this;
             this.$Modal.confirm({
                 title: '删除设置',
-                content: '确定删除该系统设置？',
+                content: '确定删除该运营维护吗？',
                 onOk: () => {
-                    API.Systems.delSystem({
+                    API.Systems.delOperateMaDate({
                         id: id
                     }).then((res) => {
                         self.$Message.success("删除成功");
@@ -352,6 +297,7 @@ export default {
          * 编辑系统设置
          */
         editSetting(data) {
+            console.log(data)
             this.editmodal=true;
             this.currentInfo = JSON.parse(JSON.stringify(data));
         },
@@ -362,9 +308,10 @@ export default {
             this.createLoading = true;
             this.$refs['editData'].validate((valid) => {
                 if (valid) {
-                    API.Systems.editSystem({
+                    API.Systems.modifyOperateMaDate({
                         id:this.currentInfo.id,
-                        value:this.currentInfo.value,
+                        trueName: this.currentInfo.trueName,  //名称
+                        phone:this.currentInfo.phone,           //手机号码
                         remark:this.currentInfo.remark,
                     }).then((res) => {
                         this.$Message.success("修改成功");

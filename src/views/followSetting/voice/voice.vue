@@ -253,7 +253,7 @@ export default {
 		}
 	},
 	components: {
-		draggable,
+		// draggable,
 	},
 	created() {
 		this.fetchData()

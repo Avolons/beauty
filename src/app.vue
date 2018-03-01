@@ -1,6 +1,8 @@
 <template>
     <div id="main" class="app-main">
+      <navigation>
         <router-view></router-view>
+      </navigation>
     </div>
 </template>
 
@@ -19,11 +21,16 @@ import { API } from '@/services';
 
             });
         },
+        created() {
+          this.$navigation.on('back', (to, from) => {
+            // alert("后退")
+          })
+        },
         beforeDestroy () {
 
         },
         methods: {
-
+         
         }
     };
 </script>

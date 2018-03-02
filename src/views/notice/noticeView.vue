@@ -1,4 +1,4 @@
-<style lang="less">
+<style lang="scss">
 .noshow{
     display: none;
 }
@@ -74,7 +74,7 @@
                 <span>
                     计划时间：
                 </span>
-                <DatePicker @on-change="timeChange" type="daterange" placement="bottom-end" placeholder="请选择时间范围"></DatePicker>
+                <DatePicker @on-change="timeChange" type="datetimerange" placement="bottom-end" placeholder="请选择时间范围"></DatePicker>
                 </Col>
                 <Col span="6">
                     <Button  @click="searchParams.pager=1;getData()" type="primary">查询</Button>

@@ -219,11 +219,6 @@
 						</div>
 					</li>
 				</ul>
-				<!-- <ul id="shopList" >
-										<li v-for="(item,index) in switchArr" :key="index" :data-index="index">
-											
-										</li>
-									</ul> -->
 				</Col>
 				<Col span="24">
 				<Button type="primary" style="margin: 10px 20px;" @click="addVoice()">添加话术</Button>
@@ -290,7 +285,7 @@ export default {
 				/*
 				*根据指标id，获取指标阀值等信息
 				*/
-				let getTargetIDVoice = res.data.targetId//指标id
+				let getTargetIDVoice = res.data.targetId.trim()//指标id
 				if (getTargetIDVoice) {
 					API.follSetting.editList({
 						id: getTargetIDVoice
@@ -305,36 +300,66 @@ export default {
 							this.questionTargetStyle = '文本'
 						}
 						//获取指标阀值
+
 						this.questionTargetfz = res.data.optionValues;
 						this.fzArray = this.questionTargetfz.split(',');
+						console.log(this.fzArray);
 						/*switch信息*/
-						class Point {
-							constructor(item) {
-								this.switchID = item.switchID
-								this.switchText = item.switchText
-								this.switchRegexText = item.switchRegexText
-								this.keyname = item.keyname
-								this.outRptSwitchID = item.outRptSwitchID
-								this.keyvalue = item.keyvalue
-							}
-						}
-						if (this.switchArr.length == 0) {
-							this.fzArray.forEach((item, index) => {
-								this.switchArr.push(new Point({
-									switchID: index + 1,
-									// switchText : '',
-									switchRegexText: '',
-									keyname: '',
-									outRptSwitchID: '',
-									keyvalue: item
-								}))
-							})
-							this.switchArr.forEach((item, index) => {
-								item.keyname = this.questionTargetName
+
+						let questionList = [];
+
+						for (const item of this.fzArray) {
+							questionList.push({
+								switchID: 0,
+								switchText: '',
+								switchRegexText: '',
+								keyname: this.questionTargetName,
+								outRptSwitchID: '',
+								keyvalue: item
 							})
 						}
 
+						if (this.switchArr.length == 0) {
+							this.switchArr = questionList.concat(this.switchArr);
+						} else {
+							if (this.switchArr[0].keyname) {
+								for (const item of questionList) {
+									for (const ite of this.switchArr) {
+										if (item.keyvalue = ite.keyvalue) {
+											item.switchText = ite.switchText;
+											item.switchRegexText = ite.switchRegexText;
+											item.outRptSwitchID = ite.outRptSwitchID;
+											break;
+										}
+									}
+								}
+								let flag = 0;
+								for (const item of this.switchArr) {
+									if (item.keyvalue) {
+										flag++;
+									}
+								}
+								this.switchArr.splice(0, flag);
+								this.switchArr = questionList.concat(this.switchArr);
+							}
+						}
+
+						this.switchArr.forEach((item, index) => {
+							item.switchID = index + 1
+						})
+
 					}).catch((error) => {
+					})
+				} else {
+					for (var index = 0; index < this.switchArr.length; index++) {
+						if (this.switchArr[index].keyname) {
+							this.switchArr.splice(index, 1);
+							index--;
+						}
+
+					}
+					this.switchArr.forEach((item, index) => {
+						item.switchID = index + 1
 					})
 				}
 			}).catch((error) => {
@@ -357,7 +382,6 @@ export default {
 			this.switchArr.forEach((item, index) => {
 				item.switchID = index + 1
 			})
-			console.log(this.switchArr)
 		},
 		/*
 		*删除话术

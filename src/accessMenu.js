@@ -245,7 +245,18 @@ export const AM = {
         saveDisAction: '/visit/newDisease/save',
 
         /** 查询对应模板方案 */
-        listDisTemp: '/visit/newDisease/findTemp'
+        listDisTemp: '/visit/newDisease/findTemp',
 
+        /** 查询运营维护 */
+        MaintainDate: '/visit/sysConfigOperation/list',
+
+        /** 删除运营维护 */
+        MaintainDel: '/visit/sysConfigOperation/del',
+
+        /** 添加运营维护 */
+        addMaintainDate: '/visit/sysConfigOperation/save',
+
+        /** 编辑运营维护 */
+        editorMaintainDate: '/visit/sysConfigOperation/view'
     }
 };

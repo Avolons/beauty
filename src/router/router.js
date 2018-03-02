@@ -411,11 +411,21 @@ export const appRouter = [{
     children: [{
         path: '/systemSet/systemSetup',
         title: '系统设置',
-        access: '/systemSet/systemSetup', // access已经添加
+        operatMaintain: '/systemSet/systemSetup', // access已经添加
         name: 'systemSetup',
         icon: 'android-locate',
         component: resolve => {
             require(['@/views/systemSet/systemSetup.vue'], resolve);
+        }
+    },
+    {
+        path: '/systemSet/operatMaintain',
+        title: '运营维护',
+        access: '/systemSet/operatMaintain', // access已经添加
+        name: 'operatMaintain',
+        icon: 'social-codepen',
+        component: resolve => {
+            require(['@/views/systemSet/operatMaintain.vue'], resolve);
         }
     },
     {

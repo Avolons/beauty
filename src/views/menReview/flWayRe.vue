@@ -224,13 +224,13 @@
 				<span>
 					执行日期：
 				</span>
-				<DatePicker @on-change="timeChange_one" type="daterange" placeholder="请选择执行日期"></DatePicker>
+				<DatePicker @on-change="timeChange_one" type="datetimerange" placeholder="请选择执行日期"></DatePicker>
 				</Col>
 				<Col span="6" style="height:32px;">
 				<span>
 					审核日期：
 				</span>
-				<DatePicker @on-change="timeChange_two"  placement="bottom-end" type="daterange" placeholder="请选择审核日期"></DatePicker>
+				<DatePicker @on-change="timeChange_two" placement="bottom-end" type="datetimerange" placeholder="请选择审核日期"></DatePicker>
 				</Col>
 				<Col span="6">
 				<Button @click="searchParam.pager=1;getData()" type="primary">查询</Button>
@@ -585,10 +585,10 @@ export default {
 			statusList: [{
 				name: "全部",
 				id: ""
-			},{
+			}, {
 				name: "未审核",
 				id: 0
-			},{
+			}, {
 				name: "已审核",
 				id: 1
 			}, {
@@ -600,7 +600,7 @@ export default {
 			}, {
 				name: "已取消",
 				id: 12
-			}, ],//审核状态选项列表
+			},],//审核状态选项列表
 			audioObj: document.querySelector('#audioObj'),
 			showAll: ["1", "2"],
 			hzxxId: "",//患者id
@@ -799,16 +799,22 @@ export default {
 		}
 	},
 	mounted() {
+		/** 
+		 * 获取科室列表集合
+		 */
 		this.getDepartList();
 		this.getData();
-		audioObj.addEventListener("ended", () => {
-		});
+		/* audioObj.addEventListener("ended", () => {
+		}); */
 	},
 	methods: {
+		/** 
+		 * 时间变更触发
+		 */
 		timeChange_one(date) {
 			this.searchParam.dateEndBegin = date[0];
 			this.searchParam.dateEndEnd = date[1];
-			
+
 		},
 		timeChange_two(date) {
 			this.searchParam.dateVetBegin = date[0];
@@ -822,20 +828,8 @@ export default {
 			this.audioObj.play();
 		},
 		/** 
-		 * 获取方案
+		 * 指标变化自动判断
 		 */
-		getPlan() {
-			if (!this.searchParam.adminId) {
-				return false;
-			}
-			API.Dataaudit.listDoctorPlan({
-				id: this.searchParam.adminId
-			}).then((res) => {
-				this.actionList = res.data;
-			}).catch((err) => {
-
-			});
-		},
 		labeChange(item) {
 			/* 获取预警阈值 */
 			let flag = 0;
@@ -905,7 +899,7 @@ export default {
 				/** 
 				 * 格式化正常值
 				 */
-				item.isNormal = item.isNormal == false ? "0" : "1";
+				item.isNormal = !item.isNormal ? "0" : "1";
 				let flag = 0;
 				/** 
 				 * 判断是否属于采集指标类型
@@ -959,12 +953,15 @@ export default {
 			this.modal = true;
 			this.modal = false;
 			this.modal = true;
-			// this.$refs.zzsfForm.resetFields();
+
 			this.zzsfForm.select = '';
 			this.zzsfForm.textarea = '';
 			API.Dataaudit.infoResult({
 				id: id
 			}).then((res) => {
+				this.planInfo = {
+					orderReplyQuestions: [],
+				};
 				this.planInfo = this.dataForm(res.data);
 				if (res.data.notPassReason != '') {
 					this.zzsfForm.radio = 1;
@@ -1008,6 +1005,7 @@ export default {
 				this.zzsfForm.textarea = '';
 			}
 		},
+		
 		/**
 		 * 判断是否终止随访
 		 */
@@ -1111,19 +1109,19 @@ export default {
 			this.zzsfModel = true;
 			this.sfrName = name;
 			this.nowId = id;
-			console.log(notPassReason,notPassRemark)
-      //清空终止随访的旧值
-      if(notPassReason !='') {
-      	this.zzsfForm.radio = 1;
-        this.zzsfForm.select = notPassReason;
-        this.zzsfForm.textarea = notPassRemark;
-        this.$refs.sfStatusBtn.$el.setAttribute('disabled',true)
-      }else {
-      	this.zzsfForm.radio = 0;
-        this.zzsfForm.select = '';
-        this.zzsfForm.textarea = '';
-        this.$refs.sfStatusBtn.$el.removeAttribute('disabled')
-      }    
+			console.log(notPassReason, notPassRemark)
+			//清空终止随访的旧值
+			if (notPassReason != '') {
+				this.zzsfForm.radio = 1;
+				this.zzsfForm.select = notPassReason;
+				this.zzsfForm.textarea = notPassRemark;
+				this.$refs.sfStatusBtn.$el.setAttribute('disabled', true)
+			} else {
+				this.zzsfForm.radio = 0;
+				this.zzsfForm.select = '';
+				this.zzsfForm.textarea = '';
+				this.$refs.sfStatusBtn.$el.removeAttribute('disabled')
+			}
 		},
 		//选择终止随访的原因
 		xzReason(value) {

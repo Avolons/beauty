@@ -33,25 +33,25 @@
 			<span>
 				生成日期：
 			</span>
-			<DatePicker @on-change="timeChange_one" type="daterange" placeholder="请选择生成日期"></DatePicker>
+			<DatePicker @on-change="timeChange_one" type="datetimerange" placeholder="请选择生成日期"></DatePicker>
 			</Col>
 			<Col span="6" style="height:32px;margin-top:10px">
 			<span>
 				执行日期：
 			</span>
-			<DatePicker @on-change="timeChange_two" type="daterange" placeholder="请选择执行日期"></DatePicker>
+			<DatePicker @on-change="timeChange_two" type="datetimerange" placeholder="请选择执行日期"></DatePicker>
 			</Col>
 			<Col span="6" style="height:32px;margin-top:10px">
 			<span>
 				审核日期：
 			</span>
-			<DatePicker @on-change="timeChange_three" type="daterange" placeholder="请选择审核日期"></DatePicker>
+			<DatePicker @on-change="timeChange_three" type="datetimerange" placeholder="请选择审核日期"></DatePicker>
 			</Col>
 			<Col span="6" style="height:32px;margin-top:10px">
 			<span style="width:105px;height:32px;">
 				计划执行日期：
 			</span>
-			<DatePicker @on-change="timeChange_four" type="daterange" placement="bottom-end" placeholder="请选择计划执行日期" style="width:calc(100% - 105px)"></DatePicker>
+			<DatePicker @on-change="timeChange_four" type="datetimerange" placement="bottom-end" placeholder="请选择计划执行日期" style="width:calc(100% - 105px)"></DatePicker>
 			</Col>
 			<Col span="6" style="margin-top:10px">
 			<Button @click="searchParams.pager=1;getData()" type="primary">查询</Button>

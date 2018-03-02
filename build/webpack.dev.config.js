@@ -14,16 +14,16 @@ fs.open('./build/env.js', 'w', function(err, fd) {
 
 module.exports = merge(webpackBaseConfig, {
     devtool: '#source-map',
-    /* devServer: {
+    devServer: {
         port: 8888,
         proxy:{
             '/visit/*':{
-                target: 'http://61.153.232.58:9998',
+                target: 'http://192.168.1.215:8080',
                 changeOrigin: true,
                 secure: false
             }
         }
-    }, */
+    },
     output: {
         publicPath: '/dist/',
         filename: '[name].js',

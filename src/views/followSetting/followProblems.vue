@@ -670,19 +670,21 @@ export default {
             this.patientText = false;
             this.listRefresh(this.page);
             this.$Message.success("提交成功");
-            if(JSON.stringify(addPram)!=JSON.stringify(this.editorDate)){
-                console.log(this.formItem.playWavOnly)
-                if(this.formItem.playWavOnly=='0'){
-                    this.$router.push({ path: '/followSetting/voice/voice/'+this.formItem.id+''});
-                    //保存数据  当再次返回的时候进行重新赋值
-                    this.FollowProblePage({
-                        "followProble": {
-                            "followProblePage": this.page,       //页码
-                        }
-                    });
-                }
+            if (this.formItem.id){
+                if(JSON.stringify(addPram)!=JSON.stringify(this.editorDate)){
+                    if(this.formItem.playWavOnly=='0'){
+                        this.$router.push({ path: '/followSetting/voice/voice/'+this.formItem.id+''});
+                        //保存数据  当再次返回的时候进行重新赋值
+                        this.FollowProblePage({
+                            "followProble": {
+                                "followProblePage": this.page,       //页码
+                            }
+                        });
+                    }
 
+                }
             }
+
           }).catch((error) => {
           })
         } else {

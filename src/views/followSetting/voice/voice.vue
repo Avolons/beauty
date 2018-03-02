@@ -230,7 +230,7 @@
 </template>
 
 <script>
-import draggable from 'vuedraggable'
+// import draggable from 'vuedraggable'
 import { API } from '@/services';
 export default {
 	data() {
@@ -248,7 +248,7 @@ export default {
 		}
 	},
 	components: {
-		draggable,
+		// draggable,
 	},
 	created() {
 		this.fetchData()

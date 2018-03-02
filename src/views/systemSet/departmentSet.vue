@@ -207,7 +207,7 @@ export default {
 			},],//状态选项列表
 			formData: {
 				name: "",
-				paixu: 0,
+				paixu: "0",
 				types: "0",
 				mType: "0",
 				state: "0",
@@ -222,10 +222,10 @@ export default {
 			modalexit:false,
 			//表格配置
 			config: [
-				{
-					title: '科室编号',
-					key: 'id',
-				},
+				// {
+				// 	title: '科室编号',
+				// 	key: 'id',
+				// },
 				{
 					title: '科室名称',
 					key: 'name',
@@ -335,7 +335,7 @@ export default {
 		 */
 		addData() {
 			this.modal = true;
-
+			this.formData.name = '';//新增时清空名称
 		},
 		/** 
          * 获取所有数据

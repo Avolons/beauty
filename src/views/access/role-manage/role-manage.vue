@@ -93,10 +93,10 @@ export default {
             //权限列表
             treeData: [],
             config: [
-                {
-                    title: '编号',
-                    key: 'id',
-                },
+                // {
+                //     title: '编号',
+                //     key: 'id',
+                // },
                 {
                     title: '名称',
                     key: 'name'

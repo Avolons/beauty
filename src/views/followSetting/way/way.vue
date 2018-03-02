@@ -437,11 +437,11 @@
 
 <script>
 import { API } from '@/services';
-import draggable from 'vuedraggable'
+// import draggable from 'vuedraggable'
 export default {
-	components: {
-		draggable
-	},
+	// components: {
+	// 	draggable
+	// },
 	data() {
 		return {
 			isWindow: false,

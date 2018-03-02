@@ -32,7 +32,14 @@ export default {
             document.title = res.data;
         }).catch((err) => {
 
-        });
+            });
+        },
+        created() {
+          
+        },
+        beforeDestroy () {
+
+        },
         let _this=this;
        /*  window.addEventListener('popstate', () => {
             let routePath = _this.$route.path;

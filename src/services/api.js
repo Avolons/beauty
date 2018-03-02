@@ -14,6 +14,7 @@ Vue.prototype.$http = axios;
 /* 默认最长响应时间 */
 // axios.defaults.timeout = 5000;
 /* 默认的接口地址 */
+/* axios.defaults.baseURL = 'http://192.168.3.24:8080'; */
 axios.defaults.baseURL = 'http://192.168.1.215:8080';
 /* axios.defaults.baseURL = 'http://60.190.86.50:6016'; */
 /* axios.defaults.baseURL = 'http://192.168.1.32:8081'; */
@@ -25,7 +26,7 @@ axios.defaults.baseURL = 'http://192.168.1.215:8080';
 
 /* axios.defaults.baseURL = 'http://192.168.3.26:8081'; */
 
-let JsonData = ['/visit/order/batchcancelall', '/order/temp/testvisit', '/order/temp/visit', '/visit/order/vet/save', '/visit/order/notice', '/ordertask/vet', '/question/script/save', '/questionscheme/save', '/questiontemple/save', '/questiontarget/save'];
+let JsonData = ['/visit/order/batchcancelall', '/order/temp/testvisit', '/order/temp/visit', '/visit/order/vet/save', '/visit/order/notice', '/ordertask/vet', '/question/script/save', '/questionscheme/save', '/questiontemple/save'];
 // 添加请求拦截器
 axios.interceptors.request.use(function (config) {
     let flag = 0;

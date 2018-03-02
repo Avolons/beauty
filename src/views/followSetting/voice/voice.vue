@@ -300,25 +300,50 @@ export default {
 							this.questionTargetStyle = '文本'
 						}
 						//获取指标阀值
+
 						this.questionTargetfz = res.data.optionValues;
 						this.fzArray = this.questionTargetfz.split(',');
+						console.log(this.fzArray);
 						/*switch信息*/
-						
+
 						let questionList = [];
-						if (this.switchArr.length == 0 || (this.switchArr.length >= 0 && !this.switchArr[0].keyname)) {
-							this.fzArray.forEach((item, index) => {
-								questionList.push({
-									switchID: 0,
-									switchText: '',
-									switchRegexText:'',
-									keyname:this.questionTargetName ,
-									outRptSwitchID: '',
-									keyvalue: item
-								})
+
+						for (const item of this.fzArray) {
+							questionList.push({
+								switchID: 0,
+								switchText: '',
+								switchRegexText: '',
+								keyname: this.questionTargetName,
+								outRptSwitchID: '',
+								keyvalue: item
 							})
-							
-							this.switchArr=questionList.concat(this.switchArr);
 						}
+
+						if (this.switchArr.length == 0) {
+							this.switchArr = questionList.concat(this.switchArr);
+						} else {
+							if (this.switchArr[0].keyname) {
+								for (const item of questionList) {
+									for (const ite of this.switchArr) {
+										if (item.keyvalue = ite.keyvalue) {
+											item.switchText = ite.switchText;
+											item.switchRegexText = ite.switchRegexText;
+											item.outRptSwitchID = ite.outRptSwitchID;
+											break;
+										}
+									}
+								}
+								let flag = 0;
+								for (const item of this.switchArr) {
+									if (item.keyvalue) {
+										flag++;
+									}
+								}
+								this.switchArr.splice(0, flag);
+								this.switchArr = questionList.concat(this.switchArr);
+							}
+						}
+
 						this.switchArr.forEach((item, index) => {
 							item.switchID = index + 1
 						})

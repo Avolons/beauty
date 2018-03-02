@@ -200,6 +200,12 @@
       </Select>
       </Col>
       <Col span="6">
+      <span>
+        指标id
+      </span>
+      <Input type="text" v-model="proSearch.targetId" placeholder="请输入相关联的指标id"></Input>
+      </Col>
+      <Col span="6">
       <Button style="margin-right:10px" type="primary" @click="handleSearch">查询</Button>
       <Button type="info" v-if="!menuShow(this.AM.FollowSetting.addPro)" @click="addBtn('proRuleModel')">添加问题</Button>
       </Col>
@@ -296,6 +302,7 @@ export default {
         limit: 10,
         title: '',
         diseaseId: '',
+        targetId:"",
       },
       //表格data
       dataList: [],

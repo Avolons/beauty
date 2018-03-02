@@ -211,6 +211,11 @@ export default {
 	  config(){
 		return [
 			{
+				title: '指标id',
+				key: 'id',
+				align: 'center',
+			},
+			{
 				title: '指标名称',
 				key: 'name',
 				align: 'center',

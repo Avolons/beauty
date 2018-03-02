@@ -39,6 +39,7 @@ module.exports = {
                     // }
                     loaders: {
                         css: 'vue-style-loader!css-loader',
+                        scss: 'vue-style-loader!css-loader!sass-loader',
                         less: 'vue-style-loader!css-loader!less-loader'
                     },
                     postLoaders: {

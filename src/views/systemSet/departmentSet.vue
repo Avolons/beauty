@@ -207,7 +207,7 @@ export default {
 			},],//状态选项列表
 			formData: {
 				name: "",
-				paixu: 0,
+				paixu: "0",
 				types: "0",
 				mType: "0",
 				state: "0",
@@ -335,7 +335,7 @@ export default {
 		 */
 		addData() {
 			this.modal = true;
-
+			this.formData.name = '';//新增时清空名称
 		},
 		/** 
          * 获取所有数据

@@ -126,7 +126,8 @@ export default {
             message: '请填写名称',
             trigger: 'blur'
         }],
-        paixu: [{
+        paixu: [
+        {
             required: true,
             type: 'number',
             message: '请填写序号',
@@ -134,7 +135,8 @@ export default {
             transform(value) {
                 return Number(value);
             }
-        }],
+        }
+        ],
         types: [{
             required: true,
             message: '请选择类型',

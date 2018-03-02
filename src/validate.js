@@ -130,7 +130,10 @@ export default {
             required: true,
             type: 'number',
             message: '请填写序号',
-            trigger: 'blur'
+            trigger: 'blur',
+            transform(value) {
+                return Number(value);
+            }
         }],
         types: [{
             required: true,

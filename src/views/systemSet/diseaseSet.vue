@@ -222,13 +222,13 @@ export default {
                         return params.row.disease.name
                     }
                 },
-                {
-                    title: '默认方案',
-                    key: 'qtName',
-                    /*  render:(h,params)=>{
-                         return params.row.disease.pid
-                     } */
-                },
+                // {
+                //     title: '默认方案',
+                //     key: 'qtName',
+                //       render:(h,params)=>{
+                //          return params.row.disease.pid
+                //      } 
+                // },
                 {
                     title: '操作',
                     key: 'action',

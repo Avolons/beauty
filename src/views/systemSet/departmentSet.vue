@@ -222,10 +222,10 @@ export default {
 			modalexit:false,
 			//表格配置
 			config: [
-				{
-					title: '科室编号',
-					key: 'id',
-				},
+				// {
+				// 	title: '科室编号',
+				// 	key: 'id',
+				// },
 				{
 					title: '科室名称',
 					key: 'name',

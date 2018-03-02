@@ -306,6 +306,7 @@ export default {
             /* this.createLoading = true; */
             this.$refs['addData'].validate((valid) => {
                 if (valid) {
+                    this.createLoading = true;
                     API.Systems.addSystem(this.formData).then((res) => {
                         this.$Message.success("新增成功");
                         this.modal = false;
@@ -336,6 +337,7 @@ export default {
                 title: '删除设置',
                 content: '确定删除该系统设置？',
                 onOk: () => {
+                    this.createLoading = true;
                     API.Systems.delSystem({
                         id: id
                     }).then((res) => {
@@ -345,6 +347,9 @@ export default {
                     }).catch((err) => {
 
                     });
+                },
+                onCancel: () => {
+                    this.createLoading = false;
                 }
             });
 

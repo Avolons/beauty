@@ -306,8 +306,8 @@ export default {
             /* this.createLoading = true; */
             this.$refs['addData'].validate((valid) => {
                 if (valid) {
-                    this.createLoading = true;
                     API.Systems.addSystem(this.formData).then((res) => {
+                         this.createLoading = true;
                         this.$Message.success("新增成功");
                         this.modal = false;
                         this.getData();
@@ -365,7 +365,7 @@ export default {
          * 提交修改
          */
         submitSetting() {
-            this.createLoading = true;
+            
             this.$refs['editData'].validate((valid) => {
                 if (valid) {
                     API.Systems.editSystem({
@@ -373,6 +373,7 @@ export default {
                         value: this.currentInfo.value,
                         remark: this.currentInfo.remark,
                     }).then((res) => {
+                        this.createLoading = true;
                         this.$Message.success("修改成功");
                         this.editmodal = false;
                         this.getData();

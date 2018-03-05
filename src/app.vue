@@ -32,28 +32,20 @@ export default {
             document.title = res.data;
         }).catch((err) => {
 
-            });
-        },
-        created() {
-          
-        },
-        beforeDestroy () {
-
-        },
-        let _this=this;
-       /*  window.addEventListener('popstate', () => {
-            let routePath = _this.$route.path;
-            console.log(_this.$route.path);
-            for (const ite of _this.routeList) {
-                if (routePath.indexOf(ite) > -1) {
-                    _this.modal = true;
-                    window.history.forward(1);
-                    return false;
-                }
-            }
-            
-        }); */
+        });
     },
+    /*  window.addEventListener('popstate', () => {
+         let routePath = _this.$route.path;
+         console.log(_this.$route.path);
+         for (const ite of _this.routeList) {
+             if (routePath.indexOf(ite) > -1) {
+                 _this.modal = true;
+                 window.history.forward(1);
+                 return false;
+             }
+         }
+         
+     }); */
     beforeDestroy() {
 
     },

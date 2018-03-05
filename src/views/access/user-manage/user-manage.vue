@@ -479,7 +479,7 @@ export default {
             if (this.newPassword.trim()) {
                 API.Jurisdiction.updataPass({
                     id: this.UserId,
-                    pwd: this.newPassword
+                    pwd: this.newPassword.trim()
                 }).then((res) => {
                     this.$Message.success("密码重置成功");
                     this.getData();

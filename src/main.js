@@ -10,7 +10,7 @@ import VueI18n from 'vue-i18n';
 import validate from './validate.js';
 import promise from 'es6-promise';
 import { AM } from './accessMenu.js';
-import Navigation from 'vue-navigation'
+/* import Navigation from 'vue-navigation'; */
 
 Vue.prototype.AM = AM;
 
@@ -18,7 +18,7 @@ Vue.prototype.AM = AM;
 promise.polyfill();
 Vue.use(VueI18n);
 Vue.use(iView);
-Vue.use(Navigation, {router})
+/* Vue.use(Navigation, {router}) */
 
 Vue.prototype.validate = validate;
 /* 全局设置API */

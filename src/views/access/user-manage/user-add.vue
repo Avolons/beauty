@@ -236,12 +236,14 @@ export default {
                     if (this.id == -1) {
                         API.Jurisdiction.addUser(copyData).then((res) => {
                             this.$Message.success("新增成功");
+                            window.history.back();
                         }).catch((err) => {
 
                         });
                     } else {
                         API.Jurisdiction.editUser(copyData).then((res) => {
                             this.$Message.success("修改成功");
+                            window.history.back();
                         }).catch((err) => {
 
                         });

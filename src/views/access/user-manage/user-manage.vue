@@ -182,13 +182,13 @@ export default {
                         return params.row.admin.type == 0 ? "管理员" : "医生";
                     }
                 },
-                {
-                    title: '最后登录时间',
-                    key: 'time',
-                    render: (h, params) => {
-                        return params.row.admin.lastVisitDate
-                    }
-                },
+                // {
+                //     title: '最后登录时间',
+                //     key: 'time',
+                //     render: (h, params) => {
+                //         return params.row.admin.lastVisitDate
+                //     }
+                // },
                 {
                     title: '默认方案',
                     key: 'dvtName',

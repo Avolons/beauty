@@ -399,10 +399,10 @@ export default {
          * 提交添加
          */
 		submitDepart() {
-		    this.createLoading = true;
 			this.$refs['formData'].validate((valid) => {
 				if (valid) {
 					API.Systems.addDepart(this.formData).then((res) => {
+		    			this.createLoading = true;
 						this.$Message.success("添加成功");
 						this.modal = false;
 						this.getData();
@@ -419,7 +419,6 @@ export default {
 		 * 提交修改
 		 */
 		changeDepart(){
-            this.createLoading = true;
 			this.$refs['currentData'].validate((valid) => {
 				if (valid) {
 					API.Systems.editDepart({
@@ -431,6 +430,7 @@ export default {
 						state:this.currentData.isUse-0,
 						remark:this.currentData.remark
 					}).then((res) => {
+            			this.createLoading = true;
 						this.$Message.success("修改成功");
 						this.modalexit = false;
 						this.getData();

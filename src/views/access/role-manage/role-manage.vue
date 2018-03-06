@@ -191,7 +191,7 @@ export default {
 
                     });
                 } else {
-                    this.$Message.error('补全信息!');
+                    /* this.$Message.error('补全信息!'); */
                     return false;
                 }
 

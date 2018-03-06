@@ -479,7 +479,7 @@ export default {
             if (this.newPassword.trim()) {
                 API.Jurisdiction.updataPass({
                     id: this.UserId,
-                    pwd: this.newPassword
+                    pwd: this.newPassword.trim()
                 }).then((res) => {
                     this.$Message.success("密码重置成功");
                     this.getData();
@@ -548,7 +548,6 @@ export default {
          * 删除用户
          */
         delUser(id) {
-            this.createLoading = true;
             let self = this;
             this.$Modal.confirm({
                 title: '删除用户',
@@ -557,6 +556,7 @@ export default {
                     API.Jurisdiction.delUser({
                         id: id
                     }).then((res) => {
+                        this.createLoading = true;
                         self.$Message.success("删除成功");
                         self.getData();
                     }).catch((err) => {

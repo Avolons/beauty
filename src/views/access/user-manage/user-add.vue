@@ -85,8 +85,8 @@
                 <FormItem label="手机号码" prop="tel" style="width:450px;">
                     <Input v-model="formData.tel" placeholder="请输入手机号码"></Input>
                 </FormItem>
-                <FormItem label="专属号码"  style="width:450px;">
-                    <Input v-model="formData.mobile" placeholder="请输入手机号码"></Input>
+                <FormItem label="专属号码" prop="mobile"  style="width:450px;">
+                    <Input v-model="formData.mobile" placeholder="请输入专属号码"></Input>
                 </FormItem>
                 <FormItem label="身份"  style="width:450px;">
                     <Select  v-model="formData.types" style="width:200px">
@@ -236,12 +236,14 @@ export default {
                     if (this.id == -1) {
                         API.Jurisdiction.addUser(copyData).then((res) => {
                             this.$Message.success("新增成功");
+                            window.history.back();
                         }).catch((err) => {
 
                         });
                     } else {
                         API.Jurisdiction.editUser(copyData).then((res) => {
                             this.$Message.success("修改成功");
+                            window.history.back();
                         }).catch((err) => {
 
                         });

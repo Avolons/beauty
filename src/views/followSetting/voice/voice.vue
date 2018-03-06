@@ -303,9 +303,8 @@ export default {
 
 						this.questionTargetfz = res.data.optionValues;
 						this.fzArray = this.questionTargetfz.split(',');
-						console.log(this.fzArray);
-						/*switch信息*/
 
+						/*switch信息*/
 						let questionList = [];
 
 						for (const item of this.fzArray) {
@@ -318,14 +317,13 @@ export default {
 								keyvalue: item
 							})
 						}
-
 						if (this.switchArr.length == 0) {
 							this.switchArr = questionList.concat(this.switchArr);
 						} else {
 							if (this.switchArr[0].keyname) {
 								for (const item of questionList) {
 									for (const ite of this.switchArr) {
-										if (item.keyvalue = ite.keyvalue) {
+										if (item.keyvalue == ite.keyvalue) {
 											item.switchText = ite.switchText;
 											item.switchRegexText = ite.switchRegexText;
 											item.outRptSwitchID = ite.outRptSwitchID;

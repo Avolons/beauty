@@ -208,7 +208,7 @@ export default {
                     API.common.change({
                         adminId:this.userForm.id,
                         oldPassword: this.editPasswordForm.oldPass,
-                        newPassword: this.editPasswordForm.newPass,
+                        newPassword: this.editPasswordForm.newPass.trim(),
                     }).then((res) => {
 
                         setTimeout(() => {

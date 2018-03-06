@@ -33,7 +33,7 @@
                 </Card>
                 </Col>
                 <Col :md="12" :lg="24" :style="{marginBottom: '10px'}">
-                <Card style="height:370px" class="doctorSort">
+                <Card style="min-height:370px" class="doctorSort">
                     <p slot="title" class="card-title">
                         <Icon type="map"></Icon>
                         医生接诊量排行
@@ -123,8 +123,8 @@
                     <data-source-pie ref="success" :data="finshList"></data-source-pie>
                     </Col>
                     <Col :md="12" :lg="6"  :style="{marginBottom: '10px',height:'100%'}">
-                    <h3>任务失败情况统计</h3>
-                    <service-requests ref="fail" :data="cancelList"></service-requests>
+                    <h3 v-if="cancelList.length">任务失败情况统计</h3>
+                    <service-requests ref="fail" :data="cancelList" v-if="cancelList.length"></service-requests>
                     </Col>
                 </Row>
             </Card>
@@ -396,16 +396,19 @@ export default {
             // 任务失败情况统计接口
             API.Home.countordercancel(sendData).then((res) => {
                let arr=[];
-               for (const item of res.data) {
-                   arr.push({
-                      name:item.remark,
-                      value:item.doNum,
-                  }) 
-               }
-               this.cancelList=arr;
-               setTimeout(()=> {
-               this.$refs.fail.init();
-               }, 20);
+                if(res.data.length>0){
+                    for (const item of res.data) {
+                        arr.push({
+                            name:item.remark,
+                            value:item.doNum,
+                        })
+                    }
+                    this.cancelList=arr;
+                    setTimeout(()=> {
+                        this.$refs.fail.init();
+                    }, 20);
+                }
+
             }).catch((err) => {
 
             });

@@ -9,16 +9,17 @@
         }
     }
 }
+
 .sys-tasklog {
     &_main {
 
         &_list {}
-        &_search{
+        &_search {
             box-sizing: border-box;
             margin-bottom: 10px;
-            .ivu-col{
+            .ivu-col {
                 display: flex;
-                >span{
+                >span {
                     background-color: #dadada;
                     text-align: center;
                     line-height: 32px;
@@ -28,26 +29,25 @@
                     border-top-left-radius: 4px;
                     border-bottom-left-radius: 4px;
                 }
-                .ivu-input{
+                .ivu-input {
                     border-top-left-radius: 0;
                     border-bottom-left-radius: 0;
                 }
-                .ivu-select{
+                .ivu-select {
                     flex-grow: 1;
                     flex-shrink: 1;
                 }
-                .ivu-select-selection{
+                .ivu-select-selection {
                     border-top-left-radius: 0;
                     border-bottom-left-radius: 0;
                 }
             }
         }
-        &_page{
+        &_page {
             margin-top: 10px;
         }
     }
 }
-
 </style>
 
 
@@ -59,30 +59,30 @@
             <Row class="sys-tasklog_main_search" :gutter="15">
                 <Col span="6">
                 <span>
-                        编码：
-                    </span>
-                <Input   placeholder="请输入编码" v-model="serchSyst.key"></Input>
+                    编码：
+                </span>
+                <Input placeholder="请输入编码" v-model="serchSyst.key"></Input>
                 </Col>
                 <Col span="6">
                 <span>
-                            值：
-                        </span>
-                <Input   placeholder="请输入值" v-model="serchSyst.value"></Input>
+                    值：
+                </span>
+                <Input placeholder="请输入值" v-model="serchSyst.value"></Input>
                 </Col>
                 <Col span="6">
                 <span>
-                            备注：
-                        </span>
-                <Input   placeholder="请输入备注" v-model="serchSyst.remark"></Input>
+                    备注：
+                </span>
+                <Input placeholder="请输入备注" v-model="serchSyst.remark"></Input>
                 </Col>
                 <Col span="6">
                 <span>
-                            分类信息：
-                        </span>
-                <Input   placeholder="请输入分类信息" v-model="serchSyst.mainType"></Input>
+                    分类信息：
+                </span>
+                <Input placeholder="请输入分类信息" v-model="serchSyst.mainType"></Input>
                 </Col>
                 <Col span="6" style="margin-top: 10px">
-                <Button  type="primary" style="margin-right: 10px;" @click="searchData">查询</Button>
+                <Button type="primary" style="margin-right: 10px;" @click="searchData">查询</Button>
                 <Button @click="modal=true;formData.sort=0" v-if="!menuShow(this.AM.Systems.addSystem)" type="primary">添加</Button>
 
                 </Col>
@@ -93,10 +93,10 @@
                 <Table border :columns="config" :data="dataList" :loading="createLoading"></Table>
             </div>
             <Row class="sys-sysset_main_page" v-if="totalPage>10">
-                <Page :page-size="pageSize" :total="totalPage" :current="page" show-elevator style="float:right" show-total  @on-change="changePage"></Page>
+                <Page :page-size="pageSize" :total="totalPage" :current="page" show-elevator style="float:right" show-total @on-change="changePage"></Page>
             </Row>
         </div>
-        <Modal v-model="modal" title="添加参数" >
+        <Modal v-model="modal" title="添加参数">
             <Form ref="addData" class="sys-sysset_main_form" :model="formData" :rules="validate.system" :label-width="80">
                 <FormItem label="类型" prop="type">
                     <Select v-model="formData.type" placeholder="请选择类型">
@@ -110,7 +110,7 @@
                     <Input v-model="formData.mType" placeholder="请输入分类信息"></Input>
                 </FormItem>
                 <FormItem label="排序字段" prop="sort">
-                  <InputNumber  :min="0"  v-model="formData.sort"></InputNumber>
+                    <InputNumber :min="0" v-model="formData.sort"></InputNumber>
                 </FormItem>
                 <FormItem label="参数值" prop="value">
                     <Input v-model="formData.value" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="请填写参数值"></Input>
@@ -123,7 +123,7 @@
                 <Button type="primary" @click="addSetting">确认</Button>
             </div>
         </Modal>
-        <Modal v-model="editmodal" title="编辑参数" >
+        <Modal v-model="editmodal" title="编辑参数">
             <Form ref="editData" class="sys-sysset_main_form" :model="currentInfo" :rules="validate.system" :label-width="80">
                 <FormItem label="编码" prop="key">
                     <Input disabled v-model="currentInfo.key" placeholder="请输入编码"></Input>
@@ -147,12 +147,12 @@ import { API } from '../../services/index.js';
 export default {
     data() {
         return {
-            createLoading:true,    //loading 动画加载中
+            createLoading: true,    //loading 动画加载中
             page: 1,//当前页码
             totalPage: 0,//总页码
-            pageSize:10,
+            pageSize: 10,
             //搜索数据
-            serchSyst:{
+            serchSyst: {
                 key: '',  //编码（可选）
                 value: '',   //值(可选)
                 remark: '',  //备注（可选）
@@ -172,8 +172,8 @@ export default {
                 key: "",
                 value: "",
                 remark: "",
-                mType:"",
-                sort:0,
+                mType: "",
+                sort: 0,
             },
             //类型选项列表
             typeList: [
@@ -191,7 +191,7 @@ export default {
                 },
             ],
             //添加的显示隐藏
-            editmodal:false,
+            editmodal: false,
             modal: false,
             config: [
                 {
@@ -237,9 +237,9 @@ export default {
                                 style: {
                                     marginRight: '5px'
                                 },
-                                'class':{
-									menuHide:this.menuShow(this.AM.Systems.editSystem)
-								},
+                                'class': {
+                                    menuHide: this.menuShow(this.AM.Systems.editSystem)
+                                },
                                 on: {
                                     click: () => {
                                         this.editSetting(params.row)
@@ -254,9 +254,9 @@ export default {
                                 style: {
                                     marginRight: '5px'
                                 },
-                                'class':{
-									menuHide:this.menuShow(this.AM.Systems.delSystem)
-								},
+                                'class': {
+                                    menuHide: this.menuShow(this.AM.Systems.delSystem)
+                                },
                                 on: {
                                     click: () => {
                                         this.delSetting(params.row.id)
@@ -276,7 +276,7 @@ export default {
         /**
          * 查询
          */
-        searchData () {
+        searchData() {
             this.page = 1;
             this.getData();
         },
@@ -291,10 +291,10 @@ export default {
                 remark: this.serchSyst.remark,
                 mainType: this.serchSyst.mainType
             }).then((res) => {
-                this.dataList=res.data;
+                this.dataList = res.data;
                 this.totalPage = res.totleRow;
-				this.pageSize=res.pageSize;
-				this.createLoading = false;
+                this.pageSize = res.pageSize;
+                this.createLoading = false;
             }).catch((err) => {
 
             });
@@ -303,14 +303,15 @@ export default {
          * 新增系统设置
          */
         addSetting() {
-            this.createLoading = true;
+            /* this.createLoading = true; */
             this.$refs['addData'].validate((valid) => {
                 if (valid) {
                     API.Systems.addSystem(this.formData).then((res) => {
+                         this.createLoading = true;
                         this.$Message.success("新增成功");
-                        this.modal=false;
+                        this.modal = false;
                         this.getData();
-                        this.formData= {
+                        this.formData = {
                             type: "",
                             key: "",
                             value: "",
@@ -320,7 +321,7 @@ export default {
 
                     });
                 } else {
-                    this.$Message.error('补全信息!');
+                    /* this.$Message.error('补全信息!'); */
                     return false;
                 }
 
@@ -330,20 +331,25 @@ export default {
          * 删除系统设置
          */
         delSetting(id) {
-            this.createLoading = true;
+            
             let self = this;
             this.$Modal.confirm({
                 title: '删除设置',
                 content: '确定删除该系统设置？',
                 onOk: () => {
+                    this.createLoading = true;
                     API.Systems.delSystem({
                         id: id
                     }).then((res) => {
+                        this.createLoading = true;
                         self.$Message.success("删除成功");
                         self.getData();
                     }).catch((err) => {
 
                     });
+                },
+                onCancel: () => {
+                    this.createLoading = false;
                 }
             });
 
@@ -352,23 +358,24 @@ export default {
          * 编辑系统设置
          */
         editSetting(data) {
-            this.editmodal=true;
+            this.editmodal = true;
             this.currentInfo = JSON.parse(JSON.stringify(data));
         },
         /** 
          * 提交修改
          */
         submitSetting() {
-            this.createLoading = true;
+            
             this.$refs['editData'].validate((valid) => {
                 if (valid) {
                     API.Systems.editSystem({
-                        id:this.currentInfo.id,
-                        value:this.currentInfo.value,
-                        remark:this.currentInfo.remark,
+                        id: this.currentInfo.id,
+                        value: this.currentInfo.value,
+                        remark: this.currentInfo.remark,
                     }).then((res) => {
+                        this.createLoading = true;
                         this.$Message.success("修改成功");
-                        this.editmodal=false;
+                        this.editmodal = false;
                         this.getData();
                     }).catch((err) => {
 

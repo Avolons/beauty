@@ -310,6 +310,7 @@ export default {
                    }
                }
            } */
+          /*  console.log(data);
             let getItem = (id, arrList) => {
                 for (const item of this.treeData) {
                     if (item.id == id) {
@@ -335,12 +336,13 @@ export default {
 
                     }
                 }
-            }
+            } */
             for (const item of data) {
                 if (item.pid) {
-                    getItem(item.pid, arrList);
+                   /*  getItem(item.pid, arrList); */
+                     arrList.push(item.id);
                 } 
-                arrList.push(item.id);
+               
             }
 
             if (this.type == 1) {
@@ -349,6 +351,7 @@ export default {
             this.formData.actionsIds = arrList;
             API.Jurisdiction.editRoles(this.formData).then((res) => {
                 this.$Message.success("编辑成功");
+                window.history.back();
             }).catch((err) => {
 
             });

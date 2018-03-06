@@ -181,7 +181,8 @@ export default {
 								},
                                 on: {
                                     click: () => {
-                                        this.remarkTime(params.row.id)
+                                        this.value = params.row.remark;
+                                        this.remarkTime(params.row.id);
                                     }
                                 }
                             }, '备注'),
@@ -285,7 +286,7 @@ export default {
                         props: {
                             value: this.value,
                             autofocus: true,
-                            placeholder: '请填写备注'
+                            placeholder: '请填写备注',
                         },
                         on: {
                             input: (val) => {
@@ -296,7 +297,7 @@ export default {
                     })
                 },
                 onOk: () => {
-                    if (self.value.trim()) {
+//                   if (self.value.trim()) {
                         API.Systems.remarkTime({
                             id: self.currentId,
                             remark: self.value
@@ -308,7 +309,7 @@ export default {
                         }).catch((err) => {
                                 
                         });
-                    }
+//                    }
                 }
             })
         },

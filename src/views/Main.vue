@@ -123,7 +123,14 @@
             }
         },
         methods: {
-            ...mapActions(['FollowProblePage','saveFollowWay','saveAccessUse','saveFollowTemplate','saveAccessBusines']),
+            ...mapActions([
+                'FollowProblePage',
+                'saveFollowWay',
+                'saveAccessUse',
+                'saveFollowTemplate',
+                'saveAccessBusines',
+                'saveRoleManageRecord'
+            ]),
             init () {
                 let pathArr = util.setCurrentPath(this, this.$route.name);
                 this.$store.commit('updateMenulist');
@@ -243,7 +250,13 @@
                     });
                 };
 
-
+                //清空角色管理 再次进入页面清空 角色管理缓存的内容
+                if(to.name!='role_manage'&&to.name!='role_add'){
+                    this.saveRoleManageRecord({
+                        page:1,
+                        content:'',
+                    });
+                };
 
 
 

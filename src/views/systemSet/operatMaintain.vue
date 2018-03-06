@@ -79,7 +79,7 @@
             <div class="sys-sysset_main_list">
                 <Table border :columns="config" :data="dataList" :loading="createLoading"></Table>
             </div>
-            <Row class="sys-sysset_main_page" v-if="totalPage>10">
+            <Row class="sys-sysset_main_page" >
                 <Page :page-size="pageSize" :total="totalPage" :current="page" show-elevator style="float:right" show-total  @on-change="changePage"></Page>
             </Row>
         </div>
@@ -238,8 +238,8 @@ export default {
                 phone: this.serchSyst.phone,
             }).then((res) => {
                 this.dataList=res.data;
-                this.totalPage = res.totleRow;
-				this.pageSize=res.pageSize;
+                this.totalPage = res.total;
+				// this.pageSize = res.pageSize;
 				this.createLoading = false;
             }).catch((err) => {
 

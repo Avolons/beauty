@@ -469,7 +469,7 @@ export default {
 
                   }
                 }
-              }, '编辑话述'),
+              }, '编辑话术'),
               h('Button', {
                 props: {
                   type: 'warning',
@@ -530,10 +530,9 @@ export default {
         diseaseId: [
           { required: true, type: "array", message: '疾病类型不能为空', trigger: 'blur' }
         ],
-        password: [
-          { required: true, message: 'Please fill in the password.', trigger: 'blur' },
-          { type: 'string', min: 6, message: 'The password length cannot be less than 6 bits', trigger: 'blur' }
-        ]
+        targetId:[
+          { required: true, message: '关联指标不能为空', trigger: 'blur' },
+        ],
       },
     }
   },

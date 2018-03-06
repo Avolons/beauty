@@ -283,7 +283,7 @@ import { API } from '@/services';
 export default {
 	data() {
 		return {
-			//用来测试的，没几把用
+			
 			// timeList: [],
 			// timeConfig: [
 			// 	{
@@ -341,6 +341,7 @@ export default {
 				schemeName: "", //方案名称
 				adminId: "", //医生id
 				admin: "",
+				diseaseId: '',
 				mobile: "",  //发起人专属服务号码
 				visitStartTime: "",//随访起始时间
 				hzxxIds: [],  //患者id
@@ -518,6 +519,7 @@ export default {
 							//this.sendData.hzxxIds = []
 							this.sendData.isAll = 1;
 							this.sendData.brxm = this.searchParams.brxm;
+							this.sendData.brxm = this.searchParams.brxm;
 							this.sendData.beginTime = this.searchParams.beginTime;
 							this.sendData.endTime = this.searchParams.endTime;
 							this.sendData.diagnoseTimeBegin = this.searchParams.diagnoseTimeBegin;
@@ -609,7 +611,6 @@ export default {
 			this.searchParams.adminId = this.sendData.adminId;
 			this.searchParams.beginTime = this.timeobj1.date;
 			this.searchParams.endTime = this.timeobj2.date;
-			console.log(this.searchParams);
 			API.FollowBussiness.patList(this.searchParams).then((res) => {
 				this.dataList = this.formData(res.data);
 				this.totalPage = res.total;
@@ -660,6 +661,7 @@ export default {
 				this.$Message.warning("您尚未添加任何患者");
 				return false;
 			}
+			this.sendData.diseaseId=this.searchParams.diseaseId;
 			this.step = "step_two";
 		},
 		/** ylTimeChange

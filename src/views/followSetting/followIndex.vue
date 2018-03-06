@@ -1,5 +1,5 @@
 <style lang="less">
-    @import "../../styles/followSetting/followIndex.less";
+@import "../../styles/followSetting/followIndex.less";
 </style>
 
 
@@ -7,43 +7,43 @@
 	<Row class="followIndex">
 		<!-- 搜索栏 start -->
 		<Col span="24" class="searchCol">
-			<Row class="followIndex_main_search" :gutter="15">
-				<Col span="6">
-				<span>
-					指标名称
-				</span>
-				<Input type="text" v-model="IndexSearch.name" placeholder="请输入指标名称"></Input>
-				</Col>
-				<Col span="6">
-				<span>
-					指标类型
-				</span>
-				<Select v-model="IndexSearch.otype">
-					<Option v-for="item,index in indexTypeList" :key="index" :value="item.value">{{item.label}}</Option>
-				</Select>
-				</Col>
-				<Col span="6">
-				<span>
-					疾病类型
-				</span>
-				<Select v-model="IndexSearch.diseaseId" filterable remote not-found-text="" :remote-method="remoteMethod2" :label-in-value="true" clearable @on-change="selectChange" placeholder="请输入疾病类型">
-					<Option v-for="(option, index) in diseaseList" :value="option.value" :key="index">{{option.label}}</Option>
-				</Select>
-				</Col>
-				<Col span="6">
-				<Button style="margin-right:10px" type="primary" @click="IndexSearch.pager=1;list()">查询</Button>
-				<Button type="info" v-if="!menuShow(this.AM.FollowSetting.addIndex)" @click="addBtn">添加指标</Button>
-				</Col>
-			</Row>
+		<Row class="followIndex_main_search" :gutter="15">
+			<Col span="6">
+			<span>
+				指标名称
+			</span>
+			<Input type="text" v-model="IndexSearch.name" placeholder="请输入指标名称"></Input>
+			</Col>
+			<Col span="6">
+			<span>
+				指标类型
+			</span>
+			<Select v-model="IndexSearch.otype">
+				<Option v-for="item,index in indexTypeList" :key="index" :value="item.value">{{item.label}}</Option>
+			</Select>
+			</Col>
+			<Col span="6">
+			<span>
+				疾病类型
+			</span>
+			<Select v-model="IndexSearch.diseaseId" filterable remote not-found-text="" :remote-method="remoteMethod2" :label-in-value="true" clearable @on-change="selectChange" placeholder="请输入疾病类型">
+				<Option v-for="(option, index) in diseaseList" :value="option.value" :key="index">{{option.label}}</Option>
+			</Select>
+			</Col>
+			<Col span="6">
+			<Button style="margin-right:10px" type="primary" @click="IndexSearch.pager=1;list()">查询</Button>
+			<Button type="info" v-if="!menuShow(this.AM.FollowSetting.addIndex)" @click="addBtn">添加指标</Button>
+			</Col>
+		</Row>
 		</Col>
 		<!-- 搜索栏 end -->
 
 		<!-- 表格栏 start-->
 		<Col span="24" class="fpTable">
-			<Table border :columns="config" :data="datalist" class="margin-bottom-10" :loading="createLoading"></Table>
-			<Row>
-				<Page style="float:right" :current="IndexSearch.pager" :total="pageTotal" @on-change="currentPage" show-elevator show-total></Page>
-			</Row>
+		<Table border :columns="config" :data="datalist" class="margin-bottom-10" :loading="createLoading"></Table>
+		<Row>
+			<Page style="float:right" :current="IndexSearch.pager" :total="pageTotal" @on-change="currentPage" show-elevator show-total></Page>
+		</Row>
 		</Col>
 		<!-- 表格栏 end-->
 
@@ -111,7 +111,7 @@ import { API } from '@/services';
 export default {
 	data() {
 		return {
-            createLoading:true,	 //loading 动画加载中
+			createLoading: true,	 //loading 动画加载中
 			//搜索数据
 			IndexSearch: {
 				pager: 1,
@@ -147,159 +147,159 @@ export default {
 			radioNumber: false,//数值类型
 		}
 	},
-	computed:{
-	   /**
-		*校验规则
-		* followIndexVal
-	    **/
-       followIndexVal(){
-           return {
-               name: [
-                   { required: true, message: '指标名称不能为空', trigger: 'blur' }
-               ],
-               select: [
-                   { required: true, message: '指标类型不能为空', trigger: 'change' }
-               ],
-               radio: [
-                   { required: true, message: '请选择是否放音', trigger: 'change' }
-               ],
-		   }
-	   },
-	  /**
-	   *指标类型集合
-	   **/
-      indexTypeList(){
-		return [
-            {
-                value: "",
-                label: "无"
-            },
-            {
-                value: "01",
-                label: "症状"
-            },
-            {
-                value: "02",
-                label: "体征"
-            },
-            {
-                value: "03",
-                label: "生活方式指导"
-            },
-            {
-                value: "04",
-                label: "辅助检查"
-            },
-            {
-                value: "05",
-                label: "用药反馈"
-            },
-            {
-                value: "06",
-                label: "转诊情况"
-            },
-            {
-                value: "07",
-                label: "通用"
-            }
-        ]
-      },
+	computed: {
+		/**
+		 *校验规则
+		 * followIndexVal
+		 **/
+		followIndexVal() {
+			return {
+				name: [
+					{ required: true, message: '指标名称不能为空', trigger: 'blur' }
+				],
+				select: [
+					{ required: true, message: '指标类型不能为空', trigger: 'change' }
+				],
+				radio: [
+					{ required: true, message: '请选择是否放音', trigger: 'change' }
+				],
+			}
+		},
+		/**
+		 *指标类型集合
+		 **/
+		indexTypeList() {
+			return [
+				{
+					value: "",
+					label: "无"
+				},
+				{
+					value: "01",
+					label: "症状"
+				},
+				{
+					value: "02",
+					label: "体征"
+				},
+				{
+					value: "03",
+					label: "生活方式指导"
+				},
+				{
+					value: "04",
+					label: "辅助检查"
+				},
+				{
+					value: "05",
+					label: "用药反馈"
+				},
+				{
+					value: "06",
+					label: "转诊情况"
+				},
+				{
+					value: "07",
+					label: "通用"
+				}
+			]
+		},
 		/**
 		 * 表格栏
 		 * 渲染数据
 		 */
-	  config(){
-		return [
-			{
-				title: '指标id',
-				key: 'id',
-				align: 'center',
-			},
-			{
-				title: '指标名称',
-				key: 'name',
-				align: 'center',
-			},
-			{
-				title: '指标类型',
-				key: 'otype',
-				align: 'center',
-				render: (h, params) => {
-					for (const item of this.indexTypeList) {
-						if (item.value == params.row.otype) {
-							return item.label
+		config() {
+			return [
+				{
+					title: '指标id',
+					key: 'id',
+					align: 'center',
+				},
+				{
+					title: '指标名称',
+					key: 'name',
+					align: 'center',
+				},
+				{
+					title: '指标类型',
+					key: 'otype',
+					align: 'center',
+					render: (h, params) => {
+						for (const item of this.indexTypeList) {
+							if (item.value == params.row.otype) {
+								return item.label
+							}
 						}
 					}
-				}
-			},
-			{
-				title: '结果类型',
-				key: 'type',
-				align: 'center',
-				render: (h, params) => {
-					let type = params.row.type;
-					return type == 'digit' ? '数值' : type == 'select' ? '选项' : '文本';
-				}
-			},
-			{
-				title: '疾病类型',
-				key: 'diseaseName',
-				align: 'center',
-			},
-			{
-				title: '操作',
-				key: 'action',
-				width: 150,
-				align: 'center',
-				render: (h, params) => {
-					return h('div', [
-						h('Button', {
-							props: {
-								type: 'primary',
-								size: 'small'
-							},
-							style: {
-								marginRight: '5px'
-							},
-							'class': {
-								menuHide: this.menuShow(this.AM.FollowSetting.editIndex)
-							},
-							on: {
-								click: () => {
-									this.editIndex(params.row.id);
+				},
+				{
+					title: '结果类型',
+					key: 'type',
+					align: 'center',
+					render: (h, params) => {
+						let type = params.row.type;
+						return type == 'digit' ? '数值' : type == 'select' ? '选项' : '文本';
+					}
+				},
+				{
+					title: '疾病类型',
+					key: 'diseaseName',
+					align: 'center',
+				},
+				{
+					title: '操作',
+					key: 'action',
+					width: 150,
+					align: 'center',
+					render: (h, params) => {
+						return h('div', [
+							h('Button', {
+								props: {
+									type: 'primary',
+									size: 'small'
+								},
+								style: {
+									marginRight: '5px'
+								},
+								'class': {
+									menuHide: this.menuShow(this.AM.FollowSetting.editIndex)
+								},
+								on: {
+									click: () => {
+										this.editIndex(params.row.id);
+									}
 								}
-							}
-						}, '编辑'),
-						h('Button', {
-							props: {
-								type: 'warning',
-								size: 'small'
-							},
-							style: {
+							}, '编辑'),
+							h('Button', {
+								props: {
+									type: 'warning',
+									size: 'small'
+								},
+								style: {
 
-							},
-							'class': {
-								menuHide:  true //this.menuShow(this.AM.FollowSetting.delIndex)
-							},
-							on: {
-								click: () => {
-									this.$Modal.confirm({
-										title: '删除指标',
-										content: '确定要删除该指标吗?',
-										onOk: () => {
-											this.deleteRow(params.row.id)
-										},
-										onCancel: () => {
-										}
-									})
+								},
+								'class': {
+									menuHide: true //this.menuShow(this.AM.FollowSetting.delIndex)
+								},
+								on: {
+									click: () => {
+										this.$Modal.confirm({
+											title: '删除指标',
+											content: '确定要删除该指标吗?',
+											onOk: () => {
+												this.deleteRow(params.row.id)
+											},
+											onCancel: () => {
+											}
+										})
+									}
 								}
-							}
-						}, '删除')
-					]);
+							}, '删除')
+						]);
+					}
 				}
-			}
-		]
-	  }
+			]
+		}
 	},
 	mounted() {
 		/** 
@@ -320,31 +320,33 @@ export default {
 				id: id
 			}).then((res) => {
 				let arr = [];
-				res.data.diseaseId = res.data.diseaseId.split(",");
-				res.data.diseaseName = res.data.diseaseName.split(",");
-				res.data.diseaseId.forEach((item, index) => {
-					arr.push({
-						value: item,
-						label: res.data.diseaseName[index]
-					})
-				})
-				this.diseaseList = arr;
 				let result = [];
 				this.labelobj = [];
-				for (const item of arr) {
-					result.push(item.value);
-					this.labelobj.push(item.label);
+				if (res.data.diseaseId) {
+					res.data.diseaseId = res.data.diseaseId.split(",");
+					res.data.diseaseName = res.data.diseaseName.split(",");
+					res.data.diseaseId.forEach((item, index) => {
+						arr.push({
+							value: item,
+							label: res.data.diseaseName[index]
+						})
+					})
+					this.diseaseList = arr;
+					for (const item of arr) {
+						result.push(item.value);
+						this.labelobj.push(item.label);
+					}
 				}
-				this.formItem ={
-                    diseaseName:result,					//疾病标签
-                    id:res.data.id,						//
-                    name:res.data.name,					//指标名称
-                    radio:res.data.type,				//结果类型
-                    select:res.data.otype,				//指标类型，id
-                    select2:res.data.status,			//
-                    textarea:res.data.remark,			//备注
-                    top:res.data.thresholdValueStart,	//预警阈值上限（数值类型）
-                    bottom:res.data.thresholdValueEnd	//预警阈值下限（数值类型）
+				this.formItem = {
+					diseaseName: result,					//疾病标签
+					id: res.data.id,						//
+					name: res.data.name,					//指标名称
+					radio: res.data.type,				//结果类型
+					select: res.data.otype,				//指标类型，id
+					select2: res.data.status,			//
+					textarea: res.data.remark,			//备注
+					top: res.data.thresholdValueStart,	//预警阈值上限（数值类型）
+					bottom: res.data.thresholdValueEnd	//预警阈值下限（数值类型）
 				}
 				/** 
 				 * 指标类型判断
@@ -413,31 +415,31 @@ export default {
 		/** 
 		 * 取消弹框
 		 */
-		cancelModel(){
-		 this.$Modal.confirm({
-			  title: '退出编辑',
-			  content: '<p>您还有内容未保存，确定要退出?</p>',
-			  onOk: () => {
-				this.patientText=false;
-			  },
-			  onCancel: () => {
-			  }
+		cancelModel() {
+			this.$Modal.confirm({
+				title: '退出编辑',
+				content: '<p>您还有内容未保存，确定要退出?</p>',
+				onOk: () => {
+					this.patientText = false;
+				},
+				onCancel: () => {
+				}
 			});
 		},
         /**
          * 清除所有历史遗留数据
          */
 		clearAll() {
-		    this.formItem={
-                id:'',           //
-                name:'',         //指标名称
-                diseaseName:[],  //
-                anormal:[],      //预警阈值
-                radio:'string',  //结果类型
-                select:'',       //指标类型，id
-                textarea:'',     //备注
-                top:'',          //预警阈值上限（数值类型）
-                bottom:''        //预警阈值下限（数值类型）
+			this.formItem = {
+				id: '',           //
+				name: '',         //指标名称
+				diseaseName: [],  //
+				anormal: [],      //预警阈值
+				radio: 'string',  //结果类型
+				select: '',       //指标类型，id
+				textarea: '',     //备注
+				top: '',          //预警阈值上限（数值类型）
+				bottom: ''        //预警阈值下限（数值类型）
 			};
 			this.labelobj = [];   ////指标多选label标签
 			this.diseaseList = [];  //指标选项的select
@@ -463,6 +465,10 @@ export default {
 			}
 			this.$refs[name].validate((valid) => {
 				if (valid) {
+					if (this.formItem.diseaseName.length == 0) {
+						this.$Message.error("请填写正确的疾病类型");
+						return false;
+					}
 					let sendData = {
 						"id": this.formItem.id,
 						"name": this.formItem.name,
@@ -477,14 +483,14 @@ export default {
 						"remark": this.formItem.textarea
 					}
 					API.follSetting.addList(sendData).then((res) => {
-					    //数据进行清空
-                        this.formItem={
-                            id:'',
-                            name:'',
-                            select2:'',
-                            select:'',
-                            radio:'string',
-                            textarea:''
+						//数据进行清空
+						this.formItem = {
+							id: '',
+							name: '',
+							select2: '',
+							select: '',
+							radio: 'string',
+							textarea: ''
 						}
 						this.patientText = false;
 						this.list();
@@ -515,9 +521,9 @@ export default {
 		*指标选项添加预警阀值
 		*/
 		addItem() {
-		    if(!this.formItem.indexName){
-                this.$Message.warning('您添加的为空');
-                return false;
+			if (!this.formItem.indexName) {
+				this.$Message.warning('您添加的为空');
+				return false;
 			}
 			for (let item of this.optionList) {
 				if (item == this.formItem.indexName) {

@@ -517,6 +517,24 @@ export const appRouter = [{
             require(['@/views/access/group-manage/groupList.vue'], resolve);
         }
     }, */
+    //  {
+    //     path: '/component',
+    //     icon: 'social-buffer',
+    //     name: 'component',
+    //     title: '组件',
+    //     component: Main,
+    //     children: [
+    //         {
+    //             path: 'text-editor',
+    //             icon: 'compose',
+    //             name: 'text-editor',
+    //             title: '富文本编辑器',
+    //             component: resolve => {
+    //                 require(['@/views//my-components/text-editor/text-editor.vue'], resolve);
+    //             }
+    //         },
+    //     ]
+    // },
     {
         path: '/access/business',
         icon: 'social-buffer',

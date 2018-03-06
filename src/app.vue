@@ -32,15 +32,15 @@ export default {
             document.title = res.data;
         }).catch((err) => {
 
-            });
-        },
-        created() {
-          
-        },
-        beforeDestroy () {
+        });
+    },
+    created() {
+      
+    },
+    beforeDestroy () {
 
-        },
-        let _this=this;
+    },
+        
        /*  window.addEventListener('popstate', () => {
             let routePath = _this.$route.path;
             console.log(_this.$route.path);
@@ -53,7 +53,7 @@ export default {
             }
             
         }); */
-    },
+   
     beforeDestroy() {
 
     },

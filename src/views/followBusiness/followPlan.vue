@@ -693,11 +693,17 @@ export default {
       API.FollowBussiness.detailPat({
         id: id
       }).then((res) => {
+          //mjzs //门急诊信息
         if (res.data.mjzs.length) {
-          this.mjzData = res.data.mjzs
+          this.mjzData = res.data.mjzs;
+        } else {
+          this.mjzData = [];
         }
+        //住院信息
         if (res.data.cyxjs.length) {
-          this.zyData = res.data.cyxjs
+          this.zyData = res.data.cyxjs;
+        }else{
+          this.zyData = [];
         }
         this.currentData = res.data;
       }).catch((err) => {

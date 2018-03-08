@@ -509,6 +509,7 @@ export default {
 			if (value == 'select') {
 				this.radioText = true;
 				this.radioNumber = false;
+				this.formItem.anormal=[];
 			} else if (value == 'digit') {
 				this.radioNumber = true;
 				this.radioText = false;

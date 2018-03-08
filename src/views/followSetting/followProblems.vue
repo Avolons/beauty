@@ -256,7 +256,7 @@
             <Option v-for="(option, index) in netDisList" :value="option.value" :key="index">{{option.label}}</Option>
           </Select>
         </FormItem>
-        <FormItem label="关联指标" prop="targetId" v-show="targetShow">
+        <FormItem label="关联指标"  v-show="targetShow">
           <Select :label="taglabel" v-model="formItem.targetId" filterable remote :remote-method="remoteMethod1" clearable :label-in-value="true" not-found-text="">
             <Option v-for="(option, index) in indexOptions" :value="option.value" :key="index">{{option.label}}</Option>
           </Select>

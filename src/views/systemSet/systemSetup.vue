@@ -79,7 +79,9 @@
                 <span>
                     分类信息：
                 </span>
-                <Input placeholder="请输入分类信息" v-model="serchSyst.mainType"></Input>
+                <Select v-model="serchSyst.mainType" clearable filterable>
+                    <Option v-for="item in mainTypeList" :value="item.mainType" :key="item.id">{{ item.mainType }}</Option>
+                </Select>
                 </Col>
                 <Col span="6" style="margin-top: 10px">
                 <Button type="primary" style="margin-right: 10px;" @click="searchData">查询</Button>
@@ -92,7 +94,7 @@
             <div class="sys-sysset_main_list">
                 <Table border :columns="config" :data="dataList" :loading="createLoading"></Table>
             </div>
-            <Row class="sys-sysset_main_page" v-if="totalPage>10">
+            <Row class="sys-sysset_main_page" v-if="totalPage>=10">
                 <Page :page-size="pageSize" :total="totalPage" :current="page" show-elevator style="float:right" show-total @on-change="changePage"></Page>
             </Row>
         </div>
@@ -107,7 +109,9 @@
                     <Input v-model="formData.key" placeholder="请输入编码"></Input>
                 </FormItem>
                 <FormItem label="分类信息" prop="mType">
-                    <Input v-model="formData.mType" placeholder="请输入分类信息"></Input>
+                    <AutoComplete clearable v-model="formData.mType" placeholder="请输入分类信息">
+                        <Option v-for="item in mainTypeList" :value="item.mainType" :key="item.id">{{ item.mainType }}</Option>
+                    </AutoComplete>
                 </FormItem>
                 <FormItem label="排序字段" prop="sort">
                     <InputNumber :min="0" v-model="formData.sort"></InputNumber>
@@ -150,7 +154,7 @@ export default {
             createLoading: true,    //loading 动画加载中
             page: 1,//当前页码
             totalPage: 0,//总页码
-            pageSize: 10,
+            pageSize: 20,
             //搜索数据
             serchSyst: {
                 key: '',  //编码（可选）
@@ -165,7 +169,7 @@ export default {
                 value: "",
                 remark: "",
             },
-
+            mainTypeList: [],
             //添加的数据
             formData: {
                 type: "",
@@ -286,6 +290,7 @@ export default {
         getData() {
             API.Systems.listSystem({
                 page: this.page,
+                limit: 10,
                 key: this.serchSyst.key,
                 value: this.serchSyst.value,
                 remark: this.serchSyst.remark,
@@ -298,6 +303,20 @@ export default {
             }).catch((err) => {
 
             });
+            this.getTypeList();
+        },
+        /** 
+         * 获取所有分类
+         */
+        getTypeList() {
+            API.Systems.listSystemType({
+                page: 1,
+                limit: 9999,
+            }).then((res) => {
+                this.mainTypeList = res.data;
+            }).catch((err) => {
+
+            });
         },
         /** 
          * 新增系统设置
@@ -306,8 +325,24 @@ export default {
             /* this.createLoading = true; */
             this.$refs['addData'].validate((valid) => {
                 if (valid) {
+                    let flag = 0;
+                    for (const item of this.mainTypeList) {
+                        if (item.mainType == this.formData.mType) {
+                            flag++;
+                            break;
+                        }
+                    }
+                    if (!flag) {
+                        console.log(this.formData.mType);
+                        API.Systems.addSystemType({
+                            mainType: this.formData.mType
+                        }).then((res) => {
+
+                        }).catch((err) => {
+                        });
+                    }
                     API.Systems.addSystem(this.formData).then((res) => {
-                         this.createLoading = true;
+                        this.createLoading = true;
                         this.$Message.success("新增成功");
                         this.modal = false;
                         this.getData();
@@ -331,7 +366,7 @@ export default {
          * 删除系统设置
          */
         delSetting(id) {
-            
+
             let self = this;
             this.$Modal.confirm({
                 title: '删除设置',
@@ -365,7 +400,7 @@ export default {
          * 提交修改
          */
         submitSetting() {
-            
+
             this.$refs['editData'].validate((valid) => {
                 if (valid) {
                     API.Systems.editSystem({
@@ -396,6 +431,7 @@ export default {
     },
     mounted() {
         this.getData();
+
     }
 }
 </script>

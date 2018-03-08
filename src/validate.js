@@ -88,7 +88,7 @@ export default {
                 required: true,
                 type: 'number',
                 message: '请输入类型',
-                trigger: 'blur'
+                trigger: 'change'
             }
         ],
         key: [
@@ -112,11 +112,11 @@ export default {
                 trigger: 'blur'
             }
         ],
-        main_type: [
+        mType: [
             {
                 required: true,
                 message: '请输入分类信息',
-                trigger: 'blur'
+                trigger: 'change'
             }
         ],
         sort: [
@@ -171,9 +171,9 @@ export default {
             {
                 required: true,
                 /* type: 'number', */
-                message: '请填写序号，长度不得超过10',
+                message: '请填写序号，长度不得超过8',
                 trigger: 'blur',
-                max: 10
+                max: 8
             }
         ],
         types: [

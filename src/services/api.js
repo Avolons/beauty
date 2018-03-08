@@ -15,7 +15,8 @@ Vue.prototype.$http = axios;
 // axios.defaults.timeout = 5000;
 /* 默认的接口地址 */
 /* axios.defaults.baseURL = 'http://192.168.3.24:8080'; */
-axios.defaults.baseURL = 'http://192.168.1.215:8080';
+/* axios.defaults.baseURL = 'http://192.168.1.215:8080'; */
+/* axios.defaults.baseURL = 'http://192.168.1.218:8080'; */
 /* axios.defaults.baseURL = 'http://60.190.86.50:6016'; */
 /* axios.defaults.baseURL = 'http://192.168.1.32:8081'; */
 /* axios.defaults.baseURL = 'http://192.168.1.166:8080'; */
@@ -576,6 +577,26 @@ export const Systems = {
      */
     addSystem (data) {
         return fetch('post', '/visit/newSysConfig/add', data);
+    },
+    /**
+     * 系统分类信息列表
+     * page
+     * limit:10 //每页显示条数
+     * mainType:AVIADDRESS  //分类名称（可选）
+     * @param {any} data
+     * @returns
+      */
+    listSystemType (data) {
+        return fetch('get', '/visit/sysconfigtype/list', data);
+    },
+    /**
+     * 新增系统分类
+     * mainType
+     * @param {any} data
+     * @returns
+     */
+    addSystemType (data) {
+        return fetch('post', '/visit/sysconfigtype/save', data);
     },
     /**
      * 系统功能编辑

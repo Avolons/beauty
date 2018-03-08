@@ -102,8 +102,8 @@ export default {
 		},
 		handleFormatError(file) {
 			this.$Notice.warning({
-				title: 'The file format is incorrect',
-				desc: 'File format of ' + file.name + ' is incorrect, please select jpg or png.'
+				title: '文件格式错误',
+				desc:  file.name + ' 格式不正确, 请选择 xls 或者 xlsx 格式文件.'
 			});
 		},
 		handleMaxSize(file) {

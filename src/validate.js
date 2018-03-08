@@ -324,7 +324,7 @@ export default {
             {
                 required: true,
                 message: '请输入正确的专属号码',
-                trigger: 'blur'
+                trigger: 'change'
             }
         ],
         rIds: [

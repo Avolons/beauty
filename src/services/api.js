@@ -460,6 +460,13 @@ export const Jurisdiction = {
         return fetch('post', '/visit/admin/update', data);
     },
     /**
+     *  获取专属号码
+     *
+     */
+    userNumber (data) {
+        return fetch('get', '/visit/sysconfig/exclusivephone', data);
+    },
+    /**
      * 用户删除
      * id
      * @param {any} data

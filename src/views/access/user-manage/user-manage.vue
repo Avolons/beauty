@@ -201,7 +201,7 @@ export default {
                     }
                 },
                 {
-                    title: '手机号码',
+                    title: '专属号码',
                     key: 'mobile',
                     render: (h, params) => {
                         return params.row.admin.mobile

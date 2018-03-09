@@ -284,7 +284,7 @@ export default {
         });
         this.list(1);
       } else {
-        this.$Message.cancel({
+        this.$Message.error({
           content: res.msg,
           top: 500
         });

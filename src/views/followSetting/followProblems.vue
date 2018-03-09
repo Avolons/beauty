@@ -256,7 +256,7 @@
             <Option v-for="(option, index) in netDisList" :value="option.value" :key="index">{{option.label}}</Option>
           </Select>
         </FormItem>
-        <FormItem label="关联指标"  v-show="targetShow">
+        <FormItem label="关联指标" v-show="targetShow">
           <Select :label="taglabel" v-model="formItem.targetId" filterable remote :remote-method="remoteMethod1" clearable :label-in-value="true" not-found-text="">
             <Option v-for="(option, index) in indexOptions" :value="option.value" :key="index">{{option.label}}</Option>
           </Select>
@@ -286,7 +286,7 @@ export default {
       page: 1,
       taglabel: "",
       modelTre: "",
-      editorDate:{},   //记录编辑数据  确认是否改变
+      editorDate: {},   //记录编辑数据  确认是否改变
       //指标筛选
       indexParams: {
         pager: 1,
@@ -302,7 +302,7 @@ export default {
         limit: 10,
         title: '',
         diseaseId: '',
-        targetId:"",
+        targetId: "",
       },
       //表格data
       dataList: [],
@@ -337,25 +337,25 @@ export default {
           render: (h, params) => {
             switch (params.row.otype) {
               case '01':
-                return  '症状';
+                return '症状';
                 break;
               case '02':
-                return  '体征';
+                return '体征';
                 break;
               case '03':
-                return  '生活方式指导';
+                return '生活方式指导';
                 break;
               case '04':
-                return  '辅助检查';
+                return '辅助检查';
                 break;
               case '05':
-                return  '用药反馈';
+                return '用药反馈';
                 break;
               case '06':
-                return  '转诊情况';
+                return '转诊情况';
                 break;
               default:
-                return  '通用';
+                return '通用';
                 break;
             }
           }
@@ -386,23 +386,23 @@ export default {
                     API.followProblems.editList({
                       id: params.row.id
                     }).then((res) => {
-                       //用来记录上一次的值 看是否改变
-                       this.editorDate = {
-                           id: res.data.id,
-                           title: res.data.title,
-                           isTarget: res.data.isTarget,
-                           content: res.data.content,
-                           targetId: res.data.targetId,
-                           diseaseId: res.data.diseaseId,
-                           playWavOnly: res.data.playWavOnly,
-                           status: res.data.status
+                      //用来记录上一次的值 看是否改变
+                      this.editorDate = {
+                        id: res.data.id,
+                        title: res.data.title,
+                        isTarget: res.data.isTarget,
+                        content: res.data.content,
+                        targetId: res.data.targetId,
+                        diseaseId: res.data.diseaseId,
+                        playWavOnly: res.data.playWavOnly,
+                        status: res.data.status
                       }
                       this.formItem = {
-                          id: res.data.id,
-                          title: res.data.title,
-                          content: res.data.content,
-                          playWavOnly: res.data.playWavOnly,
-                          isTarget: res.data.isTarget
+                        id: res.data.id,
+                        title: res.data.title,
+                        content: res.data.content,
+                        playWavOnly: res.data.playWavOnly,
+                        isTarget: res.data.isTarget
                       }
                       let arr = [];
                       res.data.diseaseId = res.data.diseaseId.split(",");
@@ -436,7 +436,7 @@ export default {
                       })
                       this.taglabel = res.data.targetName;
                       this.formItem.targetId = res.data.targetId;
-//                      this.search.otype = res.data.otype
+                      //                      this.search.otype = res.data.otype
                     }).catch((error) => {
                     })
                   }
@@ -462,7 +462,7 @@ export default {
                       this.FollowProblePage({
                         "followProble": {
                           "followProblePage": this.page,       //页码
-                      }
+                        }
 
                       });
                     }
@@ -530,7 +530,7 @@ export default {
         diseaseId: [
           { required: true, type: "array", message: '疾病类型不能为空', trigger: 'blur' }
         ],
-        targetId:[
+        targetId: [
           { required: true, message: '关联指标不能为空', trigger: 'blur' },
         ],
       },
@@ -676,19 +676,19 @@ export default {
             this.patientText = false;
             this.listRefresh(this.page);
             this.$Message.success("提交成功");
-            if (this.formItem.id){
-                if(JSON.stringify(addPram)!=JSON.stringify(this.editorDate)){
-                    if(this.formItem.playWavOnly=='0'){
-                        this.$router.push({ path: '/followSetting/voice/voice/'+this.formItem.id+''});
-                        //保存数据  当再次返回的时候进行重新赋值
-                        this.FollowProblePage({
-                            "followProble": {
-                                "followProblePage": this.page,       //页码
-                            }
-                        });
+            if (this.formItem.id) {
+              if (JSON.stringify(addPram) != JSON.stringify(this.editorDate)) {
+                if (this.formItem.playWavOnly == '0') {
+                  this.$router.push({ path: '/followSetting/voice/voice/' + this.formItem.id + '' });
+                  //保存数据  当再次返回的时候进行重新赋值
+                  this.FollowProblePage({
+                    "followProble": {
+                      "followProblePage": this.page,       //页码
                     }
-
+                  });
                 }
+
+              }
             }
 
           }).catch((error) => {

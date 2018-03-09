@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import { API } from '@/services';
+import { API } from './services';
 export default {
     data() {
         return {

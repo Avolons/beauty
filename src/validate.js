@@ -127,15 +127,15 @@ export default {
             trigger: 'blur'
         }],
         paixu: [
-        {
-            required: true,
-            type: 'number',
-            message: '请填写序号',
-            trigger: 'blur',
-            transform(value) {
+            {
+                required: true,
+                type: 'number',
+                message: '请填写序号',
+                trigger: 'blur',
+                transform (value) {
                 return Number(value);
             }
-        }
+            }
         ],
         types: [{
             required: true,
@@ -244,7 +244,7 @@ export default {
             pattern: ruleList.code,
             trigger: 'blur'
         }],
-        types: [{
+        mobile: [{
             required: true,
             message: '请输入正确的专属号码',
             trigger: 'blur'

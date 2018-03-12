@@ -19,6 +19,7 @@
 
 <script>
 import { API } from './services';
+import Push from 'push.js'
 export default {
     data() {
         return {
@@ -33,6 +34,10 @@ export default {
         }).catch((err) => {
 
         });
+        Push.create('Hello World!')
+
+
+
     },
     /*  window.addEventListener('popstate', () => {
          let routePath = _this.$route.path;

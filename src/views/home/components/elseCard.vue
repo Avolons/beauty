@@ -1,10 +1,5 @@
 <style lang="less">
     @import './styles/infor-card.less';
-    .infor-intro-text{
-        font-size: 15px;
-        color: #333;
-        margin-bottom: 5px;
-    }
 </style>
 
 <template>
@@ -16,17 +11,16 @@
                 </Row>
             </Col>
             <Col span="16" class="height-100">
-                <Row type="flex" align="middle"  class="height-100">
+                <Row type="flex" align="middle" justify="center" class="height-100">
                     <count-up 
                         class="infor-card-count user-created-count" 
                         :id-name="idName" 
-                        :id-names="idNames" 
                         :end-val="endVal" 
                         :color="color"
                         :countSize="countSize"
                         :countWeight="countWeight"
                     >
-                    <p class="infor-intro-text" slot="intro">{{ introText }}</p>
+                        <p class="infor-intro-text" slot="intro">{{ introText }}</p>
                     </count-up>
                 </Row>
             </Col>
@@ -35,7 +29,7 @@
 </template>
 
 <script>
-import countUp from './countUp.vue';
+import countUp from './countUps.vue';
 
 export default {
     name: 'inforCard',
@@ -44,8 +38,7 @@ export default {
     },
     props: {
         idName: String,
-        idNames:String,
-        endVal: Array,
+        endVal: Number,
         color: String,
         iconType: String,
         introText: String,

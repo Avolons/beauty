@@ -1,5 +1,5 @@
 <template>
-    <div :data="data" style="width:100%;height:300px;" id="visite_volume_con">
+    <div :data="data" style="width:100%;height:390px;" id="visite_volume_con">
     </div>
 </template>
 
@@ -28,7 +28,7 @@ export default {
             const option = {
                 color: ['#3398DB'],
                 title: {
-                    text: '每日呼出量',
+                    text: '随访正常通话统计',
                     textStyle: {
                         fontWeight: 'normal',
                         fontSize: 16,

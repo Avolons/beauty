@@ -88,6 +88,7 @@ export default {
         userFlow,
         countUp,
         inforCard,
+        elseCard
     },
     data() {
         return {

@@ -5,141 +5,87 @@
 <template>
     <div class="home-main">
         <Row :gutter="10">
-            <Col :md="24" :lg="8">
-            <Row class-name="home-page-row1" :gutter="10">
-                <Col :md="12" :lg="24" :style="{marginBottom: '10px'}">
-                <Card class="home_header">
-                    <Row type="flex" class="user-infor">
-                        <Col span="8">
-                        <Row class-name="made-child-con-middle" type="flex" align="middle">
-                            <img class="avator-img" src="../../images/asset.png" />
-                        </Row>
-                        </Col>
-                        <Col span="16" style="padding-left:6px;">
-                        <Row class-name="made-child-con-middle" type="flex" align="middle">
-                            <div>
-                                <b class="card-user-infor-name">{{baseData.name}}</b>
-                                <p>{{baseData.type}}</p>
-                            </div>
-                        </Row>
-                        </Col>
-                    </Row>
-                    <Row class="margin-top-8">
-                        <Col span="8">
-                        <p class="notwrap">上次登录时间:</p>
-                        </Col>
-                        <Col span="16" class="padding-left-8">{{baseData.loginTime}}</Col>
-                    </Row>
-                </Card>
-                </Col>
-                <Col :md="12" :lg="24" :style="{marginBottom: '10px'}">
-                <Card style="min-height:370px" class="doctorSort">
-                    <p slot="title" class="card-title">
-                        <Icon type="map"></Icon>
-                        医生接诊量排行
-                        <Select @on-change="getSortList" v-model="doctorParams.type" style="width:70px">
-                            <Option value="1">七天</Option>
-                            <Option value="2">一个月</Option>
-                        </Select>
-                        <Select @on-change="getSortList" v-model="doctorParams.departmentId" style="width:100px">
-                            <Option v-for="item in departList" :value="item.departmentId" :key="item.departmentId">{{ item.departmentName }}</Option>
-                        </Select>
-                    </p>
-                    <Table size="small" height="270px" border :columns="config" :data="dataList"></Table>
-                </Card>
-                </Col>
-            </Row>
-            </Col>
-            <Col :md="24" :lg="16">
-            <Row :gutter="5">
-                <Col :xs="24" :sm="8" :md="8" :style="{marginBottom: '10px'}">
-                <infor-card id-name="user_created_count" id-names="user_created_counts" :end-val="count.createUser" iconType="ios-paper" color="#2d8cf0" intro-text="随访记录审核"></infor-card>
-                </Col>
-                <Col :xs="24" :sm="8" :md="8" :style="{marginBottom: '10px'}">
-                <infor-card id-name="visit_count" id-names="visit_counts" :end-val="count.visit" iconType="briefcase" color="#64d572" intro-text="随访计划审核"></infor-card>
-                </Col>
-                <Col :xs="24" :sm="8" :md="8" :style="{marginBottom: '10px'}">
-                <infor-card id-name="collection_count" id-names="collection_counts" :end-val="count.collection" iconType="ios-bookmarks" color="#ffd572" intro-text="方案重复匹配审核"></infor-card>
-                </Col>
-            </Row>
+            <Col :md="24" :lg="24">
             <Row>
-                <Card :padding="0">
-                    <p slot="title" class="card-title">
-                        <Icon type="map"></Icon>
-                        就诊患者统计
-                        <Select @on-change="getjzcount" v-model="jzParams.type" style="width:100px">
-                            <Option value="1">七天</Option>
-                            <Option value="2">一个月</Option>
-                        </Select>
-                        <Select @on-change="getjzcount" v-model="jzParams.departmentId" style="width:150px">
-                            <Option v-for="item in departList" :value="item.departmentId" :key="item.departmentId">{{ item.departmentName }}</Option>
-                        </Select>
-
-                    </p>
-                    <div class="map-con">
-                        <Col span="4" class="map_left">
-                        <h3>就诊累计情况</h3>
-                        <h4>新增患者总数</h4>
-                        <h5>{{jzCount}}</h5>
-                        </Col>
-                        <Col span="20" class="map-incon">
-                        <Row type="flex" justify="center" align="middle">
-                            <home-map ref="jz" :mapData="jzList"></home-map>
+                <Col :xs="24" :sm="12" :md="8" :lg="4">
+                <Row class-name="home-page-row1" :gutter="10">
+                    <Col :md="24" :lg="24" :style="{marginBottom: '10px'}">
+                    <Card class="home_header">
+                        <Row type="flex" class="user-infor">
+                            <Col span="8">
+                            <Row class-name="made-child-con-middle" type="flex" align="middle">
+                                <img class="avator-img" src="../../images/asset.png" />
+                            </Row>
+                            </Col>
+                            <Col span="16" style="padding-left:6px;">
+                            <Row class-name="made-child-con-middle" type="flex" align="middle">
+                                <div>
+                                    <b class="card-user-infor-name">{{baseData.name}}</b>
+                                    <p>{{baseData.type}}</p>
+                                </div>
+                            </Row>
+                            </Col>
                         </Row>
-                        </Col>
-                    </div>
-                </Card>
-            </Row>
-            </Col>
-        </Row>
-        <Row :gutter="10">
-            <Card class="follow_box">
-                <p slot="title" class="card-title">
-                    <Icon type="android-map"></Icon>
-                    随访情况统计
-                    <Select @on-change="getFollowData" v-model="followParams.type" style="width:100px">
-                        <Option value="1">七天</Option>
-                        <Option value="2">一个月</Option>
-                    </Select>
-                    <Select @on-change="getFollowData" v-model="followParams.departmentId" style="width:150px">
-                        <Option v-for="item in departList_dis" :value="item.departmentId" :key="item.departmentId">{{ item.departmentName }}</Option>
-                    </Select>
-                </p>
-                <Row :gutter="10" class="follow_inner">
-                    <Col :md="6" class="follow_left" :lg="3" :style="{marginBottom: '10px',height:'100%'}">
-                        <h3>随访情况</h3>
-                        <h5>随访任务量</h5>
-                        <h4>{{countvisitorder.totalNum}}</h4>
-                        <h5>随访任务完成量</h5>
-                        <h4>{{countvisitorder.doNum}}</h4>
-                        <h5>随访任务失败量</h5>
-                        <h4>{{countvisitorder.noDoNum}}</h4>
-                    </Col>
-                    <Col :md="18" :lg="9" :style="{marginBottom: '10px',height:'100%'}">
-                    <visite-volume :data="followList" ref="follow"></visite-volume>
-                    </Col>
-                    <Col :md="12" :lg="6" :style="{marginBottom: '10px',height:'100%'}">
-                    <h3>任务成功情况统计</h3>
-                    <data-source-pie ref="success" :data="finshList"></data-source-pie>
-                    </Col>
-                    <Col :md="12" :lg="6"  :style="{marginBottom: '10px',height:'100%'}">
-                    <h3 v-if="cancelList.length">任务失败情况统计</h3>
-                    <service-requests ref="fail" :data="cancelList" v-if="cancelList.length"></service-requests>
+                    </Card>
                     </Col>
                 </Row>
-            </Card>
+                </Col>
+                <Col :xs="24" :sm="12" :md="8" :lg="4" :style="{marginBottom: '10px'}">
+                <else-card id-name="user_created_count" :end-val="count.createUser" iconType="person-stalker" color="#2d8cf0" intro-text="所有客户"></else-card>
+                </Col>
+                <Col :xs="24" :sm="12" :md="8" :lg="4" :style="{marginBottom: '10px'}">
+                <else-card id-name="visit_count" :end-val="count.visit" iconType="pie-graph" color="#64d572" intro-text="待随访客户"></else-card>
+                </Col>
+                <Col :xs="24" :sm="12" :md="8" :lg="4" :style="{marginBottom: '10px'}">
+                <else-card id-name="collection_count" :end-val="count.collection" iconType="person-add" color="#ffd572" intro-text="已随访客户"></else-card>
+                </Col>
+                <Col :xs="24" :sm="12" :md="8" :lg="4" :style="{marginBottom: '10px'}">
+                <else-card id-name="collection_count" :end-val="count.collection" iconType="ios-stopwatch" color="#ff7279" intro-text="已随访次数"></else-card>
+                </Col>
+                <Col :xs="24" :sm="12" :md="8" :lg="4" :style="{marginBottom: '10px'}">
+                <else-card id-name="collection_count" :end-val="count.collection" iconType="chatbox-working" color="#72cbff" intro-text="短信发送总数"></else-card>
+                </Col>
+            </Row>
+            </Col>
+            <Col :md="24" :lg="24">
+            <Row :gutter="10">
+                <div class="map-con">
+                    <Col :xs="24" :sm="24" :md="24" :lg="8" >
+                    <Card :padding="20" :style="{marginBottom: '10px',height:'450px'}">
+                        <p slot="title">
+                            <Icon type="arrow-graph-up-right"></Icon>
+                            今日随访情况
+                        </p>
+                        <Row type="flex" justify="spaceBetween" align="middle" :style="{height:'350px'}">
+                            <Col :xs="20" :sm="8" :md="8" :lg="20" >
+                            <infor-card id-name="user_created_count" id-names="user_created_counts" :end-val="count.createUser" iconType="ios-paper" color="#2d8cf0" intro-text="实际随访数量：1000"></infor-card>
+                            </Col>
+                            <Col :xs="20" :sm="8" :md="8" :lg="20" >
+                            <infor-card id-name="visit_count" id-names="visit_counts" :end-val="count.visit" iconType="ios-telephone" color="#64d572" intro-text="通话时长"></infor-card>
+                            </Col>
+                            <Col :xs="20" :sm="8" :md="8" :lg="20" >
+                            <infor-card id-name="collection_count" id-names="collection_counts" :end-val="count.collection" iconType="ios-email" color="#ffd572" intro-text="短信统计"></infor-card>
+                            </Col>
+                        </Row>
+                    </Card>
+
+                    </Col>
+                    <Col :xs="24" :sm="24" :md="24" :lg="16" >
+                    <Card :padding="0" :style="{marginBottom: '10px',height:'450px'}">
+                        <p slot="title">
+                            <Icon type="map"></Icon>
+                            近7天随访正常通话统计
+                        </p>
+                        <Row type="flex" justify="center" align="middle">
+                            <visite-volume :data="followList" ref="follow"></visite-volume>
+                        </Row>
+                    </Card>
+
+                    </Col>
+                </div>
+            </Row>
+            </Col>
         </Row>
-        <!-- <Row class="margin-top-10">
-                                    <Card>
-                                        <p slot="title" class="card-title">
-                                            <Icon type="ios-shuffle-strong"></Icon>
-                                            上周每日服务调用量(万)
-                                        </p>
-                                        <div class="line-chart-con">
-                                            <service-requests></service-requests>
-                                        </div>
-                                    </Card>
-                                </Row> -->
     </div>
 </template>
 
@@ -156,6 +102,7 @@ import countUp from './components/countUp.vue';
 import inforCard from './components/inforCard.vue';
 import mapDataTable from './components/mapDataTable.vue';
 import toDoListItem from './components/toDoListItem.vue';
+import elseCard from './components/elseCard.vue';
 
 export default {
     name: 'home',
@@ -168,19 +115,20 @@ export default {
         countUp,
         inforCard,
         mapDataTable,
-        toDoListItem
+        toDoListItem,
+        elseCard
     },
     data() {
         return {
             /** 
              * 基础数据
              */
-            baseData:{
+            baseData: {
 
             },
-            followList:[],
-            cancelList:[],//失败列表
-            finshList:[],//成功列表
+            followList: [],
+            cancelList: [],//失败列表
+            finshList: [],//成功列表
             /** 数据列表 */
             dataList: [],
             /** 表格文件 */
@@ -189,7 +137,7 @@ export default {
                     title: '排名',
                     type: 'index',
                     align: 'center',
-                    width:70,
+                    width: 70,
                 },
                 {
                     title: '姓名',
@@ -199,13 +147,13 @@ export default {
                     title: '接诊量',
                     key: 'jzNum',
                     sortable: true,
-                    width:90,
-                    
+                    width: 90,
+
                 },
                 {
                     title: '随访量',
                     key: 'sfNum',
-                    width:75,
+                    width: 75,
                 }
             ],
             /** 
@@ -219,14 +167,14 @@ export default {
             },
             //科室列表
             departList: [{
-                departmentName:"全部",
-                departmentId:-1,
+                departmentName: "全部",
+                departmentId: -1,
             }],//医生统计科室
             departList_dis: [
                 {
-                departmentName:"全部",
-                departmentId:-1,
-            }
+                    departmentName: "全部",
+                    departmentId: -1,
+                }
             ],//就诊累计情况科室
             /** 基础数据列表 */
             count: {
@@ -271,15 +219,15 @@ export default {
          */
         getBaseData() {
             API.Home.orderList().then((res) => {
-                if(res.data){
+                if (res.data) {
                     this.count.createUser = [res.data.noDoNum, res.data.doNum];
                 }
             }).catch((err) => {
 
             });
             API.Home.tasklist().then((res) => {
-                if(res.data){
-                this.count.visit = [res.data.noDoNum, res.data.doNum];
+                if (res.data) {
+                    this.count.visit = [res.data.noDoNum, res.data.doNum];
                 }
             }).catch((err) => {
 
@@ -287,8 +235,8 @@ export default {
             API.Home.taskList({
                 type: 2
             }).then((res) => {
-                if(res.data){
-                this.count.collection = [res.data.noDoNum, res.data.doNum];
+                if (res.data) {
+                    this.count.collection = [res.data.noDoNum, res.data.doNum];
                 }
             }).catch((err) => {
 
@@ -305,12 +253,12 @@ export default {
                  * 
                  */
                 this.jzParams.departmentId = this.departList[0].departmentId;
-                this.doctorParams.departmentId =this.departList[0].departmentId;
+                this.doctorParams.departmentId = this.departList[0].departmentId;
 
             }).catch((err) => {
 
-            }).then(()=>{
-                
+            }).then(() => {
+
                 /* this.getjzcount();
                 this.getSortList(); */
             });
@@ -328,41 +276,12 @@ export default {
         },
 
         /** 
-         * 获取医生排行数据
-         */
-        getSortList() {
-            let sendData=JSON.parse(JSON.stringify(this.doctorParams));
-            sendData.departmentId=sendData.departmentId==-1?"":sendData.departmentId;
-            API.Home.seniority(sendData).then((res) => {
-                this.dataList = res.data;
-            }).catch((err) => {
-
-            });
-        },
-        /** 
-         * 获取就诊患者排行数据
-         */
-        getjzcount() {
-            let sendData=JSON.parse(JSON.stringify(this.jzParams));
-            sendData.departmentId=sendData.departmentId==-1?"":sendData.departmentId;
-            API.Home.jzcount(sendData).then((res) => {
-                this.jzCount = res.total;
-                this.jzList = res.data;
-                setTimeout(()=> {
-                        this.$refs.jz.init();
-                }, 20);
-                
-            }).catch((err) => {
-
-            });
-        },
-        /** 
          * 获取随访情况统计
          */
         getFollowData() {
             // 随访情况接口
-            let sendData=JSON.parse(JSON.stringify(this.followParams));
-            sendData.departmentId=sendData.departmentId==-1?"":sendData.departmentId;
+            let sendData = JSON.parse(JSON.stringify(this.followParams));
+            sendData.departmentId = sendData.departmentId == -1 ? "" : sendData.departmentId;
             API.Home.countvisitorder(sendData).then((res) => {
                 this.countvisitorder = res.data;
             }).catch((err) => {
@@ -370,41 +289,41 @@ export default {
             });
             // 每日随访任务量接口
             API.Home.hccount(sendData).then((res) => {
-                this.followList=res.data;
-                setTimeout(()=> {
-                this.$refs.follow.init();
+                this.followList = res.data;
+                setTimeout(() => {
+                    this.$refs.follow.init();
                 }, 20);
             }).catch((err) => {
 
             });
             // 任务完成情况统计接口
             API.Home.countvisitfinish(sendData).then((res) => {
-                let arr=[];
+                let arr = [];
                 for (const item of res.data) {
-                  arr.push({
-                      name:item.remark,
-                      value:item.doNum,
-                  })  
+                    arr.push({
+                        name: item.remark,
+                        value: item.doNum,
+                    })
                 }
-                this.finshList=arr;
-                setTimeout(()=> {
-                this.$refs.success.init();
+                this.finshList = arr;
+                setTimeout(() => {
+                    this.$refs.success.init();
                 }, 20);
             }).catch((err) => {
 
             });
             // 任务失败情况统计接口
             API.Home.countordercancel(sendData).then((res) => {
-               let arr=[];
-                if(res.data.length>0){
+                let arr = [];
+                if (res.data.length > 0) {
                     for (const item of res.data) {
                         arr.push({
-                            name:item.remark,
-                            value:item.doNum,
+                            name: item.remark,
+                            value: item.doNum,
                         })
                     }
-                    this.cancelList=arr;
-                    setTimeout(()=> {
+                    this.cancelList = arr;
+                    setTimeout(() => {
                         this.$refs.fail.init();
                     }, 20);
                 }
@@ -415,9 +334,9 @@ export default {
         },
     },
     mounted() {
-    this.baseData=JSON.parse(
-        Cookies.get('baseData')
-    );
+        this.baseData = JSON.parse(
+            Cookies.get('baseData')
+        );
         /** 
          * 获取科室数据
          */
@@ -425,7 +344,7 @@ export default {
         this.getBaseData();
     },
     activated() {
-        
+
     }
 };
 </script>

@@ -47,8 +47,9 @@ export default {
                 },
                 legend: {
                     type:"scroll",
-                    orient: 'horizontal',
-                    bottom: '0%',
+                    orient: 'vertical',
+                    left: '290px',
+                    top:"30px",
                     data:legend
                 },
                 series: [{

@@ -9,24 +9,7 @@
 import CountUp from 'countup';
 
 function transformValue (val) {
-    let endVal = 0;
-    let unit = '';
-    if (val < 1000) {
-        endVal = val;
-    } else if (val >= 1000 && val < 1000000) {
-        endVal = parseInt(val / 1000);
-        unit = 'K+';
-    } else if (val >= 1000000 && val < 10000000000) {
-        endVal = parseInt(val / 1000000);
-        unit = 'M+';
-    } else {
-        endVal = parseInt(val / 1000000000);
-        unit = 'B+';
-    }
-    return {
-        val: endVal,
-        unit: unit
-    };
+    return val;
 }
 
 export default {

@@ -29,8 +29,8 @@ export default {
                 title: {
                     text: all,
                     /* subtext: '2016年', */
-                    x: 'center',
-                    y: '110px',
+                    x: '120px',
+                    y: '140px',
                     textStyle: {
                         fontWeight: 'normal',
                         fontSize: 14
@@ -43,12 +43,13 @@ export default {
                 },
                 legend: {
                     type:"scroll",
-                    orient: 'horizontal',
-                    bottom: '0%',
+                    orient: 'vertical',
+                    left: '290px',
+                    top:"30px",
                     data:legend
                 },
                 series: [{
-                    center: ['50%', '120px'],
+                    center: ['140px', '155px'],
                     type: 'pie',
                     selectedMode: 'single',
                     radius: ['25%', '58%'],
@@ -72,7 +73,7 @@ export default {
                     },
                     data: this.data
                 }, {
-                    center: ['50%', '120px'],
+                    center: ['140px', '155px'],
                     type: 'pie',
                     radius: ['58%', '78%'],
                     itemStyle: {

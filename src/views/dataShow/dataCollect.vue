@@ -5,20 +5,20 @@
 <template>
     <div class="home-main">
         <Row :gutter="5" type="flex" justify="space-between">
-            <Col :xs="24" :sm="6" :md="6" :style="{marginBottom: '10px'}">
-            <infor-card id-name="user_created_count" id-names="user_created_counts" :end-val="count.createUser" iconType="ios-paper" color="#2d8cf0" intro-text="随访记录审核"></infor-card>
+            <Col :xs="24" :sm="8" :md="8" :lg="5" :style="{marginBottom: '10px'}">
+            <else-card id-name="user_created_count" :end-val="count.createUser" iconType="person-stalker" color="#2d8cf0" intro-text="所有客户"></else-card>
             </Col>
-            <Col :xs="24" :sm="6" :md="6" :style="{marginBottom: '10px'}">
-            <infor-card id-name="visit_count" id-names="visit_counts" :end-val="count.visit" iconType="briefcase" color="#64d572" intro-text="随访计划审核"></infor-card>
+            <Col :xs="24" :sm="8" :md="8" :lg="5" :style="{marginBottom: '10px'}">
+            <else-card id-name="visit_count" :end-val="count.visit" iconType="pie-graph" color="#64d572" intro-text="待随访客户"></else-card>
             </Col>
-            <Col :xs="24" :sm="4" :md="4" :style="{marginBottom: '10px'}">
-            <infor-card id-name="collection_count" id-names="collection_counts" :end-val="count.collection" iconType="ios-bookmarks" color="#ffd572" intro-text="方案重复匹配审核"></infor-card>
+            <Col :xs="24" :sm="8" :md="8" :lg="5" :style="{marginBottom: '10px'}">
+            <else-card id-name="collection_count" :end-val="count.collection" iconType="person-add" color="#ffd572" intro-text="已随访客户"></else-card>
             </Col>
-            <Col :xs="24" :sm="4" :md="4" :style="{marginBottom: '10px'}">
-            <infor-card id-name="collection_count" id-names="collection_counts" :end-val="count.collection" iconType="ios-bookmarks" color="#ffd572" intro-text="方案重复匹配审核"></infor-card>
+            <Col :xs="24" :sm="12" :md="12" :lg="4" :style="{marginBottom: '10px'}">
+            <else-card id-name="collection_count" :end-val="count.collection" iconType="ios-stopwatch" color="#ff7279" intro-text="已随访次数"></else-card>
             </Col>
-            <Col :xs="24" :sm="4" :md="4" :style="{marginBottom: '10px'}">
-            <infor-card id-name="collection_count" id-names="collection_counts" :end-val="count.collection" iconType="ios-bookmarks" color="#ffd572" intro-text="方案重复匹配审核"></infor-card>
+            <Col :xs="24" :sm="12" :md="12" :lg="4" :style="{marginBottom: '10px'}">
+            <else-card id-name="collection_count" :end-val="count.collection" iconType="chatbox-working" color="#72cbff" intro-text="短信发送总数"></else-card>
             </Col>
         </Row>
         <Row :gutter="5">
@@ -26,38 +26,29 @@
                 <p slot="title" class="card-title">
                     <Icon type="android-map"></Icon>
                     随访情况统计
-                    <Select @on-change="getFollowData" v-model="followParams.type" style="width:100px">
-                        <Option value="1">七天</Option>
-                        <Option value="2">一个月</Option>
-                    </Select>
-                    <Select @on-change="getFollowData" v-model="followParams.departmentId" style="width:150px">
-                        <Option v-for="item in departList_dis" :value="item.departmentId" :key="item.departmentId">{{ item.departmentName }}</Option>
-                    </Select>
+                   <DatePicker type="datetimerange" placeholder="请选择日期" style="width: 300px"></DatePicker>
                 </p>
-                <Row :gutter="10" >
-                    <Col :md="24"  :lg="24" :style="{marginTop: '10px',height:'100%'}">
-                    <Row :gutter="5">
-                        <Col :xs="24" :sm="8" :md="8" :style="{marginBottom: '10px'}">
-                        <infor-card id-name="user_created_count" id-names="user_created_counts" :end-val="count.createUser" iconType="ios-paper" color="#2d8cf0" intro-text="随访记录审核"></infor-card>
+                <Row :gutter="10">
+                    <Col :md="24" :lg="24" :style="{margin: '20px 0',height:'100%'}">
+                    <Row type="flex" justify="spaceBetween" align="middle" >
+                        <Col :xs="24" :sm="8" :md="8" :lg="8">
+                        <infor-card id-name="user_created_count" id-names="user_created_counts" :end-val="count.createUser" iconType="ios-paper" color="#2d8cf0" intro-text="实际随访数量：1000"></infor-card>
                         </Col>
-                        <Col :xs="24" :sm="8" :md="8" :style="{marginBottom: '10px'}">
-                        <infor-card id-name="visit_count" id-names="visit_counts" :end-val="count.visit" iconType="briefcase" color="#64d572" intro-text="随访计划审核"></infor-card>
+                        <Col :xs="24" :sm="8" :md="8" :lg="8">
+                        <infor-card id-name="visit_count" id-names="visit_counts" :end-val="count.visit" iconType="ios-telephone" color="#64d572" intro-text="通话时长"></infor-card>
                         </Col>
-                        <Col :xs="24" :sm="8" :md="8" :style="{marginBottom: '10px'}">
-                        <infor-card id-name="collection_count" id-names="collection_counts" :end-val="count.collection" iconType="ios-bookmarks" color="#ffd572" intro-text="方案重复匹配审核"></infor-card>
+                        <Col :xs="24" :sm="8" :md="8" :lg="8">
+                        <infor-card id-name="collection_count" id-names="collection_counts" :end-val="count.collection" iconType="ios-email" color="#ffd572" intro-text="短信统计"></infor-card>
                         </Col>
                     </Row>
                     </Col>
-                    <!-- <Col :md="18" :lg="9" :style="{marginBottom: '10px',height:'100%'}">
-                        <visite-volume :data="followList" ref="follow"></visite-volume>
-                        </Col> -->
-                    <Col :md="12" :lg="12" :style="{marginBottom: '10px',height:'100%'}">
-                    <h3>任务成功情况统计</h3>
+                    <Col :xs="24" :md="12" :lg="12" :style="{marginBottom: '10px',height:'100%'}">
+                    <h3 style="text-align:center">通话状态分布</h3>
                     <data-source-pie ref="success" :data="finshList"></data-source-pie>
                     </Col>
-                    <Col :md="12" :lg="12" :style="{marginBottom: '10px',height:'100%'}">
-                    <h3>任务失败情况统计</h3>
-                    <service-requests ref="fail" :data="finshList" ></service-requests>
+                    <Col :xs="24" :md="12" :lg="12" :style="{marginBottom: '10px',height:'100%'}">
+                    <h3 style="text-align:center">有无意向百分比</h3>
+                    <service-requests ref="fail" :data="finshList"></service-requests>
                     </Col>
                 </Row>
             </Card>
@@ -77,7 +68,6 @@ import userFlow from './components/userFlow.vue';
 import countUp from './components/countUp.vue';
 import inforCard from './components/inforCard.vue';
 import elseCard from './components/elseCard.vue';
-
 export default {
     name: 'home',
     components: {

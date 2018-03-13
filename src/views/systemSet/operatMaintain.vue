@@ -79,7 +79,7 @@
             <div class="sys-sysset_main_list">
                 <Table border :columns="config" :data="dataList" :loading="createLoading"></Table>
             </div>
-            <Row class="sys-sysset_main_page" v-if="totalPage>10">
+            <Row class="sys-sysset_main_page" >
                 <Page :page-size="pageSize" :total="totalPage" :current="page" show-elevator style="float:right" show-total  @on-change="changePage"></Page>
             </Row>
         </div>
@@ -238,8 +238,8 @@ export default {
                 phone: this.serchSyst.phone,
             }).then((res) => {
                 this.dataList=res.data;
-                this.totalPage = res.totleRow;
-				this.pageSize=res.pageSize;
+                this.totalPage = res.total;
+				// this.pageSize = res.pageSize;
 				this.createLoading = false;
             }).catch((err) => {
 
@@ -248,10 +248,10 @@ export default {
         /** 
          * 新增系统设置
          */
-        addSetting() {
-            this.createLoading = true;
+        addSetting () {
             this.$refs['addData'].validate((valid) => {
                 if (valid) {
+                    this.createLoading = true;
                     API.Systems.addOperateMaDate(this.formData).then((res) => {
                         this.$Message.success("新增成功");
                         this.modal=false;
@@ -275,12 +275,12 @@ export default {
          * 删除系统设置
          */
         delSetting (id) {
-            this.createLoading = true;
             let self = this;
             this.$Modal.confirm({
                 title: '删除设置',
                 content: '确定删除该运营维护吗？',
                 onOk: () => {
+                    this.createLoading = true;
                     API.Systems.delOperateMaDate({
                         id: id
                     }).then((res) => {

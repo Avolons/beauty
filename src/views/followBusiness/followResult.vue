@@ -231,7 +231,7 @@
 				</div>
 				</Col>
 				<!-- 门诊 -->
-				<Col span="24" class="info-co-public" v-if="mjzData.length" v-for="item,index in mjzData" :key="index">
+				<Col span="24"   class="info-co-public" v-if="mjzData.length" v-for="item,index in mjzData" :key="index">
 				<Row class="infoRow2">
 					<Col span="4" class="sfCol4">
 					<div class="counts">
@@ -240,7 +240,7 @@
 					</Col>
 					<Col span="20" class="sfCol20">
 					<h3 class="sfName">{{currentData.brxm}}</h3>
-					<Row>
+					<Row :gutter="15"  class="result_patinfo">
 						<Col span="12">
 						<span>就诊卡号:</span>
 						<span>{{currentData.jzkh}}</span>
@@ -288,8 +288,8 @@
 					</Col>
 					<Col span="20" class="sfCol20">
 					<h3 class="sfName">{{currentData.brxm}}</h3>
-					<Row>
-						<Col span="12">
+					<Row :gutter="15" >
+						<Col span="12" class="result_patinfo">
 						<span>住院号:</span>
 						<span>{{item1.zyhm}}</span>
 						</Col>
@@ -614,6 +614,7 @@ export default {
 		},
 		selectAll(selection) {
 			this.haveSelect = selection;
+			this.clickAll = true;
 		},
 		timeChange_one(date) {
 			this.searchParams.dateAddBegin = date[0];
@@ -730,7 +731,8 @@ export default {
 			this.nowId = id;
 			this.sfStatus = sfStatus; //获取当前的随访状态,3=停止
 			if (sfStatus == '3') {
-				this.$refs.sfStatusBtn.$el.setAttribute('disabled', true)
+				this.$refs.sfStatusBtn.$el.setAttribute('disabled', true);
+				/* return false; */
 			} else {
 				this.$refs.sfStatusBtn.$el.removeAttribute('disabled')
 			}
@@ -760,8 +762,8 @@ export default {
 		zzsfOk(name) {
 			this.$refs[name].validate((valid) => {
 				if (valid) {
-					if (this.selectAll) {
-						let ids=[];
+					if (this.clickAll) {
+						let ids = [];
 						for (const item of this.haveSelect) {
 							ids.push(item.id);
 						}
@@ -772,14 +774,14 @@ export default {
 						}).then((res) => {
 							this.$Message.success('成功!');
 							this.zzsfModel = false;
-							this.selectAll = false;
+							this.clickAll = false;
 							this.zzsfForm.select = '';
 							this.zzsfForm.textarea = '';
 							this.getData(this.searchParams.pager);
 						}).catch((err) => {
 							//弹出错误信息
 							this.$Message.error(err);
-							this.selectAll = false;
+							this.clickAll = false;
 						});
 					} else {
 						API.Dataaudit.cancelall({
@@ -812,6 +814,11 @@ export default {
 <style lang="less">
 @import "../../styles/common.less";
 @import "../../styles/jzda.less";
+.result_patinfo{
+	.ivu-col{
+		margin-top: 5px;
+	}
+}
 .followResult {
 	&_single {
 		&_ai {

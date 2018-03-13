@@ -39,6 +39,12 @@ export default {
 
 
     },
+    created() {
+      
+    },
+    beforeDestroy () {
+
+    },
     /*  window.addEventListener('popstate', () => {
          let routePath = _this.$route.path;
          console.log(_this.$route.path);

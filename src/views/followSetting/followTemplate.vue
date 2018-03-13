@@ -69,7 +69,13 @@
       </Col>
       <Col span="6">
       <Button type="primary" style="margin-right:10px" @click="handleSearch('IndexSearch')">查询</Button>
-      <Upload v-if="!menuShow(this.AM.FollowSetting.importTem)" :on-success="handleSuccess" style="margin-right:10px" :show-upload-list='false' :action="API.Data.temImport" name="xmlFile">
+      <Upload
+              v-if="!menuShow(this.AM.FollowSetting.importTem)"
+              :on-success="handleSuccess"
+              style="margin-right:10px"
+              :show-upload-list='false'
+              :action="API.Data.temImport"
+              name="xmlFile">
         <Button type="primary" icon="ios-cloud-upload-outline">导入模板</Button>
       </Upload>
       <Button type="info" v-if="!menuShow(this.AM.FollowSetting.addTem)" @click="addBtn">添加模板</Button>
@@ -278,7 +284,7 @@ export default {
         });
         this.list(1);
       } else {
-        this.$Message.cancel({
+        this.$Message.error({
           content: res.msg,
           top: 500
         });

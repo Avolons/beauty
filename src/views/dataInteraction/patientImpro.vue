@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<!-- <div class="demo-upload-list" v-for="item in uploadList">
+		<div class="demo-upload-list" v-for="item in uploadList">
 			<template v-if="item.status === 'finished'">
 				<img :src="item.url">
 				<div class="demo-upload-list-cover">
@@ -11,7 +11,7 @@
 			<template v-else>
 				<Progress v-if="item.showProgress" :percent="item.percentage" hide-info></Progress>
 			</template>
-		</div> -->
+		</div>
 		<Upload ref="upload" 
 				:show-upload-list="false" 
 				:on-success="handleSuccess" 
@@ -22,7 +22,7 @@
 				multiple 
 				name="upfile"
 				type="drag" 
-				:action="API.Data.PatImport" 
+				:action="API.Data.PatImport"
 				style="display: inline-block;width:158px;">
 			<div style="width: 158px;height:158px;display:flex;flex-direction:column;align-items:center;justify-content:center">
 				<Icon type="document-text" size="50"></Icon>
@@ -102,8 +102,8 @@ export default {
 		},
 		handleFormatError(file) {
 			this.$Notice.warning({
-				title: 'The file format is incorrect',
-				desc: 'File format of ' + file.name + ' is incorrect, please select jpg or png.'
+				title: '文件格式错误',
+				desc:  file.name + ' 格式不正确, 请选择 xls 或者 xlsx 格式文件.'
 			});
 		},
 		handleMaxSize(file) {

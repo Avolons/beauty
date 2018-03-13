@@ -183,30 +183,30 @@
 							</Col>
 							<Col span="6">
 							<span>
-								年龄范围
-							</span>
-							<InputNumber :max="searchParams.ageEnd" :min="0" v-model="searchParams.ageBegin"></InputNumber>
-							<InputNumber :max="100" :min="searchParams.ageBegin" v-model="searchParams.ageEnd"></InputNumber>
-							</Col>
-							<Col span="6">
-							<span>
 								疾病类型
 							</span>
 							<Select v-model="searchParams.diseaseId" filterable remote not-found-text="" :remote-method="remoteMethod" clearable>
 								<Option v-for="(item, index) in diseaseList" :value="item.id" :key="index">{{item.name}}</Option>
 							</Select>
 							</Col>
-							<Col span="6" style="height:32px;margin-top:10px">
+							<Col span="6" style="height:32px;">
 							<span style="width:105px;height:32px;">
 								就诊开始时间：
 							</span>
-							<DatePicker @on-change="timeChange_import" type="datetime"  placeholder="请选择就诊开始时间" style="width:calc(100% - 105px)"></DatePicker>
+							<DatePicker @on-change="timeChange_import" type="datetime" placeholder="请选择就诊开始时间" style="width:calc(100% - 105px)"></DatePicker>
 							</Col>
 							<Col span="6" style="height:32px;margin-top:10px">
 							<span style="width:105px;height:32px;">
 								就诊结束时间：
 							</span>
-							<DatePicker @on-change="timeChange_export" type="datetime"  placeholder="请选择就诊结束时间" style="width:calc(100% - 105px)"></DatePicker>
+							<DatePicker @on-change="timeChange_export" type="datetime" placeholder="请选择就诊结束时间" style="width:calc(100% - 105px)"></DatePicker>
+							</Col>
+							<Col span="6" style="height:32px;margin-top:10px">
+							<span>
+								年龄范围
+							</span>
+							<InputNumber :max="searchParams.ageEnd" :min="0" v-model="searchParams.ageBegin"></InputNumber>
+							<InputNumber :max="100" :min="searchParams.ageBegin" v-model="searchParams.ageEnd"></InputNumber>
 							</Col>
 						</Row>
 						<div class="creatNotice_main_add">
@@ -280,10 +280,10 @@
 							</FormItem>
 						</Form>
 						<!-- <div class="creatNotice_main_success">
-									<Icon type="checkmark-circled"></Icon>
-									<Alert type="success">恭喜你，发起通知成功</Alert>
-									<Button type="success">查看通知进度</Button>
-								</div> -->
+										<Icon type="checkmark-circled"></Icon>
+										<Alert type="success">恭喜你，发起通知成功</Alert>
+										<Button type="success">查看通知进度</Button>
+									</div> -->
 					</TabPane>
 				</Tabs>
 			</div>
@@ -312,9 +312,9 @@ export default {
 				diseaseId: "",//疾病id，多个用英文逗号分开（可选）
 				brxb: "",     //性别：男,女
 				ageBegin: 0, //年龄开始（可选）
-				ageEnd: 200 ,  //年龄结束（可选）
-				diagnoseTimeBegin:"",
-				diagnoseTimeEnd:""
+				ageEnd: 200,  //年龄结束（可选）
+				diagnoseTimeBegin: "",
+				diagnoseTimeEnd: ""
 			},
 			/** 
 			 * 方案请求数据
@@ -539,7 +539,7 @@ export default {
 							this.sendData.diagnoseTimeEnd = this.searchParams.diagnoseTimeEnd;
 						}
 						let ajaxData = JSON.parse(JSON.stringify(this.sendData));
-						
+
 						/* delete ajaxData.admin;
 						delete ajaxData.adminId; */
 						API.Notice.createNotice(ajaxData).then((res) => {
@@ -586,7 +586,7 @@ export default {
 		 * 获取医生列表
 		 */
 		getDoctorList() {
-			this.doctorobj="";
+			this.doctorobj = "";
 			API.FollowBussiness.listDoctor({
 				pager: 1,
 				limit: 100000,

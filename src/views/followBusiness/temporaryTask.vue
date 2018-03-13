@@ -148,7 +148,7 @@
 							<span>
 								医生：
 							</span>
-							<Select :filterable="true" @on-change="getData" v-model="searchParams.admin">
+							<Select :filterable="true" @on-change="getData_change" v-model="searchParams.admin">
 								<!-- <Select @on-change="getData" v-model="doctorobj"> -->
 								<Option v-for="item in doctorList" :value="item.realname+','+item.id" :key="item.id">{{item.realname}}</Option>
 							</Select>
@@ -177,25 +177,25 @@
 							<span style="width:105px;height:32px;">
 								导入开始时间：
 							</span>
-							<DatePicker @on-change="timeChange_import" type="datetime"  placeholder="请选择数据导入时间" style="width:calc(100% - 105px)"></DatePicker>
+							<DatePicker @on-change="timeChange_import" type="datetime" placeholder="请选择数据导入时间" style="width:calc(100% - 105px)"></DatePicker>
 							</Col>
 							<Col span="6" style="height:32px">
 							<span style="width:105px;height:32px;margin-left:15px">
 								导入结束时间：
 							</span>
-							<DatePicker @on-change="timeChange_export" type="datetime" placement="bottom-end"  placeholder="请选择数据导出时间" style="width:calc(100% - 105px)"></DatePicker>
+							<DatePicker @on-change="timeChange_export" type="datetime" placement="bottom-end" placeholder="请选择数据导出时间" style="width:calc(100% - 105px)"></DatePicker>
 							</Col>
 							<Col span="6" style="height:32px;margin-top:10px">
 							<span style="width:105px;height:32px;">
 								就诊开始时间：
 							</span>
-							<DatePicker @on-change="timeChange_importElse" type="datetime"  placeholder="请选择就诊开始时间" style="width:calc(100% - 105px)"></DatePicker>
+							<DatePicker @on-change="timeChange_importElse" type="datetime" placeholder="请选择就诊开始时间" style="width:calc(100% - 105px)"></DatePicker>
 							</Col>
 							<Col span="6" style="height:32px;margin-top:10px">
 							<span style="width:105px;height:32px;">
 								就诊结束时间：
 							</span>
-							<DatePicker @on-change="timeChange_exportElse" type="datetime"  placeholder="请选择就诊结束时间" style="width:calc(100% - 105px)"></DatePicker>
+							<DatePicker @on-change="timeChange_exportElse" type="datetime" placeholder="请选择就诊结束时间" style="width:calc(100% - 105px)"></DatePicker>
 							</Col>
 						</Row>
 						<div class="creatNotice_main_add">
@@ -244,7 +244,7 @@
 						<Button @click="returnStep(1)" style="margin-right:10px">返回上一步</Button>
 					</TabPane>
 					<TabPane label="标签三" name="step_three">
-						<Form  ref="sendData" class="creatNotice_main_form" :model="sendData" :rules="validate.sendData" :label-width="110">
+						<Form ref="sendData" class="creatNotice_main_form" :model="sendData" :rules="validate.sendData" :label-width="110">
 							<FormItem label="医生" style="width:450px;">
 								<Input disabled v-model="sendData.admin" style="width: 435px"></Input>
 							</FormItem>
@@ -267,10 +267,10 @@
 						</Form>
 						<!-- <Table border :columns="timeConfig" :data="timeList"></Table> -->
 						<!-- <div class="creatNotice_main_success">
-										<Icon type="checkmark-circled"></Icon>
-										<Alert type="success">恭喜你，发起通知成功</Alert>
-										<Button type="success">查看通知进度</Button>
-									</div> -->
+												<Icon type="checkmark-circled"></Icon>
+												<Alert type="success">恭喜你，发起通知成功</Alert>
+												<Button type="success">查看通知进度</Button>
+											</div> -->
 					</TabPane>
 				</Tabs>
 			</div>
@@ -283,22 +283,6 @@ import { API } from '@/services';
 export default {
 	data() {
 		return {
-			//用来测试的，没几把用
-			// timeList: [],
-			// timeConfig: [
-			// 	{
-			// 		title: '方案名称',
-			// 		key: 'schemeName'
-			// 	},
-			// 	{
-			// 		title: '编号',
-			// 		key: 'orderNo'
-			// 	},
-			// 	{
-			// 		title: '随访时间',
-			// 		key: 'dateBegin'
-			// 	},
-			// ],
 			timeobj: {//发起随访时间
 				date: "",
 				time: "",
@@ -323,8 +307,8 @@ export default {
 				adminId: "",
 				beginTime: '',//导入开始时间：年月日时分秒(可选)
 				endTime: '',//导入结束时间：年月日时分秒（可选）
-				diagnoseTimeBegin:"",
-				diagnoseTimeEnd:""
+				diagnoseTimeBegin: "",
+				diagnoseTimeEnd: ""
 			},
 			/** 
 			 * 方案请求数据
@@ -341,6 +325,7 @@ export default {
 				schemeName: "", //方案名称
 				adminId: "", //医生id
 				admin: "",
+				diseaseId: '',
 				mobile: "",  //发起人专属服务号码
 				visitStartTime: "",//随访起始时间
 				hzxxIds: [],  //患者id
@@ -518,6 +503,7 @@ export default {
 							//this.sendData.hzxxIds = []
 							this.sendData.isAll = 1;
 							this.sendData.brxm = this.searchParams.brxm;
+							this.sendData.brxm = this.searchParams.brxm;
 							this.sendData.beginTime = this.searchParams.beginTime;
 							this.sendData.endTime = this.searchParams.endTime;
 							this.sendData.diagnoseTimeBegin = this.searchParams.diagnoseTimeBegin;
@@ -575,6 +561,7 @@ export default {
 					name: '全部'
 				});
 				this.getDoctorList();
+
 			}).catch((err) => {
 
 			});
@@ -583,7 +570,10 @@ export default {
 		 * 获取医生列表
 		 */
 		getDoctorList() {
-			this.searchParams.admin="";
+			this.searchParams.admin = "";
+			this.isAll = 0;
+			this.dataList = [];
+			this.addList=[];
 			API.FollowBussiness.listDoctor({
 				pager: 1,
 				limit: 100000,
@@ -594,6 +584,12 @@ export default {
 			}).catch((err) => {
 
 			});
+		},
+		getData_change(){
+			if(!this.searchParams.admin){
+				return false;
+			}
+			this.getData();
 		},
 		/** 
 		 * 获取列表数据,搜索接口
@@ -609,7 +605,6 @@ export default {
 			this.searchParams.adminId = this.sendData.adminId;
 			this.searchParams.beginTime = this.timeobj1.date;
 			this.searchParams.endTime = this.timeobj2.date;
-			console.log(this.searchParams);
 			API.FollowBussiness.patList(this.searchParams).then((res) => {
 				this.dataList = this.formData(res.data);
 				this.totalPage = res.total;
@@ -660,6 +655,7 @@ export default {
 				this.$Message.warning("您尚未添加任何患者");
 				return false;
 			}
+			this.sendData.diseaseId = this.searchParams.diseaseId;
 			this.step = "step_two";
 		},
 		/** ylTimeChange

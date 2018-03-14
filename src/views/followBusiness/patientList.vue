@@ -95,18 +95,44 @@
 		<Row class="inter-down_main_search" :gutter="15">
 			<Col span="6">
 			<span>
-				患者编号
+				客户姓名：
 			</span>
-			<Input type="text" v-model="searchParams.brid" placeholder="请输入患者编号"></Input>
+			<Input type="text" v-model.trim="searchParams.brxm" placeholder="请输入客户姓名"></Input>
 			</Col>
 			<Col span="6">
 			<span>
-				患者姓名
+				性别：
 			</span>
-			<Input type="text" v-model="searchParams.brxm" placeholder="请输入患者姓名"></Input>
+			<Select v-model="searchParams.brxb">
+				<Option v-for="item in statusList" :value="item.id" :key="item.id">{{item.name}}</Option>
+			</Select>
 			</Col>
 			<Col span="6">
-			<Button type="primary" @click="searchParams.pager=1;getData()">查询</Button>
+			<span>
+				出生年月：
+			</span>
+			 <DatePicker @on-change="timeChange_one" type="daterange" split-panels placeholder="请选择出生年月" style="width: 300px"></DatePicker>
+			</Col>
+			<Col span="6" style="height:32px;">
+			<span>
+				联系电话：
+			</span>
+				<Input type="text" v-model.trim="searchParams.jtdh" placeholder="请输入联系电话"></Input>
+			</Col>
+			<Col span="6" style="height:32px;margin-top:10px">
+			<span>
+				居住地址：
+			</span>
+			<Input type="text" v-model.trim="searchParams.qtdz" placeholder="请输入居住地址"></Input>
+			</Col>
+			<Col span="6" style="height:32px;margin-top:10px">
+			<span>
+				导入时间
+			</span>
+			<DatePicker @on-change="timeChange_two" type="daterange" placeholder="请选择导入时间"></DatePicker>
+			</Col>
+			<Col span="6">
+			<Button type="primary" @click="searchParams.pager=1;getData()" style="margin-top: 10px;">查询</Button>
 			</Col>
 		</Row>
 		<!-- 表格 -->
@@ -118,7 +144,7 @@
 		<Page :total="totalPage" :current="searchParams.pager" show-elevator @on-change="changePage" show-total></Page>
 		</Col>
 		<!-- 详情模态框 -->
-		<Modal v-model="patientDetail" title="患者信息" class-name="patientInfo" :styles="{top: '36px'}" width="1000">
+		<Modal v-model="patientDetail" title="客户信息" class-name="patientInfo" :styles="{top: '36px'}" width="1000">
 			<Row class="infoRow">
 				<Col span="12" class="info-col mb12">
 					<div class="info">
@@ -160,11 +186,11 @@
 					<div class="info">
 						<div class="info-row">
 							<div class="info-one bb1">出生年月</div>
-							<div class="info-two bdx1">{{currentData.csny}}</div>
+							<div class="info-two bdx1">{{currentData.csny?currentData.csny.slice(0,10): ''}}</div>
 						</div>
 						<div class="info-row">
-							<div class="info-one">身份证号</div>
-							<div class="info-two">{{currentData.sfzh}}</div>
+							<div class="info-one">单位</div>
+							<div class="info-two">{{currentData.dwmc}}</div>
 						</div>
 					</div>
 				</Col>
@@ -192,14 +218,6 @@
 						</div>
 					</div>
 				</Col>
-				<Col span="12" class="info-col mb12">
-					<div class="info" style="height: 32px;">
-						<div class="info-row">
-							<div class="info-one bdx1">单位</div>
-							<div class="info-two bdx1">{{currentData.dwmc}}</div>
-						</div>
-					</div>
-				</Col>
 				<!-- 门诊 -->
 				<Col span="24" class="info-co-public" v-if="mjzData.length" v-for="item,index in mjzData" :key="index">
 					<Row class="infoRow2">
@@ -215,7 +233,7 @@
 								<span>就诊卡号:</span><span>{{currentData.jzkh}}</span>
 							</Col>
 							<Col span="12">
-								<span>患者性质:</span><span>{{currentData.brxz}}</span>
+								<span>客户性质:</span><span>{{currentData.brxz}}</span>
 							</Col>
 							<Col span="12">
 								<span>就诊时间:</span><span>{{item.jzrq}}</span>
@@ -255,7 +273,7 @@
 								<span>住院号:</span><span>{{item1.zyhm}}</span>
 							</Col>
 							<Col span="12">
-								<span>患者性质:</span><span>{{currentData.brxz}}</span>
+								<span>客户性质:</span><span>{{currentData.brxz}}</span>
 							</Col>
 							<Col span="12">
 								<span>入院时间:</span><span>{{item1.admissiontime}}</span>
@@ -288,38 +306,38 @@
 			</Row>
 		</Modal>
 		<!-- 编辑功能模态框 -->
-		<Modal v-model="patientText" :mask-closable="false" title="编辑患者信息" class-name="patientInfo" :styles="{top: '36px'}" width="1000">
+		<Modal v-model="patientText" :mask-closable="false" title="编辑客户信息" class-name="patientInfo" :styles="{top: '36px'}" width="1000">
 			<!-- 门诊 -->
 			<Row class="infoRow">
 				<Form ref="formCustom" :model="formCustom" :label-width="80">
 					<Col span="12">
 						<FormItem label="姓名">
-	            <Input v-model="formCustom.brxm" disabled></Input>
+	            <Input v-model="formCustom.brxm"></Input>
 	          </FormItem>
 					</Col>
 					<Col span="12">
 						<FormItem label="性别">
-	            <Input v-model="formCustom.brxb" disabled></Input>
+	            <Input v-model="formCustom.brxb"></Input>
 	          </FormItem>
 					</Col>
 					<Col span="12">
 						<FormItem label="民族">
-	            <Input v-model="formCustom.mz" disabled></Input>
+	            <Input v-model="formCustom.mz"></Input>
 	          </FormItem>
 					</Col>
 					<Col span="12">
-						<FormItem label="身份证号">
-	            <Input v-model="formCustom.sfzh" disabled></Input>
+						<FormItem label="年龄">
+	            <Input v-model="formCustom.age"></Input>
 	          </FormItem>
 					</Col>
 					<Col span="12">
-						<FormItem label="家庭电话">
-	            <Input v-model="formCustom.jtdh" placeholder="请输入家庭电话"></Input>
+						<FormItem label="联系电话">
+	            <Input v-model="formCustom.jtdh" placeholder="请输入联系电话"></Input>
 	          </FormItem>
 					</Col>
 					<Col span="12">
 						<FormItem label="出生年月">
-	            <DatePicker :value="formCustom.csny" type="date" placeholder="Select date" style="width: 200px" @on-change="csnyChange"></DatePicker>
+	            <DatePicker :value="formCustom.csny" type="date" placeholder="Select date" style="width: 400px" @on-change="csnyChange"></DatePicker>
 	          </FormItem>
 					</Col>
 					<Col span="12">
@@ -368,7 +386,7 @@
 								<span>就诊卡号:</span><span>{{currentData.jzkh}}</span>
 							</Col>
 							<Col span="12">
-								<span>患者性质:</span><span>{{currentData.brxz}}</span>
+								<span>客户性质:</span><span>{{currentData.brxz}}</span>
 							</Col>
 							<Col span="12">
 								<span>就诊时间:</span><span>{{item.jzrq}}</span>
@@ -407,7 +425,7 @@
 								<span>住院号:</span><span>{{item1.zyhm}}</span>
 							</Col>
 							<Col span="12">
-								<span>患者性质:</span><span>{{currentData.brxz}}</span>
+								<span>客户性质:</span><span>{{currentData.brxz}}</span>
 							</Col>
 							<Col span="12">
 								<span>入院时间:</span><span>{{item1.admissiontime}}</span>
@@ -447,16 +465,32 @@ import { API } from '@/services';
 export default {
 	data() {
 		return {
-            createLoading:true,			//loading动画 加载中
+      createLoading:true,			//loading动画 加载中
 			//搜索条件对象
 			searchParams: {
-				brid: '',//患者编号
-				brxm: '',//患者姓名
+				brxm: '',//客户姓名
+				brxb: '',//客户性别
+				jtdh: '',//联系电话
+				qtdz: '',//户主地址
+				csnyBegin: '',//出生年月（可选） 不用时分秒
+				csnyEnd: '',//出生年月（可选） 不用时分秒
+				sourceTimeBegin: '',//导入开始日期（可选） 不用时分秒
+				sourceTimeEnd: '',///导入结束日期（可选） 不用时分秒
 				pager: 1,//当前页码
 				limit: 10,//每页条数
 			},
+			statusList: [{//性别
+					name: "全部",
+					id: ""
+				}, {
+					name: "男",
+					id: "男"
+				}, {
+					name: "女",
+					id: "女"
+				}],
 			totalPage: 100,//总页数
-			currentData: {}, //当前被点击患者，编辑和详情按钮触发时更换数据
+			currentData: {}, //当前被点击客户，编辑和详情按钮触发时更换数据
 			mjzData: [],//门急诊信息
 			zyData: [],//住院信息
 			patientDetail: false,//详情模态框
@@ -479,38 +513,34 @@ export default {
 			dataList: [], //表格数据
 			config: [     //表格配置
 				{
-					title: '患者编号',
-					key: 'brid',
+					title: '序号',
+					type: 'index',
 					align: 'center'
 				},
 				{
-					title: '患者姓名',
+					title: '客户姓名',
 					key: 'brxm',
+					align: 'center'
+				},
+				{
+					title: '性别',
+					key: 'brxb',
 					align: 'center'
 				},
 				{
 					title: '民族',
 					key: 'mz',
-					align: 'center',
-					width:"70px"
+					align: 'center'
 				},
 				{
 					title: '出生年月',
 					key: 'csny',
-					align: 'center',
-					width:"100px"
+					align: 'center'
 				},
 				{
-					title: '性别',
-					key: 'brxb',
-					align: 'center',
-					width:"70px"
-				},
-				{
-					title: '家庭电话',
+					title: '联系电话',
 					key: 'jtdh',
-					align: 'center',
-					width:"120px"
+					align: 'center'
 				},
 				{
 					title: '居住地址',
@@ -518,13 +548,8 @@ export default {
 					align: 'center'
 				},
 				{
-					title: '身份证号',
-					key: 'sfzh',
-					align: 'center'
-				},
-				{
-					title: '单位名称',
-					key: 'dwmc',
+					title: '导入时间',
+					key: 'xzzQtdz',
 					align: 'center'
 				},
 				{
@@ -577,9 +602,40 @@ export default {
 		}
 	},
 	methods: {
-        /**
-         * 点击编辑按钮
-         */
+		/**
+		 * 出生年月select
+		 * @function 出生年月
+		 */
+		timeChange_one(date) {
+			this.searchParams.csnyBegin = date[0];
+			this.searchParams.csnyEnd = date[1];
+		},
+		/**
+		 * 导入时间select
+		 * @function 出生年月
+		 */
+		timeChange_two(date) {
+			this.searchParams.sourceTimeBegin = date[0];
+			this.searchParams.sourceTimeEnd = date[1];
+		},
+		/** 
+		 * 获取列表数据,搜索接口
+		 * @function getData
+		 * @param {searchParams} 搜索列表
+		 */
+		getData() {
+			API.FollowBussiness.listPat(this.searchParams).then((res) => {
+				this.dataList = res.data;
+				this.totalPage = res.total;
+				this.createLoading = false;
+			}).catch((err) => {
+				//弹出错误信息
+				this.$Message.error(err);
+			});
+		},
+		/**
+		 * 点击编辑按钮
+		 */
 		editPat(data) {
 			this.formCustom = JSON.parse(JSON.stringify(data));
 			this.patientText = true;
@@ -591,7 +647,7 @@ export default {
 			this.formCustom.csny = value
 		},
 		/** 
-		 * 查看患者详情
+		 * 查看客户详情
 		 */
 		getInfo(id) {
 			API.FollowBussiness.detailPat({
@@ -611,16 +667,19 @@ export default {
 			});
 		},
 		/** 
-		 * 修改患者信息
+		 * 修改客户信息
 		 */
 		submitData(name) {
 			/** 
 			 * 此处填写具体的ajax请求
 			 */
-            this.$Spin.show();
-			console.log(this.formCustom)
+      this.$Spin.show();
 			API.FollowBussiness.savePat({
 				id: this.formCustom.id,
+				brxm: this.formCustom.brxm,
+				brxb: this.formCustom.brxb,
+				age: this.formCustom.age,
+				mz: this.formCustom.mz,
 				jtdh: this.formCustom.jtdh,
 				xzzQtdz: this.formCustom.xzzQtdz,
 				lxrm: this.formCustom.lxrm,
@@ -636,19 +695,6 @@ export default {
                 this.$Spin.hide();
 			}).catch((err) => {
 			    //弹出错误信息
-                this.$Message.error(err);
-			});
-		},
-		/** 
-		 * 获取列表数据,搜索接口
-		 */
-		getData() {
-			API.FollowBussiness.listPat(this.searchParams).then((res) => {
-				this.dataList = res.data;
-				this.totalPage = res.total;
-				this.createLoading = false;
-			}).catch((err) => {
-                //弹出错误信息
                 this.$Message.error(err);
 			});
 		},

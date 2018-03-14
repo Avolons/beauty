@@ -14,9 +14,8 @@ Vue.prototype.$http = axios;
 /* 默认最长响应时间 */
 // axios.defaults.timeout = 5000;
 /* 默认的接口地址 */
-/* axios.defaults.baseURL = 'http://192.168.3.24:8080'; */
-axios.defaults.baseURL = 'http://192.168.1.215:8080';
-/* axios.defaults.baseURL = 'http://192.168.1.218:8080'; */
+  axios.defaults.baseURL = '/api';
+// axios.defaults.baseURL = 'http://192.168.3.24:8080';
 /* axios.defaults.baseURL = 'http://60.190.86.50:6016'; */
 /* axios.defaults.baseURL = 'http://192.168.1.32:8081'; */
 /* axios.defaults.baseURL = 'http://192.168.1.166:8080'; */
@@ -27,7 +26,7 @@ axios.defaults.baseURL = 'http://192.168.1.215:8080';
 
 /* axios.defaults.baseURL = 'http://192.168.3.26:8081'; */
 
-let JsonData = ['/visit/order/batchcancelall', '/order/temp/testvisit', '/order/temp/visit', '/visit/order/vet/save', '/visit/order/notice', '/ordertask/vet', '/question/script/save', '/questionscheme/save', '/questiontemple/save'];
+let JsonData = ['/visit/order/batchcancelall', '/order/temp/testvisit', '/order/temp/visit', '/visit/order/vet/save', '/visit/order/notice', '/ordertask/vet', '/question/script/save', '/questionscheme/save', '/questiontemple/save', '/questiontarget/save'];
 // 添加请求拦截器
 axios.interceptors.request.use(function (config) {
     let flag = 0;
@@ -460,13 +459,6 @@ export const Jurisdiction = {
         return fetch('post', '/visit/admin/update', data);
     },
     /**
-     *  获取专属号码
-     *
-     */
-    userNumber (data) {
-        return fetch('get', '/visit/sysconfig/exclusivephone', data);
-    },
-    /**
      * 用户删除
      * id
      * @param {any} data
@@ -584,26 +576,6 @@ export const Systems = {
      */
     addSystem (data) {
         return fetch('post', '/visit/newSysConfig/add', data);
-    },
-    /**
-     * 系统分类信息列表
-     * page
-     * limit:10 //每页显示条数
-     * mainType:AVIADDRESS  //分类名称（可选）
-     * @param {any} data
-     * @returns
-      */
-    listSystemType (data) {
-        return fetch('get', '/visit/sysconfigtype/list', data);
-    },
-    /**
-     * 新增系统分类
-     * mainType
-     * @param {any} data
-     * @returns
-     */
-    addSystemType (data) {
-        return fetch('post', '/visit/sysconfigtype/save', data);
     },
     /**
      * 系统功能编辑
@@ -1218,7 +1190,29 @@ export const FollowBussiness = {
       */
     patCeshi (data) {
         return fetch('post', '/visit/order/temp/testvisit', data);
+    },
+    /**
+     * 正常通话查询接口
+     * pager:1, //当前页码
+     limit:3,//每页条数
+     pager:h5 //第几页
+     brxm:    //客户姓名
+     mobile:  //手机号
+     schemeName //方案名称
+     callTime   //呼叫次数
+     intention  //是否有意向 （ 1:有  0：无）
+     dateAddStart  //生成开始时间
+     dateAddEnd   //生成结束时间
+     datebeginStart  //执行开始时间
+     datebeginEnd    //执行结束时间
+     isExport        //是否导出过（是：1  否：0）
+     * @returns
+     */
+    normalCallList (data) {
+        return  fetch('post', '/bjmt/visit/getorderlist', data);
     }
+
+
 };
 
 /* 通知相关接口 *****/

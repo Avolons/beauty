@@ -30,7 +30,7 @@
                 </p>
                 <Row :gutter="10">
                     <Col :md="24" :lg="24" :style="{margin: '20px 0',height:'100%'}">
-                    <Row type="flex" justify="spaceBetween" align="middle" >
+                    <Row type="flex"  align="middle" >
                         <Col :xs="24" :sm="8" :md="8" :lg="8">
                         <infor-card id-name="user_created_count" id-names="user_created_counts" :end-val="count.createUser" iconType="ios-paper" color="#2d8cf0" intro-text="实际随访数量：1000"></infor-card>
                         </Col>
@@ -59,24 +59,17 @@
 <script>
 import Cookies from 'js-cookie';
 import { API } from '@/services'
-/* import cityData from './map-data/get-city-value.js'; */
-import homeMap from './components/map.vue';
 import dataSourcePie from './components/dataSourcePie.vue';
 import visiteVolume from './components/visiteVolume.vue';
 import serviceRequests from './components/serviceRequests.vue';
-import userFlow from './components/userFlow.vue';
-import countUp from './components/countUp.vue';
-import inforCard from './components/inforCard.vue';
-import elseCard from './components/elseCard.vue';
+import inforCard from '../home/components/inforCard.vue';
+import elseCard from '../home/components/elseCard.vue';
 export default {
     name: 'home',
     components: {
-        homeMap,
         dataSourcePie,
         visiteVolume,
         serviceRequests,
-        userFlow,
-        countUp,
         inforCard,
         elseCard
     },

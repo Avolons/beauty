@@ -71,11 +71,15 @@
 						<Radio label="digit">数值</Radio>
 					</RadioGroup>
 				</FormItem>
-				<FormItem label="是否需要考核" prop="isCheck">
+				<FormItem label="有无意向" prop="isCheck">
 					<RadioGroup v-model="formItem.isCheck">
-						<Radio label="0">需要考核</Radio>
-						<Radio label="1">不需要考核</Radio>
+						<Radio label="0">有意向</Radio>
+						<Radio label="1">无意向</Radio>
 					</RadioGroup>
+				</FormItem>
+				<FormItem v-show="formItem.isCheck=='0'" label="关键词">
+					<Tag v-for="item,index in formItem.fieldValue" :key="item" :name="item" closable @on-close="keyClose(index)">{{item}}</Tag>
+					<Button icon="ios-plus-empty" type="dashed" size="small" @click="keyAdds">添加关键词</Button>
 				</FormItem>
 				<FormItem label="指标选项" v-if="formItem.type=='select'">
 					<Input v-model="willIndex" placeholder="请输入指标选项" style="width:80%"></Input>
@@ -126,6 +130,7 @@ export default {
 				otype: '',
 				diseaseId: '',
 			},
+			keyArray: [],//关键词数组
 			willIndex: "",//即将要添加的指标值
 			//表格数据
 			datalist: [],
@@ -134,17 +139,6 @@ export default {
 			labelobj: [],//指标多选label标签
 			//编辑内容
 			formItem: {
-				/* name: "",//指标名称
-				select: '',//指标类型，id
-				radio: 'string',//结果类型
-				select2: '',//
-				textarea: '',//备注
-				indexName: '',//指标选项（临时数据）
-				anormal: [],//预警阈值
-				top: '',//预警阈值上限（数值类型）
-				bottom: '',//预警阈值下限（数值类型）
-				diseaseName: [],//疾病标签 
-				isCheck: 1//是否需要考核：0，是；1，否 */
 				id: "", //不传表示增加
 				diseaseId: [],                 //疾病标签，多个用应为逗号分开
 				otype: "01",                                //指标类型
@@ -156,7 +150,8 @@ export default {
 				thresholdValueEnd: "",                   //数值上限
 				status: 0,                                  //状态：0，启用；1，禁用
 				remark: "",                   //备注
-				isCheck: 1                                 //是否需要考核：0，是；1，否
+				isCheck: 1,                               //是否需要考核：0，是；1，否
+				fieldValue: [],//关键词
 			},
 			diseaseList: [],//疾病标签下拉框数组
 			optionList: [],//指标选项的select
@@ -321,6 +316,50 @@ export default {
 		this.list();
 	},
 	methods: {
+		/** 
+		 * 标签关闭
+		 */
+		keyClose(index) {
+			this.formItem.fieldValue.splice(index, 1);
+		},
+		/**
+		 * 新增关键词
+		 */
+		keyAdds() {
+			let addVal;
+			this.$Modal.confirm({
+				render: (h) => {
+					return h('Input', {
+						props: {
+							value: this.value,
+							autofocus: true,
+							placeholder: '请输入关键词'
+						},
+						on: {
+							input: (val) => {
+								addVal = val;
+							}
+						}
+					})
+				},
+				okText: "添加",
+				onOk: () => {
+					let val = addVal || "";
+					val=val.trim();
+					if (!val) {
+						this.$Message.warning('您添加的为空');
+						return false;
+					}
+					for (let item of this.formItem.fieldValue) {
+						if (item == val) {
+							this.$Message.warning('不可重复添加');
+							return false;
+						}
+					}
+					this.formItem.fieldValue.push(val);
+				}
+			})
+		},
 		/**
 		* 清除所有历史遗留数据
 		*/
@@ -337,7 +376,8 @@ export default {
 				thresholdValueEnd: "",         //数值上限
 				status: 0,                     //状态：0，启用；1，禁用
 				remark: "",                    //备注
-				isCheck: 1                     //是否需要考核：0，是；1，否
+				isCheck: 1,                     //是否需要考核：0，是；1，否
+				fieldValue: []
 			};
 			this.labelobj = [];
 			this.diseaseList = [];
@@ -389,7 +429,8 @@ export default {
 					thresholdValueEnd: res.data.thresholdValueEnd,         //数值上限
 					status: res.data.status,                     //状态：0，启用；1，禁用
 					remark: res.data.remark,                    //备注
-					isCheck: 1                     //是否需要考核：0，是；1，否
+					isCheck: res.data.isCheck,                     //是否需要考核：0，是；1，否
+					fieldValue: res.data.fieldValue ? res.data.fieldValue.split(",") : []
 				};
 
 				if (res.data.optionValues) {
@@ -484,6 +525,7 @@ export default {
 					sendData.thresholdValue = sendData.type == "select" ? sendData.thresholdValue.join(',') : "";
 					sendData.thresholdValueStart = sendData.type == "digit" ? sendData.thresholdValueStart : "";
 					sendData.thresholdValueEnd = sendData.type == "digit" ? sendData.thresholdValueEnd : "";
+					sendData.fieldValue = sendData.fieldValue.length != 0 ? sendData.fieldValue.join(',') : "";
 					API.follSetting.addList(sendData).then((res) => {
 						//数据进行清空
 						this.clearAll();

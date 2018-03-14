@@ -282,7 +282,7 @@ export const appRouter = [
             }
         ]
     },
-    {
+    /* {
         path: '/menReview',
         icon: 'social-buffer',
         name: 'menReview',
@@ -321,7 +321,7 @@ export const appRouter = [
                 }
             }
         ]
-    },
+    }, */
     {
         path: '/followSetting',
         icon: 'paintbucket',
@@ -372,7 +372,7 @@ export const appRouter = [
             }
         ]
     },
-    {
+   /*  {
         path: '/notice',
         icon: 'email',
         name: 'notice',
@@ -401,7 +401,7 @@ export const appRouter = [
                 }
             }
         ]
-    },
+    }, */
 
     {
         path: '/dataInteraction',

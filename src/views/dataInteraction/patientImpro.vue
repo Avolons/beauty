@@ -98,7 +98,7 @@ export default {
 					this.$Message.warning("上传失败");
 				}
 			}
-			
+			this.$Spin.hide();
 		},
 		handleFormatError(file) {
 			this.$Notice.warning({
@@ -113,6 +113,7 @@ export default {
 			});
 		},
 		handleBeforeUpload() {
+			this.$Spin.show();
 			const check = this.uploadList.length < 5;
 			if (!check) {
 				this.$Notice.warning({

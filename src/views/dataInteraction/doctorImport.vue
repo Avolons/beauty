@@ -96,6 +96,7 @@ export default {
 					this.$Message.warning("上传失败");
 				}
 			}
+			this.$Spin.hide();
 		},
 		handleFormatError(file) {
 			this.$Notice.warning({
@@ -111,6 +112,7 @@ export default {
 		},
 		handleBeforeUpload() {
 			const check = this.uploadList.length < 5;
+			this.$Spin.show();
 			if (!check) {
 				this.$Notice.warning({
 					title: 'Up to five pictures can be uploaded.'

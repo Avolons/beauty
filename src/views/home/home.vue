@@ -51,19 +51,19 @@
             <Row :gutter="10">
                 <div class="map-con">
                     <Col :xs="24" :sm="24" :md="24" :lg="8" >
-                    <Card :padding="20" :style="{marginBottom: '10px',height:'450px'}">
+                    <Card :padding="20" :style="{marginBottom: '10px'}">
                         <p slot="title">
                             <Icon type="arrow-graph-up-right"></Icon>
                             今日随访情况
                         </p>
-                        <Row type="flex" justify="spaceBetween" align="middle" :style="{height:'350px'}">
-                            <Col :xs="20" :sm="8" :md="8" :lg="20" >
+                        <Row type="flex" justify="center" align="middle" >
+                            <Col :xs="20" :sm="8" :md="8" :lg="20"  :style="{marginBottom: '20px'}">
                             <infor-card id-name="user_created_count" id-names="user_created_counts" :end-val="count.createUser" iconType="ios-paper" color="#2d8cf0" intro-text="实际随访数量：1000"></infor-card>
                             </Col>
-                            <Col :xs="20" :sm="8" :md="8" :lg="20" >
+                            <Col :xs="20" :sm="8" :md="8" :lg="20" :style="{marginBottom: '20px'}">
                             <infor-card id-name="visit_count" id-names="visit_counts" :end-val="count.visit" iconType="ios-telephone" color="#64d572" intro-text="通话时长"></infor-card>
                             </Col>
-                            <Col :xs="20" :sm="8" :md="8" :lg="20" >
+                            <Col :xs="20" :sm="8" :md="8" :lg="20" :style="{marginBottom: '20px'}">
                             <infor-card id-name="collection_count" id-names="collection_counts" :end-val="count.collection" iconType="ios-email" color="#ffd572" intro-text="短信统计"></infor-card>
                             </Col>
                         </Row>
@@ -71,7 +71,7 @@
 
                     </Col>
                     <Col :xs="24" :sm="24" :md="24" :lg="16" >
-                    <Card :padding="0" :style="{marginBottom: '10px',height:'450px'}">
+                    <Card :padding="0" :style="{height:'457px'}">
                         <p slot="title">
                             <Icon type="map"></Icon>
                             近7天随访正常通话统计
@@ -92,30 +92,15 @@
 <script>
 import Cookies from 'js-cookie';
 import { API } from '@/services'
-import cityData from './map-data/get-city-value.js';
-import homeMap from './components/map.vue';
-import dataSourcePie from './components/dataSourcePie.vue';
 import visiteVolume from './components/visiteVolume.vue';
-import serviceRequests from './components/serviceRequests.vue';
-import userFlow from './components/userFlow.vue';
-import countUp from './components/countUp.vue';
 import inforCard from './components/inforCard.vue';
-import mapDataTable from './components/mapDataTable.vue';
-import toDoListItem from './components/toDoListItem.vue';
 import elseCard from './components/elseCard.vue';
 
 export default {
     name: 'home',
     components: {
-        homeMap,
-        dataSourcePie,
         visiteVolume,
-        serviceRequests,
-        userFlow,
-        countUp,
         inforCard,
-        mapDataTable,
-        toDoListItem,
         elseCard
     },
     data() {

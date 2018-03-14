@@ -14,7 +14,7 @@ Vue.prototype.$http = axios;
 /* 默认最长响应时间 */
 // axios.defaults.timeout = 5000;
 /* 默认的接口地址 */
-axios.defaults.baseURL = '/api';
+  axios.defaults.baseURL = '/api';
 // axios.defaults.baseURL = 'http://192.168.3.24:8080';
 /* axios.defaults.baseURL = 'http://60.190.86.50:6016'; */
 /* axios.defaults.baseURL = 'http://192.168.1.32:8081'; */
@@ -1190,7 +1190,29 @@ export const FollowBussiness = {
       */
     patCeshi (data) {
         return fetch('post', '/visit/order/temp/testvisit', data);
+    },
+    /**
+     * 正常通话查询接口
+     * pager:1, //当前页码
+     limit:3,//每页条数
+     pager:h5 //第几页
+     brxm:    //客户姓名
+     mobile:  //手机号
+     schemeName //方案名称
+     callTime   //呼叫次数
+     intention  //是否有意向 （ 1:有  0：无）
+     dateAddStart  //生成开始时间
+     dateAddEnd   //生成结束时间
+     datebeginStart  //执行开始时间
+     datebeginEnd    //执行结束时间
+     isExport        //是否导出过（是：1  否：0）
+     * @returns
+     */
+    normalCallList (data) {
+        return  fetch('post', '/bjmt/visit/getorderlist', data);
     }
+
+
 };
 
 /* 通知相关接口 *****/

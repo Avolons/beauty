@@ -201,8 +201,27 @@ export const appRouter = [{
         component: resolve => {
             require(['@/views/followBusiness/temporaryTask.vue'], resolve);
         }
-    }
-    ]
+    },
+    {
+        path: '/followBusiness/normalTelephone',
+        icon: 'ios-stopwatch',
+        name: 'normalTelephone',
+        title: '正常通话',
+        access: '/followBusiness/normalTelephone', // access已经添加
+        component: resolve => {
+            require(['@/views/followBusiness/normalTelephone.vue'], resolve);
+        }
+    },
+    {
+        path: '/followBusiness/telephoneRecord',
+        icon: 'ios-stopwatch',
+        name: 'telephoneRecord',
+        title: '通话记录',
+        access: '/followBusiness/telephoneRecord', // access已经添加
+        component: resolve => {
+            require(['@/views/followBusiness/telephoneRecord.vue'], resolve);
+        }
+    }]
 },
 {
     path: '/menReview',

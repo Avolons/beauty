@@ -1,18 +1,21 @@
 <template>
    <div class="sms">
-      <Tabs type="card" value="name1" v-bind:style="styleObject" @on-click = "tabClick">
+      <Tabs type="card" value="1" v-bind:style="styleObject" @on-click = "tabClick">
         <!-- 日期 -->
-        <TabPane label="日期" name="name1">
+        <TabPane label="日期" name="1">
           <!-- 表格 -->
-          <Table border height="520" :columns="columns1" :data="data1" v-bind:style="styleObject2"></Table>
+          <Table border height="521" :columns="columns1" :data="data1" class="smsTable" v-bind:style="styleObject2" :loading = "smsLoading1"></Table>
         </TabPane>
         <!-- 月份 -->
-        <TabPane label="月份" name="name2">
+        <TabPane label="月份" name="2">
           <!-- 表格 -->
-          <Table border height="520" :columns="columns1" :data="data1" v-bind:style="styleObject2"></Table>
+          <Table border height="521" :columns="columns1" :data="data1" v-bind:style="styleObject2" class="smsTable" :loading = "smsLoading2"></Table>
         </TabPane>
-        <!-- 选择时间 -->
-        <Select v-model="Month" v-if="showSelect" style="width:200px;" slot="extra" @on-change="selectChange">
+        <!-- 日期选择 -->
+        <Select v-model="sameYear" style="width:200px;" slot="extra" @on-change="selectYear">
+          <Option v-for="item in yearList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+        </Select>
+        <Select v-model="sameMonth" style="width:200px;margin-left: 20px;" v-show="showSelect" slot="extra" @on-change="selectMonth">
           <Option v-for="item in monthList" :value="item.value" :key="item.value">{{ item.label }}</Option>
         </Select>
       </Tabs>
@@ -31,6 +34,9 @@
  * 短信统计
  * @module sms
  */
+import { API } from '@/services';
+import Point from './formatYear'
+
 export default {
   data () {
     return {
@@ -40,6 +46,8 @@ export default {
       styleObject2: {
         marginTop: '15px',
       },
+      tabName: '1',//当前选中的tab 1:日期。2：yue 
+      yearList: [],//年份集合
       monthList: [//月份集合
         {
           value: '1',
@@ -90,108 +98,35 @@ export default {
           label: '12月'
         }
       ],
-      Month: '2',//当前月份
+      sameMonth: '',//当前月份
+      sameYear: '',//当前年份
       columns1: [//日期
         {
           title: '序号',
-          key: 'name'
+          type: 'index'
         },
         {
           title: '发送时间',
-          key: 'age'
+          key: 'sendTime'
         },
         {
           title: '无意向发送数',
-          key: 'address'
+          key: 'hasnotSendreasonCount'
         },
         {
           title: '有意向发送数',
-          key: 'name'
+          key: 'hasSendreasonCount'
         },
         {
           title: '发送总条数(条)',
-          key: 'age'
+          key: 'sendMsgCount'
         },
         {
           title: '费用合计(元)',
-          key: 'address'
+          key: 'free'
         }
       ],
-      data1: [//日期data
-        {
-          name: 'John Brown',
-          age: 18,
-          address: 'New York No. 1 Lake Park',
-          date: '2016-10-03'
-        },
-        {
-          name: 'John Brown',
-          age: 18,
-          address: 'New York No. 1 Lake Park',
-          date: '2016-10-03'
-        },
-        {
-          name: 'John Brown',
-          age: 18,
-          address: 'New York No. 1 Lake Park',
-          date: '2016-10-03'
-        },
-        {
-          name: 'John Brown',
-          age: 18,
-          address: 'New York No. 1 Lake Park',
-          date: '2016-10-03'
-        },
-        {
-          name: 'John Brown',
-          age: 18,
-          address: 'New York No. 1 Lake Park',
-          date: '2016-10-03'
-        },
-        {
-          name: 'John Brown',
-          age: 18,
-          address: 'New York No. 1 Lake Park',
-          date: '2016-10-03'
-        },
-        {
-          name: 'John Brown',
-          age: 18,
-          address: 'New York No. 1 Lake Park',
-          date: '2016-10-03'
-        },
-        {
-          name: 'John Brown',
-          age: 18,
-          address: 'New York No. 1 Lake Park',
-          date: '2016-10-03'
-        },
-        {
-          name: 'John Brown',
-          age: 18,
-          address: 'New York No. 1 Lake Park',
-          date: '2016-10-03'
-        },
-        {
-          name: 'John Brown',
-          age: 18,
-          address: 'New York No. 1 Lake Park',
-          date: '2016-10-03'
-        },
-        {
-          name: 'John Brown',
-          age: 18,
-          address: 'New York No. 1 Lake Park',
-          date: '2016-10-03'
-        },
-        {
-          name: 'John Brown',
-          age: 18,
-          address: 'New York No. 1 Lake Park',
-          date: '2016-10-03'
-        }
-        
-      ],
+      data1: [],//数据
       totalNumber: {
         noIntentionStrip: 55,//无意向发送条数
         intentionStrip: 55,//有意向发送条数
@@ -199,29 +134,117 @@ export default {
         totalCost: 1000, //费用合计
       },
       showSelect: true,//是否显示月份select
-      selectMonth: null, //查看某月短信量
+      // selectMonth: null, //查看某月短信量
+      smsLoading1: true,
+      smsLoading2: true
     }
+  },
+  mounted() {
+    this.getTime();
   },
   methods: {
     /**
-     * 如果是name1,则显示月份select
+     * 获取当前的年份和月份
+     */
+    getTime () {
+      //获取当前年月
+      let date = new Date;
+      let years = date.getFullYear();
+      let months = date.getMonth() +1;
+      this.sameYear = years;
+      this.sameMonth = String(months);
+      const p1 = new Point(years,years)
+      let arr = [];
+      arr.push(p1)
+      this.yearList = arr;
+      this.getList(this.tabName, this.sameYear, this.sameMonth)
+    },
+    /**
+     * 获取短信统计列表
+     * @function getList
+     * @param {String} type 1:按日汇总 2:按月汇总
+     * @param {String} year 需要汇总的年
+     * @param {String} month month
+     */
+    getList (type, year, month) {
+      API.sms.selectByTime({
+        type: type,
+        year: year,
+        month: month
+      }).then((res) => {
+        this.smsLoading1 = false;
+        this.smsLoading2 = false;
+        // console.log(res.data)
+        if(res.code == 0) {
+          //处理年月日和费用
+          res.data.smsCallMonitorVOs.forEach((item) => {
+            item.sendTime = item.sendTime.slice(0,4) +'-'+ item.sendTime.slice(4,6)+'-'+item.sendTime.slice(6,8)
+            item.free = item.free/100
+          });
+          this.data1 = res.data.smsCallMonitorVOs
+          //总计
+          this.totalNumber.totalStrip = res.data.sendMsgCount
+          this.totalNumber.noIntentionStrip = res.data.hasnotSendreasonCount
+          this.totalNumber.intentionStrip = res.data.hasSendreasonCount
+          this.totalNumber.totalCost = res.data.free / 100 
+          
+          //获取年份
+          
+          res.data.years.forEach((item, index) => {
+           this.yearList[index] = new Point(item, item)
+          })
+         
+          //当前年份和月份
+          this.sameYear = res.data.sendTime.slice(0,4)
+          this.sameMonth = res.data.sendTime.slice(4,6)
+        
+        }
+			}).catch((error) => {
+				console.log(error)
+			})
+    },
+    /**
+     * 点击tab切换栏的时候请求当前tab的短信统计
      * @function  tabClick
      */
     tabClick(evt) {
-      console.log(evt)
-      if(evt == 'name1') {
+      //当从月份切到日期时，重新给月份赋值
+      let date = new Date;
+      let months = date.getMonth() +1;
+      this.sameMonth = String(months);
+
+      this.selectChange(evt)
+    },
+    /**
+     * 请求统计的function
+     * @function selectChange
+     */
+    selectChange (evt) {
+      if(evt == '1') {
         this.showSelect = true;
+        this.tabName = 1;
+        this.getList(this.tabName, this.sameYear, this.sameMonth)
       }else {
         this.showSelect = false;
+        this.tabName = 2;
+        this.getList(this.tabName, this.sameYear)
       }
     },
     /**
-     * 查看某月的短信量
-     * @function selectChange
+     * 年份选择的时候产看当前年份统计
+     * @function selectYear
      */
-    selectChange(val) {
-      console.log(val)
-      this.selectMonth = val
+    selectYear(val) {
+      this.sameYear = val;
+      this.selectChange(this.tabName)
+    },
+    /**
+     * 月份选择的时候产看当前年份统计
+     * @function selectYear
+     */
+    selectMonth(val) {
+      this.sameMonth = val;
+      this.selectChange(this.tabName)
     }
   }
 }
@@ -236,6 +259,9 @@ export default {
   .ivu-col {
     padding-left: 18px;
   }
+}
+.smsTable .ivu-table-body {
+  height: 479px!important;
 }
 </style>
 

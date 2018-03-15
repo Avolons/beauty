@@ -177,10 +177,18 @@ export default {
         // console.log(res.data)
         if(res.code == 0) {
           //处理年月日和费用
-          res.data.smsCallMonitorVOs.forEach((item) => {
-            item.sendTime = item.sendTime.slice(0,4) +'-'+ item.sendTime.slice(4,6)+'-'+item.sendTime.slice(6,8)
-            item.free = item.free/100
-          });
+          if(this.tabName == 1) {
+            res.data.smsCallMonitorVOs.forEach((item) => {
+              item.sendTime = item.sendTime.slice(0,4) +'-'+ item.sendTime.slice(4,6)+'-'+item.sendTime.slice(6,8)
+              item.free = item.free/100
+            });
+          }else {
+            res.data.smsCallMonitorVOs.forEach((item) => {
+              item.sendTime = item.sendTime.slice(0,4) +'-'+ item.sendTime.slice(4,6)
+              item.free = item.free/100
+            });
+          }
+          
           this.data1 = res.data.smsCallMonitorVOs
           //总计
           this.totalNumber.totalStrip = res.data.sendMsgCount

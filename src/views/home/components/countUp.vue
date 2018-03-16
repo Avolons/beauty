@@ -87,6 +87,7 @@ export default {
         introText: [String, Number]
     },
     mounted() {
+        
         this.$nextTick(() => {
             setTimeout(() => {
                 let res = transformValue(this.endVal);

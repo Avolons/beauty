@@ -175,9 +175,9 @@ export default {
              */
             API.Home.visitcount().then((res) => {
                 res.data = res.data || {};
-                this.topData[1] = res.data.doNum - 0;
-                this.topData[2] = res.data.noDoNum - 0;
-                this.topData[3] = res.data.totalNum - 0;
+                this.topData[1] = res.data.doNum?res.data.doNum - 0:0;
+                this.topData[2] = res.data.noDoNum?res.data.noDoNum - 0:0;
+                this.topData[3] = res.data.totalNum?res.data.totalNum - 0:0;
             }).catch((err) => {
 
             });
@@ -199,17 +199,18 @@ export default {
              * 实际随访数量、通话时长
              */
             API.Home.visitedcount(this.dateObj).then((res) => {
-                res.data = res.data || {};
-                this.followCount = {
-                    title: "实际随访数量  " + res.data.totalNum,
-                    param: ["正常通话", "有意向客户"],
-                    numArray: [res.data.doNum ? res.data.doNum - 0 : 0, res.data.doIntention ? res.data.doIntention - 0 : 0],
-                };
-                this.phoneTime = {
-                    title: "通话时长",
-                    param: ["正常通话≤1分钟", "正常通话>1分钟"],
-                    numArray: [res.data.ltDuration ? res.data.ltDuration - 0 : 0, res.data.gtDuration ? res.data.gtDuration - 0 : 0],
-                };
+                if (res.data) {
+                    this.followCount = {
+                        title: "实际随访数量  " + res.data.totalNum,
+                        param: ["正常通话", "有意向客户"],
+                        numArray: [res.data.doNum ? res.data.doNum - 0 : 0, res.data.doIntention ? res.data.doIntention - 0 : 0],
+                    };
+                    this.phoneTime = {
+                        title: "通话时长",
+                        param: ["正常通话≤1分钟", "正常通话>1分钟"],
+                        numArray: [res.data.ltDuration ? res.data.ltDuration - 0 : 0, res.data.gtDuration ? res.data.gtDuration - 0 : 0],
+                    };
+                }
             }).catch((err) => {
 
             });
@@ -217,12 +218,13 @@ export default {
              * 短信统计
              */
             API.Home.smscount(this.dateObj).then((res) => {
-                res.data = res.data || {};
-                this.messageCount = {
-                    title: "短信统计",
-                    param: ["有意向发送数", "无意向发送数"],
-                    numArray: [res.data.doNum ? res.data.doNum - 0 : 0, res.data.noDoNum ? res.data.noDoNum - 0 : 0],
-                };
+                if (res.data) {
+                    this.messageCount = {
+                        title: "短信统计",
+                        param: ["有意向发送数", "无意向发送数"],
+                        numArray: [res.data.doNum ? res.data.doNum - 0 : 0, res.data.noDoNum ? res.data.noDoNum - 0 : 0],
+                    };
+                }
             }).catch((err) => {
 
             });

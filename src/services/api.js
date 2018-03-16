@@ -1174,8 +1174,30 @@ export const FollowBussiness = {
      */
     normalCallList (data) {
         return fetch('post', '/bjmt/visit/getorderlist', data);
+    },
+    /**
+     * 每天随访记录详情接口
+     *  visitOrderId:f4695df7-fc24-11e7-b52b-6cae8b369de2  //orderid
+     **/
+    getOrderDetail (data) {
+        return fetch('post', '/bjmt/visit/getorderdetail', data);
+    },
+    /**
+     * 随访记录导出接口
+     *   isall:0  //是否全部导出  0：否  1：是
+        ids:    //部分导出时传入的逗号分隔的字符串
+        orderDTO：  //全部导出时 将查询条件的参数 全部传入
+     **/
+    visitorDerExport () {
+        return '/bjmt/visit/visitorderexport';
+    },
+    /**
+     * 删除正常通话接口
+     ids:    //部分导出时传入的逗号分隔的字符串
+     **/
+    deleteOrder (data) {
+        return fetch('post', '/bjmt/visit/deleteorder', data);
     }
-
 };
 
 /* 通知相关接口 *****/

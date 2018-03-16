@@ -1,5 +1,5 @@
 <template>
-    <div :data="data" style="height:320px;width:100%" id="service_request_con">
+    <div :data="data" style="height:340px;width:100%" id="service_request_con">
     </div>
 </template>
 
@@ -30,7 +30,7 @@ export default {
                     text: all,
                     /* subtext: '2016年', */
                     x: 'center',
-                    y: '140px',
+                    y: '160px',
                     textStyle: {
                         fontWeight: 'normal',
                         fontSize: 14
@@ -48,7 +48,7 @@ export default {
                     data: legend
                 },
                 series: [{
-                    center: ['center', '155px'],
+                    center: ['center', '175px'],
                     type: 'pie',
                     selectedMode: 'single',
                     radius: ['25%', '58%'],
@@ -73,7 +73,7 @@ export default {
                     data: this.data
                 }, {
                     name:"意向分布",
-                    center: ['center', '155px'],
+                    center: ['center', '175px'],
                     type: 'pie',
                     radius: ['58%', '78%'],
                     itemStyle: {

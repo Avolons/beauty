@@ -3,7 +3,7 @@
 </style>
 
 <template>
-    <div :data="data" style="height:320px;width:100%" id="data_source_con">
+    <div :data="data" style="height:340px;width:100%" id="data_source_con">
     </div>
 </template>
 
@@ -34,7 +34,7 @@ export default {
                     text:all,
                     /* subtext: '2016年', */
                     x: '40%',
-                    y: '140px',
+                    y: '160px',
                     textStyle: {
                         fontWeight: 'normal',
                         fontSize: 14
@@ -53,7 +53,7 @@ export default {
                     data:legend
                 },
                 series: [{
-                    center: ['40%', '155px'],
+                    center: ['40%', '175px'],
                     type: 'pie',
                     selectedMode: 'single',
                     radius: ['25%', '58%'],
@@ -77,7 +77,7 @@ export default {
                     },
                     data: this.data
                 }, {
-                    center: ['40%', '155px'],
+                    center: ['40%', '175px'],
                     type: 'pie',
                     radius: ['58%', '78%'],
                     itemStyle: {

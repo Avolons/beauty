@@ -152,9 +152,8 @@ export default {
              * 获取所有客户数量
              */
             API.Home.clientcount().then((res) => {
-                if (res.data) {
-                    this.topData[0] = res.data - 0;
-                }
+                res.data = res.data || 0;
+                this.topData[0] = res.data - 0;
             }).catch((err) => {
 
             });
@@ -162,9 +161,10 @@ export default {
              * 获取待随访、已随访客户、已随访次数接口
              */
             API.Home.visitcount().then((res) => {
-                this.topData[1] = res.data.doNum - 0;
-                this.topData[2] = res.data.noDoNum - 0;
-                this.topData[3] = res.data.totalNum - 0;
+                res.data = res.data || {};
+                this.topData[1] = res.data.doNum?res.data.doNum - 0:0;
+                this.topData[2] = res.data.noDoNum?res.data.noDoNum - 0:0;
+                this.topData[3] = res.data.totalNum?res.data.totalNum - 0:0;
             }).catch((err) => {
 
             });
@@ -172,9 +172,8 @@ export default {
              * 获取短信发送总数
              */
             API.Home.smsallcount().then((res) => {
-                if (res.data) {
-                    this.topData[4] = res.data - 0;
-                }
+                res.data = res.data || 0;
+                this.topData[4] = res.data - 0;
             }).catch((err) => {
 
             });
@@ -198,7 +197,6 @@ export default {
                         param: ["正常通话≤1分钟", "正常通话>1分钟"],
                         numArray: [res.data.ltDuration ? res.data.ltDuration - 0 : 0, res.data.gtDuration ? res.data.gtDuration - 0 : 0],
                     };
-                    console.log(res.data);
                 }
             }).catch((err) => {
 

@@ -42,11 +42,11 @@
                         </Col>
                     </Row>
                     </Col>
-                    <Col v-show="phoneList.length>0" :xs="24" :md="12" :lg="12" :style="{marginBottom: '10px',height:'100%'}">
+                    <Col v-show="phoneList.length>0" :xs="24" :md="24" :lg="12" :style="{marginBottom: '10px',height:'100%'}">
                     <h3 style="text-align:center">通话状态分布</h3>
                     <data-source-pie ref="phone" :data="phoneList"></data-source-pie>
                     </Col>
-                    <Col v-show="likeList.length>0" :xs="24" :md="12" :lg="12" :style="{marginBottom: '10px',height:'100%'}">
+                    <Col v-show="likeList.length>0" :xs="24" :md="24" :lg="12" :style="{marginBottom: '10px',height:'100%'}">
                     <h3 style="text-align:center">有无意向百分比</h3>
                     <service-requests ref="like" :data="likeList"></service-requests>
                     </Col>
@@ -104,8 +104,46 @@ export default {
                 dateEndBegin: "",
                 dateEndEnd: "",
             },
-            phoneList: [],
-            likeList: [],
+            phoneList: [
+                {
+                    value: 0,
+                    name: "呼叫失败"
+                },
+                {
+                    value: 0,
+                    name: "正常通话"
+                },
+                {
+                    value: 0,
+                    name: "关停机"
+                },
+                {
+                    value: 0,
+                    name: "空号"
+                },
+                {
+                    value: 0,
+                    name: "通话中"
+                },
+                {
+                    value: 0,
+                    name: "号码有误"
+                },
+                {
+                    value: 0,
+                    name: "无人接听"
+                }
+            ],
+            likeList: [
+                {
+                    value: 0,
+                    name: "无意向"
+                },
+                {
+                    value: 0,
+                    name: "有意向"
+                },
+            ],
         };
     },
     methods: {
@@ -127,9 +165,8 @@ export default {
              * 获取所有客户数量
              */
             API.Home.clientcount().then((res) => {
-                if (res.data) {
-                    this.topData[0] = res.data - 0;
-                }
+                res.data = res.data || 0;
+                this.topData[0] = res.data - 0;
             }).catch((err) => {
 
             });
@@ -137,6 +174,7 @@ export default {
              * 获取待随访、已随访客户、已随访次数接口
              */
             API.Home.visitcount().then((res) => {
+                res.data = res.data || {};
                 this.topData[1] = res.data.doNum - 0;
                 this.topData[2] = res.data.noDoNum - 0;
                 this.topData[3] = res.data.totalNum - 0;
@@ -147,9 +185,8 @@ export default {
              * 获取短信发送总数
              */
             API.Home.smsallcount().then((res) => {
-                if (res.data) {
-                    this.topData[4] = res.data - 0;
-                }
+                res.data = res.data || 0;
+                this.topData[4] = res.data - 0;
             }).catch((err) => {
 
             });
@@ -162,18 +199,17 @@ export default {
              * 实际随访数量、通话时长
              */
             API.Home.visitedcount(this.dateObj).then((res) => {
-                if (res.data) {
-                    this.followCount = {
-                        title: "实际随访数量  " + res.data.totalNum,
-                        param: ["正常通话", "有意向客户"],
-                        numArray: [res.data.doNum ? res.data.doNum - 0 : 0, res.data.doIntention ? res.data.doIntention - 0 : 0],
-                    };
-                    this.phoneTime = {
-                        title: "通话时长",
-                        param: ["正常通话≤1分钟", "正常通话>1分钟"],
-                        numArray: [res.data.ltDuration ? res.data.ltDuration - 0 : 0, res.data.gtDuration ? res.data.gtDuration - 0 : 0],
-                    };
-                }
+                res.data = res.data || {};
+                this.followCount = {
+                    title: "实际随访数量  " + res.data.totalNum,
+                    param: ["正常通话", "有意向客户"],
+                    numArray: [res.data.doNum ? res.data.doNum - 0 : 0, res.data.doIntention ? res.data.doIntention - 0 : 0],
+                };
+                this.phoneTime = {
+                    title: "通话时长",
+                    param: ["正常通话≤1分钟", "正常通话>1分钟"],
+                    numArray: [res.data.ltDuration ? res.data.ltDuration - 0 : 0, res.data.gtDuration ? res.data.gtDuration - 0 : 0],
+                };
             }).catch((err) => {
 
             });
@@ -181,13 +217,12 @@ export default {
              * 短信统计
              */
             API.Home.smscount(this.dateObj).then((res) => {
-                if (res.data) {
-                    this.messageCount = {
-                        title: "短信统计",
-                        param: ["有意向发送数", "无意向发送数"],
-                        numArray: [res.data.doNum ? res.data.doNum - 0 : 0, res.data.noDoNum ? res.data.noDoNum - 0 : 0],
-                    };
-                }
+                res.data = res.data || {};
+                this.messageCount = {
+                    title: "短信统计",
+                    param: ["有意向发送数", "无意向发送数"],
+                    numArray: [res.data.doNum ? res.data.doNum - 0 : 0, res.data.noDoNum ? res.data.noDoNum - 0 : 0],
+                };
             }).catch((err) => {
 
             });
@@ -195,11 +230,32 @@ export default {
             // 有无意向百分比接口
             API.Home.intentioncount(this.dateObj).then((res) => {
                 if (res.data) {
-                    this.likeList = res.data;
-                    setTimeout(() => {
-                        this.$refs.like.init();
-                    }, 20);
+                    this.likeList = [
+                        {
+                            value: res.data.noIntention,
+                            name: "无意向"
+                        },
+                        {
+                            value: res.data.doIntention,
+                            name: "有意向"
+                        },
+                    ];
+
+                } else {
+                    this.likeList = [
+                        {
+                            value: 0,
+                            name: "无意向"
+                        },
+                        {
+                            value: 0,
+                            name: "有意向"
+                        },
+                    ];
                 }
+                setTimeout(() => {
+                    this.$refs.like.init();
+                }, 20);
             }).catch((err) => {
 
             });
@@ -207,11 +263,71 @@ export default {
             // 通话状态分布接口
             API.Home.callstatus(this.dateObj).then((res) => {
                 if (res.data) {
-                    this.phoneList = res.data;
-                    setTimeout(() => {
-                        this.$refs.phone.init();
-                    }, 20);
+                    this.phoneList = [
+                        {
+                            value: res.data.callFail,
+                            name: "呼叫失败"
+                        },
+                        {
+                            value: res.data.visited,
+                            name: "正常通话"
+                        },
+                        {
+                            value: res.data.callStop,
+                            name: "关停机"
+                        },
+                        {
+                            value: res.data.noPhone,
+                            name: "空号"
+                        },
+                        {
+                            value: res.data.calling,
+                            name: "通话中"
+                        },
+                        {
+                            value: res.data.phoneError,
+                            name: "号码有误"
+                        },
+                        {
+                            value: res.data.noPerson,
+                            name: "无人接听"
+                        }
+                    ];
+                } else {
+                    this.phoneList = [
+                        {
+                            value: 0,
+                            name: "呼叫失败"
+                        },
+                        {
+                            value: 0,
+                            name: "正常通话"
+                        },
+                        {
+                            value: 0,
+                            name: "关停机"
+                        },
+                        {
+                            value: 0,
+                            name: "空号"
+                        },
+                        {
+                            value: 0,
+                            name: "通话中"
+                        },
+                        {
+                            value: 0,
+                            name: "号码有误"
+                        },
+                        {
+                            value: 0,
+                            name: "无人接听"
+                        }
+                    ];
                 }
+                setTimeout(() => {
+                    this.$refs.phone.init();
+                }, 20);
             }).catch((err) => {
 
             });

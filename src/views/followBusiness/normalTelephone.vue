@@ -142,6 +142,11 @@
         <Modal v-model="modal3" @on-cancel="configCancelAction" class-name="exportNum" @on-ok="configNumExport" :mask-closable="false" :loading="loading ">
             <p>已选择<span style="color: red;">{{recordTotal}}</span>位客户，是否确认导出</p>
         </Modal>
+
+        <div id="fixDownload" v-if="showLayer">
+            <Spin size="large"></Spin>
+            <div class="dataLoading">由于数据过多，请耐心等候...</div>
+        </div>
     </Row>
 </template>
 
@@ -157,6 +162,7 @@
                     schemeName: '', // 随访方案
                     intention: 1     // 是否有意向
                 },
+                showLayer:false,
                 orderResultList: [],     // 随访次数
                 orderReplyQuestionList: [],  // 随访详情
                 CallTimes: [   // 通话次数
@@ -396,20 +402,48 @@
                     this.loading = true;
                     this.modal3 = false;
                 });
+                this.showLayer = true;
                 if (!this.isall) {
-                    window.location.href = '/bjmt/visit/visitorderexport?isall=0&ids='+String(this.idSelectArr)
-                    //window.location.href = 'http://192.168.1.215:8080/bjmt/visit/visitorderexport?isall=0&ids='+String(this.idSelectArr)
-                    //window.open("/bjmt/visit/visitorderexport?isall="+this.isall+'&ids='+String(this.idSelectArr))
+                    let data = {};
+                    data.isall = 0;
+                    data.ids = String(this.idSelectArr);
+                    this.visitorDerExportList(data);
                 } else {
-                    //console.log('http://192.168.3.26:8083/bjmt/visit/visitorderexport?isall=1&orderDTO='+JSON.stringify(this.searchParams));
-                    let data = 'brxm='+this.searchParams.brxm+'mobile='+this.searchParams.mobile+'schemeName='+this.searchParams.schemeName+'callTime='+this.searchParams.callTime   +'intention='+this.searchParams.intention +'dateAddStart='+this.searchParams.dateAddStart+'dateAddEnd='+this.searchParams.dateAddEnd+'datebeginStart='+this.searchParams.datebeginStart+'datebeginEnd='+this.searchParams.datebeginEnd+'isExport='+this.searchParams.isExport;
-                    //console.log(data)
-                    window.location.href='/bjmt/visit/visitorderexport?isall=1&'+data;
-                    //window.location.href("/bjmt/visit/visitorderexport?isall="+this.isall+'&ids='+String(this.idSelectArr))
+                    this.idSelectArr = [];
+                    let data = {};
+                    data = {
+                        isall: 1,
+                        brxm :this.searchParams.brxm,
+                        mobile:this.searchParams.mobile,
+                        schemeName:this.searchParams.schemeName,
+                        callTime:this.searchParams.callTime,
+                        intention: this.searchParams.intention,
+                        dateAddStart:this.searchParams.dateAddStart,
+                        dateAddEnd:this.searchParams.dateAddEnd,
+                        datebeginStart:this.searchParams.datebeginStart,
+                        datebeginEnd:this.searchParams.datebeginEnd,
+                        isExport:this.searchParams.isExport,
+                        orderno:this.searchParams.orderno
+                    };
+                    this.visitorDerExportList(data);
                 }
-                this.idSelectArr = [];
                 this.idAllArr = [];
                 this.haveSelect = [];
+            },
+            /**
+             * 导出参数
+             **/
+            visitorDerExportList (data) {
+                API.FollowBussiness.visitorDerExport(data).then((res) => {
+                    if (res.code == 0){
+                        //window.location.href = 'http://192.168.1.215:8080/'+ res.data;
+                        window.location.href = '/'+ res.data;
+                        this.showLayer = false;
+                    }
+                }).catch((err) => {
+                    // 弹出错误信息
+                    this.$Message.error(err);
+                });
             },
             /***
              * 取消单个选泽项
@@ -494,6 +528,9 @@
                     }
                 });
             },
+            /**
+             * 获取列表数据
+             */
             normalCallDateList () {
                 API.FollowBussiness.normalCallList(this.searchParams).then((res) => {
                     // 判断是否全部导出 全部导出的时候全部添加图标
@@ -705,5 +742,31 @@
     }
     .ivu-radio-disabled .ivu-radio-inner:after{
         background-color: #2d8cf0;
+    }
+    #fixDownload{
+        width: 100%;
+        height: 100%;
+        position: fixed;
+        left: 0;
+        top:0;
+        z-index: 9999;
+        background: white;
+        .ivu-spin-large{
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            left:50%;
+            top:300px;
+            margin-top: -50px;
+        }
+        .dataLoading{
+            position: absolute;
+            width: 200px;
+            height: 100px;
+            left:50%;
+            top:400px;
+            margin-top: -50px;
+            margin-left: -50px;
+        }
     }
 </style>

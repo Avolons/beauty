@@ -1224,8 +1224,8 @@ export const FollowBussiness = {
         ids:    //部分导出时传入的逗号分隔的字符串
         orderDTO：  //全部导出时 将查询条件的参数 全部传入
      **/
-    visitorDerExport () {
-        return '/bjmt/visit/visitorderexport';
+    visitorDerExport (data) {
+        return fetch('post', '/bjmt/visit/visitorderexport', data);
     },
     /**
      * 删除正常通话接口

@@ -251,23 +251,23 @@ export const appRouter = [
                 }
             },
             {
-                path: '/followBusiness/followNormal',
+                path: '/followBusiness/normalTelephone',
                 icon: 'ios-telephone-outline',
-                name: 'followNormal',
+                name: 'normalTelephone',
                 title: '正常通话',
-                access: '/followBusiness/followNormal', // access已经添加
+                access: '/followBusiness/normalTelephone', // access已经添加
                 component: resolve => {
-                    require(['@/views/followBusiness/followNormal.vue'], resolve);
+                    require(['@/views/followBusiness/normalTelephone.vue'], resolve);
                 }
             },
             {
-                path: '/followBusiness/followResult',
+                path: '/followBusiness/telephoneRecord',
                 icon: 'ios-stopwatch-outline',
-                name: 'followResult',
-                title: '随访记录',
-                access: '/followBusiness/followResult', // access已经添加
+                name: 'telephoneRecord',
+                title: '通话记录',
+                access: '/followBusiness/telephoneRecord', // access已经添加
                 component: resolve => {
-                    require(['@/views/followBusiness/followResult.vue'], resolve);
+                    require(['@/views/followBusiness/telephoneRecord.vue'], resolve);
                 }
             },
             {

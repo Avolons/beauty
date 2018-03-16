@@ -11,11 +11,11 @@
         <slot name="intro"></slot>
         <p :class="className" :style="{textAlign: 'center', color: color, fontSize: countSize, fontWeight: countWeight}">
             <div class="count_span">
-                {{params[0]}}
+                {{params[0]}}:&nbsp;&nbsp;&nbsp;
                 <span :style="{color: color}" v-cloak :id="idName">{{ startVal }}</span>
             </div>
             <div class="count_span">
-                {{params[1]}}
+                {{params[1]}}:&nbsp;&nbsp;&nbsp;
                 <span :style="{color: color}" v-cloak :id="idNames">{{ startVal }}</span>
             </div>
         </p>

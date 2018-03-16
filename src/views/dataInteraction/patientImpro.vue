@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<div class="demo-upload-list" v-for="item in uploadList">
+		<!-- <div class="demo-upload-list" v-for="item in uploadList">
 			<template v-if="item.status === 'finished'">
 				<img :src="item.url">
 				<div class="demo-upload-list-cover">
@@ -11,9 +11,8 @@
 			<template v-else>
 				<Progress v-if="item.showProgress" :percent="item.percentage" hide-info></Progress>
 			</template>
-		</div>
+		</div> -->
 		<Upload ref="upload" 
-				:show-upload-list="false" 
 				:on-success="handleSuccess" 
 				:format="['xml','xls','png']" 
 				:on-format-error="handleFormatError" 

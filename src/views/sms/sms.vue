@@ -178,8 +178,8 @@ export default {
         if(res.code == 0) {
           //处理年月日和费用
           res.data.smsCallMonitorVOs.forEach((item) => {
-            item.sendTime = item.sendTime.slice(0,4) +'-'+ item.sendTime.slice(4,6)+'-'+item.sendTime.slice(6,8)
-            item.free = item.free/100
+            item.sendTime = item.sendTime.slice(0,4) +'-'+ item.sendTime.slice(4,6)+(item.sendTime.length>6?('-'+item.sendTime.slice(6,8)):"");
+            item.free = item.free/100;
           });
           this.data1 = res.data.smsCallMonitorVOs
           //总计

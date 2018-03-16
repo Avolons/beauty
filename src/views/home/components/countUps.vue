@@ -9,7 +9,9 @@
 import CountUp from 'countup';
 
 function transformValue (val) {
-    return val;
+    return {
+        val: val,
+    };
 }
 
 export default {
@@ -70,7 +72,6 @@ export default {
             setTimeout(() => {
                 let res = transformValue(this.endVal);
                 let endVal = res.val;
-                this.unit = res.unit;
                 let demo = {};
                 this.demo = demo = new CountUp(this.idName, this.startVal, endVal, this.decimals, this.duration, this.options);
                 if (!demo.error) {
@@ -83,7 +84,6 @@ export default {
         endVal (val) {
             let res = transformValue(val);
             let endVal = res.val;
-            this.unit = res.unit;
             this.demo.update(endVal);
         }
     }

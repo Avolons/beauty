@@ -14,8 +14,9 @@ Vue.prototype.$http = axios;
 /* 默认最长响应时间 */
 // axios.defaults.timeout = 5000;
 /* 默认的接口地址 */
-  axios.defaults.baseURL = '/api';
+/* axios.defaults.baseURL = '/api'; */
 // axios.defaults.baseURL = 'http://192.168.3.24:8080';
+axios.defaults.baseURL = 'http://192.168.1.215:8080';
 /* axios.defaults.baseURL = 'http://60.190.86.50:6016'; */
 /* axios.defaults.baseURL = 'http://192.168.1.32:8081'; */
 /* axios.defaults.baseURL = 'http://192.168.1.166:8080'; */
@@ -122,105 +123,68 @@ export const Data = {
 /* 首页接口 *****/
 export const Home = {
     /**
-     * 随访记录审核接口
+     * 所有客户接口
      * @param {any} data
      * @returns
      */
-    orderList (data) {
-        return fetch('get', '/visit/hp/orderlist', data);
+    clientcount (data) {
+        return fetch('get', '/visit/hp/clientcount', data);
     },
     /**
-     * 随访计划审核接口
+     * 待随访、已随访客户、已随访次数接口
      * @param {any} data
      * @returns
      */
-    tasklist (data) {
-        return fetch('get', '/visit/hp/tasklist', data);
+    visitcount (data) {
+        return fetch('get', '/visit/hp/visitcount', data);
     },
     /**
-     * 方案重复匹配审核接口
-     * @param {any} data
-     * type:2    //必须为2(必传)
-     * @returns
-     */
-    taskList (data) {
-        return fetch('get', '/visit/hp/tasklist', data);
-    },
-    /**
-     * 医生接诊量排行获取科室接口
+     * 短信发送总数接口
      * @param {any} data
      * @returns
      */
-    getdepartment (data) {
-        return fetch('get', '/visit/hp/getdepartment', data);
+    smsallcount (data) {
+        return fetch('get', '/visit/hp/smsallcount', data);
     },
     /**
-     * 医生接诊量排行接口
-     * pager:1,           //当前页码
-        limit:3,           //每页条数
-        departmentId:6,   //科室(必传)
-        type:1            //类型(必传)：1表示7日，2表示30日
+     * 实际随访数量、通话时长接口
      * @param {any} data
      * @returns
      */
-    seniority (data) {
-        return fetch('get', '/visit/hp/seniority', data);
+    visitedcount (data) {
+        return fetch('get', '/visit/hp/visitedcount', data);
     },
     /**
-     * 就诊患者统计接口
-     * departmentId:821,   //科室(必传)
-        type:1            //类型(必传)：1表示7日，2表示30日
+     * 短信统计接口
      * @param {any} data
      * @returns
      */
-    jzcount (data) {
-        return fetch('get', '/visit/hp/jzcount', data);
+    smscount (data) {
+        return fetch('get', '/visit/hp/smscount', data);
     },
     /**
-     * 随访情况获取科室接口
-     * @param {any} data
-     * @returns
-      */
-    departList (data) {
-        return fetch('get', '/visit/hp/getdepartmentbyorder', data);
-    },
-    /**
-     * 随访情况接口
-     * departmentId:17,   //科室(必传)
-        type:1            //类型(必传)：1表示7日，2表示30日
+     * 近七天随访正常通话统计接口
      * @param {any} data
      * @returns
      */
-    countvisitorder (data) {
-        return fetch('get', '/visit/hp/countvisitorder', data);
+    callcount (data) {
+        return fetch('get', '/visit/hp/callcount', data);
     },
     /**
-     * 每日随访任务量接口
-        departmentId:821,   //科室(必传)
-        type:1            //类型(必传)：1表示7日，2表示30日
+     * 数据报表-有无意向百分比接口
      * @param {any} data
      * @returns
      */
-    hccount (data) {
-        return fetch('get', '/visit/hp/hccount', data);
+    intentioncount (data) {
+        return fetch('get', '/visit/hp/intentioncount', data);
     },
     /**
-     * 任务完成情况统计接口
-     * departmentId:5,   //科室(必传)
-        type:1            //类型(必传)：1表示7日，2表示30日
+     * 数据报表-通话状态分布接口
      * @param {any} data
      * @returns
      */
-    countvisitfinish (data) {
-        return fetch('get', '/visit/hp/countvisitfinish', data);
-    },
-    /**
-     * 任务失败情况统计接口
-     * @param {any} data
-     * @returns
-     */
-    countordercancel (data) {
-        return fetch('get', '/visit/hp/countordercancel', data);
+    callstatus (data) {
+        return fetch('get', '/visit/hp/callstatus', data);
     }
 };
 
@@ -1209,9 +1173,8 @@ export const FollowBussiness = {
      * @returns
      */
     normalCallList (data) {
-        return  fetch('post', '/bjmt/visit/getorderlist', data);
+        return fetch('post', '/bjmt/visit/getorderlist', data);
     }
-
 
 };
 

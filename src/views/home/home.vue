@@ -31,53 +31,53 @@
                 </Row>
                 </Col>
                 <Col :xs="24" :sm="12" :md="8" :lg="4" :style="{marginBottom: '10px'}">
-                <else-card id-name="user_created_count" :end-val="count.createUser" iconType="person-stalker" color="#2d8cf0" intro-text="所有客户"></else-card>
+                <else-card id-name="user_created_count" :end-val="topData[0]" iconType="person-stalker" color="#2d8cf0" intro-text="所有客户"></else-card>
                 </Col>
                 <Col :xs="24" :sm="12" :md="8" :lg="4" :style="{marginBottom: '10px'}">
-                <else-card id-name="visit_count" :end-val="count.visit" iconType="pie-graph" color="#64d572" intro-text="待随访客户"></else-card>
+                <else-card id-name="visit_count" :end-val="topData[1]" iconType="pie-graph" color="#64d572" intro-text="待随访客户"></else-card>
                 </Col>
                 <Col :xs="24" :sm="12" :md="8" :lg="4" :style="{marginBottom: '10px'}">
-                <else-card id-name="collection_count" :end-val="count.collection" iconType="person-add" color="#ffd572" intro-text="已随访客户"></else-card>
+                <else-card id-name="collection_count" :end-val="topData[2]" iconType="person-add" color="#ffd572" intro-text="已随访客户"></else-card>
                 </Col>
                 <Col :xs="24" :sm="12" :md="8" :lg="4" :style="{marginBottom: '10px'}">
-                <else-card id-name="collection_count" :end-val="count.collection" iconType="ios-stopwatch" color="#ff7279" intro-text="已随访次数"></else-card>
+                <else-card id-name="follow_time" :end-val="topData[3]" iconType="ios-stopwatch" color="#ff7279" intro-text="已随访次数"></else-card>
                 </Col>
                 <Col :xs="24" :sm="12" :md="8" :lg="4" :style="{marginBottom: '10px'}">
-                <else-card id-name="collection_count" :end-val="count.collection" iconType="chatbox-working" color="#72cbff" intro-text="短信发送总数"></else-card>
+                <else-card id-name="message_count" :end-val="topData[4]" iconType="chatbox-working" color="#72cbff" intro-text="短信发送总数"></else-card>
                 </Col>
             </Row>
             </Col>
             <Col :md="24" :lg="24">
             <Row :gutter="10">
                 <div class="map-con">
-                    <Col :xs="24" :sm="24" :md="24" :lg="8" >
+                    <Col :xs="24" :sm="24" :md="24" :lg="8">
                     <Card :padding="20" :style="{marginBottom: '10px'}">
                         <p slot="title">
                             <Icon type="arrow-graph-up-right"></Icon>
                             今日随访情况
                         </p>
-                        <Row type="flex" justify="center" align="middle" >
-                            <Col :xs="20" :sm="8" :md="8" :lg="20"  :style="{marginBottom: '20px'}">
-                            <infor-card id-name="user_created_count" id-names="user_created_counts" :end-val="count.createUser" iconType="ios-paper" color="#2d8cf0" intro-text="实际随访数量：1000"></infor-card>
+                        <Row type="flex" justify="center" align="middle">
+                            <Col :xs="20" :sm="8" :md="8" :lg="20" :style="{marginBottom: '20px'}">
+                            <infor-card :params="followCount.param" id-name="followCount" id-names="followCounts" :end-val="followCount.numArray" iconType="ios-paper" color="#2d8cf0" :intro-text="followCount.title"></infor-card>
                             </Col>
                             <Col :xs="20" :sm="8" :md="8" :lg="20" :style="{marginBottom: '20px'}">
-                            <infor-card id-name="visit_count" id-names="visit_counts" :end-val="count.visit" iconType="ios-telephone" color="#64d572" intro-text="通话时长"></infor-card>
+                            <infor-card :params="phoneTime.param" id-name="phoneTime" id-names="phoneTimes" :end-val="phoneTime.numArray" iconType="ios-telephone" color="#64d572" :intro-text="phoneTime.title"></infor-card>
                             </Col>
                             <Col :xs="20" :sm="8" :md="8" :lg="20" :style="{marginBottom: '20px'}">
-                            <infor-card id-name="collection_count" id-names="collection_counts" :end-val="count.collection" iconType="ios-email" color="#ffd572" intro-text="短信统计"></infor-card>
+                            <infor-card :params="messageCount.param" id-name="messageCount" id-names="messageCounts" :end-val="messageCount.numArray" iconType="ios-email" color="#ffd572" :intro-text="messageCount.title"></infor-card>
                             </Col>
                         </Row>
                     </Card>
 
                     </Col>
-                    <Col :xs="24" :sm="24" :md="24" :lg="16" >
+                    <Col :xs="24" :sm="24" :md="24" :lg="16">
                     <Card :padding="0" :style="{height:'457px'}">
                         <p slot="title">
                             <Icon type="map"></Icon>
                             近7天随访正常通话统计
                         </p>
                         <Row type="flex" justify="center" align="middle">
-                            <visite-volume :data="followList" ref="follow"></visite-volume>
+                            <visite-volume :data="normalPhone" ref="follow"></visite-volume>
                         </Row>
                     </Card>
 
@@ -105,89 +105,37 @@ export default {
     },
     data() {
         return {
+            baseData: {},
             /** 
              * 基础数据
              */
-            baseData: {
+            topData: [0, 0, 0, 0, 0],
 
+            /** 实际随访数量 */
+            followCount: {
+                title: "实际随访数量",
+                param: ["正常通话", "有意向客户"],
+                numArray: [0, 0],
             },
-            followList: [],
-            cancelList: [],//失败列表
-            finshList: [],//成功列表
-            /** 数据列表 */
-            dataList: [],
-            /** 表格文件 */
-            config: [
-                {
-                    title: '排名',
-                    type: 'index',
-                    align: 'center',
-                    width: 70,
-                },
-                {
-                    title: '姓名',
-                    key: 'realname',
-                },
-                {
-                    title: '接诊量',
-                    key: 'jzNum',
-                    sortable: true,
-                    width: 90,
-
-                },
-                {
-                    title: '随访量',
-                    key: 'sfNum',
-                    width: 75,
-                }
-            ],
+            /** 通话时长 */
+            phoneTime: {
+                title: "通话时长",
+                param: ["正常通话≤1分钟", "正常通话>1分钟"],
+                numArray: [0, 0],
+            },
             /** 
-             * 筛选条件集合
+             * 短信统计情况
              */
-            doctorParams: {
-                pager: 1,  //当前页码
-                limit: 999,  //每页条数
-                departmentId: 5, //科室(必传)
-                type: "1"   //类型(必传)：1表示7日，2表示30日
+            messageCount: {
+                title: "短信统计",
+                param: ["有意向发送数", "无意向发送数"],
+                numArray: [0, 0],
             },
-            //科室列表
-            departList: [{
-                departmentName: "全部",
-                departmentId: -1,
-            }],//医生统计科室
-            departList_dis: [
-                {
-                    departmentName: "全部",
-                    departmentId: -1,
-                }
-            ],//就诊累计情况科室
-            /** 基础数据列表 */
-            count: {
-                createUser: [0, 0],
-                visit: [0, 0],
-                collection: [0, 0],
-            },
-            //就诊患者排行
-            jzParams: {
-                departmentId: "",   //科室(必传)
-                type: "1"
-            },
-            jzCount: 0,
-            jzList: [],
-            /** 随访情况数据 */
-            followParams: {
-                departmentId: "",   //科室(必传)
-                type: '1'           //类型(必传)：1表示7日，2表示30日
-            },
-            /** 随访情况 */
-            countvisitorder: {
-                doNum: "0",      //随访任务完成量
-                noDoNum: "0",   //随访任务失败量
-                totalNum: "0"   //随访任务量
-            },
-            hccount: [],
-            countvisitfinish: [],
-            countordercancel: []
+            /** 
+             * 近7天随访正常通话统计
+             */
+            normalPhone: [],
+
         };
     },
     computed: {
@@ -196,123 +144,86 @@ export default {
         }
     },
     methods: {
-        addNewToDoItem() {
-            this.showAddNewTodo = true;
-        },
         /** 
-         * 获取基础统计数据
+         * 获取基础统计数据，最上层5个栏目
          */
         getBaseData() {
-            API.Home.orderList().then((res) => {
+            /** 
+             * 获取所有客户数量
+             */
+            API.Home.clientcount().then((res) => {
                 if (res.data) {
-                    this.count.createUser = [res.data.noDoNum, res.data.doNum];
+                    this.topData[0] = res.data - 0;
                 }
             }).catch((err) => {
 
             });
-            API.Home.tasklist().then((res) => {
-                if (res.data) {
-                    this.count.visit = [res.data.noDoNum, res.data.doNum];
-                }
+            /**
+             * 获取待随访、已随访客户、已随访次数接口
+             */
+            API.Home.visitcount().then((res) => {
+                this.topData[1] = res.data.doNum - 0;
+                this.topData[2] = res.data.noDoNum - 0;
+                this.topData[3] = res.data.totalNum - 0;
             }).catch((err) => {
 
             });
-            API.Home.taskList({
-                type: 2
-            }).then((res) => {
+            /** 
+             * 获取短信发送总数
+             */
+            API.Home.smsallcount().then((res) => {
                 if (res.data) {
-                    this.count.collection = [res.data.noDoNum, res.data.doNum];
+                    this.topData[4] = res.data - 0;
                 }
             }).catch((err) => {
 
             });
         },
-        /** 
-         * 获取科室列表
-         */
-        getDepartList() {
-            API.Home.getdepartment().then((res) => {
-                this.departList = this.departList.concat(res.data);
-                /** 
-                 * 统一数据赋值
-                 * 
-                 */
-                this.jzParams.departmentId = this.departList[0].departmentId;
-                this.doctorParams.departmentId = this.departList[0].departmentId;
-
-            }).catch((err) => {
-
-            }).then(() => {
-
-                /* this.getjzcount();
-                this.getSortList(); */
-            });
-            API.Home.departList().then((res) => {
-                this.departList_dis = this.departList_dis.concat(res.data);
-                /** 
-                 * 统一数据赋值
-                 * 
-                 */
-                this.followParams.departmentId = this.departList_dis[0].departmentId;
-                /* this.getFollowData(); */
-            }).catch((err) => {
-
-            });
-        },
-
         /** 
          * 获取随访情况统计
          */
         getFollowData() {
-            // 随访情况接口
-            let sendData = JSON.parse(JSON.stringify(this.followParams));
-            sendData.departmentId = sendData.departmentId == -1 ? "" : sendData.departmentId;
-            API.Home.countvisitorder(sendData).then((res) => {
-                this.countvisitorder = res.data;
+            /** 
+             * 实际随访数量、通话时长
+             */
+            API.Home.visitedcount(this.dateObj).then((res) => {
+                if (res.data) {
+                    this.followCount = {
+                        title: "实际随访数量  " + res.data.totalNum,
+                        param: ["正常通话", "有意向客户"],
+                        numArray: [res.data.doNum ? res.data.doNum - 0 : 0, res.data.doIntention ? res.data.doIntention - 0 : 0],
+                    };
+                    this.phoneTime = {
+                        title: "通话时长",
+                        param: ["正常通话≤1分钟", "正常通话>1分钟"],
+                        numArray: [res.data.ltDuration ? res.data.ltDuration - 0 : 0, res.data.gtDuration ? res.data.gtDuration - 0 : 0],
+                    };
+                    console.log(res.data);
+                }
             }).catch((err) => {
 
             });
-            // 每日随访任务量接口
-            API.Home.hccount(sendData).then((res) => {
-                this.followList = res.data;
+            /** 
+             * 短信统计
+             */
+            API.Home.smscount(this.dateObj).then((res) => {
+                if (res.data) {
+                    this.messageCount = {
+                        title: "短信统计",
+                        param: ["有意向发送数", "无意向发送数"],
+                        numArray: [res.data.doNum ? res.data.doNum - 0 : 0, res.data.noDoNum ? res.data.noDoNum - 0 : 0],
+                    };
+                }
+            }).catch((err) => {
+
+            });
+
+            // 近7天随访正常通话统计
+            API.Home.callcount().then((res) => {
+                this.normalPhone = res.data;
                 setTimeout(() => {
                     this.$refs.follow.init();
                 }, 20);
-            }).catch((err) => {
-
-            });
-            // 任务完成情况统计接口
-            API.Home.countvisitfinish(sendData).then((res) => {
-                let arr = [];
-                for (const item of res.data) {
-                    arr.push({
-                        name: item.remark,
-                        value: item.doNum,
-                    })
-                }
-                this.finshList = arr;
-                setTimeout(() => {
-                    this.$refs.success.init();
-                }, 20);
-            }).catch((err) => {
-
-            });
-            // 任务失败情况统计接口
-            API.Home.countordercancel(sendData).then((res) => {
-                let arr = [];
-                if (res.data.length > 0) {
-                    for (const item of res.data) {
-                        arr.push({
-                            name: item.remark,
-                            value: item.doNum,
-                        })
-                    }
-                    this.cancelList = arr;
-                    setTimeout(() => {
-                        this.$refs.fail.init();
-                    }, 20);
-                }
-
             }).catch((err) => {
 
             });
@@ -322,10 +233,7 @@ export default {
         this.baseData = JSON.parse(
             Cookies.get('baseData')
         );
-        /** 
-         * 获取科室数据
-         */
-        this.getDepartList();
+        this.getFollowData();
         this.getBaseData();
     },
     activated() {

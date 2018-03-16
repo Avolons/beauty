@@ -1,5 +1,5 @@
 <style lang="less">
-.count_span{
+.count_span {
     font-size: 12px;
     margin-top: 10px;
     font-weight: 700;
@@ -9,13 +9,13 @@
 <template>
     <div>
         <slot name="intro"></slot>
-        <p  :class="className" :style="{textAlign: 'center', color: color, fontSize: countSize, fontWeight: countWeight}">
-            <div class="count_span" >
-                待审核：
+        <p :class="className" :style="{textAlign: 'center', color: color, fontSize: countSize, fontWeight: countWeight}">
+            <div class="count_span">
+                {{params[0]}}
                 <span :style="{color: color}" v-cloak :id="idName">{{ startVal }}</span>
             </div>
-            <div class="count_span" >
-                已审核：
+            <div class="count_span">
+                {{params[1]}}
                 <span :style="{color: color}" v-cloak :id="idNames">{{ startVal }}</span>
             </div>
         </p>
@@ -32,13 +32,14 @@ function transformValue(val) {
 export default {
     data() {
         return {
-            demo: {}
+            demo1: {},
+            demo2: {},
         };
     },
     name: 'countUp',
     props: {
         idName: String,
-        idNames:String,
+        idNames: String,
         className: String,
         startVal: {
             type: Number,
@@ -76,6 +77,9 @@ export default {
             type: String,
             default: '30px'
         },
+        params: {
+            type: Array,
+        },
         countWeight: {
             type: Number,
             default: 700
@@ -88,19 +92,21 @@ export default {
                 let res = transformValue(this.endVal);
                 let endVal = res;
 
-                {let demo = {};
-                this.demo = demo = new CountUp(this.idName, this.startVal, endVal[0], this.decimals, this.duration, this.options);
-                if (!demo.error) {
-                    demo.start();
-                }  } 
                 {
-                   let demo = {};
-                this.demo = demo = new CountUp(this.idNames, this.startVal, endVal[1], this.decimals, this.duration, this.options);
-                if (!demo.error) {
-                    demo.start();
-                } 
+                    let demo = {};
+                    this.demo1 = demo = new CountUp(this.idName, this.startVal, endVal[0], this.decimals, this.duration, this.options);
+                    if (!demo.error) {
+                        demo.start();
+                    }
                 }
-                
+                {
+                    let demo = {};
+                    this.demo2 = demo = new CountUp(this.idNames, this.startVal, endVal[1], this.decimals, this.duration, this.options);
+                    if (!demo.error) {
+                        demo.start();
+                    }
+                }
+
             }, this.delay);
         });
     },
@@ -108,7 +114,8 @@ export default {
         endVal(val) {
             let res = transformValue(val);
             let endVal = res;
-            /* this.demo.update(endVal); */
+            this.demo1.update(endVal[0]);
+            this.demo2.update(endVal[1]);
         }
     }
 };

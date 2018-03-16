@@ -21,7 +21,7 @@ export default {
             let numList = [];
             let planList = [];
             for (const item of this.data) {
-                dateList.push(item.dateBegin);
+                dateList.push(item.dateEnd);
                 numList.push(item.doNum);
                 planList.push(item.totalNum);
             }

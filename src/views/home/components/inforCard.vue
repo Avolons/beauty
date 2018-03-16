@@ -25,6 +25,7 @@
                         :color="color"
                         :countSize="countSize"
                         :countWeight="countWeight"
+                        :params="params"
                     >
                     <p class="infor-intro-text" slot="intro">{{ introText }}</p>
                     </count-up>
@@ -52,6 +53,9 @@ export default {
         countSize: {
             type: String,
             default: '30px'
+        },
+        params:{
+            type:Array,
         },
         countWeight: {
             type: Number,

@@ -13,19 +13,19 @@
             <span>
 				客户姓名
 			</span>
-            <Input type="text" v-model="searchParams.brxm" placeholder="请输入客户姓名"></Input>
+            <Input type="text" v-model="searchParams.brxm" placeholder="请输入随访编号"></Input>
             </Col>
             <Col span="6">
             <span>
 				联系电话
 			</span>
-            <Input type="text" v-model="searchParams.mobile" placeholder="请输入联系电话"></Input>
+            <Input type="text" v-model="searchParams.mobile" placeholder="请输入随访编号"></Input>
             </Col>
             <Col span="6">
             <span>
 				随防方案
 			</span>
-            <Input type="text" v-model="searchParams.schemeName" placeholder="请输入随防方案"></Input>
+            <Input type="text" v-model="searchParams.schemeName" placeholder="请输入患者姓名"></Input>
             </Col>
             <Col span="6" style="height:32px;margin-top:10px">
             <span>
@@ -64,7 +64,6 @@
             </Select>
             </Col>
 
-
             <Col span="6" style="margin-top:10px">
             <Button @click="searchParams.pager=1;normalCallDateList()" type="primary">查询</Button>
             </Col>
@@ -72,10 +71,10 @@
         </Col>
         <!-- 表格 -->
         <Col span="24" class="fpTable">
-        <Table @on-selection-change="selectAll" @on-select-cancel="cancelSingle" @on-select="sigleSelct"  ref="selection" border :columns="config" :data="dataList" class="margin-bottom-10" :loading="createLoading"></Table>
+        <Table @on-selection-change="selectAll" @on-select-cancel="cancelSingle"   ref="selection" border :columns="config" :data="dataList" class="margin-bottom-10" :loading="createLoading"></Table>
         <Row>
-            <Button v-if="!menuShow(this.AM.FollowBussiness.cancleall)" @click="cancelAllResult" :type="haveSelect.length>0?'primary':'dashed'">导出选择项</Button>
-            <Button  @click="handleSelectAll(true)" type="primary" >全部导出</Button>
+            <Button v-if="!menuShow(this.AM.FollowBussiness.visitorDerexport)" @click="cancelAllResult" :type="haveSelect.length>0?'primary':'dashed'">导出选择项</Button>
+            <Button v-if="!menuShow(this.AM.FollowBussiness.visitorDerexport)" @click="handleSelectAll(true)" type="primary" >全部导出</Button>
             <Page style="float:right" :current="searchParams.pager" :total="totalPage" @on-change="changePage" show-elevator show-total></Page>
         </Row>
         </Col>
@@ -88,40 +87,40 @@
                         <Form :model="formLeft" label-position="left" :label-width="100">
                             <Row>
                                 <Col span="12">
-                                    <FormItem label="客户姓名">
-                                        <Input v-model="formLeft.input" placeholder="Enter something..."></Input>
-                                    </FormItem>
+                                <FormItem label="客户姓名">
+                                    <Input v-model="formLeft.brxm" placeholder="Enter something..." readonly></Input>
+                                </FormItem>
                                 </Col>
                                 <Col span="12">
-                                    <FormItem label="联系电话">
-                                        <Input v-model="formLeft.input" placeholder="Enter something..."></Input>
-                                    </FormItem>
+                                <FormItem label="联系电话">
+                                    <Input v-model="formLeft.mobile" placeholder="Enter something..." readonly></Input>
+                                </FormItem>
                                 </Col>
                                 <Col span="12">
-                                    <FormItem label="随访方案">
-                                        <Input v-model="formLeft.input" placeholder="Enter something..."></Input>
-                                    </FormItem>
+                                <FormItem label="随访方案">
+                                    <Input v-model="formLeft.schemeName" placeholder="Enter something..." readonly></Input>
+                                </FormItem>
                                 </Col>
                                 <Col span="12">
-                                    <FormItem label="是否有意向">
-                                        <RadioGroup v-model="formLeft.radio">
-                                            <Radio label="male">是</Radio>
-                                            <Radio label="female">否</Radio>
-                                        </RadioGroup>
-                                    </FormItem>
+                                <FormItem label="是否有意向">
+                                    <RadioGroup v-model="formLeft.intention" >
+                                        <Radio label="1" disabled>是</Radio>
+                                        <Radio label="0" disabled>否</Radio>
+                                    </RadioGroup>
+                                </FormItem>
                                 </Col>
                             </Row>
                         </Form>
                         <table border="1">
-                           <tr>
-                               <td>呼叫次数</td>
-                               <td>执行时间</td>
-                               <td>通话状态</td>
-                           </tr>
                             <tr>
                                 <td>呼叫次数</td>
                                 <td>执行时间</td>
                                 <td>通话状态</td>
+                            </tr>
+                            <tr v-for="item,index in orderResultList">
+                                <td>第{{index+1}}次</td>
+                                <td>{{item.dateAdd}}</td>
+                                <td>{{item.statusStr}}</td>
                             </tr>
                         </table>
                     </div>
@@ -129,7 +128,7 @@
                 <Panel name="2">
                     记录详情
                     <ul slot="content" class="followResult_message">
-                        <template v-for="item in planInfo.orderReplyQuestions">
+                        <template v-for="item,index in orderReplyQuestionList">
                             <li class="followResult_single_ai">
                                 <Icon type="android-call"></Icon>
                                 <span>
@@ -149,7 +148,7 @@
         </Modal>
 
         <!--选择导出的数量-->
-        <Modal v-model="modal3" class-name="exportNum" @on-ok="configNumExport" @on-cancel="configCancelAction" :mask-closable="false" :loading="loading ">
+        <Modal v-model="modal3" @on-cancel="configCancelAction" class-name="exportNum" @on-ok="configNumExport" :mask-closable="false" :loading="loading ">
             <p>已选择<span style="color: red;">{{recordTotal}}</span>位客户，是否确认导出</p>
         </Modal>
     </Row>
@@ -160,13 +159,14 @@
     export default {
         data () {
             return {
+                // 随访结果
                 formLeft: {
-                    input1: '',
-                    input2: '',
-                    input3: '',
-                    radio:1
+                    brxm: '',     // 客户姓名
+                    mobile: '',     // 联系电话
+                    schemeName: '', // 随访方案
+                    intention: 1     // 是否有意向
                 },
-                telephoneState: [   //通话状态
+                telephoneState: [    // 通话状态
                     {
                         name: '全部',
                         id: ''
@@ -200,7 +200,9 @@
                         id: '7'
                     }
                 ],
-                CallTimes:[   //通话次数
+                orderResultList: [],     // 随访次数
+                orderReplyQuestionList: [],  // 随访详情
+                CallTimes: [   // 通话次数
                     {
                         name: '全部',
                         id: ''
@@ -218,48 +220,48 @@
                         id: '3'
                     }
                 ],
-                isIntention:[   //是否有意向
+                isIntention: [   // 是否有意向
                     {
                         name: '全部',
                         id: ''
                     },
                     {
-                        name: '有',
+                        name: '有意向',
                         id: '1'
                     },
                     {
-                        name: '无',
+                        name: '无意向',
                         id: '0'
                     }
                 ],
-                loading:true,
+                loading: true,
                 listSelect: [],
-                ConversationDetail: false,  //通话详情
-                //搜索选项
-                createLoading: true,   //loading动画加载
+                ConversationDetail: false,  // 通话详情
+                // 搜索选项
+                createLoading: true,   // loading动画加载
                 searchParams: {
-                    limit: 10, //每页条数
-                    pager: 1, //第几页
-                    brxm: '',   //客户姓名
-                    mobile: '',  //手机号
-                    schemeName: '',//方案名称
-                    callTime: '',  //呼叫次数
-                    intention: '',  //是否有意向 （ 1:有  0：无）
-                    dateAddStart: '',  //生成开始时间
-                    dateAddEnd: '',   //生成结束时间
-                    datebeginStart: '',  //执行开始时间
-                    datebeginEnd: '',    //执行结束时间
-                    backStatus: '',     //通话状态
-                    orderno: '',       //随访编号
-                    isExport: ''        //是否导出过（是：1  否：0）
+                    limit: 10, // 每页条数
+                    pager: 1, // 第几页
+                    brxm: '',   // 客户姓名
+                    mobile: '',  // 手机号
+                    schemeName: '', // 方案名称
+                    callTime: '',  // 呼叫次数
+                    intention: '',  // 是否有意向 （ 1:有  0：无）
+                    dateAddStart: '',  // 生成开始时间
+                    dateAddEnd: '',   // 生成结束时间
+                    datebeginStart: '',  // 执行开始时间
+                    datebeginEnd: '',    // 执行结束时间
+                    backStatus: '',     // 通话状态
+                    orderno: '',       // 随访编号
+                    isExport: ''        // 是否导出过（是：1  否：0）
                 },
-                modal3:false,   //导出数量
-                totalPage: 100,//总页数
-                //随访记录详情
+                modal3: false,   // 导出数量
+                totalPage: 100, // 总页数
+                // 随访记录详情
                 planInfo: {
                     orderReplyQuestions: []
                 },
-                //表格配置
+                // 表格配置
                 config: [
                     {
                         type: 'selection',
@@ -280,27 +282,7 @@
                     {
                         title: '客户姓名',
                         key: 'brxm',
-                        align: 'center',
-                        render: (h, params) => {
-                            return h('div', [
-                                h('span', {
-                                    props: {
-                                        type: 'primary',
-                                        size: 'small'
-                                    },
-                                    style: {
-                                        borderBottom: '1px solid #5cadff',
-                                        color: '#5cadff'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            this.getInfo(params.row.hzxxId);
-                                            this.patientDetail = true;
-                                        }
-                                    }
-                                }, params.row.brxm),
-                            ])
-                        }
+                        align: 'center'
                     },
                     {
                         title: '联系电话',
@@ -318,7 +300,7 @@
                         key: 'backStatus',
                         align: 'center',
                         render: (h, params ) => {
-                            //1 呼叫失败 2 正常通话 3 通话中 4 关停机 5 无人接听 6 空号 7 号码有误'
+                            // 1 呼叫失败 2 正常通话 3 通话中 4 关停机 5 无人接听 6 空号 7 号码有误'
                             switch (params.row.backStatus) {
                                 case '1':
                                     return '呼叫失败'
@@ -380,26 +362,24 @@
                             return h('div', [
                                 h('Button', {
                                     props: {
-                                        type: params.row.vetStatus != 0 ? 'primary' : 'dashed',
-                                        size: 'small',
+                                        type: 'primary',
+                                        size: 'small'
                                     },
                                     style: {
                                         marginRight: '5px'
                                     },
                                     'class': {
-                                        menuHide: this.menuShow(this.AM.FollowBussiness.detailLog)
+                                        menuHide: this.menuShow(this.AM.FollowBussiness.editorRecord)
                                     },
                                     on: {
                                         click: () => {
                                             /**
                                              * 该处类型判断
                                              */
-                                            if (params.row.vetStatus != 0) {
-                                                this.showInfo(params.row.id);
-                                            }
+                                            this.showInfo(params.row.id);
                                         }
                                     }
-                                }, params.row.vetStatus == 0 ? '详情' : '详情'),
+                                }, '详情'),
                                 h('Button', {
                                     props: {
                                         type: 'warning',
@@ -409,7 +389,7 @@
 
                                     },
                                     'class': {
-                                        menuHide: this.menuShow(this.AM.FollowBussiness.delLog)
+                                        menuHide: this.menuShow(this.AM.FollowBussiness.deleteRecord)
                                     },
                                     on: {
                                         click: () => {
@@ -420,41 +400,61 @@
                             ]);
                         }
                     }],
-                //表格data
+                // 表格data
                 dataList: [],
-                follInfo: false,//详情模态框
-                //当前被点击患者，编辑和详情按钮触发时更换数据
+                follInfo: false, // 详情模态框
+                // 当前被点击患者，编辑和详情按钮触发时更换数据
                 currentData: {},
-                //门急诊信息
+                // 门急诊信息
                 mjzData: [],
-                //住院信息
+                // 住院信息
                 zyData: [],
-                //详情模态框
+                // 详情模态框
                 patientDetail: false,
-                //终止随访
                 haveSelect: [],
-                clickAll: false,//是否是批量选择，
-                allExp: false,   //记录全部导出,
-                idAllArr: [],   //记录选中的所有的值
-                idSelectArr: [], //记录选中哪些去掉重复的值
-                recordTotal: 0  //记录选中多少条
-
-            }
+                clickAll: false, // 是否是批量选择，
+                allExp: false,   // 记录全部导出,
+                idAllArr: [],   // 记录选中的所有的值
+                idSelectArr: [],  // 记录选中哪些去掉重复的值
+                exportSelectFlag: true,  // 判断是否是导出选择性还是全选
+                recordTotal: 0,  // 记录选中多少条
+                isall: 0, //0代表导出选择项 1。代表导出所有
+            };
         },
         methods: {
             /**
-             * 设置全选
+             * 导出选择项
+             **/
+            cancelAllResult () {
+                if (this.haveSelect.length == 0) {
+                    return false;
+                }
+                this.isall = 0;
+                this.allExp = false;
+                this.exportSelectFlag = true;
+                this.modal3 = true;
+                this.recordTotal = this.idSelectArr.length;
+            },
+            /**
+             * 设置全选 点击全部导出按钮
              */
             handleSelectAll (status) {
+                this.isall = 1;
                 this.allExp = true;
+                this.exportSelectFlag = false;
                 this.$refs.selection.selectAll(status);
                 this.modal3 = true;
+                this.recordTotal = this.totalPage;
             },
             /**
              * 取消导出
              * */
             configCancelAction () {
                 this.allExp = false;
+                this.idSelectArr = [];
+                this.idAllArr = [];
+                this.haveSelect = [];
+                this.exportSelectFlag = true;
                 this.normalCallDateList();
             },
             /**
@@ -462,45 +462,57 @@
              * */
             configNumExport () {
                 this.allExp = false;
+                this.exportSelectFlag = true;
+                this.idSelectArr = [];
+                this.idAllArr = [];
+                this.haveSelect = [];
                 this.normalCallDateList();
                 this.loading = false;
                 this.$nextTick(() => {
                     this.loading = true;
                     this.modal3 = false;
                 });
-            },
-            /**
-             * 单选 删除
-             * */
-            sigleSelct(selection,row){
+                if (!this.isall) {
+                    //console.log('http://192.168.3.26:8083/bjmt/visit/visitorderexport?isall=0&ids='+String(this.idSelectArr))
+                    window.location.href = '/bjmt/visit/visitorderexport?isall=0&ids='+String(this.idSelectArr);
+                    //window.open("/bjmt/visit/visitorderexport?isall="+this.isall+'&ids='+String(this.idSelectArr))
+                } else {
+                    //console.log('http://192.168.3.26:8083/bjmt/visit/visitorderexport?isall=1&orderDTO='+JSON.stringify(this.searchParams));
+                    let data = 'brxm='+this.searchParams.brxm+'mobile='+this.searchParams.mobile+'schemeName='+this.searchParams.schemeName+'callTime='+this.searchParams.callTime   +'intention='+this.searchParams.intention +'dateAddStart='+this.searchParams.dateAddStart+'dateAddEnd='+this.searchParams.dateAddEnd+'datebeginStart='+this.searchParams.datebeginStart+'datebeginEnd='+this.searchParams.datebeginEnd+'isExport='+this.searchParams.isExport;
+                    //console.log(data)
+                    //window.open('http://192.168.3.26:8083/bjmt/visit/visitorderexport?isall=1&'+data)
+                    windowlocation.href = "/bjmt/visit/visitorderexport?isall="+this.isall+'&ids='+String(this.idSelectArr);
+                }
+                this.idSelectArr = [];
+                this.idAllArr = [];
+                this.haveSelect = [];
             },
             /***
-             * 取消单选
+             * 取消单个选泽项
              **/
-            cancelSingle(selection,row){
+            cancelSingle (selection,row) {
                 if (this.idSelectArr.length) {
                     for (var i = 0; i < this.idSelectArr.length; i++) {
-                        if (row.orderNo == this.idSelectArr[i]) {
+                        if (row.id == this.idSelectArr[i]) {
                             this.idSelectArr.splice(i,1);
                         }
                     }
                 };
-
-                if( this.idAllArr.length){
+                if (this.idAllArr.length) {
                     for (var i = 0; i < this.idAllArr.length; i++) {
-                        if (row.orderNo == this.idAllArr[i]) {
+                        if (row.id == this.idAllArr[i]) {
                             this.idAllArr.splice(i,1);
                         }
                     }
                 }
             },
             /**
-             * 全选按扭
+             * 全选按扭 选择单项表格按钮 全选当前页
              **/
             selectAll (selection) {
                 this.haveSelect = selection;
                 for (const item of this.haveSelect) {
-                    this.idAllArr.push(item.orderNo);
+                    this.idAllArr.push(item.id);
                     this.idSelectArr = [...new Set(this.idAllArr)];
                 }
             },
@@ -511,55 +523,29 @@
                 this.searchParams.pager = index;
                 this.normalCallDateList();
             },
-            /**
-             * 批量终止随访
-             */
-            cancelAllResult () {
-                if (this.haveSelect.length == 0) {
-                    return false;
-                }
-                this.recordTotal = this.idSelectArr.length;
-                this.modal3 = true;
-            },
-            /**
-             * 生成日期
-             * dateAddStart: '',
-             * //生成开始时间dateAddEnd: '',
-             * //生成结束时间datebeginStart: '',
-             * //执行开始时间datebeginEnd: '',
-             * //执行结束时间
-             **/
-            timeChange_one(date) {
+            timeChange_one (date) {
                 this.searchParams.dateAddStart = date[0];
                 this.searchParams.dateAddEnd = date[1];
             },
-            /**
-             * 执行日期
-             **/
-            timeChange_two(date) {
+            timeChange_two (date) {
                 this.searchParams.datebeginStart = date[0];
                 this.searchParams.datebeginEnd = date[1];
             },
             /**
              * 显示随访详情
              */
-            showInfo(id) {
+            showInfo (id) {
                 /**
                  * 获取详情并且赋值到临时数据
                  */
-                API.FollowBussiness.detailLog({
-                    id: id
+                API.FollowBussiness.getOrderDetail({
+                    visitOrderId: id
                 }).then((res) => {
-                    this.planInfo = res.data;
-                    if (res.data.notPassReason != '') {
-                        this.zzsfForm.radio = 1;
-                        this.zzsfForm.select = res.data.notPassReason;
-                        this.zzsfForm.textarea = res.data.notPassRemark;
-                    } else {
-                        this.zzsfForm.radio = 0;
-                    }
+                    this.formLeft = res.data.order;  // 得到随访结果
+                    this.orderResultList = res.data.orderResultList; // 得到随访次数
+                    this.orderReplyQuestionList = res.data.orderReplyQuestionList;  // 得到随访详情
                 }).catch((err) => {
-                    //弹出错误信息
+                    // 弹出错误信息
                     this.$Message.error(err);
                 });
                 this.follInfo = true;
@@ -567,73 +553,52 @@
             /**
              * 删除随访记录
              */
-            deletResult(id) {
+            deletResult (id) {
                 this.$Modal.confirm({
                     title: '删除记录',
                     content: '确定删除该条记录？',
                     onOk: () => {
-                        API.FollowBussiness.delLog({
-                            id: id
+                        API.FollowBussiness.deleteOrder({
+                            ids: id
                         }).then((res) => {
-                            this.$Message.success("删除成功");
-                            this.getData();
+                            this.$Message.success('删除成功');
+                            this.normalCallDateList();
                         }).catch((err) => {
-                            //弹出错误信息
+                            // 弹出错误信息
                             this.$Message.error(err);
                         });
                     }
                 });
             },
-            /**
-             * 查看患者详情
-             */
-            getInfo(id) {
-                API.FollowBussiness.detailPat({
-                    id: id
-                }).then((res) => {
-                    if (res.data.mjzs.length) {
-                        this.mjzData = res.data.mjzs
-                    }
-                    if (res.data.cyxjs.length) {
-                        this.zyData = res.data.cyxjs
-                    }
-                    this.currentData = res.data;
-                }).catch((err) => {
-                    //弹出错误信息
-                    this.$Message.error(err);
-                });
-            },
-            /**
-             *  获取列表数据
-             */
             normalCallDateList () {
-                API.FollowBussiness.normalCallList(this.searchParams ).then((res) => {
-                    //判断是否全部导出 全部导出的时候全部添加图标
+                API.FollowBussiness.normalCallList(this.searchParams).then((res) => {
+                    // 判断是否全部导出 全部导出的时候全部添加图标
                     if (this.allExp) {
                         for (const item of res.data) {
                             item._checked = true;
                         }
                     }
-                    //判断选择性导出
-                    if(this.idSelectArr.length){
-                        for (const item of res.data) {
-                            if(this.idSelectArr.indexOf(item.orderNo)>-1){
-                                item._checked = true;
+                    if (this.exportSelectFlag) {
+                        // 判断选择性导出
+                        if (this.idSelectArr.length) {
+                            for (const item of res.data) {
+                                if (this.idSelectArr.indexOf(item.id) > -1) {
+                                    item._checked = true;
+                                }
                             }
                         }
                     }
                     this.dataList = res.data;
                     this.totalPage = res.count;
                     this.createLoading = false;
-                })
+                });
             }
 
         },
         mounted () {
-            //this.getData();
             this.normalCallDateList();
         }
-    }
+    };
 </script>
 
 <style lang="less">
@@ -811,5 +776,8 @@
         .ivu-form-item-content{
             width:233px;
         }
+    }
+    .ivu-radio-disabled .ivu-radio-inner:after{
+        background-color: #2d8cf0;
     }
 </style>

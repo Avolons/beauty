@@ -439,6 +439,9 @@
                         //window.location.href = 'http://192.168.1.215:8080/'+ res.data;
                         window.location.href = '/'+ res.data;
                         this.showLayer = false;
+                        this.idAllArr = [];
+                        this.haveSelect = [];
+                        this.idSelectArr = [];
                     }
                 }).catch((err) => {
                     // 弹出错误信息

@@ -463,9 +463,6 @@
             configNumExport () {
                 this.allExp = false;
                 this.exportSelectFlag = true;
-                this.idSelectArr = [];
-                this.idAllArr = [];
-                this.haveSelect = [];
                 this.normalCallDateList();
                 this.loading = false;
                 this.$nextTick(() => {
@@ -474,7 +471,7 @@
                 });
                 if (!this.isall) {
                     //console.log('http://192.168.3.26:8083/bjmt/visit/visitorderexport?isall=0&ids='+String(this.idSelectArr))
-                    window.location.href = '/bjmt/visit/visitorderexport?isall=0&ids='+String(this.idSelectArr);
+                    window.location.href = 'http://192.168.1.215:8080/bjmt/visit/visitorderexport?isall=0&ids='+String(this.idSelectArr);
                     //window.open("/bjmt/visit/visitorderexport?isall="+this.isall+'&ids='+String(this.idSelectArr))
                 } else {
                     //console.log('http://192.168.3.26:8083/bjmt/visit/visitorderexport?isall=1&orderDTO='+JSON.stringify(this.searchParams));

@@ -204,7 +204,7 @@ export const appRouter = [{
     },
     {
         path: '/followBusiness/normalTelephone',
-        icon: 'ios-stopwatch',
+        icon: 'social-whatsapp',
         name: 'normalTelephone',
         title: '正常通话',
         access: '/followBusiness/normalTelephone', // access已经添加
@@ -214,7 +214,7 @@ export const appRouter = [{
     },
     {
         path: '/followBusiness/telephoneRecord',
-        icon: 'ios-stopwatch',
+        icon: 'social-pinterest',
         name: 'telephoneRecord',
         title: '通话记录',
         access: '/followBusiness/telephoneRecord', // access已经添加

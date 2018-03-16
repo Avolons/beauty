@@ -1323,3 +1323,13 @@ export const Dataaudit = {
     }
 
 };
+
+/** 短信统计 **/
+export const sms = {
+     /*
+     * 短信统计
+     */
+    selectByTime (data) {
+        return fetch('get', '/sms/selectByTime', data);
+    }
+};

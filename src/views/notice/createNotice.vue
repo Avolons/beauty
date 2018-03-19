@@ -125,13 +125,13 @@
 
 <template>
 	<div class="creatNotice">
-		<Modal width="700" class="creatNotice_main_modal" :styles="{height:'500px', overflowY:'auto'}" v-model="patModal" title="已选患者列表">
+		<Modal width="700" class="creatNotice_main_modal" :styles="{height:'500px', overflowY:'auto'}" v-model="patModal" title="已选客户列表">
 			<Table border :columns="patConfig" :data="addList"></Table>
 		</Modal>
 		<div class="creatNotice_main">
 			<div class="creatNotice_main_step">
 				<Steps :current="step=='step_one'?0:step=='step_two'?1:2">
-					<Step title="选择发起人和随访患者"></Step>
+					<Step title="选择发起人和随访客户"></Step>
 					<Step title="选择方案"></Step>
 					<Step title="发起通知"></Step>
 				</Steps>
@@ -160,16 +160,16 @@
 							</Select>
 							</Col>
 						</Row>
-						<Alert show-icon>选择具体医生仅表示发起人，不作为筛选患者的条件之一</Alert>
+						<Alert show-icon>选择具体医生仅表示发起人，不作为筛选客户的条件之一</Alert>
 						<h3 class="creatNotice_main_sendDataTitle">
-							选择接收随访患者
+							选择接收随访客户
 						</h3>
 						<Row class="creatNotice_main_search" :gutter="15">
 							<Col span="6">
 							<span>
-								患者姓名：
+								客户姓名：
 							</span>
-							<Input type="text" v-model="searchParams.brxm" placeholder="请输入患者姓名"></Input>
+							<Input type="text" v-model="searchParams.brxm" placeholder="请输入客户姓名"></Input>
 							</Col>
 							<Col span="6">
 							<span>
@@ -212,10 +212,10 @@
 						<div class="creatNotice_main_add">
 							<Button @click="searchParams.pager=1;getData()" style="margin-right:10px" type="primary">搜索</Button>
 							<Badge :count="addList.length">
-								<Button @click="patModal=true" type="info">已添加患者</Button>
+								<Button @click="patModal=true" type="info">已添加客户</Button>
 							</Badge>
 						</div>
-						<Alert show-icon>已添加过的患者无法重复添加，您可在已添加患者列表里进行删除操作</Alert>
+						<Alert show-icon>已添加过的客户无法重复添加，您可在已添加客户列表里进行删除操作</Alert>
 						<div class="creatNotice_main_list">
 							<Table border ref="selection" :columns="config" :data="dataList" :loading="createLoading"></Table>
 						</div>
@@ -306,7 +306,7 @@ export default {
 			//搜索选项
 			searchParams: {
 				pager: 1,//当前页码
-				brxm: '',//患者姓名
+				brxm: '',//客户姓名
 				limit: 10,//每页条数
 				adminId: "",
 				diseaseId: "",//疾病id，多个用英文逗号分开（可选）
@@ -333,7 +333,7 @@ export default {
 				visitStartTime: "",//通知开始时间
 				visitEndTime: "",//通知结束时间
 				taskName: "", //通知计划名称 
-				hzxxIds: [],  //患者id
+				hzxxIds: [],  //客户id
 				remark: "",
 				isAll: '',//是否全选  
 				brxb: '',//性别
@@ -348,7 +348,7 @@ export default {
 			addList: [],//已经添加的用户
 			totalPage: 10,//总页数
 			patTotalPage: 10,
-			patModal: false,//已选患者列表显示
+			patModal: false,//已选客户列表显示
 			planConfig: [
 				{
 					title: '方案名称',
@@ -499,7 +499,7 @@ export default {
 	},
 	methods: {
 		/** 
-		 * 患者导入开始时间
+		 * 客户导入开始时间
 		 */
 		timeChange_import(date) {
 			this.searchParams.diagnoseTimeBegin = date;
@@ -637,7 +637,7 @@ export default {
 		 */
 		nextStep() {
 			if (this.addList.length == 0) {
-				this.$Message.warning("您尚未添加任何患者");
+				this.$Message.warning("您尚未添加任何客户");
 				return false;
 			}
 			if (this.sendData.admin == "") {
@@ -666,7 +666,7 @@ export default {
 				this.$Message.warning("您未选择默认发起人");
 				return false;
 			}
-			this.$Message.success("您已选择当前搜索到的全部患者!");
+			this.$Message.success("您已选择当前搜索到的全部客户!");
 			this.step = "step_two";
 		},
 		/** 
@@ -677,7 +677,7 @@ export default {
 			this.sendData.visitEndTime = date[1];
 		},
 		/** 
-		 * 添加患者
+		 * 添加客户
 		 */
 		addPat(data, index) {
 			/* for (let item of addList) {
@@ -692,7 +692,7 @@ export default {
 			this.addList.push(copyData);
 		},
 		/** 
-		 * 移除已选患者
+		 * 移除已选客户
 		 */
 		removePat(index) {
 			this.addList.splice(index, 1);
@@ -718,7 +718,7 @@ export default {
 			this.getData();
 		},
 		/** 
-		 * 患者列表页码更改
+		 * 客户列表页码更改
 		 */
 		patChangePage(index) {
 			this.patParams.pager = index;

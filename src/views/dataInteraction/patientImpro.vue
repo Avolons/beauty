@@ -16,7 +16,6 @@
 				:on-success="handleSuccess" 
 				:format="['xml','xls','png']" 
 				:on-format-error="handleFormatError" 
-				:on-exceeded-size="handleMaxSize" 
 				:before-upload="handleBeforeUpload" 
 				multiple 
 				name="upfile"
@@ -26,13 +25,13 @@
 			<div style="width: 158px;height:158px;display:flex;flex-direction:column;align-items:center;justify-content:center">
 				<Icon type="document-text" size="50"></Icon>
 				<br>
-				点击导入病患信息
+				点击导入客户信息
 			</div>
 		</Upload>
-		<Button style="display:block;margin-top:20px;" type="primary"><a style="color:#fff" href="/assets/templatedoc/Patient.xls">下载患者模板</a></Button>
+		<Button style="display:block;margin-top:20px;" type="primary"><a style="color:#fff" href="/assets/templatedoc/Patient.xls">下载客户模板</a></Button>
 		<Modal title="上传错误" v-model="errorMsg">
 			<Table border :columns="config" :data="dataList" ></Table>
-			<Button style="display:block;margin-top:20px;" type="primary"><a style="color:#fff" href="/assets/templatedoc/患者信息错误.xls">下载患者错误信息</a></Button>
+			<Button style="display:block;margin-top:20px;" type="primary"><a style="color:#fff" href="/assets/templatedoc/客户信息错误.xls">下载客户错误信息</a></Button>
 		</Modal>
 	</div>
 </template>
@@ -100,6 +99,7 @@ export default {
 			this.$Spin.hide();
 		},
 		handleFormatError(file) {
+			this.$Spin.hide();
 			this.$Notice.warning({
 				title: '文件格式错误',
 				desc:  file.name + ' 格式不正确, 请选择 xls 或者 xlsx 格式文件.'
@@ -107,7 +107,7 @@ export default {
 		},
 		handleMaxSize(file) {
 			this.$Notice.warning({
-				title: 'Exceeding file size limit',
+				title: '超出文件大小限制',
 				desc: 'File  ' + file.name + ' is too large, no more than 2M.'
 			});
 		},

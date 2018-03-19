@@ -11,9 +11,9 @@
 			</Col>
 			<Col span="6">
 			<span>
-				患者姓名
+				客户姓名
 			</span>
-			<Input type="text" v-model="searchParams.brxm" placeholder="请输入患者姓名"></Input>
+			<Input type="text" v-model="searchParams.brxm" placeholder="请输入客户姓名"></Input>
 			</Col>
 			<Col span="6">
 			<span>
@@ -74,7 +74,7 @@
 					<div slot="content" class="followResult_table">
 						<table border="1">
 							<tr>
-								<td>患者姓名</td>
+								<td>客户姓名</td>
 								<td>{{planInfo.brxm}}</td>
 								<td>采用随访方案</td>
 								<td>{{planInfo.schemeName}}</td>
@@ -148,7 +148,7 @@
 			</Collapse>
 		</Modal>
 		<!-- 详情模态框 -->
-		<Modal v-model="patientDetail" title="患者信息" class-name="patientInfo" :styles="{top: '36px'}" width="1000">
+		<Modal v-model="patientDetail" title="客户信息" class-name="patientInfo" :styles="{top: '36px'}" width="1000">
 			<Row class="infoRow">
 				<Col span="12" class="info-col mb12">
 				<div class="info">
@@ -246,7 +246,7 @@
 						<span>{{currentData.jzkh}}</span>
 						</Col>
 						<Col span="12">
-						<span>患者性质:</span>
+						<span>客户性质:</span>
 						<span>{{currentData.brxz}}</span>
 						</Col>
 						<Col span="12">
@@ -294,7 +294,7 @@
 						<span>{{item1.zyhm}}</span>
 						</Col>
 						<Col span="12">
-						<span>患者性质:</span>
+						<span>客户性质:</span>
 						<span>{{currentData.brxz}}</span>
 						</Col>
 						<Col span="12">
@@ -378,7 +378,7 @@ export default {
 				limit: 10,//每页条数
 				schemeName: "",//方案名称（可选）
 				orderNo: "",//编码（可选）
-				brxm: "", //患者姓名（可选）
+				brxm: "", //客户姓名（可选）
 				status: "",
 				dateAddBegin: "",  //生成开始日期（可选）
 				dateAddEnd: "",  //生成结束日期（可选）
@@ -433,7 +433,7 @@ export default {
 					align: 'center'
 				},
 				{
-					title: '患者姓名',
+					title: '客户姓名',
 					key: 'brxm',
 					align: 'center',
 					render: (h, params) => {
@@ -567,7 +567,7 @@ export default {
 			//表格data
 			dataList: [],
 			follInfo: false,//详情模态框
-			//当前被点击患者，编辑和详情按钮触发时更换数据
+			//当前被点击客户，编辑和详情按钮触发时更换数据
 			currentData: {},
 			//门急诊信息
 			mjzData: [],
@@ -592,7 +592,7 @@ export default {
 					{ required: true, message: '请输入详情', trigger: 'blur' },
 				]
 			},
-			sfStatus: '',//当前患者的随访状态
+			sfStatus: '',//当前客户的随访状态
 			haveSelect: [],
 			clickAll: false,//是否是批量选择
 		}
@@ -703,7 +703,7 @@ export default {
 			});
 		},
 		/** 
-     * 查看患者详情
+     * 查看客户详情
      */
 		getInfo(id) {
 			API.FollowBussiness.detailPat({

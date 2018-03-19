@@ -16,13 +16,13 @@ module.exports = merge(webpackBaseConfig, {
     devtool: '#source-map',
     devServer: {
         port: 8888,
-        /* proxy:{
+        proxy:{
             '/visit/*':{
                 target: 'http://192.168.1.215:8080',
                 changeOrigin: true,
                 secure: false
             }
-        } */
+        }
     },
     output: {
         publicPath: '/dist/',

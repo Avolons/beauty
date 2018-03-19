@@ -333,7 +333,6 @@ export default {
                         }
                     }
                     if (!flag) {
-                        console.log(this.formData.mType);
                         API.Systems.addSystemType({
                             mainType: this.formData.mType
                         }).then((res) => {

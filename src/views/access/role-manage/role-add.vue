@@ -310,7 +310,7 @@ export default {
                    }
                }
            } */
-          /*  console.log(data);
+           
             let getItem = (id, arrList) => {
                 for (const item of this.treeData) {
                     if (item.id == id) {
@@ -336,10 +336,10 @@ export default {
 
                     }
                 }
-            } */
+            } 
             for (const item of data) {
                 if (item.pid) {
-                   /*  getItem(item.pid, arrList); */
+                    getItem(item.pid, arrList);
                      arrList.push(item.id);
                 } 
                

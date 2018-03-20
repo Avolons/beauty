@@ -13,19 +13,19 @@
             <span>
 				客户姓名
 			</span>
-            <Input type="text" v-model="searchParams.brxm" placeholder="请输入随访编号"></Input>
+            <Input type="text" v-model="searchParams.brxm" placeholder="请输入客户姓名"></Input>
             </Col>
             <Col span="6">
             <span>
 				联系电话
 			</span>
-            <Input type="text" v-model="searchParams.mobile" placeholder="请输入随访编号"></Input>
+            <Input type="text" v-model="searchParams.mobile" placeholder="请输入联系电话"></Input>
             </Col>
             <Col span="6">
             <span>
 				随防方案
 			</span>
-            <Input type="text" v-model="searchParams.schemeName" placeholder="请输入客户姓名"></Input>
+            <Input type="text" v-model="searchParams.schemeName" placeholder="请输入随访方案"></Input>
             </Col>
             <Col span="6" style="height:32px;margin-top:10px">
             <span>

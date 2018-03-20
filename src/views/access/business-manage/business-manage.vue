@@ -18,7 +18,7 @@
               <Col span="18">
                 <Input v-model="searchResult" placeholder="请输入企业名称" style="width: 200px" />
                 <span @click="searchBus" style="margin: 0 10px;"><Button type="primary" icon="search">搜索</Button></span>
-                <Button @click="initData" type="ghost" >取消</Button>
+                <!-- <Button @click="initData" type="ghost" >取消</Button> -->
               </Col>
               <Col span="6">
                <Button @click="edit(0)" v-show="!menuShow(this.AM.Jur.addBusiness)" type="primary" style="float:right">新增企业</Button>
@@ -207,18 +207,18 @@ export default {
              * 搜索
              */
             searchBus(){
-                if(!this.searchResult.trim()){
+               /*  if(!this.searchResult.trim()){
                     this.$Message.error('请输入搜索条件');
                     this.searchResult="";
 
-                }else{
+                }else{ */
                     this.page=1;
                     this.getList();
                     //保存数据  当再次返回的时候进行重新赋值
                     this.saveAccessBusines({
                         "searchResult":this.searchResult,       //
                     });
-                }
+               /*  } */
             },
             /** 
              * 获取企业列表

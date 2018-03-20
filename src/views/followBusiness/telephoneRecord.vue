@@ -495,7 +495,8 @@
                         dateAddEnd:this.searchParams.dateAddEnd,
                         datebeginStart:this.searchParams.datebeginStart,
                         datebeginEnd:this.searchParams.datebeginEnd,
-                        isExport:this.searchParams.isExport
+                        isExport:this.searchParams.isExport,
+                        backStatus:this.searchParams.backStatus
                     };
                     this.visitorDerExportList(data);
                 }

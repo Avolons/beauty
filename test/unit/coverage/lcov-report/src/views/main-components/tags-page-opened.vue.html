@@ -1,0 +1,902 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for src/views/main-components/tags-page-opened.vue</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../../prettify.css" />
+    <link rel="stylesheet" href="../../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../../index.html">All files</a> / <a href="index.html">src/views/main-components</a> tags-page-opened.vue
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>0/126</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>0/70</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>0/17</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>0/124</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217
+218
+219
+220
+221
+222
+223
+224
+225
+226
+227
+228
+229
+230
+231
+232
+233
+234
+235
+236
+237
+238
+239
+240
+241
+242
+243
+244
+245
+246
+247
+248
+249
+250
+251
+252
+253
+254
+255
+256
+257
+258
+259
+260
+261
+262
+263
+264
+265
+266
+267
+268
+269
+270
+271
+272
+273
+274
+275
+276
+277
+278
+279
+280</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">&lt;style lang="less"&gt;
+@import '../main.less';
+&lt;/style&gt;
+&nbsp;
+&lt;template&gt;
+    &lt;div ref="scrollCon" @DOMMouseScroll="handlescroll" @mousewheel="handlescroll" class="tags-outer-scroll-con"&gt;
+        &lt;div class="close-all-tag-con"&gt;
+            &lt;Dropdown transfer @on-click="handleTagsOption"&gt;
+                &lt;Button size="small" type="primary"&gt;
+                    标签选项
+                    &lt;Icon type="arrow-down-b"&gt;&lt;/Icon&gt;
+                &lt;/Button&gt;
+                &lt;DropdownMenu slot="list"&gt;
+                    &lt;DropdownItem name="clearAll"&gt;关闭所有&lt;/DropdownItem&gt;
+                    &lt;DropdownItem name="clearOthers"&gt;关闭其他&lt;/DropdownItem&gt;
+                &lt;/DropdownMenu&gt;
+            &lt;/Dropdown&gt;
+        &lt;/div&gt;
+        &lt;div ref="scrollBody" class="tags-inner-scroll-body" :style="{left: tagBodyLeft + 'px'}"&gt;
+            &lt;transition-group name="taglist-moving-animation"&gt;
+                &lt;Tag type="dot" v-for="(item, index) in pageTagsList" ref="tagsPageOpened" :key="item.name" :name="item.name" @on-close="closePage" @click.native="linkTo(item)" :closable="item.name==='home_index'?false:true" :color="item.children?(item.children[0].name===currentPageName?'blue':'default'):(item.name===currentPageName?'blue':'default')"&gt;{{ itemTitle(item) }}&lt;/Tag&gt;
+            &lt;/transition-group&gt;
+        &lt;/div&gt;
+        &lt;Modal v-model="modal" width="360"&gt;
+            &lt;p slot="header" style="color:#f60;text-align:center"&gt;
+                &lt;Icon type="information-circled"&gt;&lt;/Icon&gt;
+                &lt;span&gt;确认离开&lt;/span&gt;
+            &lt;/p&gt;
+            &lt;div style="text-align:center"&gt;
+                &lt;p&gt;您还有编辑中的内容未保存&lt;/p&gt;
+                &lt;p&gt;是否确认离开?&lt;/p&gt;
+            &lt;/div&gt;
+            &lt;div slot="footer"&gt;
+                &lt;Button type="error" size="large" long @click="liveCurrent"&gt;离开&lt;/Button&gt;
+            &lt;/div&gt;
+        &lt;/Modal&gt;
+    &lt;/div&gt;
+&lt;/template&gt;
+&nbsp;
+&lt;script&gt;
+<span class="cstat-no" title="statement not covered" >import Vue from 'vue';</span>
+<span class="cstat-no" title="statement not covered" >import VueI18n from 'vue-i18n';</span>
+<span class="cstat-no" title="statement not covered" >Vue.use(VueI18n);</span>
+export default {
+    name: 'tagsPageOpened',
+<span class="fstat-no" title="function not covered" >    data() {</span>
+<span class="cstat-no" title="statement not covered" >        return {</span>
+            currentPageName: this.$route.name,
+            tagBodyLeft: 0,
+            refsTag: [],
+            tagsCount: 1,
+            modal: false,
+            currentItem: {},
+            closeObj: {
+                /* event: null,
+                name: null */
+            },
+            type: 0,
+            routeList: ['/followSetting/voice/voice', '/followSetting/template/template', '/followSetting/way/way',],
+        };
+    },
+    props: {
+        pageTagsList: Array,
+        beforePush: {
+            type: Function,
+<span class="fstat-no" title="function not covered" >            default: (item) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >                return true;</span>
+            }
+        }
+    },
+    computed: {
+<span class="fstat-no" title="function not covered" >        title() {</span>
+<span class="cstat-no" title="statement not covered" >            return this.$store.state.app.currentTitle;</span>
+        },
+<span class="fstat-no" title="function not covered" >        tagsList() {</span>
+<span class="cstat-no" title="statement not covered" >            return this.$store.state.app.pageOpenedList;</span>
+        }
+    },
+    methods: {
+<span class="fstat-no" title="function not covered" >        itemTitle(item) {</span>
+<span class="cstat-no" title="statement not covered" >            if (typeof item.title === 'object') {</span>
+<span class="cstat-no" title="statement not covered" >                return this.$t(item.title.i18n);</span>
+            } else {
+<span class="cstat-no" title="statement not covered" >                return item.title;</span>
+            }
+        },
+        /** 
+         * 页面关闭
+         */
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >        closePage(event, name) {</span></span>
+<span class="cstat-no" title="statement not covered" >            let routePath = this.$route.path;</span>
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" >            for (const ite of this.routeList) {</span></span>
+<span class="cstat-no" title="statement not covered" >                if (routePath.indexOf(ite) &gt; -1) {</span>
+<span class="cstat-no" title="statement not covered" >                    this.modal = true;</span>
+<span class="cstat-no" title="statement not covered" >                    this.closeObj = {</span>
+                        event: event,
+                        name: name
+                    };
+<span class="cstat-no" title="statement not covered" >                    this.type = 1;</span>
+<span class="cstat-no" title="statement not covered" >                    return false;</span>
+                }
+            }
+<span class="cstat-no" title="statement not covered" >            let pageOpenedList = this.$store.state.app.pageOpenedList;</span>
+<span class="cstat-no" title="statement not covered" >            let lastPageObj = pageOpenedList[0];</span>
+<span class="cstat-no" title="statement not covered" >            if (this.currentPageName === name) {</span>
+<span class="cstat-no" title="statement not covered" >                let len = pageOpenedList.length;</span>
+<span class="cstat-no" title="statement not covered" >                for (let i = 1; i &lt; len; i++) {</span>
+<span class="cstat-no" title="statement not covered" >                    if (pageOpenedList[i].name === name) {</span>
+<span class="cstat-no" title="statement not covered" >                        if (i &lt; (len - 1)) {</span>
+<span class="cstat-no" title="statement not covered" >                            lastPageObj = pageOpenedList[i + 1];</span>
+                        } else {
+<span class="cstat-no" title="statement not covered" >                            lastPageObj = pageOpenedList[i - 1];</span>
+                        }
+<span class="cstat-no" title="statement not covered" >                        break;</span>
+                    }
+                }
+            }
+<span class="cstat-no" title="statement not covered" >            this.$store.commit('removeTag', name);</span>
+<span class="cstat-no" title="statement not covered" >            this.$store.commit('closePage', name);</span>
+<span class="cstat-no" title="statement not covered" >            pageOpenedList = this.$store.state.app.pageOpenedList;</span>
+<span class="cstat-no" title="statement not covered" >            localStorage.pageOpenedList = JSON.stringify(pageOpenedList);</span>
+<span class="cstat-no" title="statement not covered" >            if (this.currentPageName === name) {</span>
+<span class="cstat-no" title="statement not covered" >                this.linkTo(lastPageObj);</span>
+            }
+        },
+        /** 
+         * 离开当前页面
+         */
+<span class="fstat-no" title="function not covered" >        liveCurrent() {</span>
+<span class="cstat-no" title="statement not covered" >            if (this.type == 0) {</span>
+<span class="cstat-no" title="statement not covered" >                let item = this.currentItem;</span>
+<span class="cstat-no" title="statement not covered" >                let routerObj = {};</span>
+<span class="cstat-no" title="statement not covered" >                routerObj.name = item.name;</span>
+<span class="cstat-no" title="statement not covered" >                if (item.argu) {</span>
+<span class="cstat-no" title="statement not covered" >                    routerObj.params = item.argu;</span>
+                }
+<span class="cstat-no" title="statement not covered" >                if (item.query) {</span>
+<span class="cstat-no" title="statement not covered" >                    routerObj.query = item.query;</span>
+                }
+<span class="cstat-no" title="statement not covered" >                if (this.beforePush(item)) {</span>
+<span class="cstat-no" title="statement not covered" >                    this.$router.push(routerObj);</span>
+                }
+            } else {
+<span class="cstat-no" title="statement not covered" >                let event = this.closeObj.event;</span>
+<span class="cstat-no" title="statement not covered" >                let name = this.closeObj.name;</span>
+<span class="cstat-no" title="statement not covered" >                let pageOpenedList = this.$store.state.app.pageOpenedList;</span>
+<span class="cstat-no" title="statement not covered" >                let lastPageObj = pageOpenedList[0];</span>
+<span class="cstat-no" title="statement not covered" >                if (this.currentPageName == name) {</span>
+<span class="cstat-no" title="statement not covered" >                    let len = pageOpenedList.length;</span>
+<span class="cstat-no" title="statement not covered" >                    for (let i = 1; i &lt; len; i++) {</span>
+<span class="cstat-no" title="statement not covered" >                        if (pageOpenedList[i].name === name) {</span>
+<span class="cstat-no" title="statement not covered" >                            if (i &lt; (len - 1)) {</span>
+<span class="cstat-no" title="statement not covered" >                                lastPageObj = pageOpenedList[i + 1];</span>
+                            } else {
+<span class="cstat-no" title="statement not covered" >                                lastPageObj = pageOpenedList[i - 1];</span>
+                            }
+<span class="cstat-no" title="statement not covered" >                            break;</span>
+                        }
+                    }
+                }
+<span class="cstat-no" title="statement not covered" >                this.$store.commit('removeTag', name);</span>
+<span class="cstat-no" title="statement not covered" >                this.$store.commit('closePage', name);</span>
+<span class="cstat-no" title="statement not covered" >                pageOpenedList = this.$store.state.app.pageOpenedList;</span>
+<span class="cstat-no" title="statement not covered" >                localStorage.pageOpenedList = JSON.stringify(pageOpenedList);</span>
+<span class="cstat-no" title="statement not covered" >                if (this.currentPageName == name) {</span>
+<span class="cstat-no" title="statement not covered" >                    let routerObj = {};</span>
+<span class="cstat-no" title="statement not covered" >                    routerObj.name = lastPageObj.name;</span>
+<span class="cstat-no" title="statement not covered" >                    if (lastPageObj.argu) {</span>
+<span class="cstat-no" title="statement not covered" >                        routerObj.params = lastPageObj.argu;</span>
+                    }
+<span class="cstat-no" title="statement not covered" >                    if (lastPageObj.query) {</span>
+<span class="cstat-no" title="statement not covered" >                        routerObj.query = lastPageObj.query;</span>
+                    }
+<span class="cstat-no" title="statement not covered" >                    if (this.beforePush(lastPageObj)) {</span>
+<span class="cstat-no" title="statement not covered" >                        this.$router.push(routerObj);</span>
+                    }
+                }
+            }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >            this.modal = false;</span>
+        },
+        /** 
+         * 链接对应的页面
+         */
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >        linkTo(item) {</span></span>
+<span class="cstat-no" title="statement not covered" >            let routePath = this.$route.path;</span>
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" >            for (const ite of this.routeList) {</span></span>
+<span class="cstat-no" title="statement not covered" >                if (routePath.indexOf(ite) &gt; -1) {</span>
+<span class="cstat-no" title="statement not covered" >                    this.modal = true;</span>
+<span class="cstat-no" title="statement not covered" >                    this.currentItem = item;</span>
+<span class="cstat-no" title="statement not covered" >                    this.type = 0;</span>
+<span class="cstat-no" title="statement not covered" >                    return false;</span>
+                }
+            }
+<span class="cstat-no" title="statement not covered" >            let routerObj = {};</span>
+<span class="cstat-no" title="statement not covered" >            routerObj.name = item.name;</span>
+<span class="cstat-no" title="statement not covered" >            if (item.argu) {</span>
+<span class="cstat-no" title="statement not covered" >                routerObj.params = item.argu;</span>
+            }
+<span class="cstat-no" title="statement not covered" >            if (item.query) {</span>
+<span class="cstat-no" title="statement not covered" >                routerObj.query = item.query;</span>
+            }
+<span class="cstat-no" title="statement not covered" >            if (this.beforePush(item)) {</span>
+<span class="cstat-no" title="statement not covered" >                this.$router.push(routerObj);</span>
+            }
+        },
+<span class="fstat-no" title="function not covered" >        handlescroll(e) {</span>
+<span class="cstat-no" title="statement not covered" >            var type = e.type;</span>
+<span class="cstat-no" title="statement not covered" >            let delta = 0;</span>
+<span class="cstat-no" title="statement not covered" >            if (type === 'DOMMouseScroll' || type === 'mousewheel') {</span>
+<span class="cstat-no" title="statement not covered" >                delta = (e.wheelDelta) ? e.wheelDelta : -(e.detail || 0) * 40;</span>
+            }
+<span class="cstat-no" title="statement not covered" >            let left = 0;</span>
+<span class="cstat-no" title="statement not covered" >            if (delta &gt; 0) {</span>
+<span class="cstat-no" title="statement not covered" >                left = Math.min(0, this.tagBodyLeft + delta);</span>
+            } else {
+<span class="cstat-no" title="statement not covered" >                if (this.$refs.scrollCon.offsetWidth - 100 &lt; this.$refs.scrollBody.offsetWidth) {</span>
+<span class="cstat-no" title="statement not covered" >                    if (this.tagBodyLeft &lt; -(this.$refs.scrollBody.offsetWidth - this.$refs.scrollCon.offsetWidth + 100)) {</span>
+<span class="cstat-no" title="statement not covered" >                        left = this.tagBodyLeft;</span>
+                    } else {
+<span class="cstat-no" title="statement not covered" >                        left = Math.max(this.tagBodyLeft + delta, this.$refs.scrollCon.offsetWidth - this.$refs.scrollBody.offsetWidth - 100);</span>
+                    }
+                } else {
+<span class="cstat-no" title="statement not covered" >                    this.tagBodyLeft = 0;</span>
+                }
+            }
+<span class="cstat-no" title="statement not covered" >            this.tagBodyLeft = left;</span>
+        },
+<span class="fstat-no" title="function not covered" >        handleTagsOption(type) {</span>
+<span class="cstat-no" title="statement not covered" >            if (type === 'clearAll') {</span>
+<span class="cstat-no" title="statement not covered" >                this.$store.commit('clearAllTags');</span>
+<span class="cstat-no" title="statement not covered" >                this.$router.push({</span>
+                    name: 'home_index'
+                });
+            } else {
+<span class="cstat-no" title="statement not covered" >                this.$store.commit('clearOtherTags', this);</span>
+            }
+<span class="cstat-no" title="statement not covered" >            this.tagBodyLeft = 0;</span>
+        },
+<span class="fstat-no" title="function not covered" >        moveToView(tag) {</span>
+<span class="cstat-no" title="statement not covered" >            if (tag.offsetLeft &lt; -this.tagBodyLeft) {</span>
+                // 标签在可视区域左侧
+<span class="cstat-no" title="statement not covered" >                this.tagBodyLeft = -tag.offsetLeft + 10;</span>
+<span class="cstat-no" title="statement not covered" >            } else if (tag.offsetLeft + 10 &gt; -this.tagBodyLeft &amp;&amp; tag.offsetLeft + tag.offsetWidth &lt; -this.tagBodyLeft + this.$refs.scrollCon.offsetWidth - 100) {</span>
+                // 标签在可视区域
+            } else {
+                // 标签在可视区域右侧
+<span class="cstat-no" title="statement not covered" >                this.tagBodyLeft = -(tag.offsetLeft - (this.$refs.scrollCon.offsetWidth - 100 - tag.offsetWidth) + 20);</span>
+            }
+        }
+    },
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >    mounted() {</span></span>
+<span class="cstat-no" title="statement not covered" >        this.refsTag = this.$refs.tagsPageOpened;</span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >        setTimeout(() =&gt; {</span></span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >            this.refsTag.forEach((item, index) =&gt; {</span></span>
+<span class="cstat-no" title="statement not covered" >                if (this.$route.name === item.name) {</span>
+<span class="cstat-no" title="statement not covered" >                    let tag = this.refsTag[index].$el;</span>
+<span class="cstat-no" title="statement not covered" >                    this.moveToView(tag);</span>
+                }
+            });
+        }, 1);  // 这里不设定时器就会有偏移bug
+<span class="cstat-no" title="statement not covered" >        this.tagsCount = this.tagsList.length;</span>
+    },
+    watch: {
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >        '$route'(to) {</span></span>
+<span class="cstat-no" title="statement not covered" >            this.currentPageName = to.name;</span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >            this.$nextTick(() =&gt; {</span></span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >                this.refsTag.forEach((item, index) =&gt; {</span></span>
+<span class="cstat-no" title="statement not covered" >                    if (to.name === item.name) {</span>
+<span class="cstat-no" title="statement not covered" >                        let tag = this.refsTag[index].$el;</span>
+<span class="cstat-no" title="statement not covered" >                        this.moveToView(tag);</span>
+                    }
+                });
+            });
+<span class="cstat-no" title="statement not covered" >            this.tagsCount = this.tagsList.length;</span>
+        }
+    }
+};
+&lt;/script&gt;
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Fri Mar 09 2018 15:46:08 GMT+0800 (CST)
+</div>
+</div>
+<script src="../../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../../sorter.js"></script>
+</body>
+</html>

@@ -423,7 +423,8 @@
                         datebeginStart:this.searchParams.datebeginStart,
                         datebeginEnd:this.searchParams.datebeginEnd,
                         isExport:this.searchParams.isExport,
-                        orderno:this.searchParams.orderno
+                        orderno:this.searchParams.orderno,
+                        backStatus:2
                     };
                     this.visitorDerExportList(data);
                 }
@@ -436,7 +437,8 @@
             visitorDerExportList (data) {
                 API.FollowBussiness.visitorDerExport(data).then((res) => {
                     if (res.code == 0){
-                        //window.location.href = 'http://192.168.1.215:8080/'+ res.data;
+                        console.log(res)
+                        // window.location.href = 'http://192.168.1.215:8080/'+ res.data;
                         window.location.href = '/'+ res.data;
                         this.showLayer = false;
                         this.idAllArr = [];

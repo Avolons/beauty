@@ -1,0 +1,839 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for src/views/message/message.vue</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../../prettify.css" />
+    <link rel="stylesheet" href="../../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../../index.html">All files</a> / <a href="index.html">src/views/message</a> message.vue
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>0/60</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>0/15</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>0/19</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>0/60</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217
+218
+219
+220
+221
+222
+223
+224
+225
+226
+227
+228
+229
+230
+231
+232
+233
+234
+235
+236
+237
+238
+239
+240
+241
+242
+243
+244
+245
+246
+247
+248
+249
+250
+251
+252
+253
+254
+255
+256
+257
+258
+259</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">&lt;style lang="less"&gt;
+    @import './message.less';
+&lt;/style&gt;
+&nbsp;
+&lt;template&gt;
+    &lt;div class="message-main-con"&gt;
+        &lt;div class="message-mainlist-con"&gt;
+            &lt;div&gt;
+                &lt;Button @click="setCurrentMesType('unread')" size="large" long type="text"&gt;&lt;transition name="mes-current-type-btn"&gt;&lt;Icon v-show="currentMessageType === 'unread'" type="checkmark"&gt;&lt;/Icon&gt;&lt;/transition&gt;&lt;span class="mes-type-btn-text"&gt;未读消息&lt;/span&gt;&lt;Badge class="message-count-badge-outer" class-name="message-count-badge" :count="unreadCount"&gt;&lt;/Badge&gt;&lt;/Button&gt;
+            &lt;/div&gt;
+            &lt;div&gt;
+                &lt;Button @click="setCurrentMesType('hasread')" size="large" long type="text"&gt;&lt;transition name="mes-current-type-btn"&gt;&lt;Icon v-show="currentMessageType === 'hasread'" type="checkmark"&gt;&lt;/Icon&gt;&lt;/transition&gt;&lt;span class="mes-type-btn-text"&gt;已读消息&lt;/span&gt;&lt;Badge class="message-count-badge-outer" class-name="message-count-badge" :count="hasreadCount"&gt;&lt;/Badge&gt;&lt;/Button&gt;
+            &lt;/div&gt;
+            &lt;div&gt;
+                &lt;Button @click="setCurrentMesType('recyclebin')" size="large" long type="text"&gt;&lt;transition name="mes-current-type-btn"&gt;&lt;Icon v-show="currentMessageType === 'recyclebin'" type="checkmark"&gt;&lt;/Icon&gt;&lt;/transition&gt;&lt;span class="mes-type-btn-text"&gt;回收站&lt;/span&gt;&lt;Badge class="message-count-badge-outer" class-name="message-count-badge" :count="recyclebinCount"&gt;&lt;/Badge&gt;&lt;/Button&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class="message-content-con"&gt;
+            &lt;transition name="view-message"&gt;
+                &lt;div v-if="showMesTitleList" class="message-title-list-con"&gt;
+                    &lt;Table ref="messageList" :columns="mesTitleColumns" :data="currentMesList" :no-data-text="noDataText"&gt;&lt;/Table&gt;
+                &lt;/div&gt;
+            &lt;/transition&gt;
+            &lt;transition name="back-message-list"&gt;
+                &lt;div v-if="!showMesTitleList" class="message-view-content-con"&gt;
+                    &lt;div class="message-content-top-bar"&gt;
+                        &lt;span class="mes-back-btn-con"&gt;&lt;Button type="text" @click="backMesTitleList"&gt;&lt;Icon type="chevron-left"&gt;&lt;/Icon&gt;&amp;nbsp;&amp;nbsp;返回&lt;/Button&gt;&lt;/span&gt;
+                        &lt;h3 class="mes-title"&gt;{{ mes.title }}&lt;/h3&gt;
+                    &lt;/div&gt;
+                    &lt;p class="mes-time-con"&gt;&lt;Icon type="android-time"&gt;&lt;/Icon&gt;&amp;nbsp;&amp;nbsp;{{ mes.time }}&lt;/p&gt;
+                    &lt;div class="message-content-body"&gt;
+                        &lt;p class="message-content"&gt;{{ mes.content }}&lt;/p&gt;
+                    &lt;/div&gt;
+                &lt;/div&gt;
+            &lt;/transition&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/template&gt;
+&nbsp;
+&lt;script&gt;
+export default {
+    name: 'message_index',
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >    data () {</span></span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >        const markAsreadBtn = (h, params) =&gt; {</span></span>
+<span class="cstat-no" title="statement not covered" >            return h('Button', {</span>
+                props: {
+                    size: 'small'
+                },
+                on: {
+<span class="fstat-no" title="function not covered" >                    click: () =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >                        this.hasreadMesList.unshift(this.currentMesList.splice(params.index, 1)[0]);</span>
+<span class="cstat-no" title="statement not covered" >                        this.$store.commit('setMessageCount', this.unreadMesList.length);</span>
+                    }
+                }
+            }, '标为已读');
+        };
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >        const deleteMesBtn = (h, params) =&gt; {</span></span>
+<span class="cstat-no" title="statement not covered" >            return h('Button', {</span>
+                props: {
+                    size: 'small',
+                    type: 'error'
+                },
+                on: {
+<span class="fstat-no" title="function not covered" >                    click: () =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >                        this.recyclebinList.unshift(this.hasreadMesList.splice(params.index, 1)[0]);</span>
+                    }
+                }
+            }, '删除');
+        };
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >        const restoreBtn = (h, params) =&gt; {</span></span>
+<span class="cstat-no" title="statement not covered" >            return h('Button', {</span>
+                props: {
+                    size: 'small'
+                },
+                on: {
+<span class="fstat-no" title="function not covered" >                    click: () =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >                        this.hasreadMesList.unshift(this.recyclebinList.splice(params.index, 1)[0]);</span>
+                    }
+                }
+            }, '还原');
+        };
+<span class="cstat-no" title="statement not covered" >        return {</span>
+            currentMesList: [],
+            unreadMesList: [],
+            hasreadMesList: [],
+            recyclebinList: [],
+            currentMessageType: 'unread',
+            showMesTitleList: true,
+            unreadCount: 0,
+            hasreadCount: 0,
+            recyclebinCount: 0,
+            noDataText: '暂无未读消息',
+            mes: {
+                title: '',
+                time: '',
+                content: ''
+            },
+            mesTitleColumns: [
+                // {
+                //     type: 'selection',
+                //     width: 50,
+                //     align: 'center'
+                // },
+                {
+                    title: ' ',
+                    key: 'title',
+                    align: 'left',
+                    ellipsis: true,
+<span class="fstat-no" title="function not covered" >                    render: (h, params) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >                        return h('a', {</span>
+                            on: {
+<span class="fstat-no" title="function not covered" >                                click: () =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >                                    this.showMesTitleList = false;</span>
+<span class="cstat-no" title="statement not covered" >                                    this.mes.title = params.row.title;</span>
+<span class="cstat-no" title="statement not covered" >                                    this.mes.time = this.formatDate(params.row.time);</span>
+<span class="cstat-no" title="statement not covered" >                                    this.getContent(params.index);</span>
+                                }
+                            }
+                        }, params.row.title);
+                    }
+                },
+                {
+                    title: ' ',
+                    key: 'time',
+                    align: 'center',
+                    width: 180,
+<span class="fstat-no" title="function not covered" >                    render: (h, params) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >                        return h('span', [</span>
+                            h('Icon', {
+                                props: {
+                                    type: 'android-time',
+                                    size: 12
+                                },
+                                style: {
+                                    margin: '0 5px'
+                                }
+                            }),
+                            h('span', {
+                                props: {
+                                    type: 'android-time',
+                                    size: 12
+                                }
+                            }, this.formatDate(params.row.time))
+                        ]);
+                    }
+                },
+                {
+                    title: ' ',
+                    key: 'asread',
+                    align: 'center',
+                    width: 100,
+<span class="fstat-no" title="function not covered" >                    render: (h, params) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >                        if (this.currentMessageType === 'unread') {</span>
+<span class="cstat-no" title="statement not covered" >                            return h('div', [</span>
+                                markAsreadBtn(h, params)
+                            ]);
+<span class="cstat-no" title="statement not covered" >                        } else if (this.currentMessageType === 'hasread') {</span>
+<span class="cstat-no" title="statement not covered" >                            return h('div', [</span>
+                                deleteMesBtn(h, params)
+                            ]);
+                        } else {
+<span class="cstat-no" title="statement not covered" >                            return h('div', [</span>
+                                restoreBtn(h, params)
+                            ]);
+                        }
+                    }
+                }
+            ]
+        };
+    },
+    methods: {
+<span class="fstat-no" title="function not covered" >        formatDate (time) {</span>
+<span class="cstat-no" title="statement not covered" >            let date = new Date(time);</span>
+<span class="cstat-no" title="statement not covered" >            let year = date.getFullYear();</span>
+<span class="cstat-no" title="statement not covered" >            let month = date.getMonth() + 1;</span>
+<span class="cstat-no" title="statement not covered" >            let day = date.getDate();</span>
+<span class="cstat-no" title="statement not covered" >            let hour = date.getHours();</span>
+<span class="cstat-no" title="statement not covered" >            let minute = date.getMinutes();</span>
+<span class="cstat-no" title="statement not covered" >            let second = date.getSeconds();</span>
+<span class="cstat-no" title="statement not covered" >            return year + '/' + month + '/' + day + '  ' + hour + ':' + minute + ':' + second;</span>
+        },
+<span class="fstat-no" title="function not covered" >        backMesTitleList () {</span>
+<span class="cstat-no" title="statement not covered" >            this.showMesTitleList = true;</span>
+        },
+<span class="fstat-no" title="function not covered" >        setCurrentMesType (type) {</span>
+<span class="cstat-no" title="statement not covered" >            if (this.currentMessageType !== type) {</span>
+<span class="cstat-no" title="statement not covered" >                this.showMesTitleList = true;</span>
+            }
+<span class="cstat-no" title="statement not covered" >            this.currentMessageType = type;</span>
+<span class="cstat-no" title="statement not covered" >            if (type === 'unread') {</span>
+<span class="cstat-no" title="statement not covered" >                this.noDataText = '暂无未读消息';</span>
+<span class="cstat-no" title="statement not covered" >                this.currentMesList = this.unreadMesList;</span>
+<span class="cstat-no" title="statement not covered" >            } else if (type === 'hasread') {</span>
+<span class="cstat-no" title="statement not covered" >                this.noDataText = '暂无已读消息';</span>
+<span class="cstat-no" title="statement not covered" >                this.currentMesList = this.hasreadMesList;</span>
+            } else {
+<span class="cstat-no" title="statement not covered" >                this.noDataText = '回收站无消息';</span>
+<span class="cstat-no" title="statement not covered" >                this.currentMesList = this.recyclebinList;</span>
+            }
+        },
+<span class="fstat-no" title="function not covered" >        getContent (index) {</span>
+            // you can write ajax request here to get message content
+<span class="cstat-no" title="statement not covered" >            let mesContent = '';</span>
+<span class="cstat-no" title="statement not covered" >            switch (this.currentMessageType + index) {</span>
+<span class="cstat-no" title="statement not covered" >                case 'unread0': mesContent = '这是您点击的《欢迎登录iView-admin后台管理系统，来了解他的用途吧》的相关内容。'; break;</span>
+<span class="cstat-no" title="statement not covered" >                case 'unread1': mesContent = '这是您点击的《使用iView-admin和iView-ui组件库快速搭建你的后台系统吧》的相关内容。'; break;</span>
+<span class="cstat-no" title="statement not covered" >                case 'unread2': mesContent = '这是您点击的《喜欢iView-admin的话，欢迎到github主页给个star吧》的相关内容。'; break;</span>
+<span class="cstat-no" title="statement not covered" >                case 'hasread0': mesContent = '这是您点击的《这是一条您已经读过的消息》的相关内容。'; break;</span>
+<span class="cstat-no" title="statement not covered" >                default: mesContent = '这是您点击的《这是一条被删除的消息》的相关内容。'; break;</span>
+            }
+<span class="cstat-no" title="statement not covered" >            this.mes.content = mesContent;</span>
+        }
+    },
+<span class="fstat-no" title="function not covered" >    mounted () {</span>
+<span class="cstat-no" title="statement not covered" >        this.currentMesList = this.unreadMesList = [</span>
+            {
+                title: '欢迎登录iView-admin后台管理系统，来了解他的用途吧',
+                time: 1507390106000
+            },
+            {
+                title: '使用iView-admin和iView-ui组件库快速搭建你的后台系统吧',
+                time: 1507390106000
+            },
+            {
+                title: '喜欢iView-admin的话，欢迎到github主页给个star吧',
+                time: 1507390106000
+            }
+        ];
+<span class="cstat-no" title="statement not covered" >        this.hasreadMesList = [</span>
+            {
+                title: '这是一条您已经读过的消息',
+                time: 1507330106000
+            }
+        ];
+<span class="cstat-no" title="statement not covered" >        this.recyclebinList = [</span>
+            {
+                title: '这是一条被删除的消息',
+                time: 1506390106000
+            }
+        ];
+<span class="cstat-no" title="statement not covered" >        this.unreadCount = this.unreadMesList.length;</span>
+<span class="cstat-no" title="statement not covered" >        this.hasreadCount = this.hasreadMesList.length;</span>
+<span class="cstat-no" title="statement not covered" >        this.recyclebinCount = this.recyclebinList.length;</span>
+    },
+    watch: {
+<span class="fstat-no" title="function not covered" >        unreadMesList (arr) {</span>
+<span class="cstat-no" title="statement not covered" >            this.unreadCount = arr.length;</span>
+        },
+<span class="fstat-no" title="function not covered" >        hasreadMesList (arr) {</span>
+<span class="cstat-no" title="statement not covered" >            this.hasreadCount = arr.length;</span>
+        },
+<span class="fstat-no" title="function not covered" >        recyclebinList (arr) {</span>
+<span class="cstat-no" title="statement not covered" >            this.recyclebinCount = arr.length;</span>
+        }
+    }
+};
+&lt;/script&gt;
+&nbsp;
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Fri Mar 09 2018 15:46:08 GMT+0800 (CST)
+</div>
+</div>
+<script src="../../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../../sorter.js"></script>
+</body>
+</html>

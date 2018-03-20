@@ -5,9 +5,9 @@
 		<Row class="planRe_main_search" :gutter="15">
 			<Col span="6">
 			<span>
-				患者姓名
+				客户姓名
 			</span>
-			<Input type="text" v-model="searchParams.brxm" placeholder="请输入患者姓名"></Input>
+			<Input type="text" v-model="searchParams.brxm" placeholder="请输入客户姓名"></Input>
 			</Col>
 			<Col span="6">
 			<span>
@@ -51,7 +51,7 @@
 		</Row>
 		</Col>
 		<!-- 就诊档案模态框 -->
-    <Modal v-model="patientDetail" title="患者信息" class-name="patientInfo" :styles="{top: '36px'}" width="1000">
+    <Modal v-model="patientDetail" title="客户信息" class-name="patientInfo" :styles="{top: '36px'}" width="1000">
       <Row class="infoRow">
         <Col span="12" class="info-col mb12">
           <div class="info">
@@ -148,7 +148,7 @@
                 <span>就诊卡号:</span><span>{{currentData.jzkh}}</span>
               </Col>
               <Col span="12">
-                <span>患者性质:</span><span>{{currentData.brxz}}</span>
+                <span>客户性质:</span><span>{{currentData.brxz}}</span>
               </Col>
               <Col span="12">
                 <span>就诊时间:</span><span>{{item.jzrq}}</span>
@@ -188,7 +188,7 @@
                 <span>住院号:</span><span>{{item1.zyhm}}</span>
               </Col>
               <Col span="12">
-                <span>患者性质:</span><span>{{currentData.brxz}}</span>
+                <span>客户性质:</span><span>{{currentData.brxz}}</span>
               </Col>
               <Col span="12">
                 <span>入院时间:</span><span>{{item1.admissiontime}}</span>
@@ -271,7 +271,7 @@ export default {
 		return {
 			//搜索选项
 			searchParams: {
-				brxm: '',//患者姓名
+				brxm: '',//客户姓名
 				schemeName: '',//随访方案
 				brxm: "",
 				adminName: "",
@@ -289,7 +289,7 @@ export default {
 					align: 'center'
 				},
 				{
-					title: '患者姓名',
+					title: '客户姓名',
 					key: 'brxm',
 					align: 'center',
           render: (h, params)=>{
@@ -448,13 +448,13 @@ export default {
 			id: -1,//当前被选中的数据id
 			totalPage: 100,//总页数
 			haveSelect: [],
-			//当前被点击患者，编辑和详情按钮触发时更换数据
+			//当前被点击客户，编辑和详情按钮触发时更换数据
       currentData: {},
       //门急诊信息
       mjzData: [],
       //住院信息
       zyData: [],
-      //患者档案模态框
+      //客户档案模态框
       patientDetail: false,
       //随访计划详情
       sfjhModel: false,
@@ -533,7 +533,7 @@ export default {
 			this.$refs.selection.selectAll(status);
 		},
 		/** 
-     * 查看患者详情
+     * 查看客户详情
      */
     getInfo(id) {
       API.FollowBussiness.detailPat({

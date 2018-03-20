@@ -1,10 +1,14 @@
 <style lang="less">
 .main .single-page-con .single-page{
     height: 100%;
+
 }
 .busadd {
     height: 100%;
     &_main {
+        .ivu-auto-complete.ivu-select-dropdown{
+            max-height: 310px;
+        }
         height: 100%;
         background: #fff;
         border-radius: 4px;
@@ -85,8 +89,11 @@
                 <FormItem label="手机号码" prop="tel" style="width:450px;">
                     <Input v-model="formData.tel" placeholder="请输入手机号码"></Input>
                 </FormItem>
-                <FormItem label="专属号码"  style="width:450px;">
-                    <Input v-model="formData.mobile" placeholder="请输入手机号码"></Input>
+                <FormItem label="专属号码" prop="mobile"  style="width:450px;">
+                   <!--  <Input v-model="formData.mobile" placeholder="请输入专属号码"></Input> -->
+                    <AutoComplete clearable v-model="formData.mobile" placeholder="请输入专属号码">
+                        <Option v-for="item in numberList" :value="item.value" :key="item.id">{{ item.value }}</Option>
+                    </AutoComplete>
                 </FormItem>
                 <FormItem label="身份"  style="width:450px;">
                     <Select  v-model="formData.types" style="width:200px">
@@ -149,6 +156,7 @@ export default {
             roleList: [],//角色列表
             List: [],
             //角色列表
+            numberList:[],//专属号码列表
         }
     },
     methods: {
@@ -160,6 +168,16 @@ export default {
                 id: this.id
             }).then((res) => {
                 this.formData=this.dataForm(res.data,res.roles);
+            }).catch((err) => {
+
+            });
+        },
+        /** 
+         * 获取专属号码列表
+         */
+        getNumberList(){
+            API.Jurisdiction.userNumber().then((res) => {
+                this.numberList=res.data;
             }).catch((err) => {
 
             });
@@ -236,12 +254,14 @@ export default {
                     if (this.id == -1) {
                         API.Jurisdiction.addUser(copyData).then((res) => {
                             this.$Message.success("新增成功");
+                            window.history.back();
                         }).catch((err) => {
 
                         });
                     } else {
                         API.Jurisdiction.editUser(copyData).then((res) => {
                             this.$Message.success("修改成功");
+                            window.history.back();
                         }).catch((err) => {
 
                         });
@@ -273,6 +293,7 @@ export default {
             this.getData();
         }
         this.init();
+        this.getNumberList();
     }
 }
 </script>

@@ -25,7 +25,7 @@
             <span>
 				随防方案
 			</span>
-            <Input type="text" v-model="searchParams.schemeName" placeholder="请输入患者姓名"></Input>
+            <Input type="text" v-model="searchParams.schemeName" placeholder="请输入客户姓名"></Input>
             </Col>
             <Col span="6" style="height:32px;margin-top:10px">
             <span>
@@ -409,7 +409,7 @@
                 // 表格data
                 dataList: [],
                 follInfo: false, // 详情模态框
-                // 当前被点击患者，编辑和详情按钮触发时更换数据
+                // 当前被点击客户，编辑和详情按钮触发时更换数据
                 currentData: {},
                 // 门急诊信息
                 mjzData: [],
@@ -495,7 +495,8 @@
                         dateAddEnd:this.searchParams.dateAddEnd,
                         datebeginStart:this.searchParams.datebeginStart,
                         datebeginEnd:this.searchParams.datebeginEnd,
-                        isExport:this.searchParams.isExport
+                        isExport:this.searchParams.isExport,
+                        backStatus:this.searchParams.backStatus
                     };
                     this.visitorDerExportList(data);
                 }

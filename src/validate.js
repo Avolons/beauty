@@ -1,6 +1,6 @@
 let ruleList = {
     mobile: /^(\(\d{3,4}\)|\d{3,4}-)?\d{7,8}$/,
-    code: /^1(3|4|5|7|8)[0-9]\d{8}$/,
+    code: /^1(3|4|5|6|7|8|9)[0-9]\d{8}$/,
     name: /^[\u4E00-\u9FA5\uf900-\ufa2d·s]{2,20}$/
 };
 export default {
@@ -126,12 +126,17 @@ export default {
             message: '请填写名称',
             trigger: 'blur'
         }],
-        paixu: [{
-            required: true,
-            type: 'number',
-            message: '请填写序号',
-            trigger: 'blur'
-        }],
+        paixu: [
+            {
+                required: true,
+                type: 'number',
+                message: '请填写序号',
+                trigger: 'blur',
+                transform (value) {
+                return Number(value);
+            }
+            }
+        ],
         types: [{
             required: true,
             message: '请选择类型',
@@ -239,10 +244,9 @@ export default {
             pattern: ruleList.code,
             trigger: 'blur'
         }],
-        types: [{
-            required: false,
-            message: '请输入正确的手机号码',
-            pattern: ruleList.code,
+        mobile: [{
+            required: true,
+            message: '请输入正确的专属号码',
             trigger: 'blur'
         }],
         rIds: [{

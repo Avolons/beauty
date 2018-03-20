@@ -48,7 +48,7 @@
                 <Table border :columns="config" :data="dataList"></Table>
             </div>
             <Row class="role_main_page" v-if="totalPage>10">
-                    <Page :total="totalPage" :current="1" style="float:right" @on-change="changePage"></Page>
+                    <Page :total="totalPage" :current="page" style="float:right" @on-change="changePage"></Page>
             </Row>
             <Modal v-model="modal" :title="title" width="1000">
                 <Form ref="addData" class="role_main_form" :model="formData" :rules="validate.system" :label-width="80">
@@ -76,7 +76,7 @@
 import { API } from '../../../services';
 import {mapGetters, mapActions} from 'vuex';
 export default {
-    data() {
+    data () {
         return {
             title: "编辑参数",
             modal: false,
@@ -93,10 +93,10 @@ export default {
             //权限列表
             treeData: [],
             config: [
-                {
-                    title: '编号',
-                    key: 'id',
-                },
+                // {
+                //     title: '编号',
+                //     key: 'id',
+                // },
                 {
                     title: '名称',
                     key: 'name'
@@ -126,10 +126,10 @@ export default {
                                 on: {
                                     click: () => {
                                         this.editRole(params.row.id,1);
-//                                        //保存数据  当再次返回的时候进行重新赋值
-//                                        this.saveRoleManageRecord({
-//                                            "page":this.searchParam.page,       //页码
-//                                        });
+                                       //保存数据  当再次返回的时候进行重新赋值
+                                       this.saveRoleManageRecord({
+                                           'page': this.page       //页码
+                                       });
 
                                     }
                                 }
@@ -166,15 +166,14 @@ export default {
             ]
         }
     },
-    computed:{
+    computed: {
         ...mapGetters([
             'authorToken'
-        ]),
+        ])
     },
-
     methods: {
         ...mapActions(['saveRoleManageRecord']),
-        submitRole() {
+        submitRole () {
             this.$refs['addData'].validate((valid) => {
                 if (valid) {
                     API.Systems.addSystem(this.formData).then((res) => {
@@ -191,7 +190,7 @@ export default {
 
                     });
                 } else {
-                    this.$Message.error('补全信息!');
+                    /* this.$Message.error('补全信息!'); */
                     return false;
                 }
 
@@ -200,15 +199,21 @@ export default {
         /**
          * 获取数据 搜索角色名称
          */
-        searchBus(){
+        searchBus () {
+            this.page = 1;
             this.getData();
+            //保存数据  当再次返回的时候进行重新赋值
+            this.saveRoleManageRecord({
+                'page': this.page,       //页码
+                'content':this.roleName
+            });
         },
         /**
          * 分页改变,返回点击后的分页代码
          */
-        changePage(index){
-            this.page=index;
-            this.getList();
+        changePage (index) {
+            this.page = index;
+            this.getData();
         },
         /**
          * 点击取消  进行重置
@@ -329,7 +334,11 @@ export default {
                 }
             });
         },
-    }, mounted() {
+    },
+    mounted () {
+        /* 重置所有条件 */
+        this.page = this.authorToken.roleManage.page;
+        this.roleName = this.authorToken.roleManage.content;
         this.getData();
     }
 }

@@ -1,11 +1,7 @@
 import Vue from 'vue';
 import iView from 'iview';
-import {
-    router
-} from './router/index';
-import {
-    appRouter
-} from './router/router';
+import { router } from './router/index';
+import { appRouter } from './router/router';
 import store from './store';
 import App from './app.vue';
 import '@/locale';
@@ -13,9 +9,7 @@ import 'iview/dist/styles/iview.css';
 import VueI18n from 'vue-i18n';
 import validate from './validate.js';
 import promise from 'es6-promise';
-import {
-    AM
-} from './accessMenu.js';
+import { AM } from './accessMenu.js';
 
 Vue.prototype.AM = AM;
 

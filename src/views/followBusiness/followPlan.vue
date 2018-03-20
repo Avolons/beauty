@@ -5,9 +5,9 @@
     <Row class="inter-down_main_search" :gutter="15">
       <Col span="6">
       <span>
-        患者姓名
+        客户姓名
       </span>
-      <Input type="text" v-model="searchParams.brxm" placeholder="请输入患者姓名"></Input>
+      <Input type="text" v-model="searchParams.brxm" placeholder="请输入客户姓名"></Input>
       </Col>
       <Col span="6">
       <span>
@@ -27,20 +27,20 @@
       <span>
         生成日期：
       </span>
-      <DatePicker @on-change="timeChange_one" type="datetimerange" placement="bottom-end" placeholder="请选择生成日期"></DatePicker>
+      <DatePicker @on-change="timeChange_one" type="daterange" placement="bottom-end" placeholder="请选择生成日期"></DatePicker>
       </Col>
       <Col span="6" style="height:32px;margin-top:10px">
       <span style="width:105px;height:32px;">
         计划开始日期：
       </span>
-      <DatePicker @on-change="timeChange_two" type="datetimerange" placeholder="请选择计划开始日期" style="width:calc(100% - 105px)"></DatePicker>
+      <DatePicker @on-change="timeChange_two" type="daterange" placeholder="请选择计划开始日期" style="width:calc(100% - 105px)"></DatePicker>
       </Col>
-      <Col span="6" style="height:32px;margin-top:10px">
-      <span>
-        审核日期：
-      </span>
-      <DatePicker @on-change="timeChange_three" type="datetimerange" placeholder="请选择审核日期"></DatePicker>
-      </Col>
+      <!--  <Col span="6" style="height:32px;margin-top:10px">
+          <span>
+            审核日期：
+          </span>
+          <DatePicker @on-change="timeChange_three" type="daterange" placeholder="请选择审核日期"></DatePicker>
+          </Col> -->
       <Col span="6" style="margin-top:10px">
       <Button type="primary" @click="searchParams.pager=1;getData()">查询</Button>
       </Col>
@@ -65,7 +65,7 @@
       </Form>
     </Modal>
     <!-- 就诊档案 -->
-    <Modal v-model="patientDetail" title="患者信息" class-name="patientInfo" :styles="{top: '36px'}" width="1000">
+    <Modal v-model="patientDetail" title="客户信息" class-name="patientInfo" :styles="{top: '36px'}" width="1000">
       <Row class="infoRow">
         <Col span="12" class="info-col mb12">
         <div class="info">
@@ -163,7 +163,7 @@
             <span>{{currentData.jzkh}}</span>
             </Col>
             <Col span="12">
-            <span>患者性质:</span>
+            <span>客户性质:</span>
             <span>{{currentData.brxz}}</span>
             </Col>
             <Col span="12">
@@ -211,7 +211,7 @@
             <span>{{item1.zyhm}}</span>
             </Col>
             <Col span="12">
-            <span>患者性质:</span>
+            <span>客户性质:</span>
             <span>{{currentData.brxz}}</span>
             </Col>
             <Col span="12">
@@ -333,7 +333,7 @@ export default {
       createLoading: true,     //loading 动画加载中
       //搜索选项
       searchParams: {
-        brxm: '',//患者姓名
+        brxm: '',//客户姓名
         schemeName: '',//随访方案
         status: '',//审核状态
         pager: 1,//
@@ -341,8 +341,8 @@ export default {
         dateAddEnd: "",  //生成结束日期（可选）
         VisitStartTimeBegin: "", //计划开始日期（可选）
         VisitStartTimeEnd: "",    //计划结束日期（可选）
-        dateVetBegin: "",         //审核开始日期（可选）
-        dateVetEnd: "",         //审核结束日期（可选）
+        //dateVetBegin: "",         //审核开始日期（可选）
+        //dateVetEnd: "",         //审核结束日期（可选）
         limit: 10,//每页条数
       },
       //列表配置
@@ -354,7 +354,7 @@ export default {
           width: 70,
         },
         {
-          title: '患者姓名',
+          title: '客户姓名',
           key: 'brxm',
           align: 'center',
           render: (h, params) => {
@@ -378,11 +378,11 @@ export default {
             ])
           }
         },
-        {
-          title: '疾病诊断',
-          key: 'icdName',
-          align: 'center'
-        },
+        /*  {
+           title: '疾病诊断',
+           key: 'icdName',
+           align: 'center'
+         }, */
         {
           title: '随访方案',
           key: 'schemeName',
@@ -403,7 +403,7 @@ export default {
           key: 'visitStartTime',
           align: 'center'
         },
-        {
+        /* {
           title: '审核时间',
           key: 'dateVet',
           align: 'center'
@@ -412,11 +412,11 @@ export default {
           title: '随访进度',
           key: 'totalNum',
           align: 'center'
-        },
+        }, */
         {
           title: '操作',
           key: 'action',
-          width: 250,
+          width: 200,
           align: 'center',
           /** 
            * 按钮状态
@@ -441,7 +441,7 @@ export default {
                 on: {
                   click: () => {
                     this.followShow = true;
-                    this.sfMobile(params.row.hzxxId)
+                    this.sfMobile(params.row.hzxxId);
                     this.startPlan(params.row.id);
                   }
                 }
@@ -485,7 +485,7 @@ export default {
                   }
                 }
               }, '终止随访'),
-              h('Button', {
+              /* h('Button', {
                 props: {
                   type: 'warning',
                   size: 'small'
@@ -501,7 +501,7 @@ export default {
                     this.deletPlan(params.row.id)
                   }
                 }
-              }, '删除')
+              }, '删除') */
             ]);
           }
         }],
@@ -513,23 +513,11 @@ export default {
           id: ""
         },
         {
-          name: "待审核",
-          id: 0
-        },
-        {
-          name: "不通过",
-          id: 1
-        },
-        {
-          name: "审核通过",
-          id: 2
-        },
-        {
           name: "已排期",
           id: 3
         },
         {
-          name: "已取消",
+          name: "已停止",
           id: 4
         }
       ],//审核状态选项列表
@@ -540,7 +528,7 @@ export default {
       AIform: {
         AIphone: '',
       },
-      //当前被点击患者，编辑和详情按钮触发时更换数据
+      //当前被点击客户，编辑和详情按钮触发时更换数据
       currentData: {},
       //门急诊信息
       mjzData: [],
@@ -571,7 +559,7 @@ export default {
           brxm: '',
         },
       },//随访计划详情
-      sfStatus: '',//当前患者的随访状态
+      sfStatus: '',//当前客户的随访状态
     }
   },
   methods: {
@@ -615,7 +603,7 @@ export default {
       API.FollowBussiness.gethzxx({
         id: id
       }).then((res) => {
-        this.AIform.AIphone = res.data.jtdh
+        this.AIform.AIphone = res.data.jtdh;
       }).catch((err) => {
         //弹出错误信息
         this.$Message.error(err);
@@ -626,8 +614,8 @@ export default {
       this.$refs[name].validate((valid) => {
         if (valid) {
           /** 
- * 此处填写具体的ajax请求
- */
+           * 此处填写具体的ajax请求
+           */
           API.FollowBussiness.startPlan({
             id: this.id,
             phone: this.AIform.AIphone
@@ -687,17 +675,23 @@ export default {
       this.getData();
     },
     /** 
-     * 查看患者详情
+     * 查看客户详情
      */
     getInfo(id) {
       API.FollowBussiness.detailPat({
         id: id
       }).then((res) => {
+        //mjzs //门急诊信息
         if (res.data.mjzs.length) {
-          this.mjzData = res.data.mjzs
+          this.mjzData = res.data.mjzs;
+        } else {
+          this.mjzData = [];
         }
+        //住院信息
         if (res.data.cyxjs.length) {
-          this.zyData = res.data.cyxjs
+          this.zyData = res.data.cyxjs;
+        } else {
+          this.zyData = [];
         }
         this.currentData = res.data;
       }).catch((err) => {
@@ -930,7 +924,7 @@ export default {
       margin: 16px 0 0px;
       padding-bottom: 16px;
       background: #f0f0f0;
-      border-radius: 10px; //患者基本信息
+      border-radius: 10px; //客户基本信息
       .patientMs {
         background: #fff;
         line-height: 30px;

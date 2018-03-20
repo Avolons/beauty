@@ -16,7 +16,7 @@
                 </Row>
             </Col>
             <Col span="16" class="height-100">
-                <Row type="flex" align="middle" justify="center" class="height-100">
+                <Row type="flex" align="middle"  class="height-100">
                     <count-up 
                         class="infor-card-count user-created-count" 
                         :id-name="idName" 
@@ -25,6 +25,7 @@
                         :color="color"
                         :countSize="countSize"
                         :countWeight="countWeight"
+                        :params="params"
                     >
                     <p class="infor-intro-text" slot="intro">{{ introText }}</p>
                     </count-up>
@@ -52,6 +53,9 @@ export default {
         countSize: {
             type: String,
             default: '30px'
+        },
+        params:{
+            type:Array,
         },
         countWeight: {
             type: Number,

@@ -15,9 +15,9 @@
 		<Row class="planRe_main_search" :gutter="15">
 			<Col span="6">
 			<span>
-				患者姓名
+				客户姓名
 			</span>
-			<Input type="text" v-model="searchParams.brxm" placeholder="请输入患者姓名"></Input>
+			<Input type="text" v-model="searchParams.brxm" placeholder="请输入客户姓名"></Input>
 			</Col>
 			<Col span="6">
 			<span>
@@ -67,7 +67,7 @@ export default {
 				limit: 10,     //每页条数
 				schemeName: "",//方案名称（可选）
 				adminName: "", //医生
-				brxm: "",      //患者姓名（可选）
+				brxm: "",      //客户姓名（可选）
 				status: "",    //状态 :0 待审核 1 不通过 2 审核通过 3 已排期 4 已取消
 				type: 2        //必须传，且为2
 			},
@@ -88,7 +88,7 @@ export default {
 					}
 				},
 				{
-					title: '患者姓名',
+					title: '客户姓名',
 					key: 'brxm',
 				},
 				{

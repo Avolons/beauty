@@ -182,13 +182,13 @@ export default {
                         return params.row.admin.type == 0 ? "管理员" : "医生";
                     }
                 },
-                {
-                    title: '最后登录时间',
-                    key: 'time',
-                    render: (h, params) => {
-                        return params.row.admin.lastVisitDate
-                    }
-                },
+                // {
+                //     title: '最后登录时间',
+                //     key: 'time',
+                //     render: (h, params) => {
+                //         return params.row.admin.lastVisitDate
+                //     }
+                // },
                 {
                     title: '默认方案',
                     key: 'dvtName',
@@ -201,7 +201,7 @@ export default {
                     }
                 },
                 {
-                    title: '手机号码',
+                    title: '专属号码',
                     key: 'mobile',
                     render: (h, params) => {
                         return params.row.admin.mobile
@@ -479,7 +479,7 @@ export default {
             if (this.newPassword.trim()) {
                 API.Jurisdiction.updataPass({
                     id: this.UserId,
-                    pwd: this.newPassword
+                    pwd: this.newPassword.trim()
                 }).then((res) => {
                     this.$Message.success("密码重置成功");
                     this.getData();
@@ -548,7 +548,6 @@ export default {
          * 删除用户
          */
         delUser(id) {
-            this.createLoading = true;
             let self = this;
             this.$Modal.confirm({
                 title: '删除用户',
@@ -557,6 +556,7 @@ export default {
                     API.Jurisdiction.delUser({
                         id: id
                     }).then((res) => {
+                        this.createLoading = true;
                         self.$Message.success("删除成功");
                         self.getData();
                     }).catch((err) => {

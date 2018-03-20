@@ -11,9 +11,9 @@
 			</Col>
 			<Col span="6">
 			<span>
-				患者姓名
+				客户姓名
 			</span>
-			<Input type="text" v-model="searchParams.brxm" placeholder="请输入患者姓名"></Input>
+			<Input type="text" v-model="searchParams.brxm" placeholder="请输入客户姓名"></Input>
 			</Col>
 			<Col span="6">
 			<span>
@@ -74,7 +74,7 @@
 					<div slot="content" class="followResult_table">
 						<table border="1">
 							<tr>
-								<td>患者姓名</td>
+								<td>客户姓名</td>
 								<td>{{planInfo.brxm}}</td>
 								<td>采用随访方案</td>
 								<td>{{planInfo.schemeName}}</td>
@@ -148,7 +148,7 @@
 			</Collapse>
 		</Modal>
 		<!-- 详情模态框 -->
-		<Modal v-model="patientDetail" title="患者信息" class-name="patientInfo" :styles="{top: '36px'}" width="1000">
+		<Modal v-model="patientDetail" title="客户信息" class-name="patientInfo" :styles="{top: '36px'}" width="1000">
 			<Row class="infoRow">
 				<Col span="12" class="info-col mb12">
 				<div class="info">
@@ -231,7 +231,7 @@
 				</div>
 				</Col>
 				<!-- 门诊 -->
-				<Col span="24" class="info-co-public" v-if="mjzData.length" v-for="item,index in mjzData" :key="index">
+				<Col span="24"   class="info-co-public" v-if="mjzData.length" v-for="item,index in mjzData" :key="index">
 				<Row class="infoRow2">
 					<Col span="4" class="sfCol4">
 					<div class="counts">
@@ -240,13 +240,13 @@
 					</Col>
 					<Col span="20" class="sfCol20">
 					<h3 class="sfName">{{currentData.brxm}}</h3>
-					<Row>
+					<Row :gutter="15"  class="result_patinfo">
 						<Col span="12">
 						<span>就诊卡号:</span>
 						<span>{{currentData.jzkh}}</span>
 						</Col>
 						<Col span="12">
-						<span>患者性质:</span>
+						<span>客户性质:</span>
 						<span>{{currentData.brxz}}</span>
 						</Col>
 						<Col span="12">
@@ -288,13 +288,13 @@
 					</Col>
 					<Col span="20" class="sfCol20">
 					<h3 class="sfName">{{currentData.brxm}}</h3>
-					<Row>
-						<Col span="12">
+					<Row :gutter="15" >
+						<Col span="12" class="result_patinfo">
 						<span>住院号:</span>
 						<span>{{item1.zyhm}}</span>
 						</Col>
 						<Col span="12">
-						<span>患者性质:</span>
+						<span>客户性质:</span>
 						<span>{{currentData.brxz}}</span>
 						</Col>
 						<Col span="12">
@@ -378,7 +378,7 @@ export default {
 				limit: 10,//每页条数
 				schemeName: "",//方案名称（可选）
 				orderNo: "",//编码（可选）
-				brxm: "", //患者姓名（可选）
+				brxm: "", //客户姓名（可选）
 				status: "",
 				dateAddBegin: "",  //生成开始日期（可选）
 				dateAddEnd: "",  //生成结束日期（可选）
@@ -433,7 +433,7 @@ export default {
 					align: 'center'
 				},
 				{
-					title: '患者姓名',
+					title: '客户姓名',
 					key: 'brxm',
 					align: 'center',
 					render: (h, params) => {
@@ -567,7 +567,7 @@ export default {
 			//表格data
 			dataList: [],
 			follInfo: false,//详情模态框
-			//当前被点击患者，编辑和详情按钮触发时更换数据
+			//当前被点击客户，编辑和详情按钮触发时更换数据
 			currentData: {},
 			//门急诊信息
 			mjzData: [],
@@ -592,7 +592,7 @@ export default {
 					{ required: true, message: '请输入详情', trigger: 'blur' },
 				]
 			},
-			sfStatus: '',//当前患者的随访状态
+			sfStatus: '',//当前客户的随访状态
 			haveSelect: [],
 			clickAll: false,//是否是批量选择
 		}
@@ -614,6 +614,7 @@ export default {
 		},
 		selectAll(selection) {
 			this.haveSelect = selection;
+			this.clickAll = true;
 		},
 		timeChange_one(date) {
 			this.searchParams.dateAddBegin = date[0];
@@ -702,7 +703,7 @@ export default {
 			});
 		},
 		/** 
-     * 查看患者详情
+     * 查看客户详情
      */
 		getInfo(id) {
 			API.FollowBussiness.detailPat({
@@ -730,7 +731,8 @@ export default {
 			this.nowId = id;
 			this.sfStatus = sfStatus; //获取当前的随访状态,3=停止
 			if (sfStatus == '3') {
-				this.$refs.sfStatusBtn.$el.setAttribute('disabled', true)
+				this.$refs.sfStatusBtn.$el.setAttribute('disabled', true);
+				/* return false; */
 			} else {
 				this.$refs.sfStatusBtn.$el.removeAttribute('disabled')
 			}
@@ -760,8 +762,8 @@ export default {
 		zzsfOk(name) {
 			this.$refs[name].validate((valid) => {
 				if (valid) {
-					if (this.selectAll) {
-						let ids=[];
+					if (this.clickAll) {
+						let ids = [];
 						for (const item of this.haveSelect) {
 							ids.push(item.id);
 						}
@@ -772,14 +774,14 @@ export default {
 						}).then((res) => {
 							this.$Message.success('成功!');
 							this.zzsfModel = false;
-							this.selectAll = false;
+							this.clickAll = false;
 							this.zzsfForm.select = '';
 							this.zzsfForm.textarea = '';
 							this.getData(this.searchParams.pager);
 						}).catch((err) => {
 							//弹出错误信息
 							this.$Message.error(err);
-							this.selectAll = false;
+							this.clickAll = false;
 						});
 					} else {
 						API.Dataaudit.cancelall({
@@ -812,6 +814,11 @@ export default {
 <style lang="less">
 @import "../../styles/common.less";
 @import "../../styles/jzda.less";
+.result_patinfo{
+	.ivu-col{
+		margin-top: 5px;
+	}
+}
 .followResult {
 	&_single {
 		&_ai {

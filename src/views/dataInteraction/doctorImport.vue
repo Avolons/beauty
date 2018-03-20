@@ -15,7 +15,6 @@
 		<Upload ref="upload" 
 				:format="['xml','xls','png']" 
 				:on-format-error="handleFormatError" 
-				:on-exceeded-size="handleMaxSize" 
 				:before-upload="handleBeforeUpload" 
 				:on-success="handleSuccess" 
 				multiple 
@@ -96,11 +95,13 @@ export default {
 					this.$Message.warning("上传失败");
 				}
 			}
+			this.$Spin.hide();
 		},
 		handleFormatError(file) {
+			this.$Spin.hide();
 			this.$Notice.warning({
-				title: 'The file format is incorrect',
-				desc: 'File format of ' + file.name + ' is incorrect, please select jpg or png.'
+				title: '文件格式错误',
+				desc:  file.name + ' 格式不正确, 请选择 xls 或者 xlsx 格式文件.'
 			});
 		},
 		handleMaxSize(file) {
@@ -111,6 +112,7 @@ export default {
 		},
 		handleBeforeUpload() {
 			const check = this.uploadList.length < 5;
+			this.$Spin.show();
 			if (!check) {
 				this.$Notice.warning({
 					title: 'Up to five pictures can be uploaded.'

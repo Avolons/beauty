@@ -1,0 +1,365 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for src/libs/table2excel.js</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../prettify.css" />
+    <link rel="stylesheet" href="../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../index.html">All files</a> / <a href="index.html">src/libs</a> table2excel.js
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>0/65</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>0/22</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>0/10</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>0/63</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">var idTmr;
+function <span class="fstat-no" title="function not covered" >getExplorer () {</span>
+    var explorer = <span class="cstat-no" title="statement not covered" >window.navigator.userAgent;</span>
+<span class="cstat-no" title="statement not covered" >    if (explorer.indexOf('MSIE') &gt;= 0) {</span>
+        // ie
+<span class="cstat-no" title="statement not covered" >        return 'ie';</span>
+    } else <span class="cstat-no" title="statement not covered" >if (explorer.indexOf('Firefox') &gt;= 0) {</span>
+        // firefox
+<span class="cstat-no" title="statement not covered" >        return 'Firefox';</span>
+    } else <span class="cstat-no" title="statement not covered" >if (explorer.indexOf('Chrome') &gt;= 0) {</span>
+        // Chrome
+<span class="cstat-no" title="statement not covered" >        return 'Chrome';</span>
+    } else <span class="cstat-no" title="statement not covered" >if (explorer.indexOf('Opera') &gt;= 0) {</span>
+        // Opera
+<span class="cstat-no" title="statement not covered" >        return 'Opera';</span>
+    } else <span class="cstat-no" title="statement not covered" >if (explorer.indexOf('Safari') &gt;= 0) {</span>
+        // Safari
+<span class="cstat-no" title="statement not covered" >        return 'Safari';</span>
+    };
+};
+function <span class="fstat-no" title="function not covered" >tranform (table, aId, name) {</span>
+    let tableHead = <span class="cstat-no" title="statement not covered" >table.$children[0].$el;</span>
+    let tableBody = <span class="cstat-no" title="statement not covered" >table.$children[1].$el;</span>
+    let tableInnerHTML = <span class="cstat-no" title="statement not covered" >'&lt;thead&gt;&lt;tr&gt;';</span>
+<span class="cstat-no" title="statement not covered" >    if (table.$children.length !== 1) {</span>
+        let len = <span class="cstat-no" title="statement not covered" >tableBody.rows.length;</span>
+        let i = <span class="cstat-no" title="statement not covered" >-1;</span>
+<span class="cstat-no" title="statement not covered" >        while (i &lt; len) {</span>
+<span class="cstat-no" title="statement not covered" >            if (i === -1) {</span>
+<span class="cstat-no" title="statement not covered" >                Array.from(tableHead.rows[0].children).forEach(<span class="fstat-no" title="function not covered" >(</span>td) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >                    tableInnerHTML = tableInnerHTML + '&lt;th&gt;' + td.children[0].children[0].innerHTML + '&lt;/th&gt;';</span>
+                });
+<span class="cstat-no" title="statement not covered" >                tableInnerHTML += '&lt;/tr&gt;&lt;thead&gt;&lt;tbody&gt;';</span>
+            } else {
+<span class="cstat-no" title="statement not covered" >                tableInnerHTML += '&lt;tr&gt;';</span>
+<span class="cstat-no" title="statement not covered" >                Array.from(tableBody.rows[i].children).forEach(<span class="fstat-no" title="function not covered" >(</span>td) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >                    tableInnerHTML = tableInnerHTML + '&lt;td&gt;' + td.children[0].children[0].innerHTML + '&lt;/td&gt;';</span>
+                });
+<span class="cstat-no" title="statement not covered" >                tableInnerHTML += '&lt;/tr&gt;';</span>
+            }
+<span class="cstat-no" title="statement not covered" >            i++;</span>
+        }
+<span class="cstat-no" title="statement not covered" >        tableInnerHTML += '&lt;/tbody&gt;';</span>
+    }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    if (getExplorer() !== 'Safari' &amp;&amp; name.substr(-1, 4) !== '.xls') {</span>
+<span class="cstat-no" title="statement not covered" >        name += '.xls';</span>
+    }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    if (getExplorer() === 'ie') {</span>
+        var curTbl = <span class="cstat-no" title="statement not covered" >table;</span>
+        var oXL = <span class="cstat-no" title="statement not covered" >new ActiveXObject('Excel.Application');</span>
+        var oWB = <span class="cstat-no" title="statement not covered" >oXL.Workbooks.Add();</span>
+        var xlsheet = <span class="cstat-no" title="statement not covered" >oWB.Worksheets(1);</span>
+        var sel = <span class="cstat-no" title="statement not covered" >document.body.createTextRange();</span>
+<span class="cstat-no" title="statement not covered" >        sel.moveToElementText(curTbl);</span>
+<span class="cstat-no" title="statement not covered" >        sel.select();</span>
+<span class="cstat-no" title="statement not covered" >        sel.execCommand('Copy');</span>
+<span class="cstat-no" title="statement not covered" >        xlsheet.Paste();</span>
+<span class="cstat-no" title="statement not covered" >        oXL.Visible = true;</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        try {</span>
+            var fname = <span class="cstat-no" title="statement not covered" >oXL.Application.GetSaveAsFilename('Excel.xls', 'Excel Spreadsheets (*.xls), *.xls');</span>
+        } catch (e) {
+<span class="cstat-no" title="statement not covered" >            print('Nested catch caught ' + e);</span>
+        } finally {
+<span class="cstat-no" title="statement not covered" >            oWB.SaveAs(fname);</span>
+            // oWB.Close(savechanges = false);
+<span class="cstat-no" title="statement not covered" >            oXL.Quit();</span>
+<span class="cstat-no" title="statement not covered" >            oXL = null;</span>
+<span class="cstat-no" title="statement not covered" >            idTmr = setInterval(Cleanup(), 1);</span>
+        }
+    } else {
+<span class="cstat-no" title="statement not covered" >        tableToExcel(tableInnerHTML, aId, name);</span>
+    }
+}
+function <span class="fstat-no" title="function not covered" >Cleanup () {</span>
+<span class="cstat-no" title="statement not covered" >    window.clearInterval(idTmr);</span>
+    // CollectGarbage();
+}
+let tableToExcel = (<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >function () </span>{</span>
+    let uri = <span class="cstat-no" title="statement not covered" >'data:application/vnd.ms-excel;base64,';</span>
+    let template = <span class="cstat-no" title="statement not covered" >'&lt;html&gt;&lt;head&gt;&lt;meta charset="UTF-8"&gt;&lt;/head&gt;&lt;body&gt;&lt;table&gt;{table}&lt;/table&gt;&lt;/body&gt;&lt;/html&gt;';</span>
+    let <span class="fstat-no" title="function not covered" >base64 = <span class="cstat-no" title="statement not covered" >f</span>unction (s) { <span class="cstat-no" title="statement not covered" >return window.btoa(unescape(encodeURIComponent(s))); };</span></span>
+    let <span class="fstat-no" title="function not covered" >format = <span class="cstat-no" title="statement not covered" >f</span>unction (s, c) {</span>
+<span class="cstat-no" title="statement not covered" >        return s.replace(/{(\w+)}/g, <span class="fstat-no" title="function not covered" >function (</span>m, p) { <span class="cstat-no" title="statement not covered" >return c[p]; });</span></span>
+    };
+<span class="cstat-no" title="statement not covered" >    return <span class="fstat-no" title="function not covered" >function (</span>table, aId, name) {</span>
+        let ctx = <span class="cstat-no" title="statement not covered" >{worksheet: name || 'Worksheet', table: table};</span>
+<span class="cstat-no" title="statement not covered" >        document.getElementById(aId).href = uri + base64(format(template, ctx));</span>
+<span class="cstat-no" title="statement not covered" >        document.getElementById(aId).download = name;</span>
+<span class="cstat-no" title="statement not covered" >        document.getElementById(aId).click();</span>
+    };
+})();
+&nbsp;
+const table2excel = <span class="cstat-no" title="statement not covered" >{};</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >table2excel.transform = tranform;</span>
+&nbsp;
+export default table2excel;
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Fri Mar 09 2018 15:46:08 GMT+0800 (CST)
+</div>
+</div>
+<script src="../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../sorter.js"></script>
+</body>
+</html>

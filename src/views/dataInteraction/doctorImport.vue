@@ -87,12 +87,12 @@ export default {
 					if(res.data.length>0){
 						this.errorMsg=true;
 						this.dataList=res.data;
-						this.$Message.warning("上传失败");
+						this.$Message.warning(res.message);
 					}else{
-						this.$Message.warning("上传失败");	
+						this.$Message.warning(res.message);	
 					}
 				}else{
-					this.$Message.warning("上传失败");
+					this.$Message.warning(res.message);
 				}
 			}
 			this.$Spin.hide();
@@ -111,7 +111,7 @@ export default {
 			});
 		},
 		handleBeforeUpload() {
-			const check = this.uploadList.length < 5;
+			const check = this.uploadList.length < 500;
 			this.$Spin.show();
 			if (!check) {
 				this.$Notice.warning({

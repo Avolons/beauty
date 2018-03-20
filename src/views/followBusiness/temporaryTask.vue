@@ -148,7 +148,7 @@
 							<span>
 								医生：
 							</span>
-							<Select :filterable="true"  v-model="searchParams.admin">
+							<Select :filterable="true" @on-change="getAdmin"  v-model="searchParams.admin">
 								<!-- <Select @on-change="getData" v-model="doctorobj"> -->
 								<Option v-for="item in doctorList" :value="item.realname+','+item.id" :key="item.id">{{item.realname}}</Option>
 							</Select>
@@ -585,6 +585,12 @@ export default {
 
 			});
 		},
+		getAdmin(){
+			if (this.searchParams.admin) {
+				this.sendData.admin = this.searchParams.admin.split(",")[0];
+				this.sendData.adminId = this.searchParams.admin.split(",")[1];
+			}
+		},
 		/** 
 		 * 获取列表数据,搜索接口
 		 */
@@ -592,10 +598,10 @@ export default {
 			/** 
 			 * id 赋值
 			 */
-			if (this.searchParams.admin) {
+			/* if (this.searchParams.admin) {
 				this.sendData.admin = this.searchParams.admin.split(",")[0];
 				this.sendData.adminId = this.searchParams.admin.split(",")[1];
-			}
+			} */
 			this.searchParams.beginTime = this.timeobj1.date;
 			this.searchParams.endTime = this.timeobj2.date;
 			API.FollowBussiness.patList(this.searchParams).then((res) => {

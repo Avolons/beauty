@@ -88,12 +88,12 @@ export default {
 					if(res.data.length>0){
 						this.errorMsg=true;
 						this.dataList=res.data;
-						this.$Message.warning("上传失败");
+						this.$Message.warning(res.message);
 					}else{
-						this.$Message.warning("上传失败");	
+						this.$Message.warning(res.message);	
 					}
 				}else{
-					this.$Message.warning("上传失败");
+					this.$Message.warning(res.message);
 				}
 			}
 			this.$Spin.hide();
@@ -113,7 +113,7 @@ export default {
 		},
 		handleBeforeUpload() {
 			this.$Spin.show();
-			const check = this.uploadList.length < 5;
+			const check = this.uploadList.length < 500;
 			if (!check) {
 				this.$Notice.warning({
 					title: 'Up to five pictures can be uploaded.'

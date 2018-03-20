@@ -179,6 +179,16 @@ export const appRouter = [
                 component: resolve => {
                     require(['@/views/dataShow/dataCollect.vue'], resolve);
                 }
+            },
+            {
+                path: '/dataShow/sms',
+                title: '短信统计',
+                access: '/dataShow/sms', // access已经添加
+                name: 'smes',
+                icon: 'chatbox-working',
+                component: resolve => {
+                    require(['@/views/sms/sms.vue'], resolve);
+                }
             }
       /*  {
         path: "/dataShow/docSuggests",
@@ -202,7 +212,7 @@ export const appRouter = [
       } */
         ]
     },
-    {
+    /* {
         path: '/sms',
         icon: 'chatboxes',
         name: 'sms',
@@ -221,7 +231,7 @@ export const appRouter = [
                 }
             }
         ]
-    },
+    }, */
     {
         path: '/followBusiness',
         icon: 'edit',

@@ -214,7 +214,7 @@
                     dateAddEnd: '',   // 生成结束时间
                     datebeginStart: '',  // 执行开始时间
                     datebeginEnd: '',    // 执行结束时间
-                    backStatus: '',     // 通话状态
+                    backStatus:2,     // 通话状态
                     orderno: '',       // 随访编号
                     isExport: ''        // 是否导出过（是：1  否：0）
                 },
@@ -424,7 +424,6 @@
                         datebeginEnd:this.searchParams.datebeginEnd,
                         isExport:this.searchParams.isExport,
                         orderno:this.searchParams.orderno,
-                        backStatus:2
                     };
                     this.visitorDerExportList(data);
                 }
@@ -438,8 +437,8 @@
                 API.FollowBussiness.visitorDerExport(data).then((res) => {
                     if (res.code == 0){
                         console.log(res)
-                        // window.location.href = 'http://192.168.1.215:8080/'+ res.data;
-                        window.location.href = '/'+ res.data;
+                        window.location.href = 'http://192.168.3.26:8083/'+ res.data;
+                        // window.location.href = '/'+ res.data;
                         this.showLayer = false;
                         this.idAllArr = [];
                         this.haveSelect = [];

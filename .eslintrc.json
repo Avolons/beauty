@@ -10,7 +10,7 @@
         "browser": true,
         "node": true
     },
-    "plugins": [ "html", "standard" ],
+    "plugins": [ "html", "standard","vue" ],
     "rules": {
         "indent": ["error", 4, { "SwitchCase": 1 }],
         "quotes": ["error", "single"],

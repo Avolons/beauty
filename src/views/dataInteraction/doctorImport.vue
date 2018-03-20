@@ -15,7 +15,6 @@
 		<Upload ref="upload" 
 				:format="['xml','xls','png']" 
 				:on-format-error="handleFormatError" 
-				:on-exceeded-size="handleMaxSize" 
 				:before-upload="handleBeforeUpload" 
 				:on-success="handleSuccess" 
 				multiple 
@@ -99,6 +98,7 @@ export default {
 			this.$Spin.hide();
 		},
 		handleFormatError(file) {
+			this.$Spin.hide();
 			this.$Notice.warning({
 				title: '文件格式错误',
 				desc:  file.name + ' 格式不正确, 请选择 xls 或者 xlsx 格式文件.'

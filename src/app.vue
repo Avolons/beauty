@@ -34,7 +34,7 @@ export default {
         }).catch((err) => {
 
         });
-        Push.create('Hello World!')
+        
 
 
 

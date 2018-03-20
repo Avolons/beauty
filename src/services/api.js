@@ -27,7 +27,7 @@ Vue.prototype.$http = axios;
 
 /* axios.defaults.baseURL = 'http://192.168.3.26:8081'; */
 
-let JsonData = ['/visit/order/batchcancelall', '/order/temp/testvisit', '/order/temp/visit', '/visit/order/vet/save', '/visit/order/notice', '/ordertask/vet', '/question/script/save', '/questionscheme/save', '/questiontemple/save', '/questiontarget/save'];
+let JsonData = ['/visit/order/batchcancelall', '/order/temp/testvisit', '/order/temp/visit', '/visit/order/vet/save', '/visit/order/notice', '/ordertask/vet', '/question/script/save', '/questionscheme/save', '/questiontemple/save'];
 // 添加请求拦截器
 axios.interceptors.request.use(function (config) {
     let flag = 0;
@@ -540,6 +540,26 @@ export const Systems = {
      */
     addSystem (data) {
         return fetch('post', '/visit/newSysConfig/add', data);
+    },
+    /**
+     * 系统分类信息列表
+     * page
+     * limit:10 //每页显示条数
+     * mainType:AVIADDRESS  //分类名称（可选）
+     * @param {any} data
+     * @returns
+      */
+    listSystemType (data) {
+        return fetch('get', '/visit/sysconfigtype/list', data);
+    },
+    /**
+     * 新增系统分类
+     * mainType
+     * @param {any} data
+     * @returns
+     */
+    addSystemType (data) {
+        return fetch('post', '/visit/sysconfigtype/save', data);
     },
     /**
      * 系统功能编辑

@@ -264,7 +264,7 @@ export default {
             },
             modal3: false,   // 导出数量
             totalPage: 100, // 总页数
-            // 随访记录详情
+            // 随访记录详情.
             planInfo: {
                 orderReplyQuestions: []
             },
@@ -304,34 +304,8 @@ export default {
                 },
                 {
                     title: '通话状态',
-                    key: 'backStatus',
+                    key: 'backStatusStr',
                     align: 'center',
-                    render: (h, params) => {
-                        // 1 呼叫失败 2 正常通话 3 通话中 4 关停机 5 无人接听 6 空号 7 号码有误'
-                        switch (params.row.backStatus) {
-                            case '1':
-                                return '呼叫失败'
-                                break;
-                            case '2':
-                                return '正常通话'
-                                break;
-                            case '3':
-                                return '通话中'
-                                break;
-                            case '4':
-                                return '关停机'
-                                break;
-                            case '5':
-                                return '无人接听'
-                                break;
-                            case '6':
-                                return '空号'
-                                break;
-                            case '7':
-                                return '号码有误'
-                                break;
-                        }
-                    }
                 },
                 {
                     title: '生成时间',

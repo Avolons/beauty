@@ -35,7 +35,7 @@
                 <Col span="18">
                 <Input  placeholder="角色名称" style="width: 200px" v-model="roleName"/>
                 <span style="margin: 0 10px;" @click="searchBus"><Button type="primary" icon="search" >搜索</Button></span>
-                <Button  type="ghost" @click="initData">取消</Button>
+                <!-- <Button  type="ghost" @click="initData">取消</Button> -->
                 </Col>
                 <Col span="6">
                     <Button @click="addRole" v-if="!menuShow(this.AM.Jur.infoRoles)" type="primary" style="float: right;">新增角色</Button>

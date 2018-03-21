@@ -549,7 +549,7 @@ export default {
 				},
 				{
 					title: '导入时间',
-					key: 'xzzQtdz',
+					key: 'sourcetime',
 					align: 'center'
 				},
 				{

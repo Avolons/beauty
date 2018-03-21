@@ -7,4 +7,4 @@ node_modules
 \.settings/
 build/env.js
 dist/
-test/unit/coverage
+test/unit/coverage/

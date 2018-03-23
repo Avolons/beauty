@@ -220,7 +220,21 @@ export default {
       let date = new Date;
       let months = date.getMonth() +1;
       this.sameMonth = String(months);
-
+      if(evt == 2){
+        let quanbu = [
+          {
+            value: '',
+            label: '全部'
+          }
+        ]
+        this.yearList= this.yearList.concat(quanbu)
+        this.sameYear = ''
+      }else {
+        if(this.sameYear = '') {
+          this.yearList= this.yearList.unpop()
+          this.sameYear = this.yearList[0]
+        }
+      }
       this.selectChange(evt)
     },
     /**
@@ -232,9 +246,14 @@ export default {
         this.showSelect = true;
         this.tabName = 1;
         this.getList(this.tabName, this.sameYear, this.sameMonth)
+
       }else {
         this.showSelect = false;
         this.tabName = 2;
+        //当日期切到月份时
+        const qq = new Point('全部')
+        console.log(qq)
+        // this.yearList= this.yearList.concat(qq)
         this.getList(this.tabName, this.sameYear)
       }
     },

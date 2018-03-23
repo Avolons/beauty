@@ -72,7 +72,7 @@ export default {
                     {
                         name: '实际呼出',
                         type: 'bar',
-                        /* barWidth: '60%', */
+                        barWidth: '20%',
                         data:  planList,
                         markPoint: {
                             data: [
@@ -94,7 +94,7 @@ export default {
                     {
                         name: '正常呼出',
                         type: 'bar',
-                        /* barWidth: '60%', */
+                        barWidth: '20%',
                         markPoint: {
                             data: [
                                 { type: 'max', name: '最大值' },

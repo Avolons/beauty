@@ -177,10 +177,22 @@ export default {
         // console.log(res.data)
         if(res.code == 0) {
           //处理年月日和费用
-          res.data.smsCallMonitorVOs.forEach((item) => {
-            item.sendTime = item.sendTime.slice(0,4) +'-'+ item.sendTime.slice(4,6)+(item.sendTime.length>6?('-'+item.sendTime.slice(6,8)):"");
-            item.free = item.free/100;
-          });
+          if(this.tabName == 1) {
+            res.data.smsCallMonitorVOs.forEach((item) => {
+              item.sendTime = item.sendTime.slice(0,4) +'-'+ item.sendTime.slice(4,6)+'-'+item.sendTime.slice(6,8)
+              item.free = item.free/100
+            });
+          }else {
+            res.data.smsCallMonitorVOs.forEach((item) => {
+              item.sendTime = item.sendTime.slice(0,4) +'-'+ item.sendTime.slice(4,6)
+              item.free = item.free/100
+            });
+          }
+          
+          // res.data.smsCallMonitorVOs.forEach((item) => {
+          //   item.sendTime = item.sendTime.slice(0,4) +'-'+ item.sendTime.slice(4,6)+(item.sendTime.length>6?('-'+item.sendTime.slice(6,8)):"");
+          //   item.free = item.free/100;
+          // });
           this.data1 = res.data.smsCallMonitorVOs
           //总计
           this.totalNumber.totalStrip = res.data.sendMsgCount
@@ -212,7 +224,21 @@ export default {
       let date = new Date;
       let months = date.getMonth() +1;
       this.sameMonth = String(months);
-
+      if(evt == 2){
+        let quanbu = [
+          {
+            value: '',
+            label: '全部'
+          }
+        ]
+        this.yearList= this.yearList.concat(quanbu)
+        this.sameYear = ''
+      }else {
+        if(this.sameYear = '') {
+          this.yearList= this.yearList.unpop()
+          this.sameYear = this.yearList[0]
+        }
+      }
       this.selectChange(evt)
     },
     /**
@@ -224,9 +250,14 @@ export default {
         this.showSelect = true;
         this.tabName = 1;
         this.getList(this.tabName, this.sameYear, this.sameMonth)
+
       }else {
         this.showSelect = false;
         this.tabName = 2;
+        //当日期切到月份时
+        const qq = new Point('全部')
+        console.log(qq)
+        // this.yearList= this.yearList.concat(qq)
         this.getList(this.tabName, this.sameYear)
       }
     },

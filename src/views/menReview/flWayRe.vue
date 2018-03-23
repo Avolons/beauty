@@ -196,9 +196,9 @@
 				</Col>
 				<Col span="6">
 				<span>
-					患者姓名
+					客户姓名
 				</span>
-				<Input type="text" v-model="searchParam.brxm" placeholder="请输入患者姓名"></Input>
+				<Input type="text" v-model="searchParam.brxm" placeholder="请输入客户姓名"></Input>
 				</Col>
 				<Col span="6">
 				<span>
@@ -252,7 +252,7 @@
 						<div slot="content" class="follPass_table">
 							<table border="1">
 								<tr>
-									<td>患者姓名</td>
+									<td>客户姓名</td>
 									<td>{{planInfo.brxm}}</td>
 									<td>采用随访方案</td>
 									<td>{{planInfo.schemeName}}</td>
@@ -316,7 +316,7 @@
 									<Icon type="person"></Icon>
 
 									<div class="follPass_single_patInner">
-										<Input v-model="item.asr" placeholder="患者回复"></Input>
+										<Input v-model="item.asr" placeholder="客户回复"></Input>
 									</div>
 									<div v-if="item.fieldName" class="follPass_single_patInner">
 										<h3>指标：{{item.fieldName}}</h3>
@@ -352,7 +352,7 @@
 			</Modal>
 		</div>
 		<!-- 详情模态框 -->
-		<Modal v-model="patientDetail" title="患者信息" class-name="patientInfo" :styles="{top: '36px'}" width="1000">
+		<Modal v-model="patientDetail" title="客户信息" class-name="patientInfo" :styles="{top: '36px'}" width="1000">
 			<Row class="infoRow">
 				<Col span="12" class="info-col mb12">
 				<div class="info">
@@ -450,7 +450,7 @@
 						<span>{{currentData.jzkh}}</span>
 						</Col>
 						<Col span="12">
-						<span>患者性质:</span>
+						<span>客户性质:</span>
 						<span>{{currentData.brxz}}</span>
 						</Col>
 						<Col span="12">
@@ -498,7 +498,7 @@
 						<span>{{item1.zyhm}}</span>
 						</Col>
 						<Col span="12">
-						<span>患者性质:</span>
+						<span>客户性质:</span>
 						<span>{{currentData.brxz}}</span>
 						</Col>
 						<Col span="12">
@@ -571,7 +571,7 @@
 		<!-- 确定终止随访计划 -->
 		<Modal v-model="qdqx" title="提示" @on-ok="submitData">
 			<div style="text-align:center;line-height:30px;font-size:16px;">
-				<p>确认提交后将终止该患者一切随访计划，<br>且不再为该患者自动生成随访计划?</p>
+				<p>确认提交后将终止该客户一切随访计划，<br>且不再为该客户自动生成随访计划?</p>
 			</div>
 		</Modal>
 	</div>
@@ -603,14 +603,14 @@ export default {
 			},],//审核状态选项列表
 			audioObj: document.querySelector('#audioObj'),
 			showAll: ["1", "2"],
-			hzxxId: "",//患者id
+			hzxxId: "",//客户id
 			//搜索参数
 			searchParam: {
 				pager: 1, //当前页码
 				limit: 10,//每页条数
 				schemeName: "",//方案id（可选）
 				orderNo: "",//编码（可选）
-				brxm: "", //患者姓名（可选）
+				brxm: "", //客户姓名（可选）
 				adminId: "",  //医生id
 				status: 2,  //状态为2（必传）
 				isConceal: 1,
@@ -657,7 +657,7 @@ export default {
 					key: 'orderNo',
 				},
 				{
-					title: '患者姓名',
+					title: '客户姓名',
 					key: 'brxm',
 					render: (h, params) => {
 						return h('div', [
@@ -770,7 +770,7 @@ export default {
 			],
 			//列表数据
 			dataList: [],
-			//当前被点击患者，编辑和详情按钮触发时更换数据
+			//当前被点击客户，编辑和详情按钮触发时更换数据
 			currentData: {},
 			//门急诊信息
 			mjzData: [],
@@ -1086,7 +1086,7 @@ export default {
 			this.getData();
 		},
 		/** 
-     * 查看患者详情
+     * 查看客户详情
      */
 		getInfo(id) {
 			API.FollowBussiness.detailPat({

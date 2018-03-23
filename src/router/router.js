@@ -179,6 +179,16 @@ export const appRouter = [
                 component: resolve => {
                     require(['@/views/dataShow/dataCollect.vue'], resolve);
                 }
+            },
+            {
+                path: '/dataShow/sms',
+                title: '短信统计',
+                access: '/dataShow/sms', // access已经添加
+                name: 'smes',
+                icon: 'chatbox-working',
+                component: resolve => {
+                    require(['@/views/sms/sms.vue'], resolve);
+                }
             }
       /*  {
         path: "/dataShow/docSuggests",
@@ -202,7 +212,7 @@ export const appRouter = [
       } */
         ]
     },
-    {
+    /* {
         path: '/sms',
         icon: 'chatboxes',
         name: 'sms',
@@ -221,7 +231,7 @@ export const appRouter = [
                 }
             }
         ]
-    },
+    }, */
     {
         path: '/followBusiness',
         icon: 'edit',
@@ -251,23 +261,23 @@ export const appRouter = [
                 }
             },
             {
-                path: '/followBusiness/followNormal',
+                path: '/followBusiness/normalTelephone',
                 icon: 'ios-telephone-outline',
-                name: 'followNormal',
+                name: 'normalTelephone',
                 title: '正常通话',
-                access: '/followBusiness/followNormal', // access已经添加
+                access: '/followBusiness/normalTelephone', // access已经添加
                 component: resolve => {
-                    require(['@/views/followBusiness/followNormal.vue'], resolve);
+                    require(['@/views/followBusiness/normalTelephone.vue'], resolve);
                 }
             },
             {
-                path: '/followBusiness/followResult',
+                path: '/followBusiness/telephoneRecord',
                 icon: 'ios-stopwatch-outline',
-                name: 'followResult',
-                title: '随访记录',
-                access: '/followBusiness/followResult', // access已经添加
+                name: 'telephoneRecord',
+                title: '通话记录',
+                access: '/followBusiness/telephoneRecord', // access已经添加
                 component: resolve => {
-                    require(['@/views/followBusiness/followResult.vue'], resolve);
+                    require(['@/views/followBusiness/telephoneRecord.vue'], resolve);
                 }
             },
             {
@@ -282,7 +292,7 @@ export const appRouter = [
             }
         ]
     },
-    {
+    /* {
         path: '/menReview',
         icon: 'social-buffer',
         name: 'menReview',
@@ -321,7 +331,7 @@ export const appRouter = [
                 }
             }
         ]
-    },
+    }, */
     {
         path: '/followSetting',
         icon: 'paintbucket',
@@ -372,7 +382,7 @@ export const appRouter = [
             }
         ]
     },
-    {
+   /*  {
         path: '/notice',
         icon: 'email',
         name: 'notice',
@@ -401,7 +411,7 @@ export const appRouter = [
                 }
             }
         ]
-    },
+    }, */
 
     {
         path: '/dataInteraction',

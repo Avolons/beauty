@@ -35,12 +35,12 @@
       </span>
       <DatePicker @on-change="timeChange_two" type="daterange" placeholder="请选择计划开始日期" style="width:calc(100% - 105px)"></DatePicker>
       </Col>
-      <!-- <Col span="6" style="height:32px;margin-top:10px">
-      <span>
-        审核日期：
-      </span>
-      <DatePicker @on-change="timeChange_three" type="datetimerange" placeholder="请选择审核日期"></DatePicker>
-      </Col> -->
+      <!--  <Col span="6" style="height:32px;margin-top:10px">
+          <span>
+            审核日期：
+          </span>
+          <DatePicker @on-change="timeChange_three" type="daterange" placeholder="请选择审核日期"></DatePicker>
+          </Col> -->
       <Col span="6" style="margin-top:10px">
       <Button type="primary" @click="searchParams.pager=1;getData()">查询</Button>
       </Col>
@@ -50,7 +50,7 @@
     <Col span="24" class="fpTable">
     <Table border :columns="config" :data="dataList" class="margin-bottom-10" :loading="createLoading">></Table>
     <Row>
-      <Page style="float:right" :current="searchParams.pager" :total="totalPage" @on-change="changePage" show-elevator show-total show-sizer :page-size-opts="[10, 20]"></Page>
+      <Page style="float:right" :current="searchParams.pager" :total="totalPage" @on-change="changePage" show-elevator show-total></Page>
     </Row>
     </Col>
     <!-- 随访模态框 -->
@@ -341,8 +341,8 @@ export default {
         dateAddEnd: "",  //生成结束日期（可选）
         VisitStartTimeBegin: "", //计划开始日期（可选）
         VisitStartTimeEnd: "",    //计划结束日期（可选）
-        dateVetBegin: "",         //审核开始日期（可选）
-        dateVetEnd: "",         //审核结束日期（可选）
+        //dateVetBegin: "",         //审核开始日期（可选）
+        //dateVetEnd: "",         //审核结束日期（可选）
         limit: 10,//每页条数
       },
       //列表配置
@@ -378,6 +378,11 @@ export default {
             ])
           }
         },
+        /*  {
+           title: '疾病诊断',
+           key: 'icdName',
+           align: 'center'
+         }, */
         {
           title: '随访方案',
           key: 'schemeName',
@@ -398,10 +403,20 @@ export default {
           key: 'visitStartTime',
           align: 'center'
         },
+        /* {
+          title: '审核时间',
+          key: 'dateVet',
+          align: 'center'
+        },
+        {
+          title: '随访进度',
+          key: 'totalNum',
+          align: 'center'
+        }, */
         {
           title: '操作',
           key: 'action',
-          width: 250,
+          width: 200,
           align: 'center',
           /** 
            * 按钮状态
@@ -426,7 +441,7 @@ export default {
                 on: {
                   click: () => {
                     this.followShow = true;
-                    this.sfMobile(params.row.hzxxId)
+                    this.sfMobile(params.row.hzxxId);
                     this.startPlan(params.row.id);
                   }
                 }
@@ -470,23 +485,23 @@ export default {
                   }
                 }
               }, '终止随访'),
-              // h('Button', {
-              //   props: {
-              //     type: 'warning',
-              //     size: 'small'
-              //   },
-              //   style: {
+              /* h('Button', {
+                props: {
+                  type: 'warning',
+                  size: 'small'
+                },
+                style: {
 
-              //   },
-              //   'class': {
-              //     menuHide: this.menuShow(this.AM.FollowBussiness.delPlan)
-              //   },
-              //   on: {
-              //     click: () => {
-              //       this.deletPlan(params.row.id)
-              //     }
-              //   }
-              // }, '删除')
+                },
+                'class': {
+                  menuHide: this.menuShow(this.AM.FollowBussiness.delPlan)
+                },
+                on: {
+                  click: () => {
+                    this.deletPlan(params.row.id)
+                  }
+                }
+              }, '删除') */
             ]);
           }
         }],
@@ -498,12 +513,12 @@ export default {
           id: ""
         },
         {
-          name: "已停止",
-          id: 0
+          name: "已排期",
+          id: 3
         },
         {
-          name: "已排期",
-          id: 1
+          name: "已停止",
+          id: 4
         }
       ],//审核状态选项列表
       id: -1,//当前被选中的数据id
@@ -588,7 +603,7 @@ export default {
       API.FollowBussiness.gethzxx({
         id: id
       }).then((res) => {
-        this.AIform.AIphone = res.data.jtdh
+        this.AIform.AIphone = res.data.jtdh;
       }).catch((err) => {
         //弹出错误信息
         this.$Message.error(err);
@@ -599,15 +614,18 @@ export default {
       this.$refs[name].validate((valid) => {
         if (valid) {
           /** 
- * 此处填写具体的ajax请求
- */
+           * 此处填写具体的ajax请求
+           */
+          this.$Spin.show();
           API.FollowBussiness.startPlan({
             id: this.id,
             phone: this.AIform.AIphone
           }).then((res) => {
+            this.$Spin.hide();
             this.$Message.success('提交成功!');
             this.AIform.AIphone = "";
             this.followShow = false;
+            
           }).catch((err) => {
             //弹出错误信息
             this.$Message.error(err);
@@ -666,11 +684,17 @@ export default {
       API.FollowBussiness.detailPat({
         id: id
       }).then((res) => {
+        //mjzs //门急诊信息
         if (res.data.mjzs.length) {
-          this.mjzData = res.data.mjzs
+          this.mjzData = res.data.mjzs;
+        } else {
+          this.mjzData = [];
         }
+        //住院信息
         if (res.data.cyxjs.length) {
-          this.zyData = res.data.cyxjs
+          this.zyData = res.data.cyxjs;
+        } else {
+          this.zyData = [];
         }
         this.currentData = res.data;
       }).catch((err) => {

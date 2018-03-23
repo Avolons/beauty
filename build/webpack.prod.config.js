@@ -75,7 +75,7 @@ module.exports = merge(webpackBaseConfig, {
             ]
         }),
         new HtmlWebpackPlugin({
-            title: '上海十院',
+            title: '',
             favicon: './td_icon.ico',
             filename: '../index.html',
             template: './src/template/index.ejs',

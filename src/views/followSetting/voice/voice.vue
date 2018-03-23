@@ -264,14 +264,16 @@ export default {
 			API.voiceSetting.question({
 				"questionId": this.questionId
 			}).then((res) => {
+				/** 
+				 * 0为新增
+				 */
 				if (res.data.length == 0) {
 					this.type = 0;
-				}
-				res.data.forEach((item, index) => {
-					item.switchID = index + 1
-				})
-				if (res.data.length) {
-					this.switchArr = res.data
+				} else {
+					res.data.forEach((item, index) => {
+						item.switchID = index + 1
+					})
+					this.switchArr = res.data;
 				}
 			}).catch((error) => {
 			})
@@ -281,11 +283,12 @@ export default {
 			API.followProblems.editList({
 				"id": this.questionId
 			}).then((res) => {
-				this.questionName = res.data.title
+				this.questionName = res.data.title;
 				/*
 				*根据指标id，获取指标阀值等信息
 				*/
 				let getTargetIDVoice = res.data.targetId.trim()//指标id
+
 				if (getTargetIDVoice) {
 					API.follSetting.editList({
 						id: getTargetIDVoice
@@ -295,51 +298,56 @@ export default {
 						if (res.data.type == 'digit') {
 							this.questionTargetStyle = '数值'
 						} else if (res.data.type == 'select') {
-							this.questionTargetStyle = '选项'
+							this.questionTargetStyle = '选项';
 						} else if (res.data.type == 'string') {
 							this.questionTargetStyle = '文本'
 						}
-						//获取指标阀值
 
-						this.questionTargetfz = res.data.optionValues;
-						this.fzArray = this.questionTargetfz.split(',');
-
-						/*switch信息*/
 						let questionList = [];
-
-						for (const item of this.fzArray) {
-							questionList.push({
-								switchID: 0,
-								switchText: '',
-								switchRegexText: '',
-								keyname: this.questionTargetName,
-								outRptSwitchID: '',
-								keyvalue: item
-							})
+						if (this.questionTargetStyle == '选项') {
+							//获取指标阀值
+							this.questionTargetfz = res.data.optionValues;
+							this.fzArray = this.questionTargetfz.split(',');
+							/*switch信息*/
+							
+							for (const item of this.fzArray) {
+								questionList.push({
+									switchID: 0,
+									switchText: '',
+									switchRegexText: '',
+									keyname: this.questionTargetName,
+									outRptSwitchID: '',
+									keyvalue: item
+								})
+							}
 						}
+
 						if (this.switchArr.length == 0) {
 							this.switchArr = questionList.concat(this.switchArr);
 						} else {
-							if (this.switchArr[0].keyname) {
-								for (const item of questionList) {
-									for (const ite of this.switchArr) {
-										if (item.keyvalue == ite.keyvalue) {
-											item.switchText = ite.switchText;
-											item.switchRegexText = ite.switchRegexText;
-											item.outRptSwitchID = ite.outRptSwitchID;
-											break;
+							if (this.questionTargetStyle == '选项') {
+								if (this.switchArr[0].keyname) {
+									for (const item of questionList) {
+										for (const ite of this.switchArr) {
+											if (item.keyvalue == ite.keyvalue) {
+												item.switchText = ite.switchText;
+												item.switchRegexText = ite.switchRegexText;
+												item.outRptSwitchID = ite.outRptSwitchID;
+												break;
+											}
 										}
 									}
+
 								}
-								let flag = 0;
-								for (const item of this.switchArr) {
-									if (item.keyvalue) {
-										flag++;
-									}
-								}
-								this.switchArr.splice(0, flag);
-								this.switchArr = questionList.concat(this.switchArr);
 							}
+							let flag = 0;
+							for (const item of this.switchArr) {
+								if (item.keyname) {
+									flag++;
+								}
+							}
+							this.switchArr.splice(0, flag);
+							this.switchArr = questionList.concat(this.switchArr);
 						}
 
 						this.switchArr.forEach((item, index) => {
@@ -407,34 +415,34 @@ export default {
 		handleSubmit() {
 			let tBag = 0;
 			/* 非空判断 */
+			if(!this.switchArr.length){
+				this.$Message.warning("话术条数不得为0");
+				return false;
+			}
 			this.switchArr.forEach((item) => {
 				/* 话术名称判断 */
-				if (item.switchText == '') {
-					tBag++
+				if (!item.switchText) {
+					tBag++;
 				}
 			})
 			if (tBag > 0) {
 				this.$Message.warning("话术名称不能为空");
 				return false;
 			}
-
 			/* 此处的操作必须先删除后添加 */
-			let dataPromise = async () => {
-				await API.voiceSetting.questionSave({
-					"id": this.questionId,   //问题id
-					"questionCallScripts": this.switchArr
-				}).then((res) => {
-					this.$Message.success('添加成功!');
-					this.questionInfo();
-					setTimeout(() => {
-						this.$router.push('/followSetting/followProblems');
-					}, 1500);
+			API.voiceSetting.questionSave({
+				id: this.questionId,   //问题id
+				questionCallScripts: this.switchArr
+			}).then((res) => {
+				this.$Message.success('保存成功!');
+				this.questionInfo();
+				setTimeout(() => {
+					this.$router.push('/followSetting/followProblems');
+				}, 1500);
 
-				}).catch((error) => {
+			}).catch((error) => {
 
-				});
-			}
-			dataPromise();
+			});
 		},
 	},
 }

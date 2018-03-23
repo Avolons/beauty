@@ -34,9 +34,15 @@ export default {
         }).catch((err) => {
 
         });
-        Push.create('Hello World!')
+        
 
 
+
+    },
+    created() {
+      
+    },
+    beforeDestroy () {
 
     },
     /*  window.addEventListener('popstate', () => {

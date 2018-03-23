@@ -69,7 +69,15 @@
       </Col>
       <Col span="6">
       <Button type="primary" style="margin-right:10px" @click="handleSearch('IndexSearch')">查询</Button>
-      <Upload v-if="!menuShow(this.AM.FollowSetting.importTem)" :on-success="handleSuccess" style="margin-right:10px" :show-upload-list='false' :action="API.Data.temImport" name="xmlFile">
+      <Upload v-if="!menuShow(this.AM.FollowSetting.importTem)" 
+        :on-format-error="handleFormatError"  
+        :format="['xml']"  
+        :on-success="handleSuccess" 
+        :before-upload="handleBeforeUpload" 
+        style="margin-right:10px" 
+        :show-upload-list='false' 
+        :action="API.Data.temImport" 
+      name="xmlFile">
         <Button type="primary" icon="ios-cloud-upload-outline">导入模板</Button>
       </Upload>
       <Button type="info" v-if="!menuShow(this.AM.FollowSetting.addTem)" @click="addBtn">添加模板</Button>
@@ -87,7 +95,7 @@
 
 <script>
 import { API } from '@/services';
-import {mapGetters, mapActions} from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 
 export default {
   data() {
@@ -103,13 +111,14 @@ export default {
 
     };
     return {
-       modelTre:"",  //记录值
+      uploadList: [],
+      modelTre: "",  //记录值
       API: API,
       IndexSearch: {
         name: '',
         diseaseName: ''
       },
-      createLoading:true,
+      createLoading: true,
       page: 1,
       columns7: [//表格栏
         {
@@ -149,10 +158,10 @@ export default {
                 on: {
                   click: () => {
                     this.$router.push({ path: `/followSetting/template/template/${params.row.id}` });
-                      //保存数据  当再次返回的时候进行重新赋值
-                      this.saveFollowTemplate({
-                          "page":this.page,       //页码
-                      });
+                    //保存数据  当再次返回的时候进行重新赋值
+                    this.saveFollowTemplate({
+                      "page": this.page,       //页码
+                    });
 
                   }
                 }
@@ -166,7 +175,7 @@ export default {
                   marginRight: '5px'
                 },
                 'class': {
-                  menuHide:this.menuShow(this.AM.FollowSetting.exportTem)
+                  menuHide: this.menuShow(this.AM.FollowSetting.exportTem)
                 },
                 on: {
                   click: () => {
@@ -241,34 +250,48 @@ export default {
       options2: [],
     }
   },
-  computed:{
-      ...mapGetters([
-          'authorToken'
-      ]),
+  computed: {
+    ...mapGetters([
+      'authorToken'
+    ]),
   },
   mounted() {
     /**
      * 获取页面 page 为Number   进入页面进行再一次赋值
      * @type {number}
      */
-    this.page =Number(this.authorToken.followTempRecord.page) ;     //页码
-    this.IndexSearch.name = this.authorToken.followTempRecord.name||'';            //方案名称
-    this.IndexSearch.diseaseName = this.authorToken.followTempRecord.diseaseId!==''?this.authorToken.followTempRecord.diseaseId:'';
-    this.options2 = this.authorToken.followTempRecord.diseaseList||[];
-    if(this.options2) {
-        for (const item of this.options2) {
-            if (this.authorToken.followTempRecord.diseaseId == item.value) {
-                this.modelTre = item.label
-            }
+    this.page = Number(this.authorToken.followTempRecord.page);     //页码
+    this.IndexSearch.name = this.authorToken.followTempRecord.name || '';            //方案名称
+    this.IndexSearch.diseaseName = this.authorToken.followTempRecord.diseaseId !== '' ? this.authorToken.followTempRecord.diseaseId : '';
+    this.options2 = this.authorToken.followTempRecord.diseaseList || [];
+    if (this.options2) {
+      for (const item of this.options2) {
+        if (this.authorToken.followTempRecord.diseaseId == item.value) {
+          this.modelTre = item.label
         }
+      }
     }
-
-
-
-    this.list( this.page);
+    this.list(this.page);
   },
   methods: {
     ...mapActions(['saveFollowTemplate']),
+    handleBeforeUpload() {
+      this.$Spin.show();
+      const check = this.uploadList.length < 500;
+      if (!check) {
+        this.$Notice.warning({
+          title: 'Up to five pictures can be uploaded.'
+        });
+      }
+      return check;
+    },
+    handleFormatError(file) {
+			this.$Spin.hide();
+			this.$Notice.warning({
+				title: '文件格式错误',
+				desc:  file.name + ' 格式不正确, 请选择 xml 格式文件.'
+			});
+		},
     handleSuccess(res, file) {
       res = JSON.parse(res);
       if (res.code == 0) {
@@ -278,11 +301,12 @@ export default {
         });
         this.list(1);
       } else {
-        this.$Message.cancel({
+        this.$Message.error({
           content: res.msg,
           top: 500
         });
       }
+      this.$Spin.hide();
     },
     /*
     *获取list列表数据
@@ -297,7 +321,7 @@ export default {
         if (res.code == 0) {
           this.datalist = res.data
           this.pageTotal = res.total
-            this.createLoading = false;
+          this.createLoading = false;
         } else {
           console.log(res.message)
         }
@@ -343,9 +367,9 @@ export default {
 
           //保存数据  当再次返回的时候进行重新赋值
           this.saveFollowTemplate({
-              "name":this.IndexSearch.name,       //页码
-              'diseaseId': this.IndexSearch.diseaseName,
-              "diseaseList":this.options2
+            "name": this.IndexSearch.name,       //页码
+            'diseaseId': this.IndexSearch.diseaseName,
+            "diseaseList": this.options2
           });
 
         } else {
@@ -511,7 +535,7 @@ export default {
     *疾病类型--远程搜索
     */
     remoteMethod2(query) {
-      if(query==""){
+      if (query == "") {
         return false;
       }
       API.followProblems.disease({

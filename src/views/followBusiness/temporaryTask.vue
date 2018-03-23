@@ -118,13 +118,13 @@
 
 <template>
 	<div class="creatNotice">
-		<Modal width="700" class="creatNotice_main_modal" :styles="{height:'500px', overflowY:'auto'}" v-model="patModal" title="已选患者列表">
+		<Modal width="700" class="creatNotice_main_modal" :styles="{height:'500px', overflowY:'auto'}" v-model="patModal" title="已选客户列表">
 			<Table border :columns="patConfig" :data="addList"></Table>
 		</Modal>
 		<div class="creatNotice_main">
 			<div class="creatNotice_main_step">
 				<Steps :current="step=='step_one'?0:step=='step_two'?1:2">
-					<Step title="选择发起人和随访患者"></Step>
+					<Step title="选择发起人和随访客户"></Step>
 					<Step title="选择方案"></Step>
 					<Step title="发起随访"></Step>
 				</Steps>
@@ -148,22 +148,22 @@
 							<span>
 								医生：
 							</span>
-							<Select :filterable="true" @on-change="getData" v-model="searchParams.admin">
+							<Select :filterable="true" @on-change="getAdmin"  v-model="searchParams.admin">
 								<!-- <Select @on-change="getData" v-model="doctorobj"> -->
 								<Option v-for="item in doctorList" :value="item.realname+','+item.id" :key="item.id">{{item.realname}}</Option>
 							</Select>
 							</Col>
 						</Row>
-						<Alert show-icon>选择具体医生作为随访发起人后，患者列表将只展示该医生所服务的患者</Alert>
+						<Alert show-icon>选择具体医生作为随访发起人后，客户列表将只展示该医生所服务的客户</Alert>
 						<h3 class="creatNotice_main_sendDataTitle">
-							选择接收随访患者
+							选择接收随访客户
 						</h3>
 						<Row class="creatNotice_main_search" :gutter="15">
 							<Col span="6">
 							<span>
-								患者姓名：
+								客户姓名：
 							</span>
-							<Input type="text" v-model="searchParams.brxm" placeholder="请输入患者姓名"></Input>
+							<Input type="text" v-model="searchParams.brxm" placeholder="请输入客户姓名"></Input>
 							</Col>
 							<Col span="6">
 							<span>
@@ -177,34 +177,34 @@
 							<span style="width:105px;height:32px;">
 								导入开始时间：
 							</span>
-							<DatePicker @on-change="timeChange_import" type="datetime"  placeholder="请选择数据导入时间" style="width:calc(100% - 105px)"></DatePicker>
+							<DatePicker @on-change="timeChange_import" type="datetime" placeholder="请选择数据导入时间" style="width:calc(100% - 105px)"></DatePicker>
 							</Col>
 							<Col span="6" style="height:32px">
 							<span style="width:105px;height:32px;margin-left:15px">
 								导入结束时间：
 							</span>
-							<DatePicker @on-change="timeChange_export" type="datetime" placement="bottom-end"  placeholder="请选择数据导出时间" style="width:calc(100% - 105px)"></DatePicker>
+							<DatePicker @on-change="timeChange_export" type="datetime" placement="bottom-end" placeholder="请选择数据导出时间" style="width:calc(100% - 105px)"></DatePicker>
 							</Col>
 							<Col span="6" style="height:32px;margin-top:10px">
 							<span style="width:105px;height:32px;">
 								就诊开始时间：
 							</span>
-							<DatePicker @on-change="timeChange_importElse" type="datetime"  placeholder="请选择就诊开始时间" style="width:calc(100% - 105px)"></DatePicker>
+							<DatePicker @on-change="timeChange_importElse" type="datetime" placeholder="请选择就诊开始时间" style="width:calc(100% - 105px)"></DatePicker>
 							</Col>
 							<Col span="6" style="height:32px;margin-top:10px">
 							<span style="width:105px;height:32px;">
 								就诊结束时间：
 							</span>
-							<DatePicker @on-change="timeChange_exportElse" type="datetime"  placeholder="请选择就诊结束时间" style="width:calc(100% - 105px)"></DatePicker>
+							<DatePicker @on-change="timeChange_exportElse" type="datetime" placeholder="请选择就诊结束时间" style="width:calc(100% - 105px)"></DatePicker>
 							</Col>
 						</Row>
 						<div class="creatNotice_main_add">
 							<Button style="margin-right:15px" @click="searchParams.pager=1;getData()" type="primary">搜索</Button>
-							<Badge :count="addList.length">
-								<Button @click="patModal=true" type="info">已添加患者</Button>
+							<Badge :count="addList.length" overflow-count="9999">
+								<Button @click="patModal=true" type="info">已添加客户</Button>
 							</Badge>
 						</div>
-						<Alert show-icon>已添加过的患者无法重复添加，您可在已添加患者列表里进行删除操作</Alert>
+						<Alert show-icon>已添加过的客户无法重复添加，您可在已添加客户列表里进行删除操作</Alert>
 						<div class="creatNotice_main_list">
 							<Table border ref="selection" :columns="config" :data="dataList"></Table>
 						</div>
@@ -244,7 +244,7 @@
 						<Button @click="returnStep(1)" style="margin-right:10px">返回上一步</Button>
 					</TabPane>
 					<TabPane label="标签三" name="step_three">
-						<Form  ref="sendData" class="creatNotice_main_form" :model="sendData" :rules="validate.sendData" :label-width="110">
+						<Form ref="sendData" class="creatNotice_main_form" :model="sendData" :rules="validate.sendData" :label-width="110">
 							<FormItem label="医生" style="width:450px;">
 								<Input disabled v-model="sendData.admin" style="width: 435px"></Input>
 							</FormItem>
@@ -267,10 +267,10 @@
 						</Form>
 						<!-- <Table border :columns="timeConfig" :data="timeList"></Table> -->
 						<!-- <div class="creatNotice_main_success">
-										<Icon type="checkmark-circled"></Icon>
-										<Alert type="success">恭喜你，发起通知成功</Alert>
-										<Button type="success">查看通知进度</Button>
-									</div> -->
+												<Icon type="checkmark-circled"></Icon>
+												<Alert type="success">恭喜你，发起通知成功</Alert>
+												<Button type="success">查看通知进度</Button>
+											</div> -->
 					</TabPane>
 				</Tabs>
 			</div>
@@ -283,31 +283,15 @@ import { API } from '@/services';
 export default {
 	data() {
 		return {
-			//用来测试的，没几把用
-			// timeList: [],
-			// timeConfig: [
-			// 	{
-			// 		title: '方案名称',
-			// 		key: 'schemeName'
-			// 	},
-			// 	{
-			// 		title: '编号',
-			// 		key: 'orderNo'
-			// 	},
-			// 	{
-			// 		title: '随访时间',
-			// 		key: 'dateBegin'
-			// 	},
-			// ],
 			timeobj: {//发起随访时间
 				date: "",
 				time: "",
 			},
-			timeobj1: {//患者导入开始时间
+			timeobj1: {//客户导入开始时间
 				date: "",
 				time: "",
 			},
-			timeobj2: {//患者导入结束时间
+			timeobj2: {//客户导入结束时间
 				date: "",
 				time: "",
 			},
@@ -317,14 +301,14 @@ export default {
 			//搜索选项
 			searchParams: {
 				pager: 1,//当前页码
-				brxm: '',//患者姓名
+				brxm: '',//客户姓名
 				diseaseId: '',
 				limit: 10,//每页条数
 				adminId: "",
 				beginTime: '',//导入开始时间：年月日时分秒(可选)
 				endTime: '',//导入结束时间：年月日时分秒（可选）
-				diagnoseTimeBegin:"",
-				diagnoseTimeEnd:""
+				diagnoseTimeBegin: "",
+				diagnoseTimeEnd: ""
 			},
 			/** 
 			 * 方案请求数据
@@ -341,9 +325,10 @@ export default {
 				schemeName: "", //方案名称
 				adminId: "", //医生id
 				admin: "",
+				diseaseId: '',
 				mobile: "",  //发起人专属服务号码
 				visitStartTime: "",//随访起始时间
-				hzxxIds: [],  //患者id
+				hzxxIds: [],  //客户id
 				isAll: '',//是否选择全部人数
 				beginTime: '',//导入开始时间：年月日时分秒(可选)
 				endTime: '',//导入结束时间：年月日时分秒（可选）
@@ -355,7 +340,7 @@ export default {
 			addList: [],//已经添加的用户
 			totalPage: 10,//总页数
 			patTotalPage: 10,
-			patModal: false,//已选患者列表显示
+			patModal: false,//已选客户列表显示
 			planConfig: [
 				{
 					title: '方案名称',
@@ -394,7 +379,7 @@ export default {
 			planList: [],
 			patConfig: [
 				{
-					title: '患者姓名',
+					title: '客户姓名',
 					key: 'brxm'
 				},
 				{
@@ -518,6 +503,7 @@ export default {
 							//this.sendData.hzxxIds = []
 							this.sendData.isAll = 1;
 							this.sendData.brxm = this.searchParams.brxm;
+							this.sendData.brxm = this.searchParams.brxm;
 							this.sendData.beginTime = this.searchParams.beginTime;
 							this.sendData.endTime = this.searchParams.endTime;
 							this.sendData.diagnoseTimeBegin = this.searchParams.diagnoseTimeBegin;
@@ -575,6 +561,7 @@ export default {
 					name: '全部'
 				});
 				this.getDoctorList();
+
 			}).catch((err) => {
 
 			});
@@ -583,7 +570,10 @@ export default {
 		 * 获取医生列表
 		 */
 		getDoctorList() {
-			this.searchParams.admin="";
+			this.searchParams.admin = "";
+			this.isAll = 0;
+			this.dataList = [];
+			this.addList=[];
 			API.FollowBussiness.listDoctor({
 				pager: 1,
 				limit: 100000,
@@ -595,6 +585,12 @@ export default {
 
 			});
 		},
+		getAdmin(){
+			if (this.searchParams.admin) {
+				this.sendData.admin = this.searchParams.admin.split(",")[0];
+				this.sendData.adminId = this.searchParams.admin.split(",")[1];
+			}
+		},
 		/** 
 		 * 获取列表数据,搜索接口
 		 */
@@ -602,14 +598,12 @@ export default {
 			/** 
 			 * id 赋值
 			 */
-			if (this.searchParams.admin) {
+			/* if (this.searchParams.admin) {
 				this.sendData.admin = this.searchParams.admin.split(",")[0];
 				this.sendData.adminId = this.searchParams.admin.split(",")[1];
-			}
-			this.searchParams.adminId = this.sendData.adminId;
+			} */
 			this.searchParams.beginTime = this.timeobj1.date;
 			this.searchParams.endTime = this.timeobj2.date;
-			console.log(this.searchParams);
 			API.FollowBussiness.patList(this.searchParams).then((res) => {
 				this.dataList = this.formData(res.data);
 				this.totalPage = res.total;
@@ -636,7 +630,7 @@ export default {
 		 */
 		nextStep() {
 			if (this.addList.length == 0) {
-				this.$Message.warning("您尚未添加任何患者");
+				this.$Message.warning("您尚未添加任何客户");
 				return false;
 			}
 			this.step = "step_two";
@@ -657,9 +651,10 @@ export default {
 		addAllPages() {
 			this.isAll = 1;
 			if (this.dataList.length == 0) {
-				this.$Message.warning("您尚未添加任何患者");
+				this.$Message.warning("您尚未添加任何客户");
 				return false;
 			}
+			this.sendData.diseaseId = this.searchParams.diseaseId;
 			this.step = "step_two";
 		},
 		/** ylTimeChange
@@ -675,7 +670,7 @@ export default {
 			this.timeobj.time = date;
 		},
 		/** 
-		 * 患者导入开始时间
+		 * 客户导入开始时间
 		 */
 		timeChange_import(date) {
 			this.timeobj1.date = date;
@@ -690,7 +685,7 @@ export default {
 			this.searchParams.diagnoseTimeEnd = date;
 		},
 		/** 
-		 * 添加患者
+		 * 添加客户
 		 */
 		addPat(data, index) {
 			let copyData = JSON.parse(JSON.stringify(data));
@@ -699,7 +694,7 @@ export default {
 			this.addList.push(copyData);
 		},
 		/** 
-		 * 移除已选患者
+		 * 移除已选客户
 		 */
 		removePat(index) {
 			this.addList.splice(index, 1);
@@ -728,12 +723,10 @@ export default {
 				//this.addList = []
 				this.searchParams.limit = 10
 			}
-			console.log(this.dataList)
 			this.getData();
-			console.log(this.dataList)
 		},
 		/** 
-		 * 患者列表页码更改
+		 * 客户列表页码更改
 		 */
 		patChangePage(index) {
 			this.patParams.pager = index;
@@ -776,6 +769,7 @@ export default {
 	mounted() {
 		this.getDepartList();
 		this.getPlanList();
+		this.getData();
 	}
 }
 </script>

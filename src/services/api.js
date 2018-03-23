@@ -14,8 +14,9 @@ Vue.prototype.$http = axios;
 /* 默认最长响应时间 */
 // axios.defaults.timeout = 5000;
 /* 默认的接口地址 */
-axios.defaults.baseURL = 'http://192.168.3.24:8080';
-// axios.defaults.baseURL = 'http://192.168.1.215:8080';
+/* axios.defaults.baseURL = '/api'; */
+// axios.defaults.baseURL = 'http://192.168.3.24:8080';
+/* axios.defaults.baseURL = 'http://192.168.1.215:8080'; */
 /* axios.defaults.baseURL = 'http://60.190.86.50:6016'; */
 /* axios.defaults.baseURL = 'http://192.168.1.32:8081'; */
 /* axios.defaults.baseURL = 'http://192.168.1.166:8080'; */
@@ -122,105 +123,68 @@ export const Data = {
 /* 首页接口 *****/
 export const Home = {
     /**
-     * 随访记录审核接口
+     * 所有客户接口
      * @param {any} data
      * @returns
      */
-    orderList (data) {
-        return fetch('get', '/visit/hp/orderlist', data);
+    clientcount (data) {
+        return fetch('get', '/visit/hp/clientcount', data);
     },
     /**
-     * 随访计划审核接口
+     * 待随访、已随访客户、已随访次数接口
      * @param {any} data
      * @returns
      */
-    tasklist (data) {
-        return fetch('get', '/visit/hp/tasklist', data);
+    visitcount (data) {
+        return fetch('get', '/visit/hp/visitcount', data);
     },
     /**
-     * 方案重复匹配审核接口
-     * @param {any} data
-     * type:2    //必须为2(必传)
-     * @returns
-     */
-    taskList (data) {
-        return fetch('get', '/visit/hp/tasklist', data);
-    },
-    /**
-     * 医生接诊量排行获取科室接口
+     * 短信发送总数接口
      * @param {any} data
      * @returns
      */
-    getdepartment (data) {
-        return fetch('get', '/visit/hp/getdepartment', data);
+    smsallcount (data) {
+        return fetch('get', '/visit/hp/smsallcount', data);
     },
     /**
-     * 医生接诊量排行接口
-     * pager:1,           //当前页码
-        limit:3,           //每页条数
-        departmentId:6,   //科室(必传)
-        type:1            //类型(必传)：1表示7日，2表示30日
+     * 实际随访数量、通话时长接口
      * @param {any} data
      * @returns
      */
-    seniority (data) {
-        return fetch('get', '/visit/hp/seniority', data);
+    visitedcount (data) {
+        return fetch('get', '/visit/hp/visitedcount', data);
     },
     /**
-     * 就诊患者统计接口
-     * departmentId:821,   //科室(必传)
-        type:1            //类型(必传)：1表示7日，2表示30日
+     * 短信统计接口
      * @param {any} data
      * @returns
      */
-    jzcount (data) {
-        return fetch('get', '/visit/hp/jzcount', data);
+    smscount (data) {
+        return fetch('get', '/visit/hp/smscount', data);
     },
     /**
-     * 随访情况获取科室接口
-     * @param {any} data
-     * @returns
-      */
-    departList (data) {
-        return fetch('get', '/visit/hp/getdepartmentbyorder', data);
-    },
-    /**
-     * 随访情况接口
-     * departmentId:17,   //科室(必传)
-        type:1            //类型(必传)：1表示7日，2表示30日
+     * 近七天随访正常通话统计接口
      * @param {any} data
      * @returns
      */
-    countvisitorder (data) {
-        return fetch('get', '/visit/hp/countvisitorder', data);
+    callcount (data) {
+        return fetch('get', '/visit/hp/callcount', data);
     },
     /**
-     * 每日随访任务量接口
-        departmentId:821,   //科室(必传)
-        type:1            //类型(必传)：1表示7日，2表示30日
+     * 数据报表-有无意向百分比接口
      * @param {any} data
      * @returns
      */
-    hccount (data) {
-        return fetch('get', '/visit/hp/hccount', data);
+    intentioncount (data) {
+        return fetch('get', '/visit/hp/intentioncount', data);
     },
     /**
-     * 任务完成情况统计接口
-     * departmentId:5,   //科室(必传)
-        type:1            //类型(必传)：1表示7日，2表示30日
+     * 数据报表-通话状态分布接口
      * @param {any} data
      * @returns
      */
-    countvisitfinish (data) {
-        return fetch('get', '/visit/hp/countvisitfinish', data);
-    },
-    /**
-     * 任务失败情况统计接口
-     * @param {any} data
-     * @returns
-     */
-    countordercancel (data) {
-        return fetch('get', '/visit/hp/countordercancel', data);
+    callstatus (data) {
+        return fetch('get', '/visit/hp/callstatus', data);
     }
 };
 
@@ -576,6 +540,26 @@ export const Systems = {
      */
     addSystem (data) {
         return fetch('post', '/visit/newSysConfig/add', data);
+    },
+    /**
+     * 系统分类信息列表
+     * page
+     * limit:10 //每页显示条数
+     * mainType:AVIADDRESS  //分类名称（可选）
+     * @param {any} data
+     * @returns
+      */
+    listSystemType (data) {
+        return fetch('get', '/visit/sysconfigtype/list', data);
+    },
+    /**
+     * 新增系统分类
+     * mainType
+     * @param {any} data
+     * @returns
+     */
+    addSystemType (data) {
+        return fetch('post', '/visit/sysconfigtype/save', data);
     },
     /**
      * 系统功能编辑
@@ -1190,6 +1174,49 @@ export const FollowBussiness = {
       */
     patCeshi (data) {
         return fetch('post', '/visit/order/temp/testvisit', data);
+    },
+    /**
+     * 正常通话查询接口
+     * pager:1, //当前页码
+     limit:3,//每页条数
+     pager:h5 //第几页
+     brxm:    //客户姓名
+     mobile:  //手机号
+     schemeName //方案名称
+     callTime   //呼叫次数
+     intention  //是否有意向 （ 1:有  0：无）
+     dateAddStart  //生成开始时间
+     dateAddEnd   //生成结束时间
+     datebeginStart  //执行开始时间
+     datebeginEnd    //执行结束时间
+     isExport        //是否导出过（是：1  否：0）
+     * @returns
+     */
+    normalCallList (data) {
+        return fetch('post', '/bjmt/visit/getorderlist', data);
+    },
+    /**
+     * 每天随访记录详情接口
+     *  visitOrderId:f4695df7-fc24-11e7-b52b-6cae8b369de2  //orderid
+     **/
+    getOrderDetail (data) {
+        return fetch('post', '/bjmt/visit/getorderdetail', data);
+    },
+    /**
+     * 随访记录导出接口
+     *   isall:0  //是否全部导出  0：否  1：是
+        ids:    //部分导出时传入的逗号分隔的字符串
+        orderDTO：  //全部导出时 将查询条件的参数 全部传入
+     **/
+    visitorDerExport (data) {
+        return fetch('post', '/bjmt/visit/visitorderexport', data);
+    },
+    /**
+     * 删除正常通话接口
+     ids:    //部分导出时传入的逗号分隔的字符串
+     **/
+    deleteOrder (data) {
+        return fetch('post', '/bjmt/visit/deleteorder', data);
     }
 };
 
@@ -1347,4 +1374,4 @@ export const sms = {
     selectByTime (data) {
         return fetch('get', '/sms/selectByTime', data);
     }
-}
+};

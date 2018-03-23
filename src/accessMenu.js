@@ -33,8 +33,16 @@ export const AM = {
         cancleall: '/visit/ordertask/cancleall',
 
         /** 添加临时随访任务 */
-        patSubmit: '/visit/order/temp/visit'
+        patSubmit: '/visit/order/temp/visit',
 
+        /** 删除正常通话任务 */
+        deleteRecord: '/visit/order/temp/visit',
+
+        /** 编辑正常通话任务 */
+        editorRecord: '/visit/order/temp/visit',
+
+        /** 导出选择项 */
+        visitorDerexport: '/bjmt/visit/visitorderexport'
     },
     /** 随访设置 */
     FollowSetting: {

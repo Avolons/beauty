@@ -74,7 +74,7 @@
         <Table @on-selection-change="selectAll" @on-select-cancel="cancelSingle" ref="selection" border :columns="config" :data="dataList" class="margin-bottom-10" :loading="createLoading"></Table>
         <Row>
             <Button v-if="!menuShow(this.AM.FollowBussiness.visitorDerexport)" @click="cancelAllResult" :type="idSelectArr.length>0?'primary':'dashed'">导出选择项</Button>
-            <Button v-if="!menuShow(this.AM.FollowBussiness.visitorDerexport)" @click="handleSelectAll(true)" type="primary">全部导出</Button>
+            <Button v-if="!menuShow(this.AM.FollowBussiness.visitorDerexport)" @click="handleSelectAll(true)" :type="dataList.length>0?'primary':'dashed'">全部导出</Button>
             <Page style="float:right" :current="searchParams.pager" :total="totalPage" @on-change="changePage" show-elevator show-total></Page>
         </Row>
         </Col>
@@ -304,34 +304,8 @@ export default {
                 },
                 {
                     title: '通话状态',
-                    key: 'backStatus',
+                    key: 'backStatusStr',
                     align: 'center',
-                    render: (h, params) => {
-                        // 1 呼叫失败 2 正常通话 3 通话中 4 关停机 5 无人接听 6 空号 7 号码有误'
-                        switch (params.row.backStatus) {
-                            case '1':
-                                return '呼叫失败'
-                                break;
-                            case '2':
-                                return '正常通话'
-                                break;
-                            case '3':
-                                return '通话中'
-                                break;
-                            case '4':
-                                return '关停机'
-                                break;
-                            case '5':
-                                return '无人接听'
-                                break;
-                            case '6':
-                                return '空号'
-                                break;
-                            case '7':
-                                return '号码有误'
-                                break;
-                        }
-                    }
                 },
                 {
                     title: '生成时间',
@@ -446,6 +420,10 @@ export default {
          * 设置全选 点击全部导出按钮
          */
         handleSelectAll(status) {
+            if(this.dataList.length==0){
+                /* this.$Message.error("没有选中任何数据"); */
+                return false;
+            }
             this.isall = 1;
             this.allExp = true;
             this.exportSelectFlag = false;

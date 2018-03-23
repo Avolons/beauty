@@ -33,7 +33,7 @@ export default {
                 title: {
                     text:all,
                     /* subtext: '2016年', */
-                    x: '40%',
+                    x: '39%',
                     y: '160px',
                     textStyle: {
                         fontWeight: 'normal',

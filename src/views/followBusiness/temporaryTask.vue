@@ -200,7 +200,7 @@
 						</Row>
 						<div class="creatNotice_main_add">
 							<Button style="margin-right:15px" @click="searchParams.pager=1;getData()" type="primary">搜索</Button>
-							<Badge :count="addList.length">
+							<Badge :count="addList.length" overflow-count="9999">
 								<Button @click="patModal=true" type="info">已添加客户</Button>
 							</Badge>
 						</div>
@@ -723,9 +723,7 @@ export default {
 				//this.addList = []
 				this.searchParams.limit = 10
 			}
-			console.log(this.dataList)
 			this.getData();
-			console.log(this.dataList)
 		},
 		/** 
 		 * 客户列表页码更改

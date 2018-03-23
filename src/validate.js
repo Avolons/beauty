@@ -437,7 +437,13 @@ export default {
     ]
   },
   operDate: {
-    trueName: [{ required: true, message: "请输入名称", trigger: "blur" }],
+    trueName: [
+      {
+        required: true,
+        message: "请输入名称",
+        trigger: "blur"
+      }
+    ],
     phone: [
       {
         required: true,
@@ -446,5 +452,90 @@ export default {
         trigger: "blur"
       }
     ]
+  },
+  patList:{
+    brxm: [
+      {
+        max:20,
+        message: "请输入正确的姓名，不出超过20个字符",
+        trigger: "blur"
+      }
+    ],
+    brxb: [
+      {
+        /* required: true, */
+        message: "请输入正确的性别，只能输入男女",
+        pattern: /^(男|女)$/,
+        trigger: "blur",
+      }
+    ],
+    mz: [
+      {
+        max:20,
+        message: "请输入正确的民族，不出超过20个字符",
+        trigger: "blur"
+      }
+    ],
+    age: [
+      {
+        max:150,
+        /* min:0, */
+        type:"number",
+        transform(value) {
+          return Number(value);
+        },
+        message: "请输入正确的年龄，必须为数字，区间为0-150",
+        trigger: "blur"
+      },
+    ],
+    jtdh: [
+      {
+        max:20,
+        message: "请输入正确的联系电话",
+        trigger: "blur"
+      }
+    ],
+    xzzQtdz: [
+      {
+        max:50,
+        message: "请输入正确的住址，不出超过50个字符",
+        trigger: "blur"
+      }
+    ],
+    dwmc: [
+      {
+        max:50,
+        message: "请输入正确的单位，不出超过50个字符",
+        trigger: "blur"
+      }
+    ],
+    lxrm: [
+      {
+        max:20,
+        message: "请输入正确的紧急联系人，不出超过20个字符",
+        trigger: "blur"
+      }
+    ],
+    lxgx: [
+      {
+        max:10,
+        message: "请输入正确的关系，不出超过10个字符",
+        trigger: "blur"
+      }
+    ],
+    lxdz: [
+      {
+        max:50,
+        message: "请输入正确的联系地址，不出超过50个字符",
+        trigger: "blur"
+      }
+    ],
+    lxdh: [
+      {
+        max:20,
+        message: "请输入正确的联系电话",
+        trigger: "blur"
+      }
+    ],
   }
 };

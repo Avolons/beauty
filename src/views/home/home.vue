@@ -105,6 +105,7 @@ export default {
     },
     data() {
         return {
+            inter: null,
             baseData: {},
             /** 
              * 基础数据
@@ -162,9 +163,9 @@ export default {
              */
             API.Home.visitcount().then((res) => {
                 res.data = res.data || {};
-                this.topData[1] = res.data.doNum?res.data.doNum - 0:0;
-                this.topData[2] = res.data.noDoNum?res.data.noDoNum - 0:0;
-                this.topData[3] = res.data.totalNum?res.data.totalNum - 0:0;
+                this.topData[1] = res.data.doNum ? res.data.doNum - 0 : 0;
+                this.topData[2] = res.data.noDoNum ? res.data.noDoNum - 0 : 0;
+                this.topData[3] = res.data.totalNum ? res.data.totalNum - 0 : 0;
             }).catch((err) => {
 
             });
@@ -233,9 +234,6 @@ export default {
         );
         this.getFollowData();
         this.getBaseData();
-    },
-    activated() {
-
     }
 };
 </script>

@@ -14,7 +14,7 @@
 		</div> -->
 		<Upload ref="upload" 
 				:on-success="handleSuccess" 
-				:format="['xml','xls','png']" 
+				:format="['xls','xlsx']" 
 				:on-format-error="handleFormatError" 
 				:before-upload="handleBeforeUpload" 
 				multiple 
@@ -28,7 +28,7 @@
 				点击导入客户信息
 			</div>
 		</Upload>
-		<Button style="display:block;margin-top:20px;" type="primary"><a style="color:#fff" href="/assets/templatedoc/客户信息导入模板.xls.xls">下载客户模板</a></Button>
+		<Button style="display:block;margin-top:20px;" type="primary"><a style="color:#fff" href="/assets/templatedoc/客户信息导入模板.xls">下载客户模板</a></Button>
 		<Modal title="上传错误" v-model="errorMsg">
 			<Table border :columns="config" :data="dataList" ></Table>
 			<Button style="display:block;margin-top:20px;" type="primary"><a style="color:#fff" href="/assets/templatedoc/客户信息导入错误.xls">下载客户错误信息</a></Button>
@@ -49,20 +49,13 @@ export default {
 			errorMsg:false,
 			config: [
 				{
-					title: '错误行',
-					key: 'rowNum',
+					title: '导入成功的条数',
+					key: 'successNum',
 					align: 'center',
-					width:100
 				},
 				{
-					title: '错误列',
-					key: 'lieNum',
-					align: 'center',
-					width:100
-				},
-				{
-					title: '错误信息',
-					key: 'errMsg',
+					title: '导入失败的条数',
+					key: 'failNum',
 					align: 'center',
 				},
 			],
@@ -87,7 +80,7 @@ export default {
 				if(res.data){
 					if(res.data.length>0){
 						this.errorMsg=true;
-						this.dataList=res.data;
+						this.dataList=[res.data];
 						this.$Message.warning(res.message);
 					}else{
 						this.$Message.warning(res.message);	

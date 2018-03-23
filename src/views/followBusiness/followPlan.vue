@@ -616,13 +616,16 @@ export default {
           /** 
            * 此处填写具体的ajax请求
            */
+          this.$Spin.show();
           API.FollowBussiness.startPlan({
             id: this.id,
             phone: this.AIform.AIphone
           }).then((res) => {
+            this.$Spin.hide();
             this.$Message.success('提交成功!');
             this.AIform.AIphone = "";
             this.followShow = false;
+            
           }).catch((err) => {
             //弹出错误信息
             this.$Message.error(err);

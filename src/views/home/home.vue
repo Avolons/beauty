@@ -34,16 +34,16 @@
                 <else-card id-name="user_created_count" :end-val="topData[0]" iconType="person-stalker" color="#2d8cf0" intro-text="所有客户"></else-card>
                 </Col>
                 <Col :xs="24" :sm="12" :md="8" :lg="4" :style="{marginBottom: '10px'}">
-                <else-card id-name="visit_count" :end-val="topData[1]" iconType="pie-graph" color="#64d572" intro-text="已随访客户"></else-card>
+                <else-card id-name="visit_count" :end-val="topData[1]" iconType="pie-graph" color="#2d8cf0" intro-text="已随访客户"></else-card>
                 </Col>
                 <Col :xs="24" :sm="12" :md="8" :lg="4" :style="{marginBottom: '10px'}">
-                <else-card id-name="collection_count" :end-val="topData[2]" iconType="person-add" color="#ffd572" intro-text="待随访客户"></else-card>
+                <else-card id-name="collection_count" :end-val="topData[2]" iconType="person-add" color="#2d8cf0" intro-text="待随访客户"></else-card>
                 </Col>
                 <Col :xs="24" :sm="12" :md="8" :lg="4" :style="{marginBottom: '10px'}">
-                <else-card id-name="follow_time" :end-val="topData[3]" iconType="ios-stopwatch" color="#ff7279" intro-text="已随访次数"></else-card>
+                <else-card id-name="follow_time" :end-val="topData[3]" iconType="ios-stopwatch" color="#2d8cf0" intro-text="已随访次数"></else-card>
                 </Col>
                 <Col :xs="24" :sm="12" :md="8" :lg="4" :style="{marginBottom: '10px'}">
-                <else-card id-name="message_count" :end-val="topData[4]" iconType="chatbox-working" color="#72cbff" intro-text="短信发送总数"></else-card>
+                <else-card id-name="message_count" :end-val="topData[4]" iconType="chatbox-working" color="#2d8cf0" intro-text="短信发送总数"></else-card>
                 </Col>
             </Row>
             </Col>
@@ -58,10 +58,10 @@
                         </p>
                         <Row type="flex" justify="center" align="middle">
                             <Col :xs="20" :sm="8" :md="8" :lg="20" :style="{marginBottom: '20px'}">
-                            <infor-card :params="followCount.param" id-name="followCount" id-names="followCounts" :end-val="followCount.numArray" iconType="ios-paper" color="#2d8cf0" :intro-text="followCount.title"></infor-card>
+                            <infor-card :params="followCount.param" id-name="followCount" id-names="followCounts" :end-val="followCount.numArray" iconType="ios-paper" color="#ffd572" :intro-text="followCount.title"></infor-card>
                             </Col>
                             <Col :xs="20" :sm="8" :md="8" :lg="20" :style="{marginBottom: '20px'}">
-                            <infor-card :params="phoneTime.param" id-name="phoneTime" id-names="phoneTimes" :end-val="phoneTime.numArray" iconType="ios-telephone" color="#64d572" :intro-text="phoneTime.title"></infor-card>
+                            <infor-card :params="phoneTime.param" id-name="phoneTime" id-names="phoneTimes" :end-val="phoneTime.numArray" iconType="ios-telephone" color="#ffd572" :intro-text="phoneTime.title"></infor-card>
                             </Col>
                             <Col :xs="20" :sm="8" :md="8" :lg="20" :style="{marginBottom: '20px'}">
                             <infor-card :params="messageCount.param" id-name="messageCount" id-names="messageCounts" :end-val="messageCount.numArray" iconType="ios-email" color="#ffd572" :intro-text="messageCount.title"></infor-card>
@@ -105,6 +105,7 @@ export default {
     },
     data() {
         return {
+            inter: null,
             baseData: {},
             /** 
              * 基础数据
@@ -162,9 +163,9 @@ export default {
              */
             API.Home.visitcount().then((res) => {
                 res.data = res.data || {};
-                this.topData[1] = res.data.doNum?res.data.doNum - 0:0;
-                this.topData[2] = res.data.noDoNum?res.data.noDoNum - 0:0;
-                this.topData[3] = res.data.totalNum?res.data.totalNum - 0:0;
+                this.topData[1] = res.data.doNum ? res.data.doNum - 0 : 0;
+                this.topData[2] = res.data.noDoNum ? res.data.noDoNum - 0 : 0;
+                this.topData[3] = res.data.totalNum ? res.data.totalNum - 0 : 0;
             }).catch((err) => {
 
             });
@@ -233,9 +234,6 @@ export default {
         );
         this.getFollowData();
         this.getBaseData();
-    },
-    activated() {
-
     }
 };
 </script>

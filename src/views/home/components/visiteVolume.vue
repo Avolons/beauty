@@ -26,9 +26,9 @@ export default {
                 planList.push(item.totalNum);
             }
             const option = {
-                color: ['#3398DB'],
+                color: ['#3398DB',"#ffd572"],
                 title: {
-                    text: '随访正常通话统计',
+                    text: '近7天随访正常通话统计',
                     textStyle: {
                         fontWeight: 'normal',
                         fontSize: 16,
@@ -37,6 +37,10 @@ export default {
                     },
                     top: "10px",
                     left: '20px'
+                },
+                legend: {
+                    
+                    data: ['实际呼出', '正常呼出']
                 },
                 tooltip: {
                     trigger: 'axis',
@@ -66,28 +70,47 @@ export default {
                 ],
                 series: [
                     {
-                        name: '实际呼出数量',
+                        name: '实际呼出',
                         type: 'bar',
-                        barWidth: '60%',
-                        data: numList
+                        barWidth: '20%',
+                        data:  planList,
+                        markPoint: {
+                            data: [
+                                { type: 'max', name: '最大值' },
+                                { type: 'min', name: '最小值' }
+                            ]
+                        },
+                        label: {
+                            normal: {
+                                show: true
+                            }
+                        },
+                        markLine: {
+                            data: [
+                                { type: 'average', name: '平均值' }
+                            ]
+                        }
                     },
                     {
-                        name: '计划呼出量',
-                        type: 'line',
-                        /* barWidth: '60%', */
-                        data: planList,
-                        "itemStyle": {
-                            "normal": {
-                                "color": "rgba(0,191,183,1)",
-                                "barBorderRadius": 0,
-                                "label": {
-                                    "show": true,
-                                    "position": "top",
-                                    formatter: function(p) {
-                                        return p.value > 0 ? (p.value) : '';
-                                    }
-                                }
+                        name: '正常呼出',
+                        type: 'bar',
+                        barWidth: '20%',
+                        markPoint: {
+                            data: [
+                                { type: 'max', name: '最大值' },
+                                { type: 'min', name: '最小值' }
+                            ]
+                        },
+                        label: {
+                            normal: {
+                                show: true
                             }
+                        },
+                        data: numList,
+                        markLine: {
+                            data: [
+                                { type: 'average', name: '平均值' }
+                            ]
                         },
                     }
                 ]

@@ -65,7 +65,7 @@
         <Table @on-selection-change="selectAll" @on-select-cancel="cancelSingle" ref="selection" border :columns="config" :data="dataList" class="margin-bottom-10" :loading="createLoading"></Table>
         <Row>
             <Button v-if="!menuShow(this.AM.FollowBussiness.visitorDerexport)" @click="cancelAllResult" :type="idSelectArr.length>0?'primary':'dashed'">导出选择项</Button>
-            <Button v-if="!menuShow(this.AM.FollowBussiness.visitorDerexport)" @click="handleSelectAll(true)" type="primary">全部导出</Button>
+            <Button v-if="!menuShow(this.AM.FollowBussiness.visitorDerexport)" @click="handleSelectAll(true)" :type="dataList.length>0?'primary':'dashed'" >全部导出</Button>
             <Page style="float:right" :current="searchParams.pager" :total="totalPage" @on-change="changePage" show-elevator show-total></Page>
         </Row>
         </Col>
@@ -373,6 +373,10 @@ export default {
          * 设置全选 点击全部导出按钮
          */
         handleSelectAll(status) {
+            if(this.dataList.length==0){
+                /* this.$Message.error("没有选中任何数据"); */
+                return false;
+            }
             this.isall = 1;
             this.allExp = true;
             this.exportSelectFlag = false;
@@ -394,6 +398,7 @@ export default {
          * 确定导出
          * */
         configNumExport() {
+            
             this.allExp = false;
             this.exportSelectFlag = true;
             this.normalCallDateList();

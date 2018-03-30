@@ -52,7 +52,7 @@ export default {
                     type: 'pie',
                     selectedMode: 'single',
                     radius: ['25%', '58%'],
-                    color: ['#86D560', '#AF89D6', '#59ADF3', '#FF999A', '#FFCC67',"#72cbff","#fd72ff"],
+                    color: ['#4fabfb', '#64d572', '#59ADF3', '#FF999A', '#FFCC67',"#72cbff","#fd72ff"],
                     label: {
                         normal: {
                             position: 'inner',

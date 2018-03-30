@@ -9,16 +9,16 @@
             <else-card id-name="user_created_count" :end-val="topData[0]" iconType="person-stalker" color="#2d8cf0" intro-text="所有客户"></else-card>
             </Col>
             <Col :xs="24" :sm="8" :md="8" :lg="5" :style="{marginBottom: '10px'}">
-            <else-card id-name="visit_count" :end-val="topData[1]" iconType="pie-graph" color="#64d572" intro-text="已随访客户"></else-card>
+            <else-card id-name="visit_count" :end-val="topData[1]" iconType="pie-graph" color="#2d8cf0" intro-text="已随访客户"></else-card>
             </Col>
             <Col :xs="24" :sm="8" :md="8" :lg="5" :style="{marginBottom: '10px'}">
-            <else-card id-name="collection_count" :end-val="topData[2]" iconType="person-add" color="#ffd572" intro-text="待随访客户"></else-card>
+            <else-card id-name="collection_count" :end-val="topData[2]" iconType="person-add" color="#2d8cf0" intro-text="待随访客户"></else-card>
             </Col>
             <Col :xs="24" :sm="12" :md="12" :lg="4" :style="{marginBottom: '10px'}">
-            <else-card id-name="follow_time" :end-val="topData[3]" iconType="ios-stopwatch" color="#ff7279" intro-text="已随访次数"></else-card>
+            <else-card id-name="follow_time" :end-val="topData[3]" iconType="ios-stopwatch" color="#2d8cf0" intro-text="已随访次数"></else-card>
             </Col>
             <Col :xs="24" :sm="12" :md="12" :lg="4" :style="{marginBottom: '10px'}">
-            <else-card id-name="message_count" :end-val="topData[4]" iconType="chatbox-working" color="#72cbff" intro-text="短信发送总数"></else-card>
+            <else-card id-name="message_count" :end-val="topData[4]" iconType="chatbox-working" color="#2d8cf0" intro-text="短信发送总数"></else-card>
             </Col>
         </Row>
         <Row :gutter="5">

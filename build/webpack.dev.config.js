@@ -15,7 +15,7 @@ fs.open('./build/env.js', 'w', function(err, fd) {
 module.exports = merge(webpackBaseConfig, {
     devtool: '#source-map',
     devServer: {
-        port: 8080,
+        port: 8082,
         proxy:{
             '/visit/*':{
                 target: 'http://192.168.1.215:6016',

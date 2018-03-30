@@ -33,7 +33,7 @@ export default {
                 title: {
                     text:all,
                     /* subtext: '2016年', */
-                    x: '40%',
+                    x: '39%',
                     y: '160px',
                     textStyle: {
                         fontWeight: 'normal',
@@ -57,7 +57,7 @@ export default {
                     type: 'pie',
                     selectedMode: 'single',
                     radius: ['25%', '58%'],
-                    color: ['#86D560', '#AF89D6', '#59ADF3', '#FF999A', '#FFCC67',"#72cbff","#fd72ff"],
+                    color: ['#4fabfb', '#64d572', '#ff7279', '#ffde72', '#ffb672',"#caf76a","#7082fe"],
                     label: {
                         normal: {
                             position: 'inner',

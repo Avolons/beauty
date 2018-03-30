@@ -65,7 +65,7 @@
         <Table @on-selection-change="selectAll" @on-select-cancel="cancelSingle" ref="selection" border :columns="config" :data="dataList" class="margin-bottom-10" :loading="createLoading"></Table>
         <Row>
             <Button v-if="!menuShow(this.AM.FollowBussiness.visitorDerexport)" @click="cancelAllResult" :type="idSelectArr.length>0?'primary':'dashed'">导出选择项</Button>
-            <Button v-if="!menuShow(this.AM.FollowBussiness.visitorDerexport)" @click="handleSelectAll(true)" :type="dataList.length>0?'primary':'dashed'" >全部导出</Button>
+            <Button v-if="!menuShow(this.AM.FollowBussiness.visitorDerexport)" @click="handleSelectAll" :type="dataList.length>0?'primary':'dashed'" >全部导出</Button>
             <Page style="float:right" :current="searchParams.pager" :total="totalPage" @on-change="changePage" show-elevator show-total></Page>
         </Row>
         </Col>
@@ -352,7 +352,6 @@ export default {
             exportSelectFlag: true,  // 判断是否是导出选择性还是全选
             recordTotal: 0,  // 记录选中多少条
             isall: 0,  // 0代表导出选择项 1。代表导出所有
-            isllSelect: 0
         };
     },
     methods: {
@@ -392,7 +391,7 @@ export default {
             /* this.idAllArr = [];
             this.haveSelect = []; */
             this.exportSelectFlag = true;
-            this.normalCallDateList();
+            /* this.normalCallDateList(); */
         },
         /**
          * 确定导出
@@ -401,7 +400,7 @@ export default {
             
             this.allExp = false;
             this.exportSelectFlag = true;
-            this.normalCallDateList();
+            /* this.normalCallDateList(); */
             this.loading = false;
             this.$nextTick(() => {
                 this.loading = true;

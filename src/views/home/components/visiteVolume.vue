@@ -28,7 +28,7 @@ export default {
             const option = {
                 color: ['#3398DB',"#ffd572"],
                 title: {
-                    text: '近7天随访正常通话统计',
+                    text: '',
                     textStyle: {
                         fontWeight: 'normal',
                         fontSize: 16,

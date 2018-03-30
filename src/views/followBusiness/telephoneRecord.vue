@@ -439,7 +439,7 @@ export default {
             /* this.idAllArr = [];
             this.haveSelect = []; */
             this.exportSelectFlag = true;
-            this.normalCallDateList();
+            /* this.normalCallDateList(); */
         },
         /**
          * 确定导出

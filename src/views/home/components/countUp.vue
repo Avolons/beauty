@@ -14,9 +14,13 @@
                 {{params[0]}}:&nbsp;&nbsp;&nbsp;
                 <span :style="{color: color}" v-cloak :id="idName">{{ startVal }}</span>
             </div>
-            <div class="count_span">
+            <div class="count_span" v-if="params[1]">
                 {{params[1]}}:&nbsp;&nbsp;&nbsp;
                 <span :style="{color: color}" v-cloak :id="idNames">{{ startVal }}</span>
+            </div>
+            <div class="count_span" v-if="params[2]">
+                {{params[2]}}:&nbsp;&nbsp;&nbsp;
+                <span :style="{color: color}" v-cloak :id="idNamess">{{ startVal }}</span>
             </div>
         </p>
     </div>
@@ -40,6 +44,7 @@ export default {
     props: {
         idName: String,
         idNames: String,
+        idNamess: String,
         className: String,
         startVal: {
             type: Number,
@@ -100,6 +105,15 @@ export default {
                         demo.start();
                     }
                 }
+                if(endVal[1])
+                {
+                    let demo = {};
+                    this.demo2 = demo = new CountUp(this.idNames, this.startVal, endVal[1], this.decimals, this.duration, this.options);
+                    if (!demo.error) {
+                        demo.start();
+                    }
+                }
+                if(endVal[2])
                 {
                     let demo = {};
                     this.demo2 = demo = new CountUp(this.idNames, this.startVal, endVal[1], this.decimals, this.duration, this.options);
@@ -116,7 +130,12 @@ export default {
             let res = transformValue(val);
             let endVal = res;
             this.demo1.update(endVal[0]);
-            this.demo2.update(endVal[1]);
+            if(endVal[1]){
+                this.demo2.update(endVal[1]);
+            }
+            if(endVal[2]){
+                this.demo2.update(endVal[2]);
+            }
         }
     }
 };

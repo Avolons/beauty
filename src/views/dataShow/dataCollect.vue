@@ -36,10 +36,10 @@
                         <infor-card :params="followCount.param" id-name="followCount" id-names="followCounts" :end-val="followCount.numArray" iconType="ios-paper" color="#2d8cf0" :intro-text="followCount.title"></infor-card>
                         </Col>
                         <Col :xs="24" :sm="8" :md="8" :lg="8">
-                        <infor-card :params="phoneTime.param" id-name="phoneTime" id-names="phoneTimes" :end-val="phoneTime.numArray" iconType="ios-telephone" color="#64d572" :intro-text="phoneTime.title"></infor-card>
+                        <infor-card :params="phoneTime.param" id-name="phoneTime" id-names="phoneTimes" id-namess="messageCounts" :end-val="phoneTime.numArray" iconType="ios-telephone" color="#64d572" :intro-text="phoneTime.title"></infor-card>
                         </Col>
                         <Col :xs="24" :sm="8" :md="8" :lg="8">
-                        <infor-card :params="messageCount.param" id-name="messageCount" id-names="messageCounts" :end-val="messageCount.numArray" iconType="ios-email" color="#ffd572" :intro-text="messageCount.title"></infor-card>
+                        <infor-card :params="messageCount.param" id-name="messageCount"  :end-val="messageCount.numArray" iconType="ios-email" color="#ffd572" :intro-text="messageCount.title"></infor-card>
                         </Col>
                     </Row>
                     </Col>
@@ -90,16 +90,16 @@ export default {
             /** 通话时长 */
             phoneTime: {
                 title: "通话时长",
-                param: ["正常通话≤1分钟", "正常通话>1分钟"],
-                numArray: [0, 0],
+                param: ["正常通话≤30秒", "正常通话31<=60秒", "正常通话>60秒"],
+                numArray: [0, 0,0],
             },
             /** 
              * 短信统计情况
              */
             messageCount: {
                 title: "短信统计",
-                param: ["有意向发送数", "无意向发送数"],
-                numArray: [0, 0],
+                param: ["发送数"],
+                numArray: [0],
             },
             dateObj: {
                 dateEndBegin: "",
@@ -207,10 +207,10 @@ export default {
                         param: ["正常通话", "有意向客户"],
                         numArray: [res.data.doNum ? res.data.doNum - 0 : 0, res.data.doIntention ? res.data.doIntention - 0 : 0],
                     };
-                    this.phoneTime = {
+                     this.phoneTime = {
                         title: "通话时长",
-                        param: ["正常通话≤1分钟", "正常通话>1分钟"],
-                        numArray: [res.data.ltDuration ? res.data.ltDuration - 0 : 0, res.data.gtDuration ? res.data.gtDuration - 0 : 0],
+                        param: ["正常通话≤30秒", "正常通话31<=60秒", "正常通话>60秒"],
+                        numArray: [res.data.ltDuration ? res.data.ltDuration - 0 : 0,res.data.etDuration ? res.data.etDuration - 0 : 0, res.data.gtDuration ? res.data.gtDuration - 0 : 0],
                     };
                 }
             }).catch((err) => {
@@ -221,10 +221,10 @@ export default {
              */
             API.Home.smscount(this.dateObj).then((res) => {
                 if (res.data) {
-                    this.messageCount = {
+                     this.messageCount = {
                         title: "短信统计",
-                        param: ["有意向发送数", "无意向发送数"],
-                        numArray: [res.data.doNum ? res.data.doNum - 0 : 0, res.data.noDoNum ? res.data.noDoNum - 0 : 0],
+                        param: ["发送数"],
+                        numArray: [res.data.doNum ? res.data.doNum - 0 : 0],
                     };
                 }
             }).catch((err) => {

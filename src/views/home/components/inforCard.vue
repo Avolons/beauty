@@ -15,12 +15,13 @@
                     <Icon :type="iconType" :size="iconSize"></Icon>
                 </Row>
             </Col>
-            <Col span="16" class="height-100">
+            <Col span="16" class="height-100" style="padding-left:15px">
                 <Row type="flex" align="middle"  class="height-100">
                     <count-up 
                         class="infor-card-count user-created-count" 
                         :id-name="idName" 
                         :id-names="idNames" 
+                        :id-namess="idNamess" 
                         :end-val="endVal" 
                         :color="color"
                         :countSize="countSize"
@@ -46,6 +47,7 @@ export default {
     props: {
         idName: String,
         idNames:String,
+        idNamess:String,
         endVal: Array,
         color: String,
         iconType: String,

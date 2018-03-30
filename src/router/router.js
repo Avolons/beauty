@@ -443,7 +443,7 @@ export const appRouter = [
         }, */
             {
                 path: '/dataInteraction/patientImpro',
-                title: '病患导入',
+                title: '客户导入',
                 access: '/dataInteraction/patientImpro', // access已经添加
                 name: 'patientImpro',
                 icon: 'ios-cloud-upload',

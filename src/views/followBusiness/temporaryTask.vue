@@ -371,7 +371,7 @@ export default {
 										this.selectAction(params.row);
 									}
 								}
-							}, '选则该方案'),
+							}, '选择该方案'),
 						]);
 					}
 				}

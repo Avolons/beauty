@@ -21,11 +21,11 @@
       </Tabs>
        <!-- 总计 -->
       <Row class="totals">
-        <Col :span="4"> 总计 </Col>
-        <Col :span="4" offset="4"> {{ totalNumber.noIntentionStrip }} </Col>
-        <Col :span="4"> {{ totalNumber.intentionStrip }} </Col>
-        <Col :span="4"> {{ totalNumber.totalStrip }} </Col>
-        <Col :span="4"> {{ totalNumber.totalCost }} </Col>
+        <Col :span="6"> 总计 </Col>
+        <!-- <Col :span="4" offset="4"> {{ totalNumber.noIntentionStrip }} </Col>
+        <Col :span="4"> {{ totalNumber.intentionStrip }} </Col> -->
+        <Col :span="6" offset="6"> {{ totalNumber.totalStrip }} </Col>
+        <Col :span="6"> {{ totalNumber.totalCost }} </Col>
       </Row>
     </div>
 </template>
@@ -109,14 +109,14 @@ export default {
           title: '发送时间',
           key: 'sendTime'
         },
-        {
+        /* {
           title: '无意向发送数',
           key: 'hasnotSendreasonCount'
         },
         {
           title: '有意向发送数',
           key: 'hasSendreasonCount'
-        },
+        }, */
         {
           title: '发送总条数(条)',
           key: 'sendMsgCount'

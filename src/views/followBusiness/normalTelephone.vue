@@ -56,6 +56,14 @@
             </Select>
             </Col>
             <Col span="6" style="margin-top:10px">
+            <span>
+                通话时长
+            </span>
+            <InputNumber  :min="0" v-model="searchParams.startDuration" @on-change="changeTalkStart"></InputNumber>
+            <span style="background: none;width:30px;">--</span>
+            <InputNumber  :min="searchParams.startDuration" v-model="searchParams.endDuration" @on-change="changeTalk"></InputNumber>
+            </Col>
+            <Col span="6" style="margin-top:10px">
             <Button @click="searchParams.pager=1;normalCallDateList()" type="primary">查询</Button>
             </Col>
         </Row>
@@ -106,11 +114,13 @@
                             <tr>
                                 <td>呼叫次数</td>
                                 <td>执行时间</td>
+                                <td>通话时长</td>
                                 <td>通话状态</td>
                             </tr>
                             <tr v-for="item,index in orderResultList">
                                 <td>第{{index+1}}次</td>
                                 <td>{{item.dateAdd}}</td>
+                                <td>{{item.duration}}</td>
                                 <td>{{item.statusStr}}</td>
                             </tr>
                         </table>
@@ -206,6 +216,8 @@ export default {
             searchParams: {
                 limit: 10, // 每页条数
                 pager: 1, // 第几页
+                startDuration : null,
+                endDuration: null,
                 brxm: '',   // 客户姓名
                 mobile: '',  // 手机号
                 schemeName: '', // 方案名称
@@ -218,6 +230,7 @@ export default {
                 backStatus: '2',     // 通话状态
                 orderno: '',       // 随访编号
                 isExport: ''        // 是否导出过（是：1  否：0）
+
             },
             modal3: false,   // 导出数量
             totalPage: 100, // 总页数
@@ -285,6 +298,11 @@ export default {
                             return '无';
                         }
                     }
+                },
+                {
+                    title: '通话时长',
+                    key: 'duration',
+                    align: 'center'
                 },
                 {
                     title: '操作',
@@ -357,6 +375,19 @@ export default {
     },
     methods: {
         /**
+         * 通话时长开始
+         **/
+        changeTalk(val) {
+            this.searchParams.endDuration = Math.ceil(val);
+        },
+        /**
+         * 通话时长结束
+         **/
+        changeTalkStart(val){
+            this.searchParams.startDuration = Math.ceil(val);
+            this.searchParams.endDuration = Math.ceil(val);
+        },
+        /**
          * 导出选择项
          **/
         cancelAllResult() {
@@ -392,13 +423,14 @@ export default {
             /* this.idAllArr = [];
             this.haveSelect = []; */
             this.exportSelectFlag = true;
-            this.normalCallDateList();
+            if( this.isall!=1){
+                this.normalCallDateList();
+            }
         },
         /**
          * 确定导出
          * */
         configNumExport() {
-            
             this.allExp = false;
             this.exportSelectFlag = true;
             this.normalCallDateList();
@@ -429,6 +461,8 @@ export default {
                     datebeginEnd: this.searchParams.datebeginEnd,
                     isExport: this.searchParams.isExport,
                     orderno: this.searchParams.orderno,
+                    startDuration : this.searchParams.startDuration,
+                    endDuration: this.searchParams.endDuration,
                     backStatus: 2
                 };
                 this.visitorDerExportList(data);
@@ -519,6 +553,7 @@ export default {
             API.FollowBussiness.getOrderDetail({
                 visitOrderId: id
             }).then((res) => {
+                console.log(res)
                 this.formLeft = res.data.order;  // 得到随访结果
                 this.orderResultList = res.data.orderResultList; // 得到随访次数
                 this.orderReplyQuestionList = res.data.orderReplyQuestionList;  // 得到随访详情
@@ -553,6 +588,7 @@ export default {
          */
         normalCallDateList() {
             API.FollowBussiness.normalCallList(this.searchParams).then((res) => {
+
                 // 判断是否全部导出 全部导出的时候全部添加图标
                 if (this.allExp) {
                     for (const item of res.data) {

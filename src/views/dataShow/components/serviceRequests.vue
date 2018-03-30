@@ -29,7 +29,7 @@ export default {
                 title: {
                     text: all,
                     /* subtext: '2016年', */
-                    x: '39%',
+                    x: '38.5%',
                     y: '160px',
                     textStyle: {
                         fontWeight: 'normal',

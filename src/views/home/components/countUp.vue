@@ -38,6 +38,7 @@ export default {
         return {
             demo1: {},
             demo2: {},
+            demo3: {},
         };
     },
     name: 'countUp',
@@ -105,7 +106,7 @@ export default {
                         demo.start();
                     }
                 }
-                if(endVal[1])
+                if(endVal[1]!=undefined)
                 {
                     let demo = {};
                     this.demo2 = demo = new CountUp(this.idNames, this.startVal, endVal[1], this.decimals, this.duration, this.options);
@@ -113,10 +114,10 @@ export default {
                         demo.start();
                     }
                 }
-                if(endVal[2])
+                if(endVal[2]!=undefined)
                 {
                     let demo = {};
-                    this.demo2 = demo = new CountUp(this.idNames, this.startVal, endVal[1], this.decimals, this.duration, this.options);
+                    this.demo3 = demo = new CountUp(this.idNamess, this.startVal, endVal[2], this.decimals, this.duration, this.options);
                     if (!demo.error) {
                         demo.start();
                     }
@@ -127,14 +128,19 @@ export default {
     },
     watch: {
         endVal(val) {
+            if(!val){
+                return false;
+            }
             let res = transformValue(val);
             let endVal = res;
-            this.demo1.update(endVal[0]);
-            if(endVal[1]){
+            if(endVal[0]!=undefined){
+                this.demo1.update(endVal[0]);
+            }
+            if(endVal[1]!=undefined){
                 this.demo2.update(endVal[1]);
             }
-            if(endVal[2]){
-                this.demo2.update(endVal[2]);
+            if(endVal[2]!=undefined){
+                this.demo3.update(endVal[2]);
             }
         }
     }

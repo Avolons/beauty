@@ -144,15 +144,15 @@
 								<Option v-for="item in departList" :value="item.id" :key="item.id">{{item.name}}</Option>
 							</Select>
 							</Col>
-							<Col span="6">
+							<!-- <Col span="6">
 							<span>
 								医生：
 							</span>
 							<Select :filterable="true" @on-change="getAdmin"  v-model="searchParams.admin">
-								<!-- <Select @on-change="getData" v-model="doctorobj"> -->
+								
 								<Option v-for="item in doctorList" :value="item.realname+','+item.id" :key="item.id">{{item.realname}}</Option>
 							</Select>
-							</Col>
+							</Col> -->
 						</Row>
 						<Alert show-icon>选择具体医生作为随访发起人后，客户列表将只展示该医生所服务的客户</Alert>
 						<h3 class="creatNotice_main_sendDataTitle">
@@ -503,7 +503,7 @@ export default {
 							//this.sendData.hzxxIds = []
 							this.sendData.isAll = 1;
 							this.sendData.brxm = this.searchParams.brxm;
-							this.sendData.brxm = this.searchParams.brxm;
+							/* this.sendData.brxm = this.searchParams.brxm; */
 							this.sendData.beginTime = this.searchParams.beginTime;
 							this.sendData.endTime = this.searchParams.endTime;
 							this.sendData.diagnoseTimeBegin = this.searchParams.diagnoseTimeBegin;
@@ -674,9 +674,11 @@ export default {
 		 */
 		timeChange_import(date) {
 			this.timeobj1.date = date;
+			this.searchParams.beginTime =date;
 		},
 		timeChange_export(date) {
 			this.timeobj2.date = date;
+			this.searchParams.endTime =date;
 		},
 		timeChange_importElse(date) {
 			this.searchParams.diagnoseTimeBegin = date;

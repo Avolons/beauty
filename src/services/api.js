@@ -967,6 +967,13 @@ export const followTemplate = {
         return fetch('get', '/visit/questiontemple/export', data);
     },
     /*
+     *特殊模板导出接口
+     id
+     */
+    specialExport (data) {
+        return fetch('get', '/visit/questiontemple/specialexport', data);
+    },
+    /*
      *模板导入接口
      xmlFile:文件
      */

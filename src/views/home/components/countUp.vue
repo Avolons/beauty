@@ -134,13 +134,19 @@ export default {
             let res = transformValue(val);
             let endVal = res;
             if(endVal[0]!=undefined){
-                this.demo1.update(endVal[0]);
+                if(this.demo1.update){
+                    this.demo1.update(endVal[0]);
+                }
             }
             if(endVal[1]!=undefined){
-                this.demo2.update(endVal[1]);
+                if(this.demo2.update){
+                    this.demo2.update(endVal[1]);
+                }
             }
             if(endVal[2]!=undefined){
-                this.demo3.update(endVal[2]);
+                if(this.demo3.update){
+                    this.demo3.update(endVal[2]);
+                }
             }
         }
     }

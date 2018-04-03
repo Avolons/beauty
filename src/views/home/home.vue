@@ -110,7 +110,13 @@ export default {
             /** 
              * 基础数据
              */
-            topData: [0, 0, 0, 0, 0],
+            topData: {
+                0:0,
+                1:0,
+                2:0,
+                3:0,
+                4:0,
+            },
 
             /** 实际随访数量 */
             followCount: {

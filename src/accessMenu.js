@@ -83,6 +83,9 @@ export const AM = {
         /** 导出模板 */
         exportTem: '/visit/questiontemple/export',
 
+        /* 导出特殊模板 */
+        specialExport:'/visit/questiontemple/specialexport',
+
         /** 删除方案 */
         delDep: '/visit/questionscheme/delete',
 

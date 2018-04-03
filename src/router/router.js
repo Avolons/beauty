@@ -122,15 +122,6 @@ export const otherRouter = {
             }
         },
         {
-            path: '/followBusiness/page/page',
-            title: '空白页',
-            access: '/followBusiness/page/page', // access已经添加
-            name: 'page',
-            component: resolve => {
-                require(['@/views/followBusiness/page/page.vue'], resolve);
-            }
-        },
-        {
             path: '/followSetting/voice/voice/:id',
             title: '话术编辑',
             access: '/followSetting/voice/voice/:id', // access已经添加
@@ -174,7 +165,7 @@ export const appRouter = [
                 path: '/dataShow/dataCollect',
                 title: '随访统计',
                 access: '/dataShow/dataCollect', // access已经添加
-                name: 'docSuggests',
+                name: 'dataCollect',
                 icon: 'chatbubble',
                 component: resolve => {
                     require(['@/views/dataShow/dataCollect.vue'], resolve);
@@ -184,7 +175,7 @@ export const appRouter = [
                 path: '/dataShow/sms',
                 title: '短信统计',
                 access: '/dataShow/sms', // access已经添加
-                name: 'smes',
+                name: 'sms',
                 icon: 'chatbox-working',
                 component: resolve => {
                     require(['@/views/sms/sms.vue'], resolve);
@@ -382,37 +373,6 @@ export const appRouter = [
             }
         ]
     },
-   /*  {
-        path: '/notice',
-        icon: 'email',
-        name: 'notice',
-        title: '通知业务',
-        access: '/notice', // access已经添加
-        component: Main,
-        children: [
-            {
-                path: '/notice/creatNotice',
-                icon: 'clipboard',
-                name: 'creatNotice',
-                title: '发起通知计划',
-                access: '/notice/creatNotice', // access已经添加
-                component: resolve => {
-                    require(['@/views/notice/createNotice.vue'], resolve);
-                }
-            },
-            {
-                path: '/notice/viewNotice',
-                icon: 'android-send',
-                name: 'viewNotice',
-                title: '查看通知进度',
-                access: '/notice/viewNotice', // access已经添加
-                component: resolve => {
-                    require(['@/views/notice/noticeView.vue'], resolve);
-                }
-            }
-        ]
-    }, */
-
     {
         path: '/dataInteraction',
         icon: 'ios-settings-strong',
@@ -421,26 +381,6 @@ export const appRouter = [
         access: '/dataInteraction', // access已经添加
         component: Main,
         children: [
-      /*  {
-        path: '/dataInteraction/temImport',
-        title: '随访模板导入',
-        access: '/dataInteraction/temImport', // access已经添加
-        name: 'temImport',
-        icon: 'ios-upload',
-        component: resolve => {
-            require(['@/views/dataInteraction/temImport.vue'], resolve);
-            }
-        },
-        {
-            path: '/dataInteraction/temExport',
-            title: '随访模板导出',
-            access: '/dataInteraction/temExport', // access已经添加
-            name: 'temExport',
-            icon: 'ios-download-outline',
-            component: resolve => {
-                require(['@/views/dataInteraction/temExport.vue'], resolve);
-            }
-        }, */
             {
                 path: '/dataInteraction/patientImpro',
                 title: '客户导入',
@@ -541,16 +481,7 @@ export const appRouter = [
                     require(['@/views/systemSet/systemLog.vue'], resolve);
                 }
             }
-      /*  {
-        path: '/systemSet/followType',
-        title: '随访类型优先级展示',
-        access: '/systemSet/followType', // access已经添加
-        name: 'level',
-        icon: 'arrow-graph-up-right',
-        component: resolve => {
-            require(['@/views/systemSet/followType.vue'], resolve);
-        }
-    } */
+   
         ]
     },
     {

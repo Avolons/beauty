@@ -517,7 +517,7 @@ export default {
           id: 3
         },
         {
-          name: "已停止",
+          name: "已取消",
           id: 4
         }
       ],//审核状态选项列表

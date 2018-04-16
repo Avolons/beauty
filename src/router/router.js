@@ -422,6 +422,16 @@ export const appRouter = [
                 }
             },
             {
+                path: '/systemSet/familyNames',
+                title: '百家姓',
+                access: '/systemSet/familyNames', // access已经添加
+                name: 'familyNames',
+                icon: 'android-locate',
+                component: resolve => {
+                    require(['@/views/systemSet/familyNames.vue'], resolve);
+                }
+            },
+            {
                 path: '/systemSet/operatMaintain',
                 title: '运营维护',
                 access: '/systemSet/operatMaintain', // access已经添加

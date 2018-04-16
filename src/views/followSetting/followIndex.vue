@@ -80,6 +80,7 @@
 				<FormItem v-show="formItem.isCheck=='0'" label="关键词">
 					<Tag v-for="item,index in formItem.fieldValue" :key="item" :name="item" closable @on-close="keyClose(index)">{{item}}</Tag>
 					<Button icon="ios-plus-empty" type="dashed" size="small" @click="keyAdds">添加关键词</Button>
+					<Button type="primary" size="small" @click="getallIndex">同步</Button>
 				</FormItem>
 				<FormItem label="指标选项" v-if="formItem.type=='select'">
 					<Input v-model="willIndex" placeholder="请输入指标选项" style="width:80%"></Input>
@@ -322,6 +323,10 @@ export default {
     this.list();
   },
   methods: {
+    getallIndex(){
+      let self=this;
+      this.formItem.fieldValue=[...new Set(self.formItem.fieldValue.concat(self.formItem.optionValues))]
+    },
     /**
      * 标签关闭
      */

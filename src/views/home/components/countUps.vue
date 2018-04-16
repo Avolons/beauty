@@ -1,6 +1,9 @@
 <template>
     <div>
-        <p :class="className" :style="{textAlign: 'center', color: color, fontSize: countSize, fontWeight: countWeight}"><span v-cloak :id="idName">{{ startVal }}</span><span>{{ unit }}</span></p>
+        <p :class="className" :style="{textAlign: 'center', color: color, fontSize: countSize, fontWeight: countWeight}">
+            <span v-cloak :id="idName">{{ startVal }}</span>
+            <span>{{ unit }}</span>
+        </p>
         <slot name="intro"></slot>
     </div>
 </template>
@@ -8,14 +11,14 @@
 <script>
 import CountUp from 'countup';
 
-function transformValue (val) {
+function transformValue(val) {
     return {
         val: val,
     };
 }
 
 export default {
-    data () {
+    data() {
         return {
             unit: '',
             demo: {}
@@ -67,11 +70,12 @@ export default {
         },
         introText: [String, Number]
     },
-    mounted () {
+    mounted() {
         this.$nextTick(() => {
             setTimeout(() => {
                 let res = transformValue(this.endVal);
                 let endVal = res.val;
+                console.log(endVal);
                 let demo = {};
                 this.demo = demo = new CountUp(this.idName, this.startVal, endVal, this.decimals, this.duration, this.options);
                 if (!demo.error) {
@@ -81,10 +85,14 @@ export default {
         });
     },
     watch: {
-        endVal (val) {
+        endVal(val) {
             let res = transformValue(val);
             let endVal = res.val;
-            this.demo.update(endVal);
+            if (endVal != undefined) {
+                if(this.demo.update){
+                    this.demo.update(endVal);
+                }
+            }
         }
     }
 };

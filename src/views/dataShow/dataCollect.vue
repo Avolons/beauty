@@ -6,19 +6,19 @@
     <div class="home-main">
         <Row :gutter="5" type="flex" justify="space-between">
             <Col :xs="24" :sm="8" :md="8" :lg="5" :style="{marginBottom: '10px'}">
-            <else-card id-name="user_created_count" :end-val="topData[0]" iconType="person-stalker" color="#2d8cf0" intro-text="所有客户"></else-card>
+            <else-card id-name="user_created_count_coll" :end-val="topData[0]" iconType="person-stalker" color="#2d8cf0" intro-text="所有客户"></else-card>
             </Col>
             <Col :xs="24" :sm="8" :md="8" :lg="5" :style="{marginBottom: '10px'}">
-            <else-card id-name="visit_count" :end-val="topData[1]" iconType="pie-graph" color="#2d8cf0" intro-text="已随访客户"></else-card>
+            <else-card id-name="visit_count_coll" :end-val="topData[1]" iconType="pie-graph" color="#2d8cf0" intro-text="已随访客户"></else-card>
             </Col>
             <Col :xs="24" :sm="8" :md="8" :lg="5" :style="{marginBottom: '10px'}">
-            <else-card id-name="collection_count" :end-val="topData[2]" iconType="person-add" color="#2d8cf0" intro-text="待随访客户"></else-card>
+            <else-card id-name="collection_count_coll" :end-val="topData[2]" iconType="person-add" color="#2d8cf0" intro-text="待随访客户"></else-card>
             </Col>
             <Col :xs="24" :sm="12" :md="12" :lg="4" :style="{marginBottom: '10px'}">
-            <else-card id-name="follow_time" :end-val="topData[3]" iconType="ios-stopwatch" color="#2d8cf0" intro-text="已随访次数"></else-card>
+            <else-card id-name="follow_time_coll" :end-val="topData[3]" iconType="ios-stopwatch" color="#2d8cf0" intro-text="已随访次数"></else-card>
             </Col>
             <Col :xs="24" :sm="12" :md="12" :lg="4" :style="{marginBottom: '10px'}">
-            <else-card id-name="message_count" :end-val="topData[4]" iconType="chatbox-working" color="#2d8cf0" intro-text="短信发送总数"></else-card>
+            <else-card id-name="message_count_coll" :end-val="topData[4]" iconType="chatbox-working" color="#2d8cf0" intro-text="短信发送总数"></else-card>
             </Col>
         </Row>
         <Row :gutter="5">
@@ -33,13 +33,13 @@
                     <Col :md="24" :lg="24" :style="{margin: '20px 0',height:'100%'}">
                     <Row type="flex" align="middle">
                         <Col :xs="24" :sm="8" :md="8" :lg="8">
-                        <infor-card :params="followCount.param" id-name="followCount" id-names="followCounts" :end-val="followCount.numArray" iconType="ios-paper" color="#2d8cf0" :intro-text="followCount.title"></infor-card>
+                        <infor-card :params="followCount.param" id-name="followCount_coll" id-names="followCounts_coll" :end-val="followCount.numArray" iconType="ios-paper" color="#2d8cf0" :intro-text="followCount.title"></infor-card>
                         </Col>
                         <Col :xs="24" :sm="8" :md="8" :lg="8">
-                        <infor-card :params="phoneTime.param" id-name="phoneTime" id-names="phoneTimes" :end-val="phoneTime.numArray" iconType="ios-telephone" color="#64d572" :intro-text="phoneTime.title"></infor-card>
+                        <infor-card :params="phoneTime.param" id-name="phoneTime_coll" id-names="phoneTimes_coll" id-namess="messageCounts_coll" :end-val="phoneTime.numArray" iconType="ios-telephone" color="#64d572" :intro-text="phoneTime.title"></infor-card>
                         </Col>
                         <Col :xs="24" :sm="8" :md="8" :lg="8">
-                        <infor-card :params="messageCount.param" id-name="messageCount" id-names="messageCounts" :end-val="messageCount.numArray" iconType="ios-email" color="#ffd572" :intro-text="messageCount.title"></infor-card>
+                        <infor-card :params="messageCount.param" id-name="messageCount_coll" :end-val="messageCount.numArray" iconType="ios-email" color="#ffd572" :intro-text="messageCount.title"></infor-card>
                         </Col>
                     </Row>
                     </Col>
@@ -79,7 +79,13 @@ export default {
             /** 
               * 基础数据
               */
-            topData: [0, 0, 0, 0, 0],
+            topData: {
+                0:0,
+                1:0,
+                2:0,
+                3:0,
+                4:0,
+            },
 
             /** 实际随访数量 */
             followCount: {
@@ -90,16 +96,16 @@ export default {
             /** 通话时长 */
             phoneTime: {
                 title: "通话时长",
-                param: ["正常通话≤1分钟", "正常通话>1分钟"],
-                numArray: [0, 0],
+                param: ["正常通话≤30秒", "正常通话31<=60秒", "正常通话>60秒"],
+                numArray: [0, 0, 0],
             },
             /** 
              * 短信统计情况
              */
             messageCount: {
                 title: "短信统计",
-                param: ["有意向发送数", "无意向发送数"],
-                numArray: [0, 0],
+                param: ["发送数"],
+                numArray: [0],
             },
             dateObj: {
                 dateEndBegin: "",
@@ -157,7 +163,7 @@ export default {
                 dateEndBegin: date[0],
                 dateEndEnd: date[1],
             }
-           /*  this.(); */
+            /*  this.(); */
         },
         /** 
          * 获取基础统计数据，最上层5个栏目
@@ -177,9 +183,9 @@ export default {
              */
             API.Home.visitcount().then((res) => {
                 res.data = res.data || {};
-                this.topData[1] = res.data.doNum?res.data.doNum - 0:0;
-                this.topData[2] = res.data.noDoNum?res.data.noDoNum - 0:0;
-                this.topData[3] = res.data.totalNum?res.data.totalNum - 0:0;
+                this.topData[1] = res.data.doNum ? res.data.doNum - 0 : 0;
+                this.topData[2] = res.data.noDoNum ? res.data.noDoNum - 0 : 0;
+                this.topData[3] = res.data.totalNum ? res.data.totalNum - 0 : 0;
             }).catch((err) => {
 
             });
@@ -209,8 +215,8 @@ export default {
                     };
                     this.phoneTime = {
                         title: "通话时长",
-                        param: ["正常通话≤1分钟", "正常通话>1分钟"],
-                        numArray: [res.data.ltDuration ? res.data.ltDuration - 0 : 0, res.data.gtDuration ? res.data.gtDuration - 0 : 0],
+                        param: ["正常通话≤30秒", "正常通话31<=60秒", "正常通话>60秒"],
+                        numArray: [res.data.ltDuration ? res.data.ltDuration - 0 : 0, res.data.etDuration ? res.data.etDuration - 0 : 0, res.data.gtDuration ? res.data.gtDuration - 0 : 0],
                     };
                 }
             }).catch((err) => {
@@ -223,8 +229,8 @@ export default {
                 if (res.data) {
                     this.messageCount = {
                         title: "短信统计",
-                        param: ["有意向发送数", "无意向发送数"],
-                        numArray: [res.data.doNum ? res.data.doNum - 0 : 0, res.data.noDoNum ? res.data.noDoNum - 0 : 0],
+                        param: ["发送数"],
+                        numArray: [res.data.doNum ? res.data.doNum - 0 : 0],
                     };
                 }
             }).catch((err) => {

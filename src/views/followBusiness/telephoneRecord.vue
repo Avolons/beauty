@@ -468,10 +468,7 @@ export default {
             /* this.idAllArr = [];
             this.haveSelect = []; */
             this.exportSelectFlag = true;
-            if(this.isall!=1){
-                this.normalCallDateList();
-            }
-
+            /* this.normalCallDateList(); */
         },
         /**
          * 确定导出

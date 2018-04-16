@@ -14,9 +14,13 @@
                 {{params[0]}}:&nbsp;&nbsp;&nbsp;
                 <span :style="{color: color}" v-cloak :id="idName">{{ startVal }}</span>
             </div>
-            <div class="count_span">
+            <div class="count_span" v-if="params[1]">
                 {{params[1]}}:&nbsp;&nbsp;&nbsp;
                 <span :style="{color: color}" v-cloak :id="idNames">{{ startVal }}</span>
+            </div>
+            <div class="count_span" v-if="params[2]">
+                {{params[2]}}:&nbsp;&nbsp;&nbsp;
+                <span :style="{color: color}" v-cloak :id="idNamess">{{ startVal }}</span>
             </div>
         </p>
     </div>
@@ -34,12 +38,14 @@ export default {
         return {
             demo1: {},
             demo2: {},
+            demo3: {},
         };
     },
     name: 'countUp',
     props: {
         idName: String,
         idNames: String,
+        idNamess: String,
         className: String,
         startVal: {
             type: Number,
@@ -100,9 +106,18 @@ export default {
                         demo.start();
                     }
                 }
+                if(endVal[1]!=undefined)
                 {
                     let demo = {};
                     this.demo2 = demo = new CountUp(this.idNames, this.startVal, endVal[1], this.decimals, this.duration, this.options);
+                    if (!demo.error) {
+                        demo.start();
+                    }
+                }
+                if(endVal[2]!=undefined)
+                {
+                    let demo = {};
+                    this.demo3 = demo = new CountUp(this.idNamess, this.startVal, endVal[2], this.decimals, this.duration, this.options);
                     if (!demo.error) {
                         demo.start();
                     }
@@ -113,10 +128,26 @@ export default {
     },
     watch: {
         endVal(val) {
+            if(!val){
+                return false;
+            }
             let res = transformValue(val);
             let endVal = res;
-            this.demo1.update(endVal[0]);
-            this.demo2.update(endVal[1]);
+            if(endVal[0]!=undefined){
+                if(this.demo1.update){
+                    this.demo1.update(endVal[0]);
+                }
+            }
+            if(endVal[1]!=undefined){
+                if(this.demo2.update){
+                    this.demo2.update(endVal[1]);
+                }
+            }
+            if(endVal[2]!=undefined){
+                if(this.demo3.update){
+                    this.demo3.update(endVal[2]);
+                }
+            }
         }
     }
 };

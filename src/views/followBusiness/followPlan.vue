@@ -641,7 +641,7 @@ export default {
     deletPlan(id) {
       this.$Modal.confirm({
         title: '删除设置',
-        content: '确定删除该系统设置？',
+        content: '确定删除该随访计划？',
         onOk: () => {
           API.FollowBussiness.delPlan({
             id: id

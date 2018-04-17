@@ -14,7 +14,7 @@ Vue.prototype.$http = axios;
 /* 默认最长响应时间 */
 // axios.defaults.timeout = 5000;
 /* 默认的接口地址 */
-/* axios.defaults.baseURL = '/api'; */
+  // axios.defaults.baseURL = '/api';
 // axios.defaults.baseURL = 'http://192.168.3.24:8080';
 /* axios.defaults.baseURL = 'http://192.168.1.215:8080'; */
 /* axios.defaults.baseURL = 'http://60.190.86.50:6016'; */
@@ -813,7 +813,24 @@ export const Systems = {
      */
     modifyOperateMaDate (data) {
         return fetch('post', '/visit/sysConfigOperation/save', data);
-    }
+    },
+    /**
+     * 获取百家姓对应列表数据
+     * @param {any} data
+     * @returns
+     */
+    BjxListBySomeList (data) {
+        return fetch('get', '/visit/admin/BjxListbysome', data);
+    },
+    /**
+     * 删除百家姓对应列表数据
+     * @param {any} data
+     * @returns
+     */
+    deleteBjxList (data) {
+        return fetch('post', '/visit/admin/deleteBjxList', data);
+    },
+
 };
 
 /* 随访设置--随访指标接口 *****/

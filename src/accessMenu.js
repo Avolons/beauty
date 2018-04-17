@@ -268,6 +268,10 @@ export const AM = {
         addMaintainDate: '/visit/sysConfigOperation/save',
 
         /** 编辑运营维护 */
-        editorMaintainDate: '/visit/sysConfigOperation/view'
+        editorMaintainDate: '/visit/sysConfigOperation/view',
+
+        /** 编辑百家姓 */
+        updateBjxList: '/visit/admin/updateBjxList',
+
     }
 };

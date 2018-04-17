@@ -16,23 +16,23 @@ module.exports = merge(webpackBaseConfig, {
     devtool: '#source-map',
     devServer: {
         port: 8082,
-        proxy:{
-            '/visit/*':{
-                target: 'http://192.168.1.218:8081',
-                changeOrigin: true,
-                secure: false
-            },
-            '/bjmt/*':{
-                target: 'http://192.168.1.218:8081',
-                changeOrigin: true,
-                secure: false
-            },
-            '/sms/*':{
-                target: 'http://192.168.1.218:8081',
-                changeOrigin: true,
-                secure: false
-            }
+    proxy:{
+        '/visit/*':{
+            target: 'http://192.168.1.218:8081',
+            changeOrigin: true,
+            secure: false
+        },
+        '/bjmt/*':{
+            target: 'http://192.168.1.218:8081',
+            changeOrigin: true,
+            secure: false
+        },
+        '/sms/*':{
+            target: 'http://192.168.1.218:8081',
+            changeOrigin: true,
+            secure: false
         }
+    }
     },
     output: {
         publicPath: '/dist/',

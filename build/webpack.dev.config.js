@@ -18,17 +18,17 @@ module.exports = merge(webpackBaseConfig, {
         port: 8082,
     proxy:{
         '/visit/*':{
-            target: 'http://192.168.1.218:8081',
+            target: 'http://192.168.1.215:6016',
             changeOrigin: true,
             secure: false
         },
         '/bjmt/*':{
-            target: 'http://192.168.1.218:8081',
+            target: 'http://192.168.1.215:6016',
             changeOrigin: true,
             secure: false
         },
         '/sms/*':{
-            target: 'http://192.168.1.218:8081',
+            target: 'http://192.168.1.215:6016',
             changeOrigin: true,
             secure: false
         }
@@ -58,9 +58,6 @@ module.exports = merge(webpackBaseConfig, {
             {
                 from: 'src/views/main-components/theme-switch/theme'
             },
-            {
-                from: 'src/views/my-components/text-editor/tinymce'
-            }
         ], {
             ignore: [
                 'text-editor.vue'

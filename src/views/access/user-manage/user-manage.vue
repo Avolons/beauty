@@ -1,6 +1,6 @@
 <template>
     <!--  -->
-    <user-manage></user-manage>
+    <user-manage projectType="beauty"></user-manage>
 </template>
 
 <script>

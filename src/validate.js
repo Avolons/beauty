@@ -4,6 +4,7 @@ let ruleList = {
   name: /^[\u4E00-\u9FA5\uf900-\ufa2d·s]{2,20}$/
 };
 export default {
+  /* 企业管理 */
   addBussiness: {
     name: [
       {
@@ -59,6 +60,7 @@ export default {
       }
     ]
   },
+  /* 通知 */
   notice: {
     name: [
       {
@@ -82,6 +84,7 @@ export default {
       }
     ]
   },
+  /* 系统 */
   system: {
     type: [
       {
@@ -128,6 +131,7 @@ export default {
       }
     ]
   },
+  /* 权限 */
   access: {
     name: [
       {
@@ -159,6 +163,7 @@ export default {
       }
     ]
   },
+  /* 部门管理 */
   depart: {
     name: [
       {
@@ -228,6 +233,7 @@ export default {
       }
     ]
   },
+  /* 角色管理 */
   role: {
     name: [
       {
@@ -244,6 +250,7 @@ export default {
       }
     ]
   },
+  /* 疾病管理 */
   disease: {
     name: [
       {
@@ -292,6 +299,7 @@ export default {
       }
     ]
   },
+  /* 用户管理 */
   users: {
     uName: [
       {
@@ -363,6 +371,7 @@ export default {
       }
     ]
   },
+  /* 随访方案 */
   followAction: {
     name: [
       {
@@ -402,6 +411,7 @@ export default {
       }
     ]
   },
+  /* 随访计划 */
   followPlan: {
     AIphone: [
       {
@@ -412,6 +422,7 @@ export default {
       }
     ]
   },
+  /*  */
   sendData: {
     mobile: [
       {

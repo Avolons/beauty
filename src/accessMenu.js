@@ -36,10 +36,10 @@ export const AM = {
         patSubmit: '/visit/order/temp/visit',
 
         /** 删除正常通话任务 */
-        deleteRecord: '/visit/order/temp/visit',
+        deleteRecord: '/bjmt/visit/deleteorder',
 
         /** 编辑正常通话任务 */
-        editorRecord: '/visit/order/temp/visit',
+        editorRecord: '/bjmt/visit/getorderdetail',
 
         /** 导出选择项 */
         visitorDerexport: '/bjmt/visit/visitorderexport'

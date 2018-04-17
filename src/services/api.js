@@ -830,6 +830,14 @@ export const Systems = {
     deleteBjxList (data) {
         return fetch('post', '/visit/admin/deleteBjxList', data);
     },
+    /***
+     * 下载百家姓模板
+     */
+    downBjxList (data) {
+        return fetch('post', '/visit/admin/dowloadBjxMould', data);
+    },
+
+
 
 };
 

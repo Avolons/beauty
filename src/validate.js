@@ -112,6 +112,13 @@ export default {
         trigger: "blur"
       }
     ],
+    surname:[
+        {
+            required: true,
+            message: "请填写姓氏",
+            trigger: "blur"
+        }
+    ],
     main_type: [
       {
         required: true,

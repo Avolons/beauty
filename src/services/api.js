@@ -830,12 +830,23 @@ export const Systems = {
     deleteBjxList (data) {
         return fetch('post', '/visit/admin/deleteBjxList', data);
     },
+
+    /**
+     * 更新百家姓对应列表数据
+     * @param {any} data
+     * @returns
+     */
+    updateBjxList (data) {
+        return fetch('post', '/visit/admin/updateBjxList', data);
+    },
     /***
      * 下载百家姓模板
      */
     downBjxList (data) {
         return fetch('post', '/visit/admin/dowloadBjxMould', data);
     },
+
+
 
 
 

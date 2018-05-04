@@ -273,5 +273,8 @@ export const AM = {
         /** 编辑百家姓 */
         updateBjxList: '/visit/admin/updateBjxList',
 
+        /** 删除百家姓 */
+        deleteBjxList: '/visit/admin/deleteBjxList',
+
     }
 };

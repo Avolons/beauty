@@ -31,13 +31,19 @@
             <span>
                 生成日期：
             </span>
-            <DatePicker @on-change="timeChange_one" type="datetimerange" placeholder="请选择生成日期"></DatePicker>
+            <DatePicker @on-change="timeChange_one" type="datetimerange"  placeholder="请选择生成日期"></DatePicker>
             </Col>
             <Col span="6" style="height:32px;margin-top:10px">
             <span>
                 执行日期：
             </span>
-            <DatePicker @on-change="timeChange_two" type="datetimerange" placeholder="请选择执行日期"></DatePicker>
+            <DatePicker @on-change="timeChange_two" type="daterange"  placeholder="请选择执行日期"></DatePicker>
+            </Col>
+            <Col span="6" style="height:32px;margin-top:10px">
+            <span>
+                执行时间：
+            </span>
+            <TimePicker type="timerange" placement="bottom-end" placeholder="请选择执行时间" @on-change="executionTime" @on-clear="clearTime"></TimePicker>
             </Col>
             <Col span="6" style="margin-top:10px">
             <span>
@@ -229,7 +235,10 @@ export default {
                 datebeginEnd: '',    // 执行结束时间
                 backStatus: '2',     // 通话状态
                 orderno: '',       // 随访编号
-                isExport: ''        // 是否导出过（是：1  否：0）
+                isExport: '',        // 是否导出过（是：1  否：0）
+                timeBegin:"",    //执行开始时间段（如：11:00:00）
+                timeEnd:""     //执行结束时间段（如：16:59:59）
+
 
             },
             modal3: false,   // 导出数量
@@ -280,6 +289,11 @@ export default {
                 {
                     title: '执行日期',
                     key: 'dateEnd',
+                    align: 'center'
+                },
+                {
+                    title: '执行时间',
+                    key: 'timeBegin',
                     align: 'center'
                 },
                 {
@@ -373,6 +387,20 @@ export default {
         };
     },
     methods: {
+        /**
+         * 执行时间
+         **/
+        executionTime(val){
+            this.searchParams.timeBegin =val[0];
+            this.searchParams.timeEnd =val[1];
+        },
+        /**
+         * 清除时间
+         **/
+        clearTime(){
+            this.searchParams.timeBegin ='';
+            this.searchParams.timeEnd = '';
+        },
         /**
          * 通话时长开始
          **/

@@ -376,32 +376,34 @@
 												</FormItem>
 											</Form>
 											<Form :model="it" :rules="validate.followAction" :label-width="110" v-for="it,index in ite.questionTempleQuestionJumps" :key="index" v-if="it.switchId!=''">
-												<FormItem class="way_main_questTitle" label="处理">
-													<span>{{it.switchId==-1?"无匹配":it.switchId==-2?"无声音":it.switchId==-3?"通用处理":it.switchId==""?"人工ai":it.switchId}}</span>
-												</FormItem>
-												<FormItem v-if="it.switchId!='-1'&&it.switchId!='-2'&&it.switchId!='-3'&&it.switchId!=''" label="话术名称">
-													<span>{{it.switchText}}</span>
-												</FormItem>
-												<FormItem v-if="it.switchId!=-1&&it.switchId!=-2&&it.switchId!=-3" label="判别规则">
-													<span>{{it.switchRegexText}}</span>
-												</FormItem>
-												<FormItem v-if="it.switchId!=-1&&it.switchId!=-2&&it.switchId!=-3" label="指标值">
-													<span>{{it.keyname}} ：{{it.keyvalue}}</span>
-												</FormItem>
-												<FormItem v-if="it.switchId==-2" label="超时语音">
-													<Input v-model="it.silenceWav" placeholder="请输入超时语音地址"></Input>
-												</FormItem>
-												<FormItem label="AI语音">
-													<Input v-model="it.switchWav" placeholder="请输入ai语音地址"></Input>
-												</FormItem>
-												<FormItem label="跳转问题编号">
-													<span>{{it.nextQuestionId}}</span>
-												</FormItem>
-												<FormItem v-if="it.switchId==-1" label="无匹配超次数跳转">
-													<Input v-model="it.outRptSwitchID" placeholder="请输入无匹配的跳转"></Input>
-													<!-- <span>{{it.outRptSwitchId}}</span> -->
-												</FormItem>
-											</Form>
+											<FormItem class="way_main_questTitle" label="处理">
+												<span>{{it.switchId==-1?"无匹配":it.switchId==-2?"无声音":it.switchId==-3?"通用处理":it.switchId==""?"人工ai":it.switchId}}</span>
+											</FormItem>
+											<FormItem v-if="it.switchId!='-1'&&it.switchId!='-2'&&it.switchId!='-3'&&it.switchId!=''" label="话术名称">
+												<span>{{it.switchText}}</span>
+											</FormItem>
+											<FormItem v-if="it.switchId!=-1&&it.switchId!=-2&&it.switchId!=-3" label="判别规则">
+												<span>{{it.switchRegexText}}</span>
+											</FormItem>
+											<FormItem v-if="it.switchId!=-1&&it.switchId!=-2&&it.switchId!=-3" label="指标值">
+												<span>{{it.keyname}} ：{{it.keyvalue}}</span>
+											</FormItem>
+											<FormItem v-if="it.switchId==-2" label="超时语音">
+												<Input v-model="it.silenceWav" placeholder="请输入超时语音地址"></Input>
+											</FormItem>
+											<FormItem label="AI语音">
+												<Input v-model="it.switchWav" placeholder="请输入ai语音地址"></Input>
+											</FormItem>
+											<FormItem label="跳转问题编号">
+												<span>{{it.nextQuestionId}}</span>
+											</FormItem>
+											<FormItem v-if="it.switchId==-1" label="无匹配超次数跳转">
+												<Input v-model="it.outRptSwitchID" placeholder="请输入无匹配的跳转"></Input>
+											</FormItem>
+											<FormItem v-if="it.switchId==-2" label="无声音超次数跳转">
+												<Input v-model="it.outRptSwitchID" placeholder="请输入无声音的跳转"></Input>
+											</FormItem>
+										</Form>
 										</div>
 									</Panel>
 								</Collapse>

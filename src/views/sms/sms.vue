@@ -169,7 +169,7 @@ export default {
     getList (type, year, month) {
       API.sms.selectByTime({
         type: type,
-        year: year,
+        year: year=='-1'?"":year,
         month: month
       }).then((res) => {
         this.smsLoading1 = false;
@@ -207,7 +207,10 @@ export default {
           })
          
           //当前年份和月份
-          this.sameYear = res.data.sendTime.slice(0,4)
+          if(this.sameYear!='-1'){
+            this.sameYear = res.data.sendTime.slice(0,4)
+          };
+          
           this.sameMonth = res.data.sendTime.slice(4,6)
         
         }
@@ -225,21 +228,29 @@ export default {
       let months = date.getMonth() +1;
       this.sameMonth = String(months);
       if(evt == 2){
-        let quanbu = [
+        let quanbu = 
           {
-            value: '',
+            value: '-1',
             label: '全部'
-          }
-        ]
-        this.yearList= this.yearList.concat(quanbu)
-        this.sameYear = ''
-      }else {
-        if(this.sameYear = '') {
-          this.yearList= this.yearList.unpop()
-          this.sameYear = this.yearList[0]
+          };
+        for (const iterator of this.yearList) {
+           if(iterator.label=="全部"){
+             this.sameYear ="-1";
+             return false;
+           }
         }
+        this.yearList.push(quanbu);
+        this.sameYear ="-1";
+      }else {
+        for (let index = 0; index < this.yearList.length; index++) {
+          if(this.yearList[index].label=='全部'){
+            this.yearList.splice(index,1);
+            index--;
+          }
+        }
+        this.sameYear = this.yearList[0].value;
       }
-      this.selectChange(evt)
+      this.selectChange(evt);
     },
     /**
      * 请求统计的function
@@ -250,13 +261,11 @@ export default {
         this.showSelect = true;
         this.tabName = 1;
         this.getList(this.tabName, this.sameYear, this.sameMonth)
-
       }else {
         this.showSelect = false;
         this.tabName = 2;
         //当日期切到月份时
-        const qq = new Point('全部')
-        console.log(qq)
+        const qq = new Point('全部');
         // this.yearList= this.yearList.concat(qq)
         this.getList(this.tabName, this.sameYear)
       }

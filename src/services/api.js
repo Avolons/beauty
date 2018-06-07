@@ -484,6 +484,13 @@ export const Jurisdiction = {
         return fetch('post', '/visit/admin/unstop', data);
     },
     /**
+     *  获取专属号码
+     *
+     */
+    userNumber (data) {
+        return fetch('get', '/visit/sysconfig/exclusivephone', data);
+    },
+    /**
      * 默认默认随访方案接口
      * page:1, //当前页码
         limit:3,//每页条数

@@ -560,7 +560,7 @@ export default {
 					id: "",
 					name: '全部'
 				});
-				this.getDoctorList();
+				/* this.getDoctorList(); */
 
 			}).catch((err) => {
 
@@ -570,7 +570,7 @@ export default {
 		 * 获取医生列表
 		 */
 		getDoctorList() {
-			this.searchParams.admin = "";
+			/* this.searchParams.admin = "";
 			this.isAll = 0;
 			this.dataList = [];
 			this.addList=[];
@@ -583,7 +583,7 @@ export default {
 				this.doctorList = res.data;
 			}).catch((err) => {
 
-			});
+			}); */
 		},
 		getAdmin(){
 			if (this.searchParams.admin) {

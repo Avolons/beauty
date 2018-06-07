@@ -31,19 +31,19 @@
             <span>
                 生成日期：
             </span>
-            <DatePicker @on-change="timeChange_one" type="datetimerange" placeholder="请选择生成日期"></DatePicker>
+            <DatePicker v-model="time_creat" @on-change="timeChange_one" type="datetimerange" placeholder="请选择生成日期"></DatePicker>
             </Col>
             <Col span="6" style="height:32px;margin-top:10px">
             <span>
                 执行日期：
             </span>
-            <DatePicker @on-change="timeChange_two" type="daterange" placeholder="请选择执行日期"></DatePicker>
+            <DatePicker  v-model="time_action" @on-change="timeChange_two" type="daterange" placeholder="请选择执行日期"></DatePicker>
             </Col>
             <Col span="6" style="height:32px;margin-top:10px">
             <span>
                 执行时间：
             </span>
-            <TimePicker type="timerange" placement="bottom-end" placeholder="请选择执行时间" @on-change="executionTime" @on-clear="clearTime"></TimePicker>
+            <TimePicker v-model="time_actionTime" type="timerange" placement="bottom-end" placeholder="请选择执行时间" @on-change="executionTime" @on-clear="clearTime"></TimePicker>
             </Col>
             <Col span="6" style="margin-top:10px">
             <span>
@@ -78,6 +78,7 @@
             <InputNumber  :min="searchParams.startDuration" v-model="searchParams.endDuration" @on-change="changeTalk"></InputNumber>
             </Col>
             <Col span="6" style="margin-top:10px">
+            <Button @click="restParams" type="info" style="margin-right:20px;">重置</Button>
             <Button @click="searchParams.pager=1;normalCallDateList()" type="primary">查询</Button>
             </Col>
         </Row>
@@ -180,6 +181,9 @@ import { API } from '@/services/index.js';
 export default {
     data() {
         return {
+            time_creat:[],
+            time_action:[],
+            time_actionTime:[],
             // 随访结果
             formLeft: {
                 brxm: '',     // 客户姓名
@@ -432,6 +436,31 @@ export default {
         };
     },
     methods: {
+        restParams(){
+            this.searchParams= {
+                limit: 10, // 每页条数
+                pager: 1, // 第几页
+                startDuration : null,
+                endDuration: null,
+                brxm: '',   // 客户姓名
+                mobile: '',  // 手机号
+                schemeName: '', // 方案名称
+                callTime: '',  // 呼叫次数
+                intention: '',  // 是否有意向 （ 1:有  0：无）
+                dateAddStart: '',  // 生成开始时间
+                dateAddEnd: '',   // 生成结束时间
+                datebeginStart: '',  // 执行开始时间
+                datebeginEnd: '',    // 执行结束时间
+                backStatus: '2',     // 通话状态
+                orderno: '',       // 随访编号
+                isExport: '',        // 是否导出过（是：1  否：0）
+                timeBegin:"",    //执行开始时间段（如：11:00:00）
+                timeEnd:""     //执行结束时间段（如：16:59:59）
+            };
+            this.time_creat=[];
+            this.time_action=[];
+            this.time_actionTime=[];
+        },
         /**
          * 执行时间
          **/

@@ -4,7 +4,7 @@
 </template>
 
 <script>
-import timedTask from './../common-compent/systemSet/timedTask.vue'
+import timedTask from './../commonCompent/systemSet/timedTask.vue'
 export default {
     components: {
         timedTask

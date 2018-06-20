@@ -5,7 +5,7 @@
 
 <script>
 /* import { API } from '../../../services' */
-import userManage from './../../common-compent/access/user-manage/user-manage.vue'
+import userManage from './../../commonCompent/access/user-manage/user-manage.vue'
 export default {
     components: {
         userManage

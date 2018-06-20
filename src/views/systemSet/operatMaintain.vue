@@ -4,7 +4,7 @@
 </template>
 
 <script>
-import operatMaintain from './../common-compent/systemSet/operatMaintain.vue'
+import operatMaintain from './../commonCompent/systemSet/operatMaintain.vue'
 export default {
     components: {
         operatMaintain

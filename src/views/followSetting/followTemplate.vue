@@ -4,7 +4,7 @@
 </template>
 
 <script>
-import followTemplate from './../common-compent/followSetting/followTemplate.vue'
+import followTemplate from './../commonCompent/followSetting/followTemplate.vue'
 export default {
     components: {
         followTemplate

@@ -4,7 +4,7 @@
 </template>
 
 <script>
-import timedTaskLog from './../common-compent/systemSet/timedTaskLog.vue'
+import timedTaskLog from './../commonCompent/systemSet/timedTaskLog.vue'
 export default {
     components: {
         timedTaskLog

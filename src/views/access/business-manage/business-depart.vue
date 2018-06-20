@@ -5,7 +5,7 @@
 
 <script>
 /* import { API } from '../../../services' */
-import businessDepart from './../../common-compent/access/business-manage/business-depart.vue'
+import businessDepart from './../../commonCompent/access/business-manage/business-depart.vue'
 export default {
     components: {
         businessDepart

@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import patientImport from './../common-compent/dataInteraction/patientImpro.vue'
+import patientImport from './../commonCompent/dataInteraction/patientImpro.vue'
 export default {
     components: {
         patientImport

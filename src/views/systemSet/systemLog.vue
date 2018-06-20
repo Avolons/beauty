@@ -4,7 +4,7 @@
 </template>
 
 <script>
-import systemLog from './../common-compent/systemSet/systemLog.vue'
+import systemLog from './../commonCompent/systemSet/systemLog.vue'
 export default {
     components: {
         systemLog

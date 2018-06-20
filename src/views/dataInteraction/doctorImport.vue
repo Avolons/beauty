@@ -4,7 +4,7 @@
 </template>
 
 <script>
-import doctorImport from './../common-compent/dataInteraction/doctorImport.vue'
+import doctorImport from './../commonCompent/dataInteraction/doctorImport.vue'
 export default {
     components: {
         doctorImport

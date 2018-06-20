@@ -5,7 +5,7 @@
 
 <script>
 /* import { API } from '../../../services' */
-import businessManage from './../../common-compent/access/business-manage/business-manage.vue'
+import businessManage from './../../commonCompent/access/business-manage/business-manage.vue'
 export default {
     components: {
         businessManage

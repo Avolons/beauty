@@ -4,7 +4,7 @@
 </template>
 
 <script>
-import systemSetup from './../common-compent/systemSet/systemSetup.vue'
+import systemSetup from './../commonCompent/systemSet/systemSetup.vue'
 export default {
     components: {
         systemSetup

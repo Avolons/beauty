@@ -4,7 +4,7 @@
 </template>
 
 <script>
-import familyNames from './../common-compent/systemSet/familyNames.vue'
+import familyNames from './../commonCompent/systemSet/familyNames.vue'
 export default {
     components: {
         familyNames

@@ -14,7 +14,6 @@ Vue.prototype.$http = axios;
 /* 默认最长响应时间 */
 // axios.defaults.timeout = 5000;
 /* 默认的接口地址 */
-  // axios.defaults.baseURL = '/api';
 // axios.defaults.baseURL = 'http://192.168.3.24:8080';
 /* axios.defaults.baseURL = 'http://192.168.1.215:8080'; */
 /* axios.defaults.baseURL = 'http://60.190.86.50:6016'; */

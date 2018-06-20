@@ -4,7 +4,7 @@
 </template>
 
 <script>
-import followType from './../common-compent/systemSet/followType.vue'
+import followType from './../commonCompent/systemSet/followType.vue'
 export default {
     components: {
         followType

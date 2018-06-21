@@ -115,6 +115,11 @@ export default {
                              */
                             localStorage.setItem('menuList',JSON.stringify(menuList));
                             localStorage.setItem('funList',JSON.stringify(funList));
+
+                            /**
+                             * 判断是否是管理员还是其他 type:0 是管理员
+                             **/
+                            sessionStorage.setItem("type",res.admin.type)
                             /** 
                              * cookie保存用户名和用户密码
                              */

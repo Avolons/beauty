@@ -18,17 +18,20 @@ module.exports = merge(webpackBaseConfig, {
         port: 8082,
     proxy:{
         '/visit/*':{
-            target: 'http://192.168.1.218:8081',
+            // target: 'http://192.168.1.218:8081',  //测试地址
+            target: 'http://192.168.3.29:8088',  //测试地址
             changeOrigin: true,
             secure: false
         },
         '/bjmt/*':{
-            target: 'http://192.168.1.218:8081',
+            // target: 'http://192.168.1.218:8081',//测试地址
+            target: 'http://192.168.3.29:8088',//测试地址
             changeOrigin: true,
             secure: false
         },
         '/sms/*':{
-            target: 'http://192.168.1.218:8081',
+            // target: 'http://192.168.1.218:8081',//测试地址
+            target: 'http://192.168.3.29:8088',//测试地址
             changeOrigin: true,
             secure: false
         }

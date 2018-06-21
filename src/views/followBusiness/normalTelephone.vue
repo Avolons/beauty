@@ -81,6 +81,7 @@
         <Row>
             <Button v-if="!menuShow(this.AM.FollowBussiness.visitorDerexport)" @click="cancelAllResult" :type="idSelectArr.length>0?'primary':'dashed'">导出选择项</Button>
             <Button v-if="!menuShow(this.AM.FollowBussiness.visitorDerexport)" @click="handleSelectAll" :type="dataList.length>0?'primary':'dashed'" >全部导出</Button>
+            <Button v-if="!menuShow(this.AM.FollowBussiness.AssigningCustomers)&&type==0" @click="AssigningCustomers" type="primary" >分配客户</Button>
             <Page style="float:right" :current="searchParams.pager" :total="totalPage" @on-change="changePage" show-elevator show-total></Page>
         </Row>
         </Col>
@@ -165,6 +166,24 @@
             <Spin size="large"></Spin>
             <div class="dataLoading">由于数据过多，请耐心等候...</div>
         </div>
+
+        <!--分配客户--->
+        <Modal v-model="modal4" @on-cancel="configCancelAction" class-name="exportNum" @on-ok="configSelectCustomers" :mask-closable="false" :loading="loading7" title="分配客户">
+            <Select v-model="queryCustomers" style="width:200px;margin-bottom: 10px;">
+                <Option v-for="item in customerList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+            </Select>
+            <Alert type="warning" show-icon v-show="isCustomers"> 请选择需要分配的网电咨询师</Alert>
+        </Modal>
+
+        <!-----处理结果--->
+        <Modal v-model="modal5"    :mask-closable="false"  title="处理结果">
+                <Alert type="success" show-icon>执行成功</Alert>
+                <p >(分配成功{{intSuccess}}条，失败<span style="color: red;">{{intError}}</span>条)</p>
+                <div slot="footer" style="text-align: center;">
+                    <Button  type='primary' @click="modal5=false">我知道了</Button>
+                </div>
+        </Modal>
+
     </Row>
 </template>
 
@@ -173,6 +192,17 @@ import { API } from '@/services/index.js';
 export default {
     data() {
         return {
+            customerList: [
+
+            ],
+            type:sessionStorage.getItem("type"),   //判断是否是管理员 ，type：0 是管理员 否则其他
+            intError:"",  //分配失败的条数
+            intSuccess:"", //成功的条数
+            isCustomers:false,  //是否选择客户医生了
+            model1: '',
+            queryCustomers:"",    //选中的客户
+            modal4:false,  //分配客户 默认隐藏
+            modal5:false,
             time_creat:[],
             time_action:[],
             time_actionTime:[],
@@ -219,6 +249,7 @@ export default {
                 }
             ],
             loading: true,
+            loading7:true,
             listSelect: [],
             ConversationDetail: false,  // 通话详情
             // 搜索选项
@@ -434,6 +465,7 @@ export default {
         changeTalk(val) {
             this.searchParams.endDuration = Math.ceil(val);
         },
+
         /**
          * 通话时长结束
          **/
@@ -453,6 +485,85 @@ export default {
             this.exportSelectFlag = true;
             this.modal3 = true;
             /* this.recordTotal = this.idSelectArr.length; */
+        },
+        /**
+         * 分配客户
+         **/
+        AssigningCustomers(){
+            if(this.idSelectArr.length==0){
+                 this.$Message.error("请至少勾选一个客户");
+                return false;
+            }
+            this.modal4 = true;
+
+            /**
+             * 查询客户列表，进行分配给咨询师
+             */
+            API.FollowBussiness.listDoctor({
+                types:4,
+                limit:10000,
+                page:1
+            }).then((res) => {
+                if (res.code == 0) {
+                    for(const item of res.data){
+                        this.customerList.push({
+                            label:item.realname,
+                            value:item.id
+                        })
+                    }
+                   console.log(res)
+                }else{
+                    this.$Message.error(res.message);
+                }
+            }).catch((err) => {
+                // 弹出错误信息
+                this.$Message.error(err);
+            });
+        },
+
+        /**
+         * 分配客户点击确定
+         **/
+        configSelectCustomers(){
+            let _this = this
+            setTimeout(function () {
+                _this.loading7 = false
+                _this.$nextTick(() => {
+                    _this.loading7 = true;
+                    console.log(11111111)
+                });
+            }, 0)
+             if(!this.queryCustomers){
+                this.isCustomers = true;
+                return false;
+            }
+            /*
+             * 调取分配接口
+             */
+            API.FollowBussiness.allotCustomer({
+                ids:this.idSelectArr,
+                adminId:this.queryCustomers
+            }).then((res) => {
+                if (res.code == 0) {
+                    this.intError = res.data[0].intError ;    //失败
+                    this.intSuccess = res.data[0].intSuccess ;    //成功
+                    this.modal5 = true;
+                    this.modal4 = false;
+                    this.idSelectArr = [];
+                    this.normalCallDateList();
+                    this.queryCustomers = '';
+                }else{
+                    this.$Message.error(res.message);
+                }
+            }).catch((err) => {
+                // 弹出错误信息
+                this.$Message.error(err);
+            });
+
+
+
+
+
         },
         /**
          * 设置全选 点击全部导出按钮
@@ -640,7 +751,6 @@ export default {
          */
         normalCallDateList() {
             API.FollowBussiness.normalCallList(this.searchParams).then((res) => {
-
                 // 判断是否全部导出 全部导出的时候全部添加图标
                 if (this.allExp) {
                     for (const item of res.data) {

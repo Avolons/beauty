@@ -168,7 +168,7 @@
         </div>
 
         <!--分配客户--->
-        <Modal v-model="modal4" @on-cancel="configCancelAction" class-name="exportNum" @on-ok="configSelectCustomers" :mask-closable="false" :loading="loading7" title="分配客户">
+        <Modal v-model="modal4" @on-cancel="cancelSelectCustomers" class-name="exportNum" @on-ok="configSelectCustomers" :mask-closable="false" :loading="loading7" title="分配客户">
             <Select v-model="queryCustomers" style="width:200px;margin-bottom: 10px;">
                 <Option v-for="item in customerList" :value="item.value" :key="item.value">{{ item.label }}</Option>
             </Select>
@@ -495,7 +495,6 @@ export default {
                 return false;
             }
             this.modal4 = true;
-
             /**
              * 查询客户列表，进行分配给咨询师
              */
@@ -530,7 +529,6 @@ export default {
                 _this.loading7 = false
                 _this.$nextTick(() => {
                     _this.loading7 = true;
-                    console.log(11111111)
                 });
             }, 0)
              if(!this.queryCustomers){
@@ -559,11 +557,14 @@ export default {
                 // 弹出错误信息
                 this.$Message.error(err);
             });
-
-
-
-
-
+        },
+        /**
+         * 点击取消进行清除
+         **/
+        cancelSelectCustomers(){
+            this.queryCustomers = '';
+            this.idSelectArr = [];
+            this.normalCallDateList();
         },
         /**
          * 设置全选 点击全部导出按钮

@@ -330,6 +330,11 @@ export default {
                     align: 'center'
                 },
                 {
+                    title: '网电咨询师',
+                    key: 'adminName',
+                    align: 'center'
+                },
+                {
                     title: '呼叫次数',
                     key: 'callTime',
                     align: 'center'
@@ -585,11 +590,11 @@ export default {
          * */
         configCancelAction() {
             this.allExp = false;
-            this.idSelectArr = [];
-            /* this.idAllArr = [];
-            this.haveSelect = []; */
+            this.idAllArr = [];
+            this.haveSelect = [];
             this.exportSelectFlag = true;
-            /* this.normalCallDateList(); */
+            this.idSelectArr = [];
+            this.normalCallDateList();
         },
         /**
          * 确定导出
@@ -778,6 +783,16 @@ export default {
         }
     },
     mounted() {
+        /**
+         * 判断是否是管理员 ，如果不是 就隐藏表格网电咨询师那一栏
+         */
+        if(sessionStorage.getItem("type")!=0){
+            for(var i=0;i<this.config.length;i++){
+                if(this.config[i].key === 'adminName'){
+                    this.config.splice(i,1)
+                }
+            }
+        }
         this.normalCallDateList();
     }
 };

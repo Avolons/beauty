@@ -155,7 +155,6 @@
                 </Panel>
             </Collapse>
         </Modal>
-
         <!--选择导出的数量-->
         <Modal v-model="modal3" @on-cancel="configCancelAction" class-name="exportNum" @on-ok="configNumExport" :mask-closable="false" :loading="loading ">
             <p>已选择
@@ -168,7 +167,7 @@
         </div>
 
         <!--分配客户--->
-        <Modal v-model="modal4" @on-cancel="cancelSelectCustomers" class-name="exportNum" @on-ok="configSelectCustomers" :mask-closable="false" :loading="loading7" title="分配客户">
+        <Modal v-model="modal4" style="" @on-cancel="cancelSelectCustomers" class-name="exportNum" @on-ok="configSelectCustomers" :mask-closable="false" :loading="loading7" title="分配客户">
             <Select v-model="queryCustomers" style="width:200px;margin-bottom: 10px;">
                 <Option v-for="item in customerList" :value="item.value" :key="item.value">{{ item.label }}</Option>
             </Select>
@@ -255,6 +254,7 @@ export default {
             // 搜索选项
             createLoading: true,   // loading动画加载
             searchParams: {
+                adminId:sessionStorage.getItem("adminId"),
                 limit: 10, // 每页条数
                 pager: 1, // 第几页
                 startDuration : null,
@@ -470,7 +470,6 @@ export default {
         changeTalk(val) {
             this.searchParams.endDuration = Math.ceil(val);
         },
-
         /**
          * 通话时长结束
          **/
@@ -500,6 +499,7 @@ export default {
                 return false;
             }
             this.modal4 = true;
+            this.customerList = [];
             /**
              * 查询客户列表，进行分配给咨询师
              */
@@ -567,9 +567,10 @@ export default {
          * 点击取消进行清除
          **/
         cancelSelectCustomers(){
+            this.isCustomers = false;
             this.queryCustomers = '';
-            this.idSelectArr = [];
-            this.normalCallDateList();
+//            this.idSelectArr = [];
+//            this.normalCallDateList();
         },
         /**
          * 设置全选 点击全部导出按钮
@@ -593,8 +594,8 @@ export default {
             this.idAllArr = [];
             this.haveSelect = [];
             this.exportSelectFlag = true;
-            this.idSelectArr = [];
-            this.normalCallDateList();
+//            this.idSelectArr = [];
+//            this.normalCallDateList();
         },
         /**
          * 确定导出
@@ -661,6 +662,7 @@ export default {
          * 取消单个选泽项
          **/
         cancelSingle(selection, row) {
+            console.log(selection)
             if (this.idSelectArr.length) {
                 for (var i = 0; i < this.idSelectArr.length; i++) {
                     if (row.id == this.idSelectArr[i]) {

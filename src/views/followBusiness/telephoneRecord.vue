@@ -438,6 +438,7 @@ export default {
     methods: {
         restParams(){
             this.searchParams= {
+                adminId:sessionStorage.getItem("adminId"),
                 limit: 10, // 每页条数
                 pager: 1, // 第几页
                 startDuration : null,

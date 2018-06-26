@@ -119,7 +119,8 @@ export default {
                             /**
                              * 判断是否是管理员还是其他 type:0 是管理员
                              **/
-                            sessionStorage.setItem("type",res.admin.type)
+                            sessionStorage.setItem("type",res.admin.type);
+                            sessionStorage.setItem("adminId",res.admin.id)
                             /** 
                              * cookie保存用户名和用户密码
                              */

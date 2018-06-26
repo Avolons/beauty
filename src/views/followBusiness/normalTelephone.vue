@@ -81,6 +81,7 @@
         <Row>
             <Button v-if="!menuShow(this.AM.FollowBussiness.visitorDerexport)" @click="cancelAllResult" :type="idSelectArr.length>0?'primary':'dashed'">导出选择项</Button>
             <Button v-if="!menuShow(this.AM.FollowBussiness.visitorDerexport)" @click="handleSelectAll" :type="dataList.length>0?'primary':'dashed'" >全部导出</Button>
+            <Button v-if="!menuShow(this.AM.FollowBussiness.AssigningCustomers)&&type==0" @click="AssigningCustomers" type="primary" >分配客户</Button>
             <Page style="float:right" :current="searchParams.pager" :total="totalPage" @on-change="changePage" show-elevator show-total></Page>
         </Row>
         </Col>
@@ -154,7 +155,6 @@
                 </Panel>
             </Collapse>
         </Modal>
-
         <!--选择导出的数量-->
         <Modal v-model="modal3" @on-cancel="configCancelAction" class-name="exportNum" @on-ok="configNumExport" :mask-closable="false" :loading="loading ">
             <p>已选择
@@ -165,6 +165,24 @@
             <Spin size="large"></Spin>
             <div class="dataLoading">由于数据过多，请耐心等候...</div>
         </div>
+
+        <!--分配客户--->
+        <Modal v-model="modal4" style="" @on-cancel="cancelSelectCustomers" class-name="exportNum" @on-ok="configSelectCustomers" :mask-closable="false" :loading="loading7" title="分配客户">
+            <Select v-model="queryCustomers" style="width:200px;margin-bottom: 10px;">
+                <Option v-for="item in customerList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+            </Select>
+            <Alert type="warning" show-icon v-show="isCustomers"> 请选择需要分配的网电咨询师</Alert>
+        </Modal>
+
+        <!-----处理结果--->
+        <Modal v-model="modal5"    :mask-closable="false"  title="处理结果">
+                <Alert type="success" show-icon>执行成功</Alert>
+                <p >(分配成功{{intSuccess}}条，失败<span style="color: red;">{{intError}}</span>条)</p>
+                <div slot="footer" style="text-align: center;">
+                    <Button  type='primary' @click="modal5=false">我知道了</Button>
+                </div>
+        </Modal>
+
     </Row>
 </template>
 
@@ -173,6 +191,17 @@ import { API } from '@/services/index.js';
 export default {
     data() {
         return {
+            customerList: [
+
+            ],
+            type:sessionStorage.getItem("type"),   //判断是否是管理员 ，type：0 是管理员 否则其他
+            intError:"",  //分配失败的条数
+            intSuccess:"", //成功的条数
+            isCustomers:false,  //是否选择客户医生了
+            model1: '',
+            queryCustomers:"",    //选中的客户
+            modal4:false,  //分配客户 默认隐藏
+            modal5:false,
             time_creat:[],
             time_action:[],
             time_actionTime:[],
@@ -219,11 +248,13 @@ export default {
                 }
             ],
             loading: true,
+            loading7:true,
             listSelect: [],
             ConversationDetail: false,  // 通话详情
             // 搜索选项
             createLoading: true,   // loading动画加载
             searchParams: {
+                adminId:sessionStorage.getItem("adminId"),
                 limit: 10, // 每页条数
                 pager: 1, // 第几页
                 startDuration : null,
@@ -296,6 +327,11 @@ export default {
                 {
                     title: '执行时间',
                     key: 'timeBegin',
+                    align: 'center'
+                },
+                {
+                    title: '网电咨询师',
+                    key: 'adminName',
                     align: 'center'
                 },
                 {
@@ -455,6 +491,88 @@ export default {
             /* this.recordTotal = this.idSelectArr.length; */
         },
         /**
+         * 分配客户
+         **/
+        AssigningCustomers(){
+            if(this.idSelectArr.length==0){
+                 this.$Message.error("请至少勾选一个客户");
+                return false;
+            }
+            this.modal4 = true;
+            this.customerList = [];
+            /**
+             * 查询客户列表，进行分配给咨询师
+             */
+            API.FollowBussiness.listDoctor({
+                types:4,
+                limit:10000,
+                page:1
+            }).then((res) => {
+                if (res.code == 0) {
+                    for(const item of res.data){
+                        this.customerList.push({
+                            label:item.realname,
+                            value:item.id
+                        })
+                    }
+                   console.log(res)
+                }else{
+                    this.$Message.error(res.message);
+                }
+            }).catch((err) => {
+                // 弹出错误信息
+                this.$Message.error(err);
+            });
+        },
+
+        /**
+         * 分配客户点击确定
+         **/
+        configSelectCustomers(){
+            let _this = this
+            setTimeout(function () {
+                _this.loading7 = false
+                _this.$nextTick(() => {
+                    _this.loading7 = true;
+                });
+            }, 0)
+             if(!this.queryCustomers){
+                this.isCustomers = true;
+                return false;
+            }
+            /*
+             * 调取分配接口
+             */
+            API.FollowBussiness.allotCustomer({
+                ids:this.idSelectArr,
+                adminId:this.queryCustomers
+            }).then((res) => {
+                if (res.code == 0) {
+                    this.intError = res.data[0].intError ;    //失败
+                    this.intSuccess = res.data[0].intSuccess ;    //成功
+                    this.modal5 = true;
+                    this.modal4 = false;
+                    this.idSelectArr = [];
+                    this.normalCallDateList();
+                    this.queryCustomers = '';
+                }else{
+                    this.$Message.error(res.message);
+                }
+            }).catch((err) => {
+                // 弹出错误信息
+                this.$Message.error(err);
+            });
+        },
+        /**
+         * 点击取消进行清除
+         **/
+        cancelSelectCustomers(){
+            this.isCustomers = false;
+            this.queryCustomers = '';
+//            this.idSelectArr = [];
+//            this.normalCallDateList();
+        },
+        /**
          * 设置全选 点击全部导出按钮
          */
         handleSelectAll(status) {
@@ -473,11 +591,11 @@ export default {
          * */
         configCancelAction() {
             this.allExp = false;
-            this.idSelectArr = [];
-            /* this.idAllArr = [];
-            this.haveSelect = []; */
+            this.idAllArr = [];
+            this.haveSelect = [];
             this.exportSelectFlag = true;
-            /* this.normalCallDateList(); */
+//            this.idSelectArr = [];
+//            this.normalCallDateList();
         },
         /**
          * 确定导出
@@ -544,6 +662,7 @@ export default {
          * 取消单个选泽项
          **/
         cancelSingle(selection, row) {
+            console.log(selection)
             if (this.idSelectArr.length) {
                 for (var i = 0; i < this.idSelectArr.length; i++) {
                     if (row.id == this.idSelectArr[i]) {
@@ -640,7 +759,6 @@ export default {
          */
         normalCallDateList() {
             API.FollowBussiness.normalCallList(this.searchParams).then((res) => {
-
                 // 判断是否全部导出 全部导出的时候全部添加图标
                 if (this.allExp) {
                     for (const item of res.data) {
@@ -667,6 +785,16 @@ export default {
         }
     },
     mounted() {
+        /**
+         * 判断是否是管理员 ，如果不是 就隐藏表格网电咨询师那一栏
+         */
+        if(sessionStorage.getItem("type")!=0){
+            for(var i=0;i<this.config.length;i++){
+                if(this.config[i].key === 'adminName'){
+                    this.config.splice(i,1)
+                }
+            }
+        }
         this.normalCallDateList();
     }
 };

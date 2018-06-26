@@ -27,7 +27,7 @@ Vue.prototype.$http = axios;
 
 /* axios.defaults.baseURL = 'http://192.168.3.26:8081'; */
 
-let JsonData = ['/visit/order/batchcancelall', '/order/temp/testvisit', '/order/temp/visit', '/visit/order/vet/save', '/visit/order/notice', '/ordertask/vet', '/question/script/save', '/questionscheme/save', '/questiontemple/save'];
+let JsonData = ['/visit/order/batchcancelall', '/order/temp/testvisit', '/order/temp/visit','/visit/order/allot','/visit/order/vet/save', '/visit/order/notice', '/ordertask/vet', '/question/script/save', '/questionscheme/save', '/questiontemple/save'];
 // 添加请求拦截器
 axios.interceptors.request.use(function (config) {
     let flag = 0;
@@ -1171,6 +1171,14 @@ export const FollowBussiness = {
      */
     delLog (data) {
         return fetch('post', '/visit/order/delete', data);
+    },
+    /**
+     * 分配客户接口 点击确认
+     * ids:["73125","20121","3190"],                //ids（必须）
+     * adminId:94                                   //网电咨询师id（必须）
+     */
+    allotCustomer(data){
+        return fetch('post', '/visit/order/allot', data);
     },
     /*
      * 随访记录详情

@@ -42,7 +42,10 @@ export const AM = {
         editorRecord: '/bjmt/visit/getorderdetail',
 
         /** 导出选择项 */
-        visitorDerexport: '/bjmt/visit/visitorderexport'
+        visitorDerexport: '/bjmt/visit/visitorderexport',
+
+        /** 分配客户 **/
+        AssigningCustomers:"/bjmt/visit/AssigningCustomers"
     },
     /** 随访设置 */
     FollowSetting: {

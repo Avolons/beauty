@@ -1,7 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
+<<<<<<< HEAD
     <list default="true" id="bb4a90c4-cceb-4f6b-92ca-127a7ac74759" name="Default" comment="提交" />
+=======
+    <list default="true" id="bb4a90c4-cceb-4f6b-92ca-127a7ac74759" name="Default" comment="提交">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/webpack.dev.config.js" afterPath="$PROJECT_DIR$/build/webpack.dev.config.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/views/followBusiness/followPlan.vue" afterPath="$PROJECT_DIR$/src/views/followBusiness/followPlan.vue" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/views/followBusiness/normalTelephone.vue" afterPath="$PROJECT_DIR$/src/views/followBusiness/normalTelephone.vue" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/views/followBusiness/telephoneRecord.vue" afterPath="$PROJECT_DIR$/src/views/followBusiness/telephoneRecord.vue" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/views/login.vue" afterPath="$PROJECT_DIR$/src/views/login.vue" />
+    </list>
+>>>>>>> f329c72bedeb69e8146b979e59fe45cf4bd03f97
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
     <ignored path="$PROJECT_DIR$/tmp/" />
@@ -17,8 +27,13 @@
       <file leaf-file-name="api.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/services/api.js">
           <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
             <state relative-caret-position="3496">
               <caret line="1190" column="14" lean-forward="false" selection-start-line="1190" selection-start-column="4" selection-end-line="1190" selection-end-column="14" />
+=======
+            <state relative-caret-position="325">
+              <caret line="832" column="0" lean-forward="false" selection-start-line="832" selection-start-column="0" selection-end-line="832" selection-end-column="0" />
+>>>>>>> f329c72bedeb69e8146b979e59fe45cf4bd03f97
               <folding />
             </state>
           </provider>
@@ -39,6 +54,7 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="104">
               <caret line="10" column="48" lean-forward="true" selection-start-line="10" selection-start-column="48" selection-end-line="10" selection-end-column="48" />
+<<<<<<< HEAD
               <folding>
                 <marker date="1529919415505" expanded="true" signature="615:1954" ph="{&quot;devtool&quot;: '##source-map'...}" />
                 <marker date="1529919415505" expanded="true" signature="660:1118" ph="{...}" />
@@ -55,6 +71,9 @@
                 <marker date="1529919415505" expanded="true" signature="1864:1945" ph="{...}" />
                 <marker date="1529919415505" expanded="true" signature="1886:1935" ph="[...]" />
               </folding>
+=======
+              <folding />
+>>>>>>> f329c72bedeb69e8146b979e59fe45cf4bd03f97
             </state>
           </provider>
         </entry>
@@ -62,11 +81,21 @@
       <file leaf-file-name="normalTelephone.vue" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/views/followBusiness/normalTelephone.vue">
           <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
             <state relative-caret-position="1513">
               <caret line="377" column="23" lean-forward="true" selection-start-line="377" selection-start-column="23" selection-end-line="377" selection-end-column="23" />
               <folding>
                 <element signature="n#style#0;n#Page#0;n#Row#1;n#Row#0;n#template#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#span#0;n#p#0;n#Modal#1;n#Row#0;n#template#0;n#!!top" expanded="true" />
+=======
+            <state relative-caret-position="457">
+              <caret line="579" column="54" lean-forward="true" selection-start-line="579" selection-start-column="54" selection-end-line="579" selection-end-column="54" />
+              <folding>
+                <element signature="n#style#0;n#span#0;n#p#0;n#Modal#1;n#Row#0;n#template#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#Select#0;n#Modal#2;n#Row#0;n#template#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#span#0;n#p#0;n#Modal#3;n#Row#0;n#template#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#0;n#Modal#3;n#Row#0;n#template#0;n#!!top" expanded="true" />
+>>>>>>> f329c72bedeb69e8146b979e59fe45cf4bd03f97
               </folding>
             </state>
           </provider>
@@ -76,6 +105,7 @@
         <entry file="file://$PROJECT_DIR$/src/views/followBusiness/followPlan.vue">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="466">
+<<<<<<< HEAD
               <caret line="335" column="23" lean-forward="true" selection-start-line="335" selection-start-column="23" selection-end-line="335" selection-end-column="23" />
               <folding>
                 <marker date="1529919415563" expanded="true" signature="11920:23024" ph="{...}" />
@@ -244,6 +274,10 @@
                 <marker date="1529919415563" expanded="true" signature="26109:26148" ph="{...}" />
                 <marker date="1529919415563" expanded="true" signature="26168:26197" ph="{...}" />
               </folding>
+=======
+              <caret line="335" column="43" lean-forward="true" selection-start-line="335" selection-start-column="43" selection-end-line="335" selection-end-column="43" />
+              <folding />
+>>>>>>> f329c72bedeb69e8146b979e59fe45cf4bd03f97
             </state>
           </provider>
         </entry>
@@ -255,6 +289,7 @@
               <caret line="170" column="0" lean-forward="true" selection-start-line="170" selection-start-column="0" selection-end-line="170" selection-end-column="0" />
               <folding>
                 <element signature="n#style#0;n#span#0;n#p#0;n#Modal#1;n#Row#0;n#template#0;n#!!top" expanded="true" />
+<<<<<<< HEAD
                 <marker date="1529919415588" expanded="true" signature="8360:25565" ph="{...}" />
                 <marker date="1529919415588" expanded="true" signature="16497:25505" ph="{...}" />
                 <marker date="1529919415588" expanded="true" signature="16519:17460" ph="{...}" />
@@ -371,6 +406,8 @@
                 <marker date="1529919415588" expanded="true" signature="29751:30236" ph="{...}" />
                 <marker date="1529919415588" expanded="true" signature="29896:30042" ph="{...}" />
                 <marker date="1529919415588" expanded="true" signature="30060:30234" ph="{...}" />
+=======
+>>>>>>> f329c72bedeb69e8146b979e59fe45cf4bd03f97
               </folding>
             </state>
           </provider>
@@ -380,6 +417,7 @@
         <entry file="file://$PROJECT_DIR$/src/views/login.vue">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="388">
+<<<<<<< HEAD
               <caret line="117" column="32" lean-forward="false" selection-start-line="117" selection-start-column="32" selection-end-line="117" selection-end-column="32" />
               <folding>
                 <marker date="1529919415602" expanded="true" signature="2387:5818" ph="{...}" />
@@ -397,6 +435,10 @@
                 <marker date="1529919415602" expanded="true" signature="5740:5763" ph="{...}" />
                 <marker date="1529919415602" expanded="true" signature="5837:5847" ph="..." />
               </folding>
+=======
+              <caret line="122" column="59" lean-forward="false" selection-start-line="122" selection-start-column="52" selection-end-line="122" selection-end-column="59" />
+              <folding />
+>>>>>>> f329c72bedeb69e8146b979e59fe45cf4bd03f97
             </state>
           </provider>
         </entry>
@@ -435,10 +477,13 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
+<<<<<<< HEAD
       <find>orderno</find>
       <find>timeout</find>
       <find>$Spin</find>
       <find>visitorderexport</find>
+=======
+>>>>>>> f329c72bedeb69e8146b979e59fe45cf4bd03f97
       <find>hide</find>
       <find>fixDownload</find>
       <find>showLayer</find>
@@ -462,9 +507,19 @@
       <find>ivu-upload</find>
       <find>Systems</find>
       <find>handleSuccess</find>
+<<<<<<< HEAD
       <find>limit</find>
       <find>admin/list</find>
       <find>分配客户</find>
+=======
+      <find>customerList</find>
+      <find>分配客户</find>
+      <find>exportNum</find>
+      <find>isCustomers</find>
+      <find>cancelAllResult</find>
+      <find>cancelSelectCustomers</find>
+      <find>idSelectArr</find>
+>>>>>>> f329c72bedeb69e8146b979e59fe45cf4bd03f97
     </findStrings>
     <dirStrings>
       <dir>E:\renshi\rsys_medicine</dir>
@@ -486,15 +541,16 @@
         <option value="$PROJECT_DIR$/src/views/followSetting/followTemplate.vue" />
         <option value="$PROJECT_DIR$/src/accessMenu.js" />
         <option value="$PROJECT_DIR$/package.json" />
-        <option value="$PROJECT_DIR$/src/views/followBusiness/telephoneRecord.vue" />
-        <option value="$PROJECT_DIR$/src/views/followBusiness/normalTelephone.vue" />
-        <option value="$PROJECT_DIR$/src/views/followBusiness/followPlan.vue" />
         <option value="$PROJECT_DIR$/src/views/systemSet/familyNames.vue" />
         <option value="$PROJECT_DIR$/src/router/router.js" />
         <option value="$PROJECT_DIR$/src/views/common-compent/dataInteraction/patientImpro.vue" />
         <option value="$PROJECT_DIR$/src/views/common-compent/systemSet/FamilyNames.vue" />
-        <option value="$PROJECT_DIR$/build/webpack.dev.config.js" />
         <option value="$PROJECT_DIR$/src/services/api.js" />
+        <option value="$PROJECT_DIR$/build/webpack.dev.config.js" />
+        <option value="$PROJECT_DIR$/src/views/login.vue" />
+        <option value="$PROJECT_DIR$/src/views/followBusiness/followPlan.vue" />
+        <option value="$PROJECT_DIR$/src/views/followBusiness/telephoneRecord.vue" />
+        <option value="$PROJECT_DIR$/src/views/followBusiness/normalTelephone.vue" />
       </list>
     </option>
   </component>
@@ -550,6 +606,24 @@
               <item name="rsys_medicine" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="services" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="rsys_medicine" type="b2602c69:ProjectViewProjectNode" />
+              <item name="rsys_medicine" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="rsys_medicine" type="b2602c69:ProjectViewProjectNode" />
+              <item name="rsys_medicine" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="views" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="rsys_medicine" type="b2602c69:ProjectViewProjectNode" />
+              <item name="rsys_medicine" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="views" type="462c0819:PsiDirectoryNode" />
+              <item name="followBusiness" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -616,6 +690,7 @@
       <workItem from="1522718944837" duration="1534000" />
       <workItem from="1522737801621" duration="599000" />
       <workItem from="1523862345849" duration="8289000" />
+      <workItem from="1529916299583" duration="2980000" />
     </task>
     <task id="LOCAL-00001" summary="正常通话 随访记录">
       <created>1521019214894</created>
@@ -705,13 +780,21 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
+<<<<<<< HEAD
     <option name="totallyTimeSpent" value="125237000" />
+=======
+    <option name="totallyTimeSpent" value="126172000" />
+>>>>>>> f329c72bedeb69e8146b979e59fe45cf4bd03f97
   </component>
   <component name="ToolWindowManager">
     <frame x="1912" y="-8" width="1936" height="1096" extended-state="6" />
     <editor active="true" />
     <layout>
+<<<<<<< HEAD
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.11433087" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+=======
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.13909379" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+>>>>>>> f329c72bedeb69e8146b979e59fe45cf4bd03f97
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32908705" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -719,7 +802,11 @@
       <window_info id="npm" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32861805" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+<<<<<<< HEAD
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2625" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+=======
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.108333334" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+>>>>>>> f329c72bedeb69e8146b979e59fe45cf4bd03f97
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -794,8 +881,15 @@
         <state relative-caret-position="16107">
           <caret line="413" column="21" lean-forward="false" selection-start-line="413" selection-start-column="12" selection-end-line="413" selection-end-column="21" />
           <folding>
+<<<<<<< HEAD
             <element signature="n#style#0;n#Page#0;n#Row#1;n#Row#0;n#template#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#span#0;n#p#0;n#Modal#1;n#Row#0;n#template#0;n#!!top" expanded="true" />
+=======
+            <element signature="n#style#0;n#span#0;n#p#0;n#Modal#1;n#Row#0;n#template#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#Select#0;n#Modal#2;n#Row#0;n#template#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#span#0;n#p#0;n#Modal#3;n#Row#0;n#template#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#Modal#3;n#Row#0;n#template#0;n#!!top" expanded="true" />
+>>>>>>> f329c72bedeb69e8146b979e59fe45cf4bd03f97
           </folding>
         </state>
       </provider>
@@ -806,6 +900,7 @@
           <caret line="615" column="68" lean-forward="true" selection-start-line="615" selection-start-column="68" selection-end-line="615" selection-end-column="68" />
           <folding>
             <element signature="n#style#0;n#span#0;n#p#0;n#Modal#1;n#Row#0;n#template#0;n#!!top" expanded="true" />
+<<<<<<< HEAD
             <marker date="1529919415588" expanded="true" signature="8360:25565" ph="{...}" />
             <marker date="1529919415588" expanded="true" signature="16497:25505" ph="{...}" />
             <marker date="1529919415588" expanded="true" signature="16519:17460" ph="{...}" />
@@ -922,6 +1017,8 @@
             <marker date="1529919415588" expanded="true" signature="29751:30236" ph="{...}" />
             <marker date="1529919415588" expanded="true" signature="29896:30042" ph="{...}" />
             <marker date="1529919415588" expanded="true" signature="30060:30234" ph="{...}" />
+=======
+>>>>>>> f329c72bedeb69e8146b979e59fe45cf4bd03f97
           </folding>
         </state>
       </provider>
@@ -991,8 +1088,15 @@
         <state relative-caret-position="15561">
           <caret line="399" column="18" lean-forward="true" selection-start-line="399" selection-start-column="18" selection-end-line="399" selection-end-column="18" />
           <folding>
+<<<<<<< HEAD
             <element signature="n#style#0;n#Page#0;n#Row#1;n#Row#0;n#template#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#span#0;n#p#0;n#Modal#1;n#Row#0;n#template#0;n#!!top" expanded="true" />
+=======
+            <element signature="n#style#0;n#span#0;n#p#0;n#Modal#1;n#Row#0;n#template#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#Select#0;n#Modal#2;n#Row#0;n#template#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#span#0;n#p#0;n#Modal#3;n#Row#0;n#template#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#Modal#3;n#Row#0;n#template#0;n#!!top" expanded="true" />
+>>>>>>> f329c72bedeb69e8146b979e59fe45cf4bd03f97
           </folding>
         </state>
       </provider>
@@ -1065,6 +1169,7 @@
         </state>
       </provider>
     </entry>
+<<<<<<< HEAD
     <entry file="file://$PROJECT_DIR$/src/views/login.vue">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="388">
@@ -1088,6 +1193,8 @@
         </state>
       </provider>
     </entry>
+=======
+>>>>>>> f329c72bedeb69e8146b979e59fe45cf4bd03f97
     <entry file="file://$PROJECT_DIR$/src/views/home/home.vue">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="390">
@@ -1128,6 +1235,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+<<<<<<< HEAD
           <folding />
         </state>
       </provider>
@@ -1429,6 +1537,8 @@
             <marker date="1529919415563" expanded="true" signature="26109:26148" ph="{...}" />
             <marker date="1529919415563" expanded="true" signature="26168:26197" ph="{...}" />
           </folding>
+=======
+>>>>>>> f329c72bedeb69e8146b979e59fe45cf4bd03f97
         </state>
       </provider>
     </entry>
@@ -1436,7 +1546,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1454,6 +1563,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+<<<<<<< HEAD
         </state>
       </provider>
     </entry>
@@ -1462,12 +1572,14 @@
         <state relative-caret-position="104">
           <caret line="4" column="0" lean-forward="true" selection-start-line="4" selection-start-column="0" selection-end-line="4" selection-end-column="0" />
           <folding />
+=======
+>>>>>>> f329c72bedeb69e8146b979e59fe45cf4bd03f97
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/router/router.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="189">
+        <state relative-caret-position="10582">
           <caret line="407" column="25" lean-forward="true" selection-start-line="407" selection-start-column="25" selection-end-line="407" selection-end-column="25" />
           <folding />
         </state>
@@ -1475,7 +1587,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/package.json">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2267">
+        <state relative-caret-position="1560">
           <caret line="60" column="24" lean-forward="false" selection-start-line="60" selection-start-column="24" selection-end-line="60" selection-end-column="24" />
         </state>
       </provider>
@@ -1498,14 +1610,22 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/views/common-compent/dataInteraction/patientImpro.vue" />
     <entry file="file://$PROJECT_DIR$/src/views/common-compent/systemSet/FamilyNames.vue" />
+<<<<<<< HEAD
     <entry file="file://$PROJECT_DIR$/build/webpack.base.config.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+=======
+    <entry file="file://$PROJECT_DIR$/src/services/api.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="325">
+          <caret line="832" column="0" lean-forward="false" selection-start-line="832" selection-start-column="0" selection-end-line="832" selection-end-column="0" />
+>>>>>>> f329c72bedeb69e8146b979e59fe45cf4bd03f97
           <folding />
         </state>
       </provider>
     </entry>
+<<<<<<< HEAD
     <entry file="file://$PROJECT_DIR$/build/webpack.dev.config.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="104">
@@ -1526,17 +1646,30 @@
             <marker date="1529919415505" expanded="true" signature="1864:1945" ph="{...}" />
             <marker date="1529919415505" expanded="true" signature="1886:1935" ph="[...]" />
           </folding>
+=======
+    <entry file="file://$PROJECT_DIR$/src/services/index.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="104">
+          <caret line="4" column="0" lean-forward="true" selection-start-line="4" selection-start-column="0" selection-end-line="4" selection-end-column="0" />
+          <folding />
+>>>>>>> f329c72bedeb69e8146b979e59fe45cf4bd03f97
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/services/api.js">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
         <state relative-caret-position="3496">
           <caret line="1190" column="14" lean-forward="false" selection-start-line="1190" selection-start-column="4" selection-end-line="1190" selection-end-column="14" />
+=======
+        <state relative-caret-position="104">
+          <caret line="10" column="48" lean-forward="true" selection-start-line="10" selection-start-column="48" selection-end-line="10" selection-end-column="48" />
+>>>>>>> f329c72bedeb69e8146b979e59fe45cf4bd03f97
           <folding />
         </state>
       </provider>
     </entry>
+<<<<<<< HEAD
     <entry file="file://$PROJECT_DIR$/src/views/followBusiness/normalTelephone.vue">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1513">
@@ -1544,6 +1677,43 @@
           <folding>
             <element signature="n#style#0;n#Page#0;n#Row#1;n#Row#0;n#template#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#span#0;n#p#0;n#Modal#1;n#Row#0;n#template#0;n#!!top" expanded="true" />
+=======
+    <entry file="file://$PROJECT_DIR$/src/views/login.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="388">
+          <caret line="122" column="59" lean-forward="false" selection-start-line="122" selection-start-column="52" selection-end-line="122" selection-end-column="59" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/views/followBusiness/followPlan.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="466">
+          <caret line="335" column="43" lean-forward="true" selection-start-line="335" selection-start-column="43" selection-end-line="335" selection-end-column="43" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/views/followBusiness/telephoneRecord.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="910">
+          <caret line="170" column="0" lean-forward="true" selection-start-line="170" selection-start-column="0" selection-end-line="170" selection-end-column="0" />
+          <folding>
+            <element signature="n#style#0;n#span#0;n#p#0;n#Modal#1;n#Row#0;n#template#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/views/followBusiness/normalTelephone.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="457">
+          <caret line="579" column="54" lean-forward="true" selection-start-line="579" selection-start-column="54" selection-end-line="579" selection-end-column="54" />
+          <folding>
+            <element signature="n#style#0;n#span#0;n#p#0;n#Modal#1;n#Row#0;n#template#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#Select#0;n#Modal#2;n#Row#0;n#template#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#span#0;n#p#0;n#Modal#3;n#Row#0;n#template#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#Modal#3;n#Row#0;n#template#0;n#!!top" expanded="true" />
+>>>>>>> f329c72bedeb69e8146b979e59fe45cf4bd03f97
           </folding>
         </state>
       </provider>

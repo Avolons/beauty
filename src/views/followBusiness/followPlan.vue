@@ -333,6 +333,7 @@ export default {
       createLoading: true,     //loading 动画加载中
       //搜索选项
       searchParams: {
+        adminId:sessionStorage.getItem("adminId"),
         brxm: '',//客户姓名
         schemeName: '',//随访方案
         status: '',//审核状态

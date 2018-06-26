@@ -99,6 +99,7 @@
                     <Select  v-model="formData.types" style="width:200px">
                         <Option value="0" >管理员</Option>
                         <Option value="1" >医生</Option>
+                        <Option value="4" >网电咨询师</Option>
                     </Select>
                 </FormItem>
                 <h5>功能权限</h5>

@@ -504,7 +504,7 @@ export default {
              * 查询客户列表，进行分配给咨询师
              */
             API.FollowBussiness.listDoctor({
-                types:4,
+                type:4,
                 limit:10000,
                 page:1
             }).then((res) => {

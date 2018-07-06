@@ -153,56 +153,6 @@ export const otherRouter = {
 
 /* 作为Main组件的子页面展示并且在左侧菜单显示的路由写在appRouter里; */
 export const appRouter = [
-    {
-        path: '/dataShow',
-        icon: 'ios-world-outline',
-        name: 'dataShow',
-        title: '数据报表',
-        access: '/dataShow', // access已经添加
-        component: Main,
-        children: [
-            {
-                path: '/dataShow/dataCollect',
-                title: '随访统计',
-                access: '/dataShow/dataCollect', // access已经添加
-                name: 'dataCollect',
-                icon: 'chatbubble',
-                component: resolve => {
-                    require(['@/views/dataShow/dataCollect.vue'], resolve);
-                }
-            },
-            {
-                path: '/dataShow/sms',
-                title: '短信统计',
-                access: '/dataShow/sms', // access已经添加
-                name: 'sms',
-                icon: 'chatbox-working',
-                component: resolve => {
-                    require(['@/views/sms/sms.vue'], resolve);
-                }
-            }
-      /*  {
-        path: "/dataShow/docSuggests",
-        title: "医生意见反馈",
-        access: "/dataShow/docSuggests", // access已经添加
-        name: "docSuggests",
-        icon: "chatbubble",
-        component: resolve => {
-          require(["@/views/dataShow/docSuggests.vue"], resolve);
-        }
-      },
-      {
-        path: "/dataShow/phoneCounts",
-        title: "随访信息吞吐量情况",
-        access: "/dataShow/phoneCounts", // access已经添加
-        name: "phoneCounts",
-        icon: "eject",
-        component: resolve => {
-          require(["@/views/dataShow/phoneCounts.vue"], resolve);
-        }
-      } */
-        ]
-    },
     /* {
         path: '/sms',
         icon: 'chatboxes',
@@ -223,112 +173,71 @@ export const appRouter = [
             }
         ]
     }, */
-    {
-        path: '/followBusiness',
-        icon: 'edit',
-        name: 'followBusiness',
-        access: '/followBusiness', // access已经添加
-        title: '随访业务',
-        component: Main,
-        children: [
-            {
-                path: '/followBusiness/patientList',
-                icon: 'ios-barcode-outline',
-                name: 'patientList',
-                title: '客户列表',
-                access: '/followBusiness/patientList', // access已经添加
-                component: resolve => {
-                    require(['@/views/followBusiness/patientList.vue'], resolve);
-                }
-            },
-            {
-                path: '/followBusiness/followPlan',
-                icon: 'ios-speedometer',
-                name: 'followPlan',
-                title: '随访计划',
-                access: '/followBusiness/followPlan', // access已经添加
-                component: resolve => {
-                    require(['@/views/followBusiness/followPlan.vue'], resolve);
-                }
-            },
-            {
-                path: '/followBusiness/normalTelephone',
-                icon: 'ios-telephone-outline',
-                name: 'normalTelephone',
-                title: '正常通话',
-                access: '/followBusiness/normalTelephone', // access已经添加
-                component: resolve => {
-                    require(['@/views/followBusiness/normalTelephone.vue'], resolve);
-                }
-            },
-            {
-                path: '/followBusiness/telephoneRecord',
-                icon: 'ios-stopwatch-outline',
-                name: 'telephoneRecord',
-                title: '通话记录',
-                access: '/followBusiness/telephoneRecord', // access已经添加
-                component: resolve => {
-                    require(['@/views/followBusiness/telephoneRecord.vue'], resolve);
-                }
-            },
-            {
-                path: '/followBusiness/temporaryTask',
-                icon: 'ios-stopwatch',
-                name: 'temporaryTask',
-                title: '发起临时随访任务',
-                access: '/followBusiness/temporaryTask', // access已经添加
-                component: resolve => {
-                    require(['@/views/followBusiness/temporaryTask.vue'], resolve);
-                }
-            }
-        ]
-    },
-    /* {
-        path: '/menReview',
-        icon: 'social-buffer',
-        name: 'menReview',
-        title: '人工审核',
-        access: '/menReview', // access已经添加
-        component: Main,
-        children: [
-            {
-                path: '/menReview/planRe',
-                icon: 'podium',
-                name: 'planRe',
-                title: '随访计划审核',
-                access: '/menReview/planRe', // access已经添加
-                component: resolve => {
-                    require(['@/views/menReview/planRe.vue'], resolve);
-                }
-            },
-            {
-                path: '/menReview/wayRe',
-                icon: 'disc',
-                name: 'wayRe',
-                title: '计划匹配重复审核',
-                access: '/menReview/wayRe', // access已经添加
-                component: resolve => {
-                    require(['@/views/menReview/wayRe.vue'], resolve);
-                }
-            },
-            {
-                path: '/menReview/flWayRe',
-                icon: 'pricetags',
-                name: 'flWayRe',
-                title: '随访记录审核',
-                access: '/menReview/flWayRe', // access已经添加
-                component: resolve => {
-                    require(['@/views/menReview/flWayRe.vue'], resolve);
-                }
-            }
-        ]
-    }, */
+    // {
+    //     path: '/followBusiness',
+    //     icon: 'edit',
+    //     name: 'followBusiness',
+    //     access: '/followBusiness', // access已经添加
+    //     title: '随访业务',
+    //     component: Main,
+    //     children: [
+    //         {
+    //             path: '/followBusiness/patientList',
+    //             icon: 'ios-barcode-outline',
+    //             name: 'patientList',
+    //             title: '客户列表',
+    //             access: '/followBusiness/patientList', // access已经添加
+    //             component: resolve => {
+    //                 require(['@/views/followBusiness/patientList.vue'], resolve);
+    //             }
+    //         },
+    //         {
+    //             path: '/followBusiness/followPlan',
+    //             icon: 'ios-speedometer',
+    //             name: 'followPlan',
+    //             title: '随访计划',
+    //             access: '/followBusiness/followPlan', // access已经添加
+    //             component: resolve => {
+    //                 require(['@/views/followBusiness/followPlan.vue'], resolve);
+    //             }
+    //         },
+    //         {
+    //             path: '/followBusiness/normalTelephone',
+    //             icon: 'ios-telephone-outline',
+    //             name: 'normalTelephone',
+    //             title: '正常通话',
+    //             access: '/followBusiness/normalTelephone', // access已经添加
+    //             component: resolve => {
+    //                 require(['@/views/followBusiness/normalTelephone.vue'], resolve);
+    //             }
+    //         },
+    //         {
+    //             path: '/followBusiness/telephoneRecord',
+    //             icon: 'ios-stopwatch-outline',
+    //             name: 'telephoneRecord',
+    //             title: '通话记录',
+    //             access: '/followBusiness/telephoneRecord', // access已经添加
+    //             component: resolve => {
+    //                 require(['@/views/followBusiness/telephoneRecord.vue'], resolve);
+    //             }
+    //         },
+    //         {
+    //             path: '/followBusiness/temporaryTask',
+    //             icon: 'ios-stopwatch',
+    //             name: 'temporaryTask',
+    //             title: '发起临时随访任务',
+    //             access: '/followBusiness/temporaryTask', // access已经添加
+    //             component: resolve => {
+    //                 require(['@/views/followBusiness/temporaryTask.vue'], resolve);
+    //             }
+    //         }
+    //     ]
+    // },
     {
         path: '/followSetting',
         icon: 'paintbucket',
         name: 'followSetting',
         title: '随访设置',
-        access: '/followSetting', // access已经添加
         component: Main,
         children: [
             {
@@ -336,7 +245,6 @@ export const appRouter = [
                 icon: 'navigate',
                 name: 'followIndex',
                 title: '随访指标',
-                access: '/followSetting/followIndex', // access已经添加
                 component: resolve => {
                     require(['@/views/followSetting/followIndex.vue'], resolve);
                 }
@@ -346,7 +254,6 @@ export const appRouter = [
                 icon: 'shuffle',
                 name: 'followProblems',
                 title: '随访问题',
-                access: '/followSetting/followProblems', // access已经添加
                 component: resolve => {
                     require(['@/views/followSetting/followProblems.vue'], resolve);
                 }
@@ -356,7 +263,6 @@ export const appRouter = [
                 icon: 'arrow-swap',
                 name: 'followTemplate',
                 title: '随访模板',
-                access: '/followSetting/followTemplate', // access已经添加
                 component: resolve => {
                     require(['@/views/followSetting/followTemplate.vue'], resolve);
                 }
@@ -366,39 +272,8 @@ export const appRouter = [
                 icon: 'arrow-return-left',
                 name: 'followWay',
                 title: '随访方案',
-                access: '/followSetting/followWay', // access已经添加
                 component: resolve => {
                     require(['@/views/followSetting/followWay.vue'], resolve);
-                }
-            }
-        ]
-    },
-    {
-        path: '/dataInteraction',
-        icon: 'ios-settings-strong',
-        name: 'dataInteraction',
-        title: '数据交互',
-        access: '/dataInteraction', // access已经添加
-        component: Main,
-        children: [
-            {
-                path: '/dataInteraction/patientImpro',
-                title: '客户导入',
-                access: '/dataInteraction/patientImpro', // access已经添加
-                name: 'patientImpro',
-                icon: 'ios-cloud-upload',
-                component: resolve => {
-                    require(['@/views/dataInteraction/patientImpro.vue'], resolve);
-                }
-            },
-            {
-                path: '/dataInteraction/doctorImport',
-                title: '医生导入',
-                access: '/dataInteraction/doctorImport', // access已经添加
-                name: 'doctorImport',
-                icon: 'social-reddit-outline',
-                component: resolve => {
-                    require(['@/views/dataInteraction/doctorImport.vue'], resolve);
                 }
             }
         ]
@@ -419,46 +294,6 @@ export const appRouter = [
                 icon: 'android-locate',
                 component: resolve => {
                     require(['@/views/systemSet/systemSetup.vue'], resolve);
-                }
-            },
-            {
-                path: '/systemSet/familyNames',
-                title: '百家姓',
-                access: '/systemSet/familyNames', // access已经添加
-                name: 'familyNames',
-                icon: 'android-locate',
-                component: resolve => {
-                    require(['@/views/systemSet/familyNames.vue'], resolve);
-                }
-            },
-            {
-                path: '/systemSet/operatMaintain',
-                title: '运营维护',
-                access: '/systemSet/operatMaintain', // access已经添加
-                name: 'operatMaintain',
-                icon: 'social-codepen',
-                component: resolve => {
-                    require(['@/views/systemSet/operatMaintain.vue'], resolve);
-                }
-            },
-            {
-                path: '/systemSet/timedTask',
-                title: '定时任务',
-                access: '/systemSet/timedTask', // access已经添加
-                name: 'timedTask',
-                icon: 'calendar',
-                component: resolve => {
-                    require(['@/views/systemSet/timedTask.vue'], resolve);
-                }
-            },
-            {
-                path: '/systemSet/timedTaskLog',
-                title: '定时任务日志',
-                access: '/systemSet/timedTaskLog', // access已经添加
-                name: 'timedTaskLog',
-                icon: 'android-document',
-                component: resolve => {
-                    require(['@/views/systemSet/timedTaskLog.vue'], resolve);
                 }
             },
             {
@@ -512,16 +347,6 @@ export const appRouter = [
                     require(['@/views/access/access-control/accessControl.vue'], resolve);
                 }
             },
-      /* {
-        path: '/access/group',
-        icon: 'wand',
-        title: '数据权限',
-        access: '/access/group', // access已经添加
-        name: 'access_group',
-        component: resolve => {
-            require(['@/views/access/group-manage/groupList.vue'], resolve);
-        }
-    }, */
             {
                 path: '/access/business',
                 icon: 'social-buffer',

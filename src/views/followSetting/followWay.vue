@@ -55,9 +55,9 @@
 				</Col>
 				<Col span="6">
 				<span>
-					疾病类型
+					分类类型
 				</span>
-			 <Select :label="modelTre" v-model="waySearch.diseaseId" filterable remote not-found-text="" :remote-method="remoteMethod2" :loading="loading2" placeholder="请输入疾病类型" clearable>
+			 <Select :label="modelTre" v-model="waySearch.diseaseId" filterable remote not-found-text="" :remote-method="remoteMethod2" :loading="loading2" placeholder="请输入分类类型" clearable>
           <Option v-for="(option, index) in options2" :value="option.value" :key="index">{{option.label}}</Option>
         </Select>
 				</Col>
@@ -100,8 +100,8 @@
         <FormItem label="" prop="" label="指标类型" v-if="targetShow">
           <Tag color="blue" v-if="tagShow">{{targetTag}}</Tag>
         </FormItem>
-        <FormItem label="疾病类型" prop="diseaseName">
-          <Select v-model="formItem.diseaseName" filterable remote :remote-method="remoteMethod2" :loading="loading2" clearable style="width: 70%;float: left;margin-right:20px;" @on-change="selectChange" not-found-text="" :label-in-value=true placeholder="搜索疾病类型添加至疾病标签">
+        <FormItem label="分类类型" prop="diseaseName">
+          <Select v-model="formItem.diseaseName" filterable remote :remote-method="remoteMethod2" :loading="loading2" clearable style="width: 70%;float: left;margin-right:20px;" @on-change="selectChange" not-found-text="" :label-in-value=true placeholder="搜索分类类型添加至疾病标签">
             <Option v-for="(option, index) in options2" :value="option.value" :key="index">{{option.label}}</Option>
           </Select>
           <Button type="primary" @click="addTag" ref="addTagbtn">添加</Button>
@@ -137,7 +137,7 @@ export default {
         diseaseId: '',
         departmentId: '',
       },
-        modelTre:"", //记录疾病类型值
+        modelTre:"", //记录分类类型值
       page:1,
       deparmentSelect: [],//科室列表
       columns7: [//表格栏
@@ -158,7 +158,7 @@ export default {
           align: 'center',
         },
         {
-          title: '疾病类型',
+          title: '分类类型',
           key: 'diseaseName',
           align: 'center',
         },
@@ -662,7 +662,7 @@ export default {
       })
     },
     /*
-    *疾病类型--远程搜索
+    *分类类型--远程搜索
     */
     remoteMethod2(query) {
       if(query.trim()==""){

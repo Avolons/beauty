@@ -24,9 +24,9 @@
 			</Col>
 			<Col span="6">
 			<span>
-				疾病类型
+				分类类型
 			</span>
-			<Select v-model="IndexSearch.diseaseId" filterable remote not-found-text="" :remote-method="remoteMethod2" :label-in-value="true" clearable @on-change="selectChange" placeholder="请输入疾病类型">
+			<Select v-model="IndexSearch.diseaseId" filterable remote not-found-text="" :remote-method="remoteMethod2" :label-in-value="true" clearable @on-change="selectChange" placeholder="请输入分类类型">
 				<Option v-for="(option, index) in diseaseList" :value="option.value" :key="index">{{option.label}}</Option>
 			</Select>
 			</Col>
@@ -59,7 +59,7 @@
 						<Option v-for="item,index in indexTypeList" :key="index" :value="item.value">{{item.label}}</Option>
 					</Select>
 				</FormItem>
-				<FormItem label="添加疾病类型" prop="diseaseId">
+				<FormItem label="添加分类类型" prop="diseaseId">
 					<Select :label="labelobj" v-model="formItem.diseaseId" multiple filterable remote :remote-method="remoteMethod2" not-found-text="">
 						<Option v-for="(option, index) in diseaseList" :value="option.value" :key="index">{{option.label}}</Option>
 					</Select>
@@ -236,7 +236,7 @@ export default {
           }
         },
         {
-          title: "疾病类型",
+          title: "分类类型",
           key: "diseaseName",
           align: "center"
         },
@@ -537,7 +537,7 @@ export default {
       this.$refs[name].validate(valid => {
         if (valid) {
           if (this.formItem.diseaseId.length == 0) {
-            this.$Message.error("请填写正确的疾病类型");
+            this.$Message.error("请填写正确的分类类型");
             return false;
           }
           let sendData = JSON.parse(JSON.stringify(this.formItem));
@@ -594,7 +594,7 @@ export default {
       this.selectValue = value.value;
     },
     /*
-		*疾病类型--远程搜索
+		*分类类型--远程搜索
 		*/
     remoteMethod2(query) {
       if (query == "") {

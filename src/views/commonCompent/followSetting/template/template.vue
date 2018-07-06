@@ -205,7 +205,7 @@
 		<Card>
 			<p slot="title">
 				<Icon type="social-buffer"></Icon>
-				{{diseaseType=="疾病类型"?"随访模板":"体检模板"}}信息
+				{{diseaseType=="分类类型"?"随访模板":"体检模板"}}信息
 			</p>
 			<Form ref="templateForm" :model="templateForm" :rules="ruleValidate" :label-width="80">
 				<FormItem label="模板名称" prop="name">
@@ -246,7 +246,7 @@
 		<Card style="margin-top:10px">
 			<p slot="title">
 				<Icon type="android-list"></Icon>
-				配置{{diseaseType=="疾病类型"?"随访问题":"体检问题"}}
+				配置{{diseaseType=="分类类型"?"随访问题":"体检问题"}}
 			</p>
 			<Row :gutter="20">
 				<Col span="10">
@@ -294,7 +294,7 @@
 		<Card style="margin-top:10px">
 			<p slot="title">
 				<Icon type="android-archive"></Icon>
-				{{diseaseType=="疾病类型"?"随访模板":"体检模板"}}基本信息
+				{{diseaseType=="分类类型"?"随访模板":"体检模板"}}基本信息
 			</p>
 			<Alert type="success">
 				双击问题可添加到右侧进行编辑
@@ -386,7 +386,7 @@ export default {
   props: {
     diseaseType: {
       type: String,
-      default: "疾病类型"
+      default: "分类类型"
     }
   },
   data() {
@@ -397,7 +397,7 @@ export default {
       /* 模板默认信息 */
       templateForm: {
         name: "", //模板名称
-        diseaseId: [], //疾病类型
+        diseaseId: [], //分类类型
         silencetime: 5, //静默时间
         outrepeattimes: 3, //重复次数
         firsttaskid: 1000, //起始问题
@@ -462,7 +462,7 @@ export default {
         }
       ], //问题总列表
       stepThirdQuestion: [], //第三步配置问题
-      selecetDiseId: "", //第二部选中的疾病类型的id
+      selecetDiseId: "", //第二部选中的分类类型的id
       collapse: "1",
       showRow: false,
       lastQuestionId: "", //最后一个问题的索引
@@ -695,7 +695,7 @@ export default {
         });
     },
     /*
-		*疾病类型--远程搜索
+		*分类类型--远程搜索
 		*/
     remoteMethod_else(query) {
       if (query.trim() == "") {
@@ -727,7 +727,7 @@ export default {
         });
     },
     /*
-		*获取选中的疾病类型id，根据疾病类型获取所有问题
+		*获取选中的分类类型id，根据分类类型获取所有问题
 		*/
     selectChange(value) {
       this.selecetDiseId = value;
@@ -891,12 +891,12 @@ export default {
               : this.tagCount[0] ? this.tagCount[0] : "", //通用库
           firsttaskid: this.templateForm.firsttaskid, //起始问题编号
           questionTempleQuestions: this.templateList,
-          mouldType: this.diseaseType == "疾病类型" ? 0 : 1 //类型：0，普通随访；1，体检随访（必须）
+          mouldType: this.diseaseType == "分类类型" ? 0 : 1 //类型：0，普通随访；1，体检随访（必须）
         })
         .then(res => {
           this.$Message.success("保存成功");
           setTimeout(() => {
-            if (this.diseaseType == "疾病类型") {
+            if (this.diseaseType == "分类类型") {
               this.$router.push("/followSetting/followTemplate");
             } else {
               this.$router.push("/physical/noticeSetting/template");

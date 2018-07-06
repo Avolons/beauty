@@ -208,7 +208,7 @@
 				<FormItem label="模板名称" prop="name">
 					<Input v-model="templateForm.name" placeholder="请填写模板名称"></Input>
 				</FormItem>
-				<FormItem label="疾病类型">
+				<FormItem label="分类类型">
 					<Select :label="labelobj" v-model="templateForm.diseaseId" multiple filterable remote not-found-text="" :remote-method="remoteMethod">
 						<Option v-for="(item, index) in diseaseList" :value="item.value" :key="item.value">{{item.label}}</Option>
 					</Select>
@@ -250,13 +250,13 @@
 				<div class="template_main_stepOne">
 					<h3 class="template_main_commonTitle">
 						<span>1</span>
-						选择疾病类型
+						选择分类类型
 					</h3>
 					<Alert type="success">
-						添加疾病类型显示对应的指标
+						添加分类类型显示对应的指标
 					</Alert>
 					<div class="template_main_disAdd">
-						<Select placeholder="选择疾病类型获取对应的指标" v-model="listDisID" filterable remote not-found-text="" :remote-method="remoteMethod_else" clearable @on-change="selectChange">
+						<Select placeholder="选择分类类型获取对应的指标" v-model="listDisID" filterable remote not-found-text="" :remote-method="remoteMethod_else" clearable @on-change="selectChange">
 							<Option v-for="option in diseaseListQues" :value="option.value" :key="option.value">{{option.label}}</Option>
 						</Select>
 					</div>
@@ -383,7 +383,7 @@ export default {
 			/* 模板默认信息 */
 			templateForm: {
 				name: '',//模板名称
-				diseaseId: [],//疾病类型
+				diseaseId: [],//分类类型
 				silencetime: 5,//静默时间
 				outrepeattimes: 3,//重复次数
 				firsttaskid: 1000,//起始问题
@@ -439,7 +439,7 @@ export default {
 				isGet: false,
 			}],//问题总列表
 			stepThirdQuestion: [],//第三步配置问题
-			selecetDiseId: '',//第二部选中的疾病类型的id
+			selecetDiseId: '',//第二部选中的分类类型的id
 			collapse: '1',
 			showRow: false,
 			lastQuestionId: '',//最后一个问题的索引
@@ -648,7 +648,7 @@ export default {
 			})
 		},
 		/*
-		*疾病类型--远程搜索
+		*分类类型--远程搜索
 		*/
 		remoteMethod_else(query) {
 			if (query.trim() == '') {
@@ -676,7 +676,7 @@ export default {
 			})
 		},
 		/*
-		*获取选中的疾病类型id，根据疾病类型获取所有问题
+		*获取选中的分类类型id，根据分类类型获取所有问题
 		*/
 		selectChange(value) {
 			this.selecetDiseId = value;

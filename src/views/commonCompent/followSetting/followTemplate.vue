@@ -102,7 +102,7 @@ export default {
   props: {
     diseaseType: {
       type: String,
-      default: "疾病类型"
+      default: "分类类型"
     },
     activeType: {
       type: String,
@@ -111,7 +111,7 @@ export default {
   },
   data() {
     return {
-      modelTre: "", //疾病类型记录值
+      modelTre: "", //分类类型记录值
       API: API,
       /* 搜索条件 */
       searchParams: {
@@ -119,7 +119,7 @@ export default {
         limit: 10,
         name: "",
         diseaseId: "",
-        mouldType: this.diseaseType == "疾病类型" ? 0 : 1 //类型：0，普通随访；1，体检随访（必须）
+        mouldType: this.diseaseType == "分类类型" ? 0 : 1 //类型：0，普通随访；1，体检随访（必须）
       },
       pageTotal: 0 /* 总页数 */,
       createLoading: true /* 表格loading */,
@@ -136,7 +136,7 @@ export default {
           align: "center"
         },
         {
-          title: this.diseaseType == "疾病类型" ? "疾病类型" : "体检套餐",
+          title: this.diseaseType == "分类类型" ? "分类类型" : "体检套餐",
           key: "diseaseName",
           align: "center"
         },
@@ -359,7 +359,7 @@ export default {
     *添加模板
     */
     addBtn() {
-      if (this.diseaseType == "疾病类型") {
+      if (this.diseaseType == "分类类型") {
         this.$router.push({ path: `/followSetting/template/template/new` });
       } else {
         this.$router.push({
@@ -371,7 +371,7 @@ export default {
      * 编辑模板
      */
     editTem(params) {
-      if (this.diseaseType == "疾病类型") {
+      if (this.diseaseType == "分类类型") {
         this.$router.push({
           path: `/followSetting/template/template/${params.row.id}`
         });
@@ -388,7 +388,7 @@ export default {
       });
     },
     /*
-    *疾病类型--远程搜索
+    *分类类型--远程搜索
     */
    
     remoteMethod(query) {

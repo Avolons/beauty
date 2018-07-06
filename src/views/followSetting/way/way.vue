@@ -251,8 +251,8 @@
 						<Radio label="1">通知</Radio>
 					</RadioGroup>
 				</FormItem>
-				<FormItem label="疾病类型" prop="diseaseId">
-					<Select :label="labelobj" v-model="baseData.diseaseId" not-found-text="" multiple filterable remote :remote-method="autoSearch_base" :label-in-value="true" placeholder="搜索疾病类型">
+				<FormItem label="分类类型" prop="diseaseId">
+					<Select :label="labelobj" v-model="baseData.diseaseId" not-found-text="" multiple filterable remote :remote-method="autoSearch_base" :label-in-value="true" placeholder="搜索分类类型">
 						<Option v-for="item in diseaseList" :value="item.value" :key="item.value">{{item.label}}</Option>
 					</Select>
 				</FormItem>
@@ -264,8 +264,8 @@
 				选择随访模板
 			</p>
 			<Form :label-width="80" class="way_main_wayForm">
-				<FormItem label="疾病类型">
-					<Select v-model="selectDisTemp" not-found-text="" multiple filterable remote :remote-method="autoSearch_tem" @on-change="selectChange" :label-in-value="true" placeholder="搜索疾病类型">
+				<FormItem label="分类类型">
+					<Select v-model="selectDisTemp" not-found-text="" multiple filterable remote :remote-method="autoSearch_tem" @on-change="selectChange" :label-in-value="true" placeholder="搜索分类类型">
 						<Option v-for="item in diseaseList_tem" :value="item.value" :key="item.value">{{item.label}}</Option>
 					</Select>
 				</FormItem>
@@ -454,7 +454,7 @@ export default {
 				id: "",   		//id不传表示新增
 				name: "",  		//方案名称
 				departmentId: "",//科室类型id
-				diseaseId: [],    //疾病类型id,多个之间用英文逗号分开
+				diseaseId: [],    //分类类型id,多个之间用英文逗号分开
 				activeType: 0,    //方案类型：0代表随访，1代表通知
 				status: 0,        //状态：0，启用；1，禁用
 				visitStartTime: ""
@@ -811,7 +811,7 @@ export default {
 				this.baseData = {
 					id: this.followId,
 					name: res.data.name,//方案名称
-					diseaseId: res.data.diseaseId,//疾病类型id
+					diseaseId: res.data.diseaseId,//分类类型id
 					departmentId: res.data.departmentId, //科室类型id
 					activeType: res.data.activeType,//方案类型：0代表随访，1代表通知
 					status: res.data.status,//状态：0，启用；1，禁用
@@ -960,7 +960,7 @@ export default {
 			return data;
 		},
 		/*
-		* 疾病类型--智能匹配
+		* 分类类型--智能匹配
 		*/
 		autoSearch_base(query) {
 			if (query == "") {
@@ -980,7 +980,7 @@ export default {
 			})
 		},
 		/*
-		* 疾病类型--智能匹配(模板搜索)
+		* 分类类型--智能匹配(模板搜索)
 		*/
 		autoSearch_tem(query) {
 			if (query == "") {

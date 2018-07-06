@@ -193,9 +193,9 @@
       </Col>
       <Col span="6">
       <span>
-        疾病类型
+        分类类型
       </span>
-      <Select :label="modelTre" v-model="proSearch.diseaseId" filterable remote not-found-text="" :remote-method="remoteMethod2" clearable placeholder="请输入疾病类型">
+      <Select :label="modelTre" v-model="proSearch.diseaseId" filterable remote not-found-text="" :remote-method="remoteMethod2" clearable placeholder="请输入分类类型">
         <Option v-for="(option, index) in diseaseList" :value="option.value" :key="index" :label="option.label">{{option.label}}</Option>
       </Select>
       </Col>
@@ -229,8 +229,8 @@
         <FormItem label="问题内容" prop="content">
           <Input v-model="formItem.content" placeholder="请输入随访问题内容"></Input>
         </FormItem>
-        <FormItem label="疾病类型" prop="diseaseId">
-          <Select :label="labelobj" v-model="formItem.diseaseId" multiple filterable remote :remote-method="remoteMethod2" not-found-text="" placeholder="搜索疾病类型添加至疾病标签">
+        <FormItem label="分类类型" prop="diseaseId">
+          <Select :label="labelobj" v-model="formItem.diseaseId" multiple filterable remote :remote-method="remoteMethod2" not-found-text="" placeholder="搜索分类类型添加至疾病标签">
             <Option v-for="(option, index) in diseaseList" :value="option.value" :key="index">{{option.label}}</Option>
           </Select>
         </FormItem>
@@ -251,8 +251,8 @@
             <Option value="07">通用</Option>
           </Select>
         </FormItem>
-        <FormItem label="疾病类型" v-show="targetShow">
-          <Select @on-change="remoteMethod1()" clearable v-model="indexParams.diseaseId" filterable remote :remote-method="remoteMethod" not-found-text="" placeholder="搜索疾病类型添加至疾病标签">
+        <FormItem label="分类类型" v-show="targetShow">
+          <Select @on-change="remoteMethod1()" clearable v-model="indexParams.diseaseId" filterable remote :remote-method="remoteMethod" not-found-text="" placeholder="搜索分类类型添加至疾病标签">
             <Option v-for="(option, index) in netDisList" :value="option.value" :key="index">{{option.label}}</Option>
           </Select>
         </FormItem>
@@ -295,7 +295,7 @@ export default {
         diseaseId: "",
         zjm: ""
       },
-      labelobj: [],//疾病编辑疾病类型label
+      labelobj: [],//疾病编辑分类类型label
       netDisList: [],//远程搜索疾病列表
       proSearch: {//搜索框
         pager: 1,
@@ -316,7 +316,7 @@ export default {
           align: 'center'
         },
         {
-          title: '疾病类型',
+          title: '分类类型',
           key: 'diseaseName',
           align: 'center'
         },
@@ -528,7 +528,7 @@ export default {
           { required: true, message: '问题内容不能为空', trigger: 'blur' }
         ],
         diseaseId: [
-          { required: true, type: "array", message: '疾病类型不能为空', trigger: 'blur' }
+          { required: true, type: "array", message: '分类类型不能为空', trigger: 'blur' }
         ],
         targetId: [
           { required: true, message: '关联指标不能为空', trigger: 'blur' },
@@ -629,8 +629,8 @@ export default {
         this.pageTotal = res.total;
         this.FollowProblePage({
           title: this.proSearch.title,      //问题标题
-          diseaseId: this.proSearch.diseaseId, //疾病类型
-          diseaseList: this.diseaseList.concat()   //疾病类型数组
+          diseaseId: this.proSearch.diseaseId, //分类类型
+          diseaseList: this.diseaseList.concat()   //分类类型数组
         });
       }).catch((error) => {
       })
@@ -771,7 +771,7 @@ export default {
       })
     },
     /*
-    *疾病类型--远程搜索
+    *分类类型--远程搜索
     */
     remoteMethod2(query) {
       if (query == "") {

@@ -27,6 +27,9 @@ Vue.prototype.$http = axios;
 
 /* axios.defaults.baseURL = 'http://192.168.3.26:8081'; */
 
+axios.defaults.baseURL = 'http://192.168.1.215:6022';
+
+
 let JsonData = ['/visit/order/batchcancelall', '/order/temp/testvisit', '/order/temp/visit','/visit/order/allot','/visit/order/vet/save', '/visit/order/notice', '/ordertask/vet', '/question/script/save', '/questionscheme/save', '/questiontemple/save'];
 // 添加请求拦截器
 axios.interceptors.request.use(function (config) {
